@@ -36,7 +36,20 @@ export default defineConfig({
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
   },
-  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+  projects: [
+    {
+      name: 'chromium',
+      use: {
+        ...devices['Desktop Chrome'],
+        launchOptions: {
+          // CI runners and this container have no GPU, so WebGL runs on SwiftShader. Opting in
+          // explicitly keeps that working as Chromium phases out its automatic software fallback,
+          // and stops the deprecation warning it logs.
+          args: ['--enable-unsafe-swiftshader'],
+        },
+      },
+    },
+  ],
   webServer: {
     command: `npx vite preview --host 127.0.0.1 --port ${String(port)} --strictPort`,
     url: siteUrl,
