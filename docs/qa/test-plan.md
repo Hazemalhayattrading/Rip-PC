@@ -390,7 +390,8 @@ When the URL has `perf=1`, the garage exposes `window.__RIG_LAB_PERF__`:
   deadline. A 16.7 ms threshold would count ordinary vsync jitter; a unit test proves that.
 - Idle calibration first, then 1 warm-up pass, then 3 measured passes, reporting the median.
 
-**Verdicts** (`verdictFor` in `tests/perf/fps-probe.mjs`, 15 unit tests):
+**Verdicts** (`verdictFor` in `tests/perf/fps-probe.mjs`; `tests/perf/fps.test.mjs` has 16 tests
+covering it, the meter's statistics and the file naming):
 
 - **INVALID** in reference mode when:
   - the WebGL renderer is software (SwiftShader, llvmpipe, Microsoft Basic Render); or
