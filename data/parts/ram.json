@@ -1,5 +1,378 @@
 {
   "schemaVersion": 1,
   "category": "ram",
-  "items": []
+  "items": [
+    {
+      "id": "teamgroup-t-force-delta-rgb-ddr5-6000-cl30-2x16gb",
+      "category": "ram",
+      "manufacturer": "teamgroup",
+      "brand": "T-FORCE",
+      "name": "Delta RGB DDR5-6000 CL30 32GB (2x16GB) Black",
+      "partNumber": "FF3D532G6000HC30DC01",
+      "series": "T-FORCE DELTA RGB DDR5",
+      "type": "DDR5",
+      "formFactor": "UDIMM",
+      "moduleCapacityGb": 16,
+      "moduleCount": 2,
+      "speedMtps": 6000,
+      "timings": {
+        "cl": 30,
+        "trcd": null,
+        "trp": null,
+        "tras": null
+      },
+      "voltageV": 1.35,
+      "profiles": {
+        "xmp": "3.0",
+        "expo": true
+      },
+      "heightMm": 46.1,
+      "rgb": true,
+      "sources": [
+        {
+          "url": "https://www.teamgroupinc.com/en/product-detail/memory/T-FORCE/delta-rgb-ddr5-black/delta-rgb-ddr5-black-FF3D532G6000HC30DC01/",
+          "publisher": "teamgroup",
+          "retrievedAt": "2026-09-30",
+          "docType": "product-page",
+          "title": "DELTA RGB DDR5 DESKTOP MEMORY BLACK 32GB(2x16GB) 6000MHz CL30"
+        }
+      ],
+      "notes": [
+        {
+          "field": "timings",
+          "text": "TeamGroup publishes CL only for this kit (\"6000MHz CL30\"); tRCD, tRP and tRAS are not listed."
+        },
+        {
+          "field": "speedMtps",
+          "text": "TeamGroup lists the data rate as \"6000MHz\"; recorded as 6000 MT/s."
+        },
+        {
+          "field": "profiles",
+          "text": "The page lists \"Profile 8200 MHz↑: Intel XMP3.0 8000 MHz↓: Intel XMP3.0 / AMD EXPO\", so this 6000 kit has both."
+        },
+        {
+          "field": "heightMm",
+          "text": "From \"Dimensions 46.1(H) x 144.2(L) x 7(W)mm\" in More Product Specifications."
+        }
+      ]
+    },
+    {
+      "id": "gskill-flare-x5-ddr5-6000-cl30-2x16gb",
+      "category": "ram",
+      "manufacturer": "gskill",
+      "brand": "G.SKILL",
+      "name": "Flare X5 DDR5-6000 CL30 32GB (2x16GB)",
+      "partNumber": "F5-6000J3038F16GX2-FX5",
+      "series": "Flare X5",
+      "type": "DDR5",
+      "formFactor": "UDIMM",
+      "moduleCapacityGb": 16,
+      "moduleCount": 2,
+      "speedMtps": 6000,
+      "timings": {
+        "cl": 30,
+        "trcd": 38,
+        "trp": 38,
+        "tras": 96
+      },
+      "voltageV": 1.35,
+      "profiles": {
+        "xmp": "3.0",
+        "expo": true
+      },
+      "heightMm": 33,
+      "rgb": false,
+      "sources": [
+        {
+          "url": "https://www.gskill.com/specification/165/396/1673491242/F5-6000J3038F16GX2-FX5-Specification",
+          "publisher": "gskill",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "fields": [
+            "brand",
+            "name",
+            "partNumber",
+            "series",
+            "type",
+            "formFactor",
+            "moduleCapacityGb",
+            "moduleCount",
+            "speedMtps",
+            "timings",
+            "voltageV",
+            "profiles",
+            "rgb"
+          ],
+          "title": "F5-6000J3038F16GX2-FX5 Specification"
+        },
+        {
+          "url": "https://www.gskill.com/faq/1502180912/DRAM-Memory",
+          "publisher": "gskill",
+          "retrievedAt": "2026-09-30",
+          "docType": "support-article",
+          "fields": [
+            "heightMm"
+          ],
+          "title": "FAQ - DRAM Memory: \"How tall are the memory modules?\"",
+          "locator": "Flare X5: 33mm (1.30in)"
+        }
+      ],
+      "notes": [
+        {
+          "field": "rgb",
+          "text": "G.SKILL describes a matte heat spreader and lists no lighting for Flare X5."
+        }
+      ]
+    },
+    {
+      "id": "gskill-trident-z5-neo-rgb-ddr5-6000-cl30-2x16gb",
+      "category": "ram",
+      "manufacturer": "gskill",
+      "brand": "G.SKILL",
+      "name": "Trident Z5 Neo RGB DDR5-6000 CL30 32GB (2x16GB)",
+      "partNumber": "F5-6000J3038F16GX2-TZ5NR",
+      "series": "Trident Z5 Neo RGB",
+      "type": "DDR5",
+      "formFactor": "UDIMM",
+      "moduleCapacityGb": 16,
+      "moduleCount": 2,
+      "speedMtps": 6000,
+      "timings": {
+        "cl": 30,
+        "trcd": 38,
+        "trp": 38,
+        "tras": 96
+      },
+      "voltageV": 1.35,
+      "profiles": {
+        "xmp": "3.0",
+        "expo": true
+      },
+      "heightMm": 44,
+      "rgb": true,
+      "sources": [
+        {
+          "url": "https://www.gskill.com/specification/165/390/1661410135/F5-6000J3038F16GX2-TZ5NR-Specification",
+          "publisher": "gskill",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "fields": [
+            "brand",
+            "name",
+            "partNumber",
+            "series",
+            "type",
+            "formFactor",
+            "moduleCapacityGb",
+            "moduleCount",
+            "speedMtps",
+            "timings",
+            "voltageV",
+            "profiles",
+            "rgb"
+          ],
+          "title": "F5-6000J3038F16GX2-TZ5NR Specification"
+        },
+        {
+          "url": "https://www.gskill.com/faq/1502180912/DRAM-Memory",
+          "publisher": "gskill",
+          "retrievedAt": "2026-09-30",
+          "docType": "support-article",
+          "fields": [
+            "heightMm"
+          ],
+          "title": "FAQ - DRAM Memory: \"How tall are the memory modules?\"",
+          "locator": "Trident Z5 Neo RGB: 44mm (1.73in)"
+        }
+      ]
+    },
+    {
+      "id": "gskill-trident-z5-ck-ddr5-8200-cl40-2x24gb",
+      "category": "ram",
+      "manufacturer": "gskill",
+      "brand": "G.SKILL",
+      "name": "Trident Z5 CK DDR5-8200 CL40 48GB (2x24GB) CU-DIMM",
+      "partNumber": "F5-8200C4052G24GX2-TZ5CK",
+      "series": "Trident Z5 CK",
+      "type": "DDR5",
+      "formFactor": "CUDIMM",
+      "moduleCapacityGb": 24,
+      "moduleCount": 2,
+      "speedMtps": 8200,
+      "timings": {
+        "cl": 40,
+        "trcd": 52,
+        "trp": 52,
+        "tras": 131
+      },
+      "voltageV": 1.4,
+      "profiles": {
+        "xmp": "3.0",
+        "expo": false
+      },
+      "heightMm": 44,
+      "rgb": false,
+      "sources": [
+        {
+          "url": "https://www.gskill.com/specification/165/434/1730699010/F5-8200C4052G24GX2-TZ5CK-Specification",
+          "publisher": "gskill",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "fields": [
+            "brand",
+            "name",
+            "partNumber",
+            "series",
+            "type",
+            "formFactor",
+            "moduleCapacityGb",
+            "moduleCount",
+            "speedMtps",
+            "timings",
+            "voltageV",
+            "profiles",
+            "rgb"
+          ],
+          "title": "F5-8200C4052G24GX2-TZ5CK Specification"
+        },
+        {
+          "url": "https://www.gskill.com/faq/1502180912/DRAM-Memory",
+          "publisher": "gskill",
+          "retrievedAt": "2026-09-30",
+          "docType": "support-article",
+          "fields": [
+            "heightMm"
+          ],
+          "title": "FAQ - DRAM Memory: \"How tall are the memory modules?\"",
+          "locator": "Trident Z5 CK: 44mm (1.73in)"
+        }
+      ],
+      "notes": [
+        {
+          "field": "formFactor",
+          "text": "G.SKILL calls this \"DDR5 CU-DIMM memory\" with an integrated Clock Driver (CKD), for Intel Core Ultra 200 K-series and Z890 (or newer) only."
+        },
+        {
+          "field": "rgb",
+          "text": "The lit version is sold as a separate series (Trident Z5 CK RGB, listed separately in the G.SKILL height FAQ); this page lists no lighting."
+        }
+      ]
+    },
+    {
+      "id": "gskill-trident-z-neo-ddr4-3600-cl16-2x16gb",
+      "category": "ram",
+      "manufacturer": "gskill",
+      "brand": "G.SKILL",
+      "name": "Trident Z Neo DDR4-3600 CL16 32GB (2x16GB)",
+      "partNumber": "F4-3600C16D-32GTZNC",
+      "series": "Trident Z Neo",
+      "type": "DDR4",
+      "formFactor": "UDIMM",
+      "moduleCapacityGb": 16,
+      "moduleCount": 2,
+      "speedMtps": 3600,
+      "timings": {
+        "cl": 16,
+        "trcd": 19,
+        "trp": 19,
+        "tras": 39
+      },
+      "voltageV": 1.35,
+      "profiles": {
+        "xmp": "2.0",
+        "expo": false
+      },
+      "heightMm": 44,
+      "rgb": true,
+      "sources": [
+        {
+          "url": "https://www.gskill.com/specification/165/326/1562840211/F4-3600C16D-32GTZNC-Specification",
+          "publisher": "gskill",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "fields": [
+            "brand",
+            "name",
+            "partNumber",
+            "series",
+            "type",
+            "formFactor",
+            "moduleCapacityGb",
+            "moduleCount",
+            "speedMtps",
+            "timings",
+            "voltageV",
+            "profiles",
+            "rgb"
+          ],
+          "title": "F4-3600C16D-32GTZNC Specification"
+        },
+        {
+          "url": "https://www.gskill.com/faq/1502180912/DRAM-Memory",
+          "publisher": "gskill",
+          "retrievedAt": "2026-09-30",
+          "docType": "support-article",
+          "fields": [
+            "heightMm"
+          ],
+          "title": "FAQ - DRAM Memory: \"How tall are the memory modules?\"",
+          "locator": "DDR4 Memory Series - Trident Z Neo: 44mm (1.73in)"
+        }
+      ]
+    },
+    {
+      "id": "teamgroup-t-force-vulcan-z-ddr4-3200-cl16-2x16gb",
+      "category": "ram",
+      "manufacturer": "teamgroup",
+      "brand": "T-FORCE",
+      "name": "Vulcan Z DDR4-3200 CL16 32GB (2x16GB) Gray",
+      "partNumber": "TLZGD432G3200HC16CDC01",
+      "series": "T-FORCE VULCAN Z DDR4",
+      "type": "DDR4",
+      "formFactor": "UDIMM",
+      "moduleCapacityGb": 16,
+      "moduleCount": 2,
+      "speedMtps": 3200,
+      "timings": {
+        "cl": 16,
+        "trcd": null,
+        "trp": null,
+        "tras": null
+      },
+      "voltageV": 1.35,
+      "profiles": {
+        "xmp": "2.0",
+        "expo": false
+      },
+      "heightMm": 32,
+      "rgb": false,
+      "sources": [
+        {
+          "url": "https://www.teamgroupinc.com/en/product-detail/memory/T-FORCE/vulcan-z-ddr4-gray/vulcan-z-ddr4-gray-TLZGD432G3200HC16CDC01/",
+          "publisher": "teamgroup",
+          "retrievedAt": "2026-09-30",
+          "docType": "product-page",
+          "title": "VULCAN Z DDR4 DESKTOP MEMORY GRAY 32GB(2x16GB) 3200MHz CL16"
+        }
+      ],
+      "notes": [
+        {
+          "field": "timings",
+          "text": "TeamGroup publishes CL only for this kit (\"3200MHz CL16\"); tRCD, tRP and tRAS are not listed."
+        },
+        {
+          "field": "speedMtps",
+          "text": "TeamGroup lists the data rate as \"3200MHz\"; recorded as 3200 MT/s."
+        },
+        {
+          "field": "heightMm",
+          "text": "From \"Dimensions 32(H) x 140(L) x 7(W)mm\" in More Product Specifications."
+        },
+        {
+          "field": "rgb",
+          "text": "The feature list (\"Simple design\", \"Aluminum heat spreader\", \"Supports XMP2.0\") names no lighting."
+        }
+      ]
+    }
+  ]
 }

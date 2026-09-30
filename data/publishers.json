@@ -6,6 +6,8 @@
     { "id": "asus", "name": "ASUS", "kind": "manufacturer", "domains": ["asus.com"] },
     { "id": "nvidia", "name": "NVIDIA", "kind": "manufacturer", "domains": ["nvidia.com"] },
     { "id": "pny", "name": "PNY Technologies", "kind": "manufacturer", "domains": ["pny.com"] },
-    { "id": "sapphire", "name": "Sapphire Technology", "kind": "manufacturer", "domains": ["sapphiretech.com"] }
+    { "id": "sapphire", "name": "Sapphire Technology", "kind": "manufacturer", "domains": ["sapphiretech.com"] },
+    { "id": "gskill", "name": "G.SKILL", "kind": "manufacturer", "domains": ["gskill.com"] },
+    { "id": "teamgroup", "name": "TEAMGROUP", "kind": "manufacturer", "domains": ["teamgroupinc.com"] }
   ]
 }

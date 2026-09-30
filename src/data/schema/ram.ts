@@ -16,8 +16,16 @@ export const Ram = z.strictObject({
   moduleCapacityGb: PosInt,
   moduleCount: PosInt,
   speedMtps: PosInt,
-  /** Primary timings as published (CL-tRCD-tRP-tRAS). */
-  timings: z.strictObject({ cl: PosInt, trcd: PosInt, trp: PosInt, tras: PosInt }),
+  /**
+   * Primary timings as published (CL-tRCD-tRP-tRAS). Some makers publish CL only; the other three
+   * are then `null` with a note.
+   */
+  timings: z.strictObject({
+    cl: PosInt,
+    trcd: PosInt.nullable(),
+    trp: PosInt.nullable(),
+    tras: PosInt.nullable(),
+  }),
   voltageV: PosNum,
   profiles: z.strictObject({
     /** Intel XMP version. `null` means the kit has no XMP profile. */
