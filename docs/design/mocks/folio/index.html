@@ -126,10 +126,10 @@ figcaption b { color: var(--ink); font-weight: 600; }
 .article { min-width: 0; }
 .kicker { font-size: 14px; color: var(--ink-3); display: flex; gap: 14px; align-items: baseline; }
 .kicker a { color: var(--ink-2); text-decoration: underline; text-decoration-color: var(--rule-strong); text-underline-offset: 3px; }
-h1 { font-family: "Source Serif 4", serif; font-size: 48px; line-height: 54px; font-weight: 600; letter-spacing: -.015em; margin: 4px 0 10px; font-optical-sizing: auto; }
+h1 { font-family: "Source Serif 4", serif; font-size: 48px; line-height: 54px; font-weight: 600; letter-spacing: -.015em; margin: 2px 0 8px; font-optical-sizing: auto; }
 .brief { font-family: "Source Serif 4", serif; font-size: 18px; line-height: 28px; color: var(--ink-2); margin: 0 0 18px; max-width: 66ch; }
 .brief b { color: var(--ink); font-weight: 600; }
-.tools { display: flex; align-items: center; gap: 18px; border-top: 1px solid var(--rule-strong); padding: 10px 0; font-size: 14px; color: var(--ink-3); }
+.tools { display: flex; align-items: center; gap: 18px; border-top: 1px solid var(--rule-strong); padding: 8px 0; font-size: 14px; color: var(--ink-3); }
 .tools .sp { flex: 1; }
 .tools button { background: none; border: 0; padding: 0; cursor: pointer; color: var(--ink-2); display: inline-flex; gap: 6px; align-items: center; }
 .tools button[aria-pressed="true"] { color: var(--ink); }
@@ -139,10 +139,10 @@ h1 { font-family: "Source Serif 4", serif; font-size: 48px; line-height: 54px; f
 .cat { width: 100%; border-collapse: collapse; }
 .cat thead th { font-weight: 500; font-size: 13px; line-height: 18px; color: var(--ink-3); text-align: left; padding: 8px 10px 8px 0; border-bottom: 1px solid var(--rule); white-space: nowrap; }
 .cat th.r, .cat td.r { text-align: right; }
-.cat tbody.group th { text-align: left; padding: 14px 0 6px; border-bottom: 1px solid var(--rule); }
+.cat tbody.group th { text-align: left; padding: 12px 0 6px; border-bottom: 1px solid var(--rule); }
 .cat tbody.group th .gh { font-family: "Source Serif 4", serif; font-size: 20px; line-height: 26px; font-weight: 600; color: var(--ink); }
 .cat tbody.group th .gs { font-weight: 400; font-size: 14px; color: var(--ink-3); margin-left: 10px; }
-.cat td { padding: 10px 10px 10px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.cat td { padding: 9px 10px 9px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
 .cat tr.part { cursor: pointer; }
 .cat tr.part:hover td { background: var(--raise); }
 .cat tr.sel td { background: var(--raise); }
@@ -192,7 +192,7 @@ tr.blocked .pn { color: var(--ink-2); font-weight: 500; }
 
 /* motion: transform and opacity only */
 .ruler .br { transition: transform 280ms cubic-bezier(.3, 0, .1, 1); }
-.cat tr.part td { transition: background-color 160ms ease-out; }
+
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: 0ms !important; animation-duration: 0ms !important; } }
 
 /* drawing: tonal plate. The case is a black product, lit from the upper left. */
@@ -303,6 +303,14 @@ tr.blocked .pn { color: var(--ink-2); font-weight: 500; }
 .chapterbar b { color: var(--ink); font-weight: 600; }
 .chapterbar button { background: none; border: 1px solid var(--rule); border-radius: 16px; height: 32px; padding: 0 12px; color: var(--ink-2); display: inline-flex; gap: 6px; align-items: center; }
 .cur, .phu { display: none; }
+
+/* number swap (see swap() in the script) */
+.sw { position: relative; display: inline-block; }
+.sw-new { display: inline-block; }
+.sw-old { position: absolute; inset: 0; text-align: inherit; white-space: nowrap; pointer-events: none; }
+@keyframes rows-in { from { opacity: 0; } to { opacity: 1; } }
+.rows-in { animation: rows-in var(--rows-ms, 120ms) linear; }
+@media (prefers-reduced-motion: reduce) { .rows-in { animation: none; } }
 </style>
 </head>
 <body>
@@ -373,12 +381,12 @@ tr.blocked .pn { color: var(--ink-2); font-weight: 500; }
     <div class="facts">
       <div class="fact">
         <div class="k">Build total</div>
-        <div class="v" data-bind="total"><span class="cu">SAR</span>9,412</div>
+        <div class="v sw" data-bind="total"><span class="cu">SAR</span>9,412</div>
         <div class="s">Prices as of 30 Sep 2026<sup class="fn"><a href="#n1">1</a></sup></div>
       </div>
       <div class="fact">
         <div class="k">Cyberpunk 2077, 1440p High</div>
-        <div class="v" data-bind="fps">96–108<span class="u"> fps</span></div>
+        <div class="v sw" data-bind="fps">96–108<span class="u"> fps</span></div>
         <div class="ruler" aria-hidden="true"><span class="t" style="left:0"></span><span class="t" style="left:25%"></span><span class="t" style="left:50%"></span><span class="t" style="left:75%"></span><span class="t" style="left:100%"></span><span class="br" data-bind="fps-br"></span></div>
         <div class="rs" aria-hidden="true"><span>0</span><span>80</span><span>160 fps</span></div>
         <div class="s"><span class="conf" aria-label="Medium confidence"><i class="f"></i><i class="f"></i><i></i></span> Medium confidence<sup class="fn"><a href="#n2">2</a></sup></div>
@@ -389,7 +397,7 @@ tr.blocked .pn { color: var(--ink-2); font-weight: 500; }
   <main class="article">
     <div class="kicker"><span>Step 3 of 12</span><span class="k2">Next: <a href="#">Motherboard</a></span></div>
     <h1>Choose a processor</h1>
-    <p class="brief">At 1440p your <b>RTX 5070 Ti</b> sets the pace in most games, so any modern eight-core chip keeps up.<sup class="fn"><a href="#n2">2</a></sup> <span class="b2">Large-cache X3D chips still earn their place in CPU-heavy games like Counter-Strike 2.<sup class="fn"><a href="#n3">3</a></sup></span></p>
+    <p class="brief">At 1440p your <b>RTX 5070 Ti</b> sets the pace, so any modern eight-core chip keeps up.<sup class="fn"><a href="#n2">2</a></sup> <span class="b2">X3D chips still help in CPU-heavy games.<sup class="fn"><a href="#n3">3</a></sup></span></p>
 
     <div class="tools">
       <span class="search"><svg class="i"><use href="#i-search"/></svg>Search 38 processors</span>
@@ -422,8 +430,8 @@ tr.blocked .pn { color: var(--ink-2); font-weight: 500; }
 </div>
 
 <div class="bottom" aria-label="Live summary">
-  <div class="bt"><b data-bind="total-b"><span class="cu">SAR</span>9,412</b><small>As of 30 Sep 2026</small></div>
-  <div class="bf"><b data-bind="fps-b">96–108 fps</b><small>Cyberpunk 2077, medium</small></div>
+  <div class="bt"><b class="sw" data-bind="total-b"><span class="cu">SAR</span>9,412</b><small>As of 30 Sep 2026</small></div>
+  <div class="bf"><b class="sw" data-bind="fps-b">96–108 fps</b><small>Cyberpunk 2077, medium</small></div>
   <span class="sp"></span>
   <button class="cmp" type="button"><svg class="i"><use href="#i-compare"/></svg><span data-bind="cmp-b">Compare 2</span></button>
   <button class="next" type="button"><span class="nl">Next: Motherboard</span><svg class="i"><use href="#i-next"/></svg></button>
@@ -450,6 +458,22 @@ const ST = { ok: ['Fits', 'i-ok'], warn: ['Fits, with a warning', 'i-warn'], blo
 let cur = 'sar', selected = '9800x3d';
 const compare = new Set(['9800x3d', '7800x3d']);
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const MOTION = { dy: '6px', inMs: 280, inDelay: 60, outMs: 160, ease: 'cubic-bezier(.3, 0, .1, 1)' };
+// Number change: the new value sits in the layout; the old value leaves as an overlay.
+// Web Animations on transform and opacity only, so it runs on the compositor. Reduced motion: instant swap.
+function swap(el, html) {
+  const cur = el.querySelector(':scope > .sw-new');
+  const prev = cur ? cur.innerHTML : el.innerHTML;
+  if (prev === html) return;
+  if (reduce) { el.innerHTML = `<span class="sw-new">${html}</span>`; return; }
+  el.innerHTML = `<span class="sw-new">${html}</span><span class="sw-old" aria-hidden="true">${prev}</span>`;
+  const n = el.firstElementChild, p = el.lastElementChild;
+  n.animate([{ transform: `translateY(${MOTION.dy})`, opacity: 0 }, { transform: 'translateY(0)', opacity: 1 }],
+    { duration: MOTION.inMs, delay: MOTION.inDelay, easing: MOTION.ease, fill: 'backwards' });
+  p.animate([{ transform: 'translateY(0)', opacity: 1 }, { transform: `translateY(-${MOTION.dy})`, opacity: 0 }],
+    { duration: MOTION.outMs, easing: MOTION.ease, fill: 'forwards' }).onfinish = () => p.remove();
+}
+
 const fmt = (n) => n.toLocaleString('en-US');
 const bind = (k) => document.querySelector(`[data-bind="${k}"]`);
 function row(c) {
@@ -486,11 +510,11 @@ let last = OTHER.sar + 1899;
 function readouts() {
   const c = CPUS.find((x) => x.id === selected);
   const total = OTHER[cur] + (c[cur] || 0), code = cur === 'sar' ? 'SAR' : 'USD';
-  tween(bind('total'), last, total, (v) => `<span class="cu">${code}</span>${fmt(v)}`);
-  tween(bind('total-b'), last, total, (v) => `<span class="cu">${code}</span>${fmt(v)}`);
+  swap(bind('total'), `<span class="cu">${code}</span>${fmt(total)}`);
+  swap(bind('total-b'), `<span class="cu">${code}</span>${fmt(total)}`);
   last = total;
-  bind('fps').innerHTML = `${c.cp[0]}–${c.cp[1]}<span class="u"> fps</span>`;
-  bind('fps-b').textContent = `${c.cp[0]}–${c.cp[1]} fps`;
+  swap(bind('fps'), `${c.cp[0]}–${c.cp[1]}<span class="u"> fps</span>`);
+  swap(bind('fps-b'), `${c.cp[0]}–${c.cp[1]} fps`);
   const w = document.querySelector('.ruler').clientWidth || 180;
   bind('fps-br').style.transform = `translateX(${c.cp[0] / 160 * w}px) scaleX(${(c.cp[1] - c.cp[0]) / 160})`;
   bind('cap-cpu').textContent = c.short;

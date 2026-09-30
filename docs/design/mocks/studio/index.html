@@ -20,7 +20,7 @@
   --edge: #2d2f34;
   --ink: #f4f4f3;
   --ink-2: #babcc0;
-  --ink-3: #8e9197;
+  --ink-3: #9da0a6;
   --ok: #62d497;
   --warn: #f4ba4e;
   --block: #ff8b80;
@@ -160,7 +160,7 @@ svg.i { width: 18px; height: 18px; flex: none; stroke: currentColor; fill: none;
 .f[aria-pressed="true"] { background: var(--panel-2); color: var(--ink); border-color: var(--ink-3); }
 .f svg.i { width: 15px; height: 15px; }
 .list { overflow: auto; padding: 0 8px 8px; flex: 1; scrollbar-width: thin; }
-.part { position: relative; display: grid; grid-template-columns: 22px minmax(0, 1fr) auto; gap: 2px 12px; padding: 12px 10px 12px 12px; border-radius: 14px; cursor: pointer; }
+.part { position: relative; display: grid; grid-template-columns: 22px minmax(0, 1fr) auto; gap: 2px 12px; padding: 11px 10px 11px 12px; border-radius: 14px; cursor: pointer; }
 .part + .part { margin-top: 2px; }
 .part:hover { background: var(--panel-2); }
 .part.sel { background: var(--panel-2); box-shadow: inset 0 0 0 1px var(--edge); }
@@ -213,7 +213,6 @@ svg.i { width: 18px; height: 18px; flex: none; stroke: currentColor; fill: none;
 .mock { position: fixed; z-index: 4; left: 40px; bottom: 176px; color: var(--ink-3); font-size: 12px; line-height: 16px; }
 
 /* motion: transform and opacity only */
-.part { transition: background-color 160ms ease-out; }
 .callout { transition: opacity 200ms ease-out, transform 360ms cubic-bezier(.2, .8, .2, 1); }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: 0ms !important; animation-duration: 0ms !important; } }
 
@@ -283,6 +282,14 @@ svg.i { width: 18px; height: 18px; flex: none; stroke: currentColor; fill: none;
   .btn.primary .nl { display: none; }
   .mock { padding: 12px 16px 0; }
 }
+
+/* number swap (see swap() in the script) */
+.sw { position: relative; display: inline-block; }
+.sw-new { display: inline-block; }
+.sw-old { position: absolute; inset: 0; text-align: inherit; white-space: nowrap; pointer-events: none; }
+@keyframes rows-in { from { opacity: 0; } to { opacity: 1; } }
+.rows-in { animation: rows-in var(--rows-ms, 120ms) linear; }
+@media (prefers-reduced-motion: reduce) { .rows-in { animation: none; } }
 </style>
 </head>
 <body>
@@ -369,15 +376,15 @@ svg.i { width: 18px; height: 18px; flex: none; stroke: currentColor; fill: none;
     <div class="track" aria-hidden="true"><i class="d"></i><i class="d"></i><i class="c"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
   </section>
   <section class="fps1" aria-label="Estimated frame rate">
-    <div class="big" data-bind="fps">96–108<span class="unit">fps</span></div>
+    <div class="big sw" data-bind="fps">96–108<span class="unit">fps</span></div>
     <div class="cap"><span>Cyberpunk 2077<span class="hide-s">, 1440p High</span></span><span class="conf" aria-label="Medium confidence"><i class="f"></i><i class="f"></i><i></i><span class="hide-s">Medium</span></span></div>
   </section>
   <section class="fps2" aria-label="Estimated frame rate, second game">
-    <div class="big" style="font-size:26px;line-height:32px" data-bind="fps2">470–540<span class="unit">fps</span></div>
+    <div class="big sw" style="font-size:26px;line-height:32px" data-bind="fps2">470–540<span class="unit">fps</span></div>
     <div class="cap"><span>Counter-Strike 2</span><span class="conf" aria-label="Low confidence"><i class="f"></i><i></i><i></i>Low</span></div>
   </section>
   <section class="tot" aria-label="Build total">
-    <div class="big" data-bind="total"><span class="cu">SAR</span>9,412</div>
+    <div class="big sw" data-bind="total"><span class="cu">SAR</span>9,412</div>
     <div class="cap"><span><span class="hide-s">Prices </span>as of 30 Sep 2026</span><a class="hide-s" href="#">Sources</a></div>
   </section>
   <span class="sp"></span>
@@ -395,8 +402,6 @@ const CPUS = [
   { id: '7800x3d', name: 'AMD Ryzen 7 7800X3D', short: 'Ryzen 7 7800X3D', sub: '8 cores, 5.0 GHz, 120 W', sar: 1549, usd: 399, cp: [95, 107], cs: [420, 490], state: 'ok' },
   { id: '9950x3d', name: 'AMD Ryzen 9 9950X3D', short: 'Ryzen 9 9950X3D', sub: '16 cores, 5.7 GHz, 170 W', sar: 2849, usd: 699, cp: [96, 109], cs: [480, 550], state: 'warn',
     reason: 'Draws up to 230 W under all-core load, so your 120 mm air cooler will run loud in long renders.', rule: 'cooler-tdp-class' },
-  { id: '9600x', name: 'AMD Ryzen 5 9600X', short: 'Ryzen 5 9600X', sub: '6 cores, 5.4 GHz, 65 W', sar: 899, usd: 229, cp: [92, 104], cs: [360, 420], state: 'warn',
-    reason: 'May need a BIOS update before first boot. Your board can update without a CPU installed.', rule: 'bios-min-version' },
   { id: '265k', name: 'Intel Core Ultra 7 265K', short: 'Core Ultra 7 265K', sub: 'LGA1851, 20 cores, 5.5 GHz', sar: 1199, usd: 299, state: 'block',
     reason: 'Needs an LGA1851 board. Your board is AM5.', rule: 'socket-match' },
   { id: '14600k', name: 'Intel Core i5-14600K', short: 'Core i5-14600K', sub: 'LGA1700, 14 cores, 5.3 GHz', sar: 799, usd: 199, state: 'block',
@@ -408,6 +413,22 @@ const ST = { ok: ['Fits your build', 'i-ok'], warn: ['Fits, with a warning', 'i-
 let cur = 'sar', selected = '9800x3d';
 const compare = new Set(['9800x3d', '7800x3d']);
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const MOTION = { dy: '55%', inMs: 360, inDelay: 40, outMs: 240, ease: 'cubic-bezier(.2, .8, .2, 1)' };
+// Number change: the new value sits in the layout; the old value leaves as an overlay.
+// Web Animations on transform and opacity only, so it runs on the compositor. Reduced motion: instant swap.
+function swap(el, html) {
+  const cur = el.querySelector(':scope > .sw-new');
+  const prev = cur ? cur.innerHTML : el.innerHTML;
+  if (prev === html) return;
+  if (reduce) { el.innerHTML = `<span class="sw-new">${html}</span>`; return; }
+  el.innerHTML = `<span class="sw-new">${html}</span><span class="sw-old" aria-hidden="true">${prev}</span>`;
+  const n = el.firstElementChild, p = el.lastElementChild;
+  n.animate([{ transform: `translateY(${MOTION.dy})`, opacity: 0 }, { transform: 'translateY(0)', opacity: 1 }],
+    { duration: MOTION.inMs, delay: MOTION.inDelay, easing: MOTION.ease, fill: 'backwards' });
+  p.animate([{ transform: 'translateY(0)', opacity: 1 }, { transform: `translateY(-${MOTION.dy})`, opacity: 0 }],
+    { duration: MOTION.outMs, easing: MOTION.ease, fill: 'forwards' }).onfinish = () => p.remove();
+}
+
 const fmt = (n) => n.toLocaleString('en-US');
 const bind = (k) => document.querySelector(`[data-bind="${k}"]`);
 
@@ -438,9 +459,9 @@ let last = OTHER.sar + 1899;
 function readouts() {
   const c = CPUS.find((x) => x.id === selected);
   const total = OTHER[cur] + (c[cur] || 0), code = cur === 'sar' ? 'SAR' : 'USD';
-  tween(bind('total'), last, total, (v) => `<span class="cu">${code}</span>${fmt(v)}`); last = total;
-  bind('fps').innerHTML = `${c.cp[0]}–${c.cp[1]}<span class="unit">fps</span>`;
-  bind('fps2').innerHTML = `${c.cs[0]}–${c.cs[1]}<span class="unit">fps</span>`;
+  swap(bind('total'), `<span class="cu">${code}</span>${fmt(total)}`);
+  swap(bind('fps'), `${c.cp[0]}–${c.cp[1]}<span class="unit">fps</span>`);
+  swap(bind('fps2'), `${c.cs[0]}–${c.cs[1]}<span class="unit">fps</span>`);
   bind('co-name').textContent = c.short;
   const [lab, icon] = ST[c.state];
   const chip = bind('co-state'); chip.className = 'chip ' + c.state; chip.innerHTML = `<svg class="i"><use href="#${icon}"/></svg>${c.state === 'ok' ? 'Fits your board' : 'Fits, see warning'}`;

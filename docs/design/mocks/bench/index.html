@@ -257,7 +257,7 @@ kbd { font-family: inherit; border: 1px solid var(--line); border-bottom-width: 
 
 /* ---------- motion (transform and opacity only) ---------- */
 .band, .mini b, .meter b, .budget b, .med { transition: transform 180ms cubic-bezier(.2, 0, 0, 1); }
-tr.part td { transition: background-color 120ms linear; }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: 0ms !important; animation-duration: 0ms !important; }
 }
@@ -355,6 +355,14 @@ tr.part td { transition: background-color 120ms linear; }
   .cur, .ph { display: inline !important; }
   .phone-note { display: block !important; }
 }
+
+/* number swap (see swap() in the script) */
+.sw { position: relative; display: inline-block; }
+.sw-new { display: inline-block; }
+.sw-old { position: absolute; inset: 0; text-align: inherit; white-space: nowrap; pointer-events: none; }
+@keyframes rows-in { from { opacity: 0; } to { opacity: 1; } }
+.rows-in { animation: rows-in var(--rows-ms, 120ms) linear; }
+@media (prefers-reduced-motion: reduce) { .rows-in { animation: none; } }
 </style>
 </head>
 <body>
@@ -496,7 +504,7 @@ tr.part td { transition: background-color 120ms linear; }
   <aside class="readout" aria-label="Live readouts">
     <section class="rpanel rp-total" aria-label="Build total">
       <h2><span>Build total</span><span data-bind="market">SA market</span></h2>
-      <div class="big num" data-bind="total"><span class="unit">SAR</span>9,412</div>
+      <div class="big num sw" data-bind="total"><span class="unit">SAR</span>9,412</div>
       <div class="row"><span>Budget</span><span class="num" data-bind="budget">SAR 9,500, SAR 88 left</span></div>
       <div class="budget"><b data-bind="budget-bar" style="transform:scaleX(.991)"></b></div>
       <div class="prov"><span>Prices as of 30 Sep 2026</span><span class="num">9 of 10 parts priced</span><a href="#">Sources</a></div>
@@ -512,7 +520,7 @@ tr.part td { transition: background-color 120ms linear; }
           <span class="band" data-bind="cp-band" style="left:0;transform:translateX(160px) scaleX(.0625)"></span>
         </div>
         <div class="range-scale num"><span>0</span><span>40</span><span>80</span><span>120</span><span>160</span></div>
-        <div class="reading-line"><span class="v num" data-bind="fps-cp">96–108<span class="unit"> fps</span></span><span class="conf">Medium<i class="f"></i><i class="f"></i><i></i></span></div>
+        <div class="reading-line"><span class="v num sw" data-bind="fps-cp">96–108<span class="unit"> fps</span></span><span class="conf">Medium<i class="f"></i><i class="f"></i><i></i></span></div>
         <div class="limiter">Limited by the graphics card. A faster CPU adds about 1%.</div>
       </div>
       <div class="game">
@@ -523,7 +531,7 @@ tr.part td { transition: background-color 120ms linear; }
           <span class="band" data-bind="cs-band" style="left:0;transform:translateX(200px) scaleX(.1)"></span>
         </div>
         <div class="range-scale num"><span>0</span><span>150</span><span>300</span><span>450</span><span>600</span></div>
-        <div class="reading-line"><span class="v num" data-bind="fps-cs">470–540<span class="unit"> fps</span></span><span class="conf">Low<i class="f"></i><i></i><i></i></span></div>
+        <div class="reading-line"><span class="v num sw" data-bind="fps-cs">470–540<span class="unit"> fps</span></span><span class="conf">Low<i class="f"></i><i></i><i></i></span></div>
         <div class="limiter">Limited by the processor. Varies by map.</div>
       </div>
       <div class="prov"><span>Estimates from published reviews, not measured on this build.</span><a href="#">Method</a></div>
@@ -561,8 +569,8 @@ tr.part td { transition: background-color 120ms linear; }
 </div>
 
 <div class="dock" aria-label="Live readout">
-  <div class="d-total"><b class="num" data-bind="dock-total"><span class="unit">SAR</span>9,412</b><small>As of 30 Sep 2026</small></div>
-  <div class="d-fps"><b class="num" data-bind="dock-cp">96–108<span class="unit"> fps</span></b><small>Cyberpunk, medium</small></div>
+  <div class="d-total"><b class="num sw" data-bind="dock-total"><span class="unit">SAR</span>9,412</b><small>As of 30 Sep 2026</small></div>
+  <div class="d-fps"><b class="num sw" data-bind="dock-cp">96–108<span class="unit"> fps</span></b><small>Cyberpunk, medium</small></div>
   <div class="d-fps d-cs"><b class="num" data-bind="dock-cs">470–540<span class="unit"> fps</span></b><small>Counter-Strike 2, low</small></div>
   <div class="d-cmp"><button class="primary" type="button"><svg class="i"><use href="#i-compare"/></svg><span class="cl">Compare </span><span data-bind="dock-cmp">2</span></button></div>
 </div>
@@ -591,6 +599,22 @@ const STATE = { ok: ['Compatible', 'i-ok'], warn: ['Warning', 'i-warn'], block: 
 let cur = 'sar', selected = '9800x3d';
 const compare = new Set(['9800x3d', '7800x3d']);
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const MOTION = { dy: '40%', inMs: 160, inDelay: 0, outMs: 120, ease: 'cubic-bezier(.2, 0, 0, 1)' };
+// Number change: the new value sits in the layout; the old value leaves as an overlay.
+// Web Animations on transform and opacity only, so it runs on the compositor. Reduced motion: instant swap.
+function swap(el, html) {
+  const cur = el.querySelector(':scope > .sw-new');
+  const prev = cur ? cur.innerHTML : el.innerHTML;
+  if (prev === html) return;
+  if (reduce) { el.innerHTML = `<span class="sw-new">${html}</span>`; return; }
+  el.innerHTML = `<span class="sw-new">${html}</span><span class="sw-old" aria-hidden="true">${prev}</span>`;
+  const n = el.firstElementChild, p = el.lastElementChild;
+  n.animate([{ transform: `translateY(${MOTION.dy})`, opacity: 0 }, { transform: 'translateY(0)', opacity: 1 }],
+    { duration: MOTION.inMs, delay: MOTION.inDelay, easing: MOTION.ease, fill: 'backwards' });
+  p.animate([{ transform: 'translateY(0)', opacity: 1 }, { transform: `translateY(-${MOTION.dy})`, opacity: 0 }],
+    { duration: MOTION.outMs, easing: MOTION.ease, fill: 'forwards' }).onfinish = () => p.remove();
+}
+
 const fmt = (n) => n.toLocaleString('en-US');
 const money = (n) => n == null ? null : (cur === 'sar' ? 'SAR ' : 'USD ') + fmt(n);
 const $ = (s) => document.querySelector(s);
@@ -650,16 +674,16 @@ function readouts() {
   const c = CPUS.find((x) => x.id === selected);
   const total = OTHER[cur] + (c[cur] || 0);
   const code = cur === 'sar' ? 'SAR' : 'USD';
-  tween(bind('total'), lastTotal, total, (v) => `<span class="unit">${code}</span>${fmt(v)}`);
+  swap(bind('total'), `<span class="unit">${code}</span>${fmt(total)}`);
   lastTotal = total;
   const budget = cur === 'sar' ? 9500 : 2530;
   bind('budget').textContent = `${code} ${fmt(budget)}, ${code} ${fmt(Math.abs(budget - total))} ${budget >= total ? 'left' : 'over'}`;
   bind('budget-bar').style.transform = `scaleX(${Math.min(1, total / budget)})`;
-  bind('fps-cp').innerHTML = `${c.cp[0]}–${c.cp[1]}<span class="unit"> fps</span>`;
-  bind('fps-cs').innerHTML = `${c.cs[0]}–${c.cs[1]}<span class="unit"> fps</span>`;
-  bind('dock-cp').innerHTML = `${c.cp[0]}–${c.cp[1]}<span class="unit"> fps</span>`;
+  swap(bind('fps-cp'), `${c.cp[0]}–${c.cp[1]}<span class="unit"> fps</span>`);
+  swap(bind('fps-cs'), `${c.cs[0]}–${c.cs[1]}<span class="unit"> fps</span>`);
+  swap(bind('dock-cp'), `${c.cp[0]}–${c.cp[1]}<span class="unit"> fps</span>`);
   bind('dock-cs').innerHTML = `${c.cs[0]}–${c.cs[1]}<span class="unit"> fps</span>`;
-  tween(bind('dock-total'), lastDock, total, (v) => `<span class="unit">${code}</span>${fmt(v)}`);
+  swap(bind('dock-total'), `<span class="unit">${code}</span>${fmt(total)}`);
   lastDock = total;
   bind('dock-cmp').textContent = `${compare.size}`;
   const w = document.querySelector('.range').clientWidth || 312;
@@ -680,7 +704,7 @@ document.addEventListener('click', (e) => {
   const tr = e.target.closest('tr.part');
   if (tr && !tr.classList.contains('blocked')) { selected = tr.dataset.id; render(); readouts(); return; }
   const seg = e.target.closest('.seg button');
-  if (seg) { cur = seg.dataset.cur; document.querySelectorAll('.seg button').forEach((b) => b.setAttribute('aria-pressed', b === seg)); render(); readouts(); return; }
+  if (seg) { cur = seg.dataset.cur; document.querySelectorAll('.seg button').forEach((b) => b.setAttribute('aria-pressed', b === seg)); render(); $('#rows').classList.remove('rows-in'); void $('#rows').offsetWidth; $('#rows').classList.add('rows-in'); readouts(); return; }
   if (e.target.closest('#theme')) { const r = document.documentElement; r.dataset.theme = r.dataset.theme === 'light' ? 'dark' : 'light'; }
 });
 const q = new URLSearchParams(location.search);

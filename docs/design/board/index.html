@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rig Lab directions board</title>
+<meta name="description" content="WP-DS0: the three design directions for Rig Lab side by side, each with a two-sentence thesis and its three mock screenshots. Design mocks with illustrative values, not data.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..700&family=Mona+Sans:wdth,wght@100..125,300..500&family=Public+Sans:wght@400..600&family=Source+Serif+4:opsz,wght@8..60,600&display=swap" rel="stylesheet">
+<style>
+/* Neutral presentation chrome, so no direction is favoured by the board itself. */
+:root { --bg: #e6e6e3; --card: #f7f7f5; --ink: #18181a; --ink-2: #4a4a4f; --ink-3: #66666c; --rule: #cfcfca; color-scheme: light; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Public Sans", system-ui, sans-serif; font-size: 15px; line-height: 22px; -webkit-font-smoothing: antialiased; }
+img { display: block; width: 100%; height: auto; border-radius: 6px; box-shadow: 0 1px 2px rgba(0,0,0,.18), 0 6px 18px rgba(0,0,0,.10); background: #111; }
+.cap { font-size: 12px; line-height: 16px; color: var(--ink-3); margin-top: 6px; }
+.name-a { font-family: "Archivo", sans-serif; font-stretch: 75%; font-weight: 700; letter-spacing: .01em; }
+.name-b { font-family: "Source Serif 4", serif; font-weight: 600; letter-spacing: -.01em; }
+.name-c { font-family: "Mona Sans", sans-serif; font-stretch: 125%; font-weight: 300; letter-spacing: -.01em; }
+.letter { font-size: 13px; line-height: 18px; color: var(--ink-3); font-weight: 600; }
+.foot { margin-top: 20px; font-size: 12px; line-height: 18px; color: var(--ink-3); }
+
+/* one-screen summary for a single direction: 1600 x ~760 */
+.summary { width: 1600px; padding: 36px 40px 30px; }
+.summary header { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 40px; align-items: end; margin-bottom: 22px; }
+.summary h1 { margin: 2px 0 10px; font-size: 64px; line-height: 64px; }
+.summary .thesis { margin: 0; font-size: 19px; line-height: 29px; color: var(--ink-2); max-width: 70ch; }
+.summary dl { margin: 0; display: grid; grid-template-columns: 96px 1fr; gap: 6px 12px; font-size: 13px; line-height: 18px; border-left: 1px solid var(--rule); padding-left: 20px; }
+.summary dt { color: var(--ink-3); }
+.summary dd { margin: 0; color: var(--ink); }
+.summary .shots { display: grid; grid-template-columns: 624px 624px 188px; gap: 22px; align-items: start; }
+
+/* the three directions side by side: 1600 x ~1400 */
+.compare { width: 1600px; padding: 34px 36px 30px; }
+.compare > h1 { margin: 0 0 4px; font-size: 26px; line-height: 32px; font-weight: 600; }
+.compare > p { margin: 0 0 22px; color: var(--ink-2); max-width: 110ch; }
+.cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
+.col h2 { margin: 2px 0 8px; font-size: 44px; line-height: 46px; font-weight: inherit; }
+.col .thesis { margin: 0 0 16px; font-size: 14px; line-height: 21px; color: var(--ink-2); min-height: 105px; }
+.col .stack { display: grid; gap: 14px; }
+.col .pair { display: grid; grid-template-columns: 1fr 112px; gap: 12px; align-items: start; }
+.hidden { display: none; }
+</style>
+</head>
+<body>
+<main id="compare" class="compare">
+  <h1>Rig Lab: three directions for the builder</h1>
+  <p>The same CPU step drawn three ways, with the same parts and the same illustrative numbers. Each column shows 1440 px dark, 1440 px light and 390 px dark. Design mocks with illustrative values, not data.</p>
+  <div class="cols">
+    <section class="col">
+      <div class="letter">Direction A</div>
+      <h2 class="name-a">Bench</h2>
+      <p class="thesis" data-thesis="a"></p>
+      <div class="stack">
+        <div><img src="../mocks/bench/1440-dark.jpg" alt="Bench at 1440 px, dark"><div class="cap">1440 px, dark</div></div>
+        <div class="pair"><div><img src="../mocks/bench/1440-light.jpg" alt="Bench at 1440 px, light"><div class="cap">1440 px, light</div></div><div><img src="../mocks/bench/390-dark.jpg" alt="Bench at 390 px, dark"><div class="cap">390 px, dark</div></div></div>
+      </div>
+    </section>
+    <section class="col">
+      <div class="letter">Direction B</div>
+      <h2 class="name-b">Folio</h2>
+      <p class="thesis" data-thesis="b"></p>
+      <div class="stack">
+        <div><img src="../mocks/folio/1440-dark.jpg" alt="Folio at 1440 px, dark"><div class="cap">1440 px, dark</div></div>
+        <div class="pair"><div><img src="../mocks/folio/1440-light.jpg" alt="Folio at 1440 px, light"><div class="cap">1440 px, light</div></div><div><img src="../mocks/folio/390-dark.jpg" alt="Folio at 390 px, dark"><div class="cap">390 px, dark</div></div></div>
+      </div>
+    </section>
+    <section class="col">
+      <div class="letter">Direction C</div>
+      <h2 class="name-c">Studio</h2>
+      <p class="thesis" data-thesis="c"></p>
+      <div class="stack">
+        <div><img src="../mocks/studio/1440-dark.jpg" alt="Studio at 1440 px, dark"><div class="cap">1440 px, dark</div></div>
+        <div class="pair"><div><img src="../mocks/studio/1440-light.jpg" alt="Studio at 1440 px, light"><div class="cap">1440 px, light</div></div><div><img src="../mocks/studio/390-dark.jpg" alt="Studio at 390 px, dark"><div class="cap">390 px, dark</div></div></div>
+      </div>
+    </section>
+  </div>
+  <p class="foot">WP-DS0, 30 Sep 2026. Mocks: docs/design/mocks/&lt;slug&gt;/index.html. Full specification: docs/design/direction.md.</p>
+</main>
+
+<main id="summary" class="summary hidden">
+  <header>
+    <div>
+      <div class="letter" data-f="letter"></div>
+      <h1 data-f="name"></h1>
+      <p class="thesis" data-f="thesis"></p>
+    </div>
+    <dl data-f="facts"></dl>
+  </header>
+  <div class="shots">
+    <div><img data-f="d" alt=""><div class="cap">1440 px, dark</div></div>
+    <div><img data-f="l" alt=""><div class="cap">1440 px, light</div></div>
+    <div><img data-f="p" alt=""><div class="cap">390 px, dark</div></div>
+  </div>
+</main>
+
+<script>
+const D = {
+  a: { slug: 'bench', letter: 'Direction A', name: 'Bench', cls: 'name-a',
+    thesis: 'Rig Lab as a calibrated test bench: every panel is an instrument and every number is a reading with its tolerance. The whole build stays on screen at once, so you can tune it without losing sight of the machine or its numbers.',
+    facts: [['Structure', 'Fixed workspace: step rail, specimen window, dense table, readout column'], ['Type', 'Archivo (OFL), one variable file, 40 KB'], ['Colour', 'Graphite; colour means state or a measurement'], ['Phone', 'Stepper, small specimen, stacked rows, docked readout'], ['Best at', 'Dense comparison, experts, speed']] },
+  b: { slug: 'folio', letter: 'Direction B', name: 'Folio', cls: 'name-b',
+    thesis: 'Rig Lab as the best hardware review you have ever read, written for your build: each step opens with a plain-English brief, a reasoned shortlist and footnoted sources. Trust comes from the writing and the citations, while the build sits beside you like a plate in a well-made catalogue.',
+    facts: [['Structure', 'Scrolling review: figure plate, brief, annotated catalogue, margin notes'], ['Type', 'Source Serif 4 and Chivo (both OFL), 70 KB'], ['Colour', 'Warm ink and white paper; ink-blue citations'], ['Phone', 'Step bar, compact figure, entries, docked total'], ['Best at', 'First-time buyers, trust, explanation']] },
+  c: { slug: 'studio', letter: 'Direction C', name: 'Studio', cls: 'name-c',
+    thesis: 'Rig Lab as a product studio: your build stands full-screen under studio light and turns to show the part you are choosing, while the controls wait quietly at the edges. Every choice lands on the machine first, and the numbers settle in the same beat.',
+    facts: [['Structure', 'Full-bleed 3D stage, part rail, bottom dock, pinned callouts'], ['Type', 'Mona Sans (OFL), one variable file, 70 KB'], ['Colour', 'Neutral studio; colour comes from light'], ['Phone', 'Stage on top, bottom sheet, docked total'], ['Best at', 'Desire, looks, the 3D build']] },
+};
+document.querySelectorAll('[data-thesis]').forEach((p) => { p.textContent = D[p.dataset.thesis].thesis; });
+const v = new URLSearchParams(location.search).get('view');
+if (v && D[v]) {
+  const d = D[v];
+  document.getElementById('compare').classList.add('hidden');
+  const s = document.getElementById('summary'); s.classList.remove('hidden');
+  s.querySelector('[data-f="letter"]').textContent = d.letter;
+  const h = s.querySelector('[data-f="name"]'); h.textContent = d.name; h.className = d.cls;
+  s.querySelector('[data-f="thesis"]').textContent = d.thesis;
+  s.querySelector('[data-f="facts"]').innerHTML = d.facts.map(([k, x]) => `<dt>${k}</dt><dd>${x}</dd>`).join('');
+  for (const [k, f] of [['d', '1440-dark'], ['l', '1440-light'], ['p', '390-dark']]) { const im = s.querySelector(`[data-f="${k}"]`); im.src = `../mocks/${d.slug}/${f}.jpg`; im.alt = `${d.name} at ${f.replace('-', ' px, ')}`; }
+}
+</script>
+</body>
+</html>
