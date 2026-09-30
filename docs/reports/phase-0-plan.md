@@ -33,11 +33,25 @@ These override anything below that says otherwise.
   error. It launched as a named, messageable **background subagent**: `ListAgents` lists every agent
   under "Subagents" and has no Teammates section. The new agent also took over the name `qa-lead`
   from the earlier instance, which is now addressable only by its agent ID.
+- The test spawn's own capability report adds four facts:
+  - A lead-type subagent has **no `Agent` tool**, so it **cannot spawn workers**. It also has no
+    `ListAgents`, `TaskList` or `TaskUpdate`.
+  - `SendMessage` works both ways: a lead can reach the Director at `main`, and the Director can
+    reach a lead by name or agent ID.
+  - A lead's run ends when it hands back. A `SendMessage` to it by name resumes it with its context.
+  - When two agents share a name, the latest spawn takes it, and the earlier one is reachable only
+    by its agent ID.
 - Phase 0 therefore runs under the **BUILD_PROMPT §1 fallback**:
-  - one lead-type subagent per work package, which does the work and reviews its own output;
+  - one lead-type subagent per work package, which **does its team's work itself** and reviews its
+    own output;
   - then a **fresh** `qa-lead` subagent verifies independently;
   - then the Director reviews.
-  The independent QA step is never skipped.
+  The independent QA step is never skipped. The task list is the Director's.
+- Container quirks for every spawn:
+  - An isolated worktree is created from the old commit `a2c7ca9`, so it must be fast-forwarded to
+    the integration branch before any work (`git merge --ff-only claude/keen-lamport-0794zj`).
+  - The worktree guard refuses complex compound `git` commands. Run plain git commands, one per
+    call, from inside the worktree.
 
 ---
 
