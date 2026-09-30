@@ -85,6 +85,8 @@
     "aggregation": "median",
     "warmupRuns": 1,
     "calibrationMs": 2000,
+    "maxRunSpreadPct": 15,
+    "maxRunSpreadSource": "qa-lead: if (max - min) / median of the per-run averages exceeds this, the runs disagree and the result is INCONCLUSIVE, not a measurement. Added after uncapped SwiftShader gave 379, 3.8 and 2.2 fps on one scene (2026-09-30).",
     "metric": "avgFps = (frames - 1) / elapsed seconds while the scene plays its scripted, time-based camera path, with the browser frame-rate limit off. Also recorded: 1% low = 1000 / p99 frame interval, min fps, p50/p95/p99 frame time.",
     "targets": {
       "referenceLaptop": {
