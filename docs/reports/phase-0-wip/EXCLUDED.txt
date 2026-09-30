@@ -1,0 +1,23 @@
+Rig Lab Phase 0: what was deliberately NOT preserved from the cloud container (2026-09-30)
+Everything else from the team worktrees and the session scratchpad is in evidence/*.tar.xz.part-*.
+Each item below can be recreated; none of it is work or unique evidence.
+
+1. data-lead artifacts/scratch/venv/ (50 MB, ~2,300 files)
+   A local Python virtualenv. Recreate: python -m venv artifacts/scratch/venv, then pip install
+   what the scripts in artifacts/scratch/ import. The 64 scripts themselves ARE preserved.
+
+2. data-lead artifacts/specs/case/fractal-terra-support-cooler-gpu.html (38,922 bytes)
+   Left out because the page's own code embeds an AWS access-key ID of Fractal Design's support
+   site (not ours), which secret scanners flag. Re-fetch from the source if needed:
+   https://support.fractal-design.com/support/solutions/articles/4000194849-terra-cpu-cooler-gpu-support
+   (first retrieved 2026-09-30T19:42:24Z, HTTP 200). Its SHA-256 is still listed in
+   evidence/data-lead-evidence-manifest.sha256.txt.
+
+3. Session scratchpad, large throwaway items (about 1.7 GB):
+   merge-check/, clean-checkout/, wpq1/ (repo copies used for merge checks and QA mutation tests),
+   vite-probe/, routerbench/, ts6/, ts7/, qa-tools/ (build-lead's version and router benchmark
+   projects; results are in the hand-off), actionlint/, shellcheck/ (downloaded tool binaries),
+   pylib/ (HarfBuzz Python bindings; pip install uharfbuzz), build-scaffold.tar (a git export).
+
+4. node_modules/, dist/, coverage/, playwright-report/, test-results/, .lighthouseci/ in every
+   worktree: build and test output, recreated by npm ci and the npm scripts.
