@@ -22,6 +22,19 @@ export const RadiatorSize = z.union([
 export const GpuClearance = z.strictObject({ maxLengthMm: PosNum, condition: z.string().min(1).nullable() });
 export const CoolerClearance = z.strictObject({ maxHeightMm: PosNum, condition: z.string().min(1).nullable() });
 
+/**
+ * One published position of a movable motherboard plate ("spine"). Each position trades CPU cooler
+ * height for GPU thickness; a build fits when any single position fits both the cooler and the GPU.
+ */
+export const LayoutPosition = z.strictObject({
+  position: z.string().min(1),
+  coolerMaxHeightMm: PosNum,
+  gpuMaxThicknessMm: PosNum,
+  /** A tighter thickness limit for GPUs taller than `aboveGpuHeightMm`, when the maker publishes one. */
+  tallGpuLimit: z.strictObject({ aboveGpuHeightMm: PosNum, maxThicknessMm: PosNum }).nullable(),
+});
+export type LayoutPosition = z.infer<typeof LayoutPosition>;
+
 export const Case = z.strictObject({
   ...specRecordBase,
   category: z.literal('case'),
@@ -31,8 +44,18 @@ export const Case = z.strictObject({
   /** GPU length limits. One row per published condition (e.g. "with front radiator"). */
   gpuClearance: z.array(GpuClearance).min(1),
   gpuMaxThicknessMm: PosNum.nullable(),
+  /**
+   * Tallest GPU (bracket to top edge; some makers call it "width") that fits. `null` means the maker
+   * publishes no height limit, as is usual for towers.
+   */
+  gpuMaxHeightMm: PosNum.nullable(),
   /** CPU cooler height limits, one row per published condition. */
   coolerClearance: z.array(CoolerClearance).min(1),
+  /**
+   * Only for cases with a movable motherboard plate. When present, it supersedes the single
+   * cooler-height and GPU-thickness limits above for fit checks.
+   */
+  layoutPositions: z.array(LayoutPosition).min(1).optional(),
   radiatorSupport: z.array(
     z.strictObject({
       position: MountPosition,
@@ -62,12 +85,18 @@ export const Case = z.strictObject({
   }),
   expansionSlots: PosInt,
   frontIo: z.strictObject({
-    usbC: z.array(z.strictObject({ speedGbps: PosNum, count: PosInt, header: z.string().min(1) })),
+    /**
+     * Front USB-C ports, labelled as the maker words them. Each needs a front USB-C header on the
+     * motherboard. `speedGbps: null` plus a note when the maker gives no speed. `[]` means none.
+     */
+    usbC: z.array(z.strictObject({ label: z.string().min(1), speedGbps: PosNum.nullable(), count: PosInt })),
     usbA: z.array(z.strictObject({ speedGbps: PosNum, count: PosInt })),
     audioJack: z.boolean(),
   }),
-  verticalGpuMount: z.enum(['included', 'optional', 'none']),
-  sidePanel: z.enum(['tempered-glass', 'mesh', 'solid', 'acrylic']),
+  /** `null` plus a note when the maker says nothing about vertical GPU mounting. */
+  verticalGpuMount: z.enum(['included', 'optional', 'none']).nullable(),
+  /** The main (window) side panel as the maker lists it, e.g. "Tempered glass", "Ventilated mesh". */
+  sidePanel: z.string().min(1),
   colors: z.array(z.string().min(1)).min(1),
   dimensionsMm: z.strictObject({ height: PosNum, width: PosNum, depth: PosNum }).nullable(),
 });

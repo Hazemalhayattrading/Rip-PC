@@ -204,6 +204,15 @@ describe('sanity', () => {
     expectRule(run(aio(2)), 'sanity');
     expectClean(run(aio(3)));
   });
+  it('a case layout position keeps its tall-GPU limit no looser than the normal one', () => {
+    const layout = (tallLimit: number) => (d: FixtureData) => {
+      first(d.specs.case).layoutPositions = [
+        { position: '1', coolerMaxHeightMm: 77, gpuMaxThicknessMm: 43, tallGpuLimit: { aboveGpuHeightMm: 131, maxThicknessMm: tallLimit } },
+      ];
+    };
+    expectRule(run(layout(50)), 'sanity');
+    expectClean(run(layout(33)));
+  });
 });
 
 describe("prices (Owner's rule 1)", () => {

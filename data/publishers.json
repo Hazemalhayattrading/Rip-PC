@@ -13,6 +13,7 @@
     { "id": "samsung", "name": "Samsung Electronics", "kind": "manufacturer", "domains": ["samsung.com"] },
     { "id": "deepcool", "name": "DeepCool", "kind": "manufacturer", "domains": ["deepcool.com"] },
     { "id": "nzxt", "name": "NZXT", "kind": "manufacturer", "domains": ["nzxt.com"] },
-    { "id": "arctic", "name": "ARCTIC", "kind": "manufacturer", "domains": ["arctic.de"] }
+    { "id": "arctic", "name": "ARCTIC", "kind": "manufacturer", "domains": ["arctic.de"] },
+    { "id": "fractal", "name": "Fractal Design", "kind": "manufacturer", "domains": ["fractal-design.com"] }
   ]
 }
