@@ -1,0 +1,441 @@
+/*
+ * Rig Lab design tokens: direction C, Studio, chosen by Hazem on 2026-09-30.
+ * Owner: design-lead. Values, usage rules and wiring: docs/design/tokens.md.
+ *
+ * Two layers:
+ * 1. Raw values as plain custom properties. Colour, elevation, motion and layout values switch at
+ *    runtime (theme, reduced motion, breakpoint), so components, the 3D scene and scripts read these
+ *    names directly, for example getComputedStyle(root).getPropertyValue('--stage').
+ * 2. The Tailwind v4 mapping (@theme). It turns the raw values into utilities such as bg-surface,
+ *    text-ink, shadow-float, z-dock, duration-value and rounded-panel. Tailwind's default palette,
+ *    type scale, radii, shadows, easings and animations are removed, so only Rig Lab's exist.
+ *
+ * Import this file after 'tailwindcss/theme.css'. Contrast of every text and UI pair, dark and light:
+ *   node docs/design/tools/contrast.mjs --check
+ */
+
+/* ---------- Typeface ---------- */
+
+/*
+ * Rig Lab Sans: a Latin subset of Mona Sans 2.000 (SIL OFL 1.1). "Mona" is a Reserved Font Name and a
+ * subset is a Modified Version, so the family is renamed. One variable file: width 100-125 %,
+ * weight 300-600, 72,332 bytes. Built by docs/design/tools/build-font.py; licence in ./fonts/OFL.txt.
+ *
+ * font-display: swap. Text paints at once in the metric-matched fallback below, so the font never
+ * delays the largest text paint (LCP), and the swap moves nothing (CLS). Preload the file.
+ */
+@font-face {
+  font-family: 'Rig Lab Sans';
+  src: url('./fonts/rig-lab-sans.woff2') format('woff2');
+  font-weight: 300 600;
+  font-stretch: 100% 125%;
+  font-style: normal;
+  font-display: swap;
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD, U+2248, U+2264-2265;
+}
+
+/*
+ * The fallback while Rig Lab Sans loads: a local Arial (or Liberation Sans, which has Arial's widths),
+ * scaled so a line of Rig Lab's own text is as wide as in Rig Lab Sans (width 100, weight 400), with
+ * Rig Lab Sans's line box. Calibrated in Chromium on the Studio mock's 1,689 characters of text by
+ * docs/design/tools/tokens-check.mjs: Rig Lab Sans renders 2.03 % wider than Arial.
+ */
+@font-face {
+  font-family: 'Rig Lab Sans Fallback';
+  src: local('Arial'), local('ArialMT'), local('Liberation Sans'), local('LiberationSans-Regular');
+  size-adjust: 102.03%;
+  ascent-override: 106.83%;
+  descent-override: 31.36%;
+  line-gap-override: 0%;
+}
+
+/* ---------- Colour and elevation: dark first ---------- */
+
+/*
+ * Rig Lab opens dark. data-theme="light" on <html> switches the whole page; the same attribute on
+ * an element switches that subtree. The compatibility states are never shown by colour alone: each
+ * one always has its icon and its word (Fits, Warning, Incompatible) as well.
+ */
+:root,
+[data-theme='dark'] {
+  /* The studio the build stands in: wall, floor and the key light's glow. */
+  --stage: #131416;
+  --stage-floor: #1c1d20;
+  --stage-floor-deep: #0f1012;
+  --stage-key: rgba(255, 244, 232, 0.12);
+
+  /* Panels that float over the stage: the rail, the dock, callouts, pills. */
+  --surface: #17181b;
+  --surface-raised: #212226;
+  --line: #2d2f34;
+
+  /* Text, strongest to quietest. ink-3 is also the colour of control borders. */
+  --ink: #f4f4f3;
+  --ink-2: #babcc0;
+  --ink-3: #9da0a6;
+
+  /* Compatibility states. */
+  --ok: #62d497;
+  --warn: #f4ba4e;
+  --block: #ff8b80;
+
+  /* The primary action and pressed pills; focus rings. */
+  --action: #f4f4f3;
+  --action-ink: #111214;
+  --focus: #ffffff;
+
+  /* The scene's default RGB light. The build's chosen RGB colour replaces it in 3D. */
+  --scene-light: #d4e5ff;
+
+  /* Behind an expanded sheet or the Specs panel; selected text. */
+  --scrim: rgba(0, 0, 0, 0.6);
+  --selection: rgba(244, 244, 243, 0.22);
+
+  /* One elevation for chrome floating over the stage, one for sheets over everything. */
+  --elevation-float: 0 24px 64px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
+  --elevation-overlay: 0 32px 96px rgba(0, 0, 0, 0.6), 0 4px 12px rgba(0, 0, 0, 0.35);
+
+  color-scheme: dark;
+}
+
+[data-theme='light'] {
+  --stage: #f3f3f1;
+  --stage-floor: #e8e8e5;
+  --stage-floor-deep: #d9d9d5;
+  --stage-key: rgba(255, 255, 255, 0.95);
+
+  --surface: #ffffff;
+  --surface-raised: #f3f3f1;
+  --line: #e0e0dc;
+
+  --ink: #111214;
+  --ink-2: #45484d;
+  --ink-3: #62666c;
+
+  --ok: #1c7a45;
+  --warn: #8a5900;
+  --block: #b3261e;
+
+  --action: #111214;
+  --action-ink: #ffffff;
+  --focus: #111214;
+
+  --scene-light: #6f9ee0;
+
+  --scrim: rgba(17, 18, 20, 0.32);
+  --selection: rgba(17, 18, 20, 0.16);
+
+  --elevation-float: 0 16px 48px rgba(20, 20, 28, 0.12), 0 1px 3px rgba(20, 20, 28, 0.08);
+  --elevation-overlay: 0 24px 72px rgba(20, 20, 28, 0.18), 0 2px 6px rgba(20, 20, 28, 0.1);
+
+  color-scheme: light;
+}
+
+/* ---------- Motion (docs/design/motion.md, direction C) ---------- */
+
+/*
+ * Only transform and opacity animate. Numbers swap, they never count through values nobody quoted.
+ * The same values, for Motion and the 3D scene, are in ./motion.ts (a test keeps them equal).
+ */
+:root {
+  --dur-ui: 160ms; /* hover, pressed states, a pill's highlight */
+  --dur-fade: 200ms; /* crossfades: a callout chip, a compatibility state */
+  --dur-exit: 240ms; /* an old value leaving; the step track filling */
+  --dur-value: 360ms; /* a new value arriving; the rail sliding; the callout re-anchoring */
+  --delay-value: 40ms; /* the new value starts after the old one begins to leave */
+  --dur-light: 400ms; /* the RGB colour changing, in the shader */
+  --dur-seat: 500ms; /* a part seating in 3D */
+  --dur-camera: 700ms; /* the camera moving to the next part */
+  --dur-cut: 200ms; /* reduced motion only: the crossfade that replaces a camera move */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-ui: 0ms;
+    --dur-fade: 0ms;
+    --dur-exit: 0ms;
+    --dur-value: 0ms;
+    --delay-value: 0ms;
+    --dur-light: 0ms;
+    --dur-seat: 0ms;
+    --dur-camera: 0ms;
+  }
+}
+
+/* ---------- Layout ---------- */
+
+/*
+ * Studio's frame: the stage fills the viewport and the chrome floats over it. The 3D camera frames
+ * the build inside what is left: below the top bar, above the dock, and left of the rail when the
+ * rail sits beside the stage (lg and up).
+ */
+:root {
+  --gutter: 1rem; /* between floating panels and the viewport edge */
+  --inset: 1rem; /* stage text inset: 16 px on phones, 28 px tablet, 40 px desktop */
+  --topbar: 3.5rem; /* 56 px on phones, 68 px from md */
+  --dock: 4.75rem; /* 76 px on phones, 80 px tablet, 92 px desktop */
+  --rail-width: 26.5rem; /* 424 px beside the stage from lg; full width below */
+  --stage-horizon: 64%; /* where the wall meets the floor */
+
+  /* Layers, back to front. */
+  --z-stage: 0; /* the 3D canvas and its floor shadow */
+  --z-stage-ui: 2; /* leader lines and callouts pinned to the build */
+  --z-chrome: 4; /* the step heading and the 3D tools on the stage */
+  --z-rail: 6;
+  --z-dock: 8;
+  --z-topbar: 10;
+  --z-sheet: 20; /* the phone sheet expanded, the Specs panel */
+  --z-toast: 30;
+}
+
+@media (width >= 48rem) {
+  :root {
+    --inset: 1.75rem;
+    --topbar: 4.25rem;
+    --dock: 5rem;
+  }
+}
+
+@media (width >= 68.75rem) {
+  :root {
+    --inset: 2.5rem;
+    --dock: 5.75rem;
+  }
+}
+
+/* ---------- Tailwind v4 mapping ---------- */
+
+/* Scales that never change at runtime. static: always emitted, so plain CSS can use them too. */
+@theme static {
+  --font-*: initial;
+  --font-sans: 'Rig Lab Sans', 'Rig Lab Sans Fallback', system-ui, sans-serif;
+
+  --font-weight-*: initial;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+
+  /* The type scale is the type-* roles below; Tailwind's text-xs...9xl sizes are removed. */
+  --text-*: initial;
+
+  /* 390, 768, 1100 and 1440 px. lg is where the rail moves beside the stage (measured in the mock). */
+  --breakpoint-*: initial;
+  --breakpoint-sm: 24.375rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 68.75rem;
+  --breakpoint-xl: 90rem;
+
+  --radius-*: initial;
+  --radius-control: 0.3125rem; /* 5 px: checkboxes */
+  --radius-row: 0.875rem; /* 14 px: part rows, callouts */
+  --radius-panel: 1.25rem; /* 20 px: the rail, sheets */
+  --radius-dock: 1.375rem; /* 22 px: the dock */
+  --radius-pill: 9999px; /* pills, round buttons, filter chips */
+
+  /* Spacing keeps Tailwind's 4 px step (p-1 = 4 px, p-4 = 16 px); these are named sizes on top. */
+  --spacing-control: 3rem; /* 48 px: primary buttons */
+  --spacing-control-sm: 2.25rem; /* 36 px: round icon buttons */
+  --spacing-chip: 1.875rem; /* 30 px: filter chips */
+
+  --ease-*: initial;
+  --ease-settle: cubic-bezier(0.2, 0.8, 0.2, 1); /* UI: quick start, soft stop, no overshoot */
+  --ease-dolly: cubic-bezier(0.65, 0, 0.35, 1); /* camera: eases in and out */
+
+  /* No looping UI animation (motion.md rule 4). */
+  --animate-*: initial;
+}
+
+/* Values that switch at runtime. inline: utilities read the raw variable, so they switch with it. */
+@theme inline {
+  --color-*: initial;
+  --color-stage: var(--stage);
+  --color-stage-floor: var(--stage-floor);
+  --color-stage-floor-deep: var(--stage-floor-deep);
+  --color-stage-key: var(--stage-key);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-ok: var(--ok);
+  --color-warn: var(--warn);
+  --color-block: var(--block);
+  --color-action: var(--action);
+  --color-action-ink: var(--action-ink);
+  --color-focus: var(--focus);
+  --color-scene-light: var(--scene-light);
+  --color-scrim: var(--scrim);
+
+  --shadow-*: initial;
+  --shadow-float: var(--elevation-float);
+  --shadow-overlay: var(--elevation-overlay);
+
+  --transition-duration-ui: var(--dur-ui);
+  --transition-duration-fade: var(--dur-fade);
+  --transition-duration-exit: var(--dur-exit);
+  --transition-duration-value: var(--dur-value);
+  --transition-delay-value: var(--delay-value);
+
+  --spacing-gutter: var(--gutter);
+  --spacing-inset: var(--inset);
+  --spacing-topbar: var(--topbar);
+  --spacing-dock: var(--dock);
+  --spacing-rail: var(--rail-width);
+
+  --z-index-stage: var(--z-stage);
+  --z-index-stage-ui: var(--z-stage-ui);
+  --z-index-chrome: var(--z-chrome);
+  --z-index-rail: var(--z-rail);
+  --z-index-dock: var(--z-dock);
+  --z-index-topbar: var(--z-topbar);
+  --z-index-sheet: var(--z-sheet);
+  --z-index-toast: var(--z-toast);
+}
+
+/*
+ * dark: and light: follow data-theme, not the operating system (Rig Lab opens dark either way).
+ * Colours already switch through the tokens; these variants are for rare art-direction changes.
+ */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *, :root:not([data-theme]), :root:not([data-theme]) *));
+@custom-variant light (&:where([data-theme='light'], [data-theme='light'] *));
+
+/* ---------- Type roles ---------- */
+
+/*
+ * One class per role: size, line height, weight, width (Mona Sans's wdth axis) and tracking. Every
+ * role sets tabular figures, so numbers keep their width when they change. Sizes step up at md and lg.
+ */
+@utility type-display {
+  /* The step's name on the stage ("Processor"). 30/34, 48/52 from md, 56/60 from lg. */
+  font-size: 1.875rem;
+  line-height: 2.125rem;
+  font-weight: 300;
+  font-stretch: 125%;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+  @media (width >= 48rem) {
+    font-size: 3rem;
+    line-height: 3.25rem;
+  }
+  @media (width >= 68.75rem) {
+    font-size: 3.5rem;
+    line-height: 3.75rem;
+  }
+}
+
+@utility type-figure {
+  /* Live numbers in the dock: FPS range, build total. 24/28, 30/34 from md, 36/40 from lg. */
+  font-size: 1.5rem;
+  line-height: 1.75rem;
+  font-weight: 300;
+  font-stretch: 125%;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  @media (width >= 48rem) {
+    font-size: 1.875rem;
+    line-height: 2.125rem;
+  }
+  @media (width >= 68.75rem) {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+  }
+}
+
+@utility type-unit {
+  /* The unit or currency beside a figure (fps, SAR). 12/16, 16/20 from md. */
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 400;
+  font-stretch: 100%;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+  @media (width >= 48rem) {
+    font-size: 1rem;
+    line-height: 1.25rem;
+  }
+}
+
+@utility type-wordmark {
+  /* "Rig Lab" in the top bar. 19/24. */
+  font-size: 1.1875rem;
+  line-height: 1.5rem;
+  font-weight: 600;
+  font-stretch: 125%;
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+@utility type-heading {
+  /* Panel titles ("Processors" in the rail). 17/22. */
+  font-size: 1.0625rem;
+  line-height: 1.375rem;
+  font-weight: 600;
+  font-stretch: 112.5%;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+@utility type-label {
+  /* A callout's part name, the current step in the stepper. 15/20. */
+  font-size: 0.9375rem;
+  line-height: 1.25rem;
+  font-weight: 600;
+  font-stretch: 112.5%;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+@utility type-body {
+  /* Running text and hints. 15/22. */
+  font-size: 0.9375rem;
+  line-height: 1.375rem;
+  font-weight: 400;
+  font-stretch: 100%;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+@utility type-name {
+  /* Part names, prices, button labels. 15/20. */
+  font-size: 0.9375rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  font-stretch: 100%;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+@utility type-control {
+  /* Pills (SAR/USD), filter chips, secondary buttons. 14/18. */
+  font-size: 0.875rem;
+  line-height: 1.125rem;
+  font-weight: 500;
+  font-stretch: 100%;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+@utility type-small {
+  /* Spec lines, compatibility states and their reasons. 13/18. */
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+  font-weight: 400;
+  font-stretch: 100%;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+@utility type-caption {
+  /* Captions, "Prices as of", dividers, provenance. 12/16, the smallest text Rig Lab sets. */
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 400;
+  font-stretch: 100%;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
