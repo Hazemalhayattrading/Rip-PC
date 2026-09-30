@@ -18,5 +18,10 @@ export default defineConfig(({ isPreview }) => ({
     // dist/.vite/manifest.json maps source modules to chunks. The e2e smoke test reads it to
     // prove the 3D chunk stays off the landing page. Pages deploys skip dotfiles, so it is not published.
     manifest: true,
+    // The lazy 3D chunk is about 925 KB minified, because React Three Fiber 9 imports the whole
+    // THREE namespace. It is budgeted apart from the initial JS. Do not split it with
+    // rolldownOptions.output.codeSplitting groups without re-checking the manifest: a trial
+    // `three-vendor` group made the entry import it statically, putting three.js on every page.
+    chunkSizeWarningLimit: 1024,
   },
 }));
