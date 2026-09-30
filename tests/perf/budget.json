@@ -1,0 +1,170 @@
+{
+  "$comment": "Single source of truth for the BUILD_PROMPT.md §8 quality-bar numbers and how each is measured. Owner: qa-lead. A gate value changes only with Director approval, logged in docs/qa/test-plan.md (change log). Every gate names its source. Read by tests/perf/bundle-budget.mjs, tests/perf/lhci-config.cjs (lighthouserc*.cjs), tests/perf/web-vitals.spec.ts and tests/perf/fps-probe.mjs.",
+  "schemaVersion": 1,
+  "owner": "qa-lead",
+  "updated": "2026-09-30",
+  "bundle": {
+    "distDir": "dist",
+    "entryHtml": ["index.html"],
+    "basePath": "/Rip-PC/",
+    "gzip": {
+      "library": "node:zlib gzipSync, one file at a time (each file is served and compressed separately)",
+      "level": 6,
+      "bytesPerKilobyte": 1000,
+      "evidence": "Measured 2026-09-30: GitHub Pages served pages.github.com/js/application.js at exactly the zlib level-6 size (2158 B); jquery.js and css/pages.css were served 0.57% and 0.68% above level 6. Vite 8.3.1's own build reporter prints about 1.1% above level 6. Level 9 would under-report what users download."
+    },
+    "initialJs": {
+      "maxGzipBytes": 250000,
+      "op": "<",
+      "source": "BUILD_PROMPT.md §8: 'Initial JS < 250 KB gzip before the 3D chunk'",
+      "counts": "Every JS file the entry HTML loads eagerly (module and classic script src, inline scripts, modulepreload, preload as=script) plus their static-import closure, taken from V8's own module parser. Dynamic-import-only chunks are excluded and reported separately.",
+      "warnAtFraction": 0.95,
+      "warnSource": "qa-lead: non-blocking early warning; covers the up-to-1.1% gap between zlib level 6 and served or Vite-reported sizes"
+    },
+    "forbiddenInInitialGraph": [
+      {
+        "name": "three.js (also catches @react-three/fiber, drei and postprocessing, which all import three)",
+        "signature": "__THREE__",
+        "source": "docs/reports/phase-0-plan.md WP-B0 item 2: 'three, R3F, drei and postprocessing are reachable only through a lazy chunk'. three's core module sets window.__THREE__ when it is imported (checked in three@0.186.1, build/three.core.js)."
+      }
+    ],
+    "css": {
+      "maxGzipBytes": null,
+      "note": "Reported only. BUILD_PROMPT.md §8 sets no CSS budget."
+    }
+  },
+  "lighthouse": {
+    "routes": ["/"],
+    "presets": ["mobile", "desktop"],
+    "numberOfRuns": 3,
+    "aggregationMethod": "median",
+    "aggregationNote": "LHCI's default aggregation is 'optimistic' (best run), so every assertion sets 'median' explicitly.",
+    "gates": {
+      "performanceScore": {
+        "value": 0.9,
+        "op": ">=",
+        "source": "BUILD_PROMPT.md §8: 'Lighthouse performance ≥ 90 on the landing page'"
+      },
+      "largestContentfulPaintMs": {
+        "value": 2500,
+        "op": "<",
+        "source": "BUILD_PROMPT.md §8: 'LCP < 2.5 s'"
+      },
+      "cumulativeLayoutShift": {
+        "value": 0.05,
+        "op": "<",
+        "source": "BUILD_PROMPT.md §8: 'CLS < 0.05'"
+      },
+      "totalBlockingTimeMs": {
+        "value": 200,
+        "op": "<",
+        "source": "Lab proxy for BUILD_PROMPT.md §8 'INP < 200 ms'. https://web.dev/articles/tbt (updated 2025-10-15): 'less than 200 milliseconds when tested on average mobile hardware' and TBT is 'a proxy metric for INP in the lab'."
+      }
+    }
+  },
+  "webVitals": {
+    "routes": [{ "name": "landing", "path": "./" }],
+    "runs": 3,
+    "aggregation": "median",
+    "cpuThrottleRates": [1, 4],
+    "settleMs": 1500,
+    "library": "web-vitals attribution IIFE build (dist/web-vitals.attribution.iife.js)",
+    "gates": {
+      "lcpMs": { "value": 2500, "op": "<", "source": "BUILD_PROMPT.md §8: 'LCP < 2.5 s'" },
+      "cls": { "value": 0.05, "op": "<", "source": "BUILD_PROMPT.md §8: 'CLS < 0.05'" },
+      "inpMs": {
+        "value": 200,
+        "op": "<",
+        "source": "BUILD_PROMPT.md §8: 'INP < 200 ms'",
+        "activeFrom": "Phase 2, once the builder has interactions to script"
+      }
+    }
+  },
+  "fps": {
+    "runs": 3,
+    "aggregation": "median",
+    "warmupRuns": 1,
+    "calibrationMs": 2000,
+    "metric": "avgFps = (frames - 1) / elapsed seconds while the scene plays its scripted, time-based camera path, with the browser frame-rate limit off. Also recorded: 1% low = 1000 / p99 frame interval, min fps, p50/p95/p99 frame time.",
+    "targets": {
+      "referenceLaptop": {
+        "avgFpsMin": 60,
+        "op": ">=",
+        "hardware": "Intel Core Ultra 7 155H laptop on its Intel Arc iGPU (dual-channel memory), Google Chrome with hardware acceleration on",
+        "expectRenderer": "Arc",
+        "source": "BUILD_PROMPT.md §8: '60 fps in the 3D garage on a mid laptop iGPU (reference: Intel Core Ultra 7 155H with Arc iGPU, Chrome with hardware acceleration on)'"
+      },
+      "desktop": {
+        "avgFpsMin": 60,
+        "op": ">=",
+        "hardware": "A desktop GPU named by the Director; the high-end desktop run also covers this bar",
+        "expectRenderer": null,
+        "source": "BUILD_PROMPT.md §8: '... and on desktop'"
+      },
+      "highEndDesktop": {
+        "avgFpsMin": 120,
+        "op": ">=",
+        "hardware": "A high-end discrete desktop GPU named by the Director",
+        "expectRenderer": null,
+        "source": "BUILD_PROMPT.md §8: '120 fps on a high-end desktop GPU'"
+      }
+    },
+    "ciProxy": {
+      "renderer": "SwiftShader (headless Chromium 1194)",
+      "cpuThrottleRates": [1, 4],
+      "maxRegressionPct": 10,
+      "blocking": false,
+      "note": "Relative regression signal only, never a pass of the §8 bar. Headless Chromium caps requestAnimationFrame at 60 Hz even with --disable-frame-rate-limit (measured 2026-09-30), so the proxy only sees scenes that render below 60 fps under SwiftShader. Becomes blocking only after its noise floor is measured (10 runs of one build) and the Director approves the threshold."
+    }
+  },
+  "console": {
+    "maxConsoleErrors": 0,
+    "maxPageErrors": 0,
+    "maxUnhandledRejections": 0,
+    "maxFailedSameOriginRequests": 0,
+    "source": "BUILD_PROMPT.md §8: 'Zero console errors. Zero unhandled promise rejections.' A failed same-origin request also logs a console error in Chromium (measured 2026-09-30)."
+  },
+  "accessibility": {
+    "standard": "WCAG 2.1 AA",
+    "axeTags": ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"],
+    "maxViolations": 0,
+    "source": "BUILD_PROMPT.md §8: 'WCAG 2.1 AA for all non-3D UI; full keyboard path through the builder.'"
+  },
+  "visual": {
+    "viewports": [
+      { "name": "390", "width": 390, "height": 844, "isMobile": true, "hasTouch": true },
+      { "name": "768", "width": 768, "height": 1024, "isMobile": false, "hasTouch": true },
+      { "name": "1440", "width": 1440, "height": 900, "isMobile": false, "hasTouch": false }
+    ],
+    "themes": ["dark", "light"],
+    "deviceScaleFactor": 1,
+    "threshold": 0.2,
+    "maxDiffPixelRatio": 0.001,
+    "source": "Widths: BUILD_PROMPT.md §8 'every step at 390 px, 768 px, 1440 px'. Themes: BUILD_PROMPT.md §6 'dark theme first, light theme supported'. Heights, deviceScaleFactor and maxDiffPixelRatio: qa-lead proposal, calibrated in WP-Q1. threshold 0.2 is Playwright's default per-pixel YIQ tolerance."
+  },
+  "compatibility": {
+    "minPositiveTestsPerRule": 1,
+    "minNegativeTestsPerRule": 1,
+    "unknownDataMustNotReturn": "ok",
+    "source": "BUILD_PROMPT.md §8: 'Every compatibility rule has a passing positive and negative test.' The unknown-data rule is qa-lead's: a null spec can never prove a fit."
+  },
+  "models": {
+    "goldenTolerancePct": 5,
+    "goldenSource": "BUILD_PROMPT.md §5.3: 'the model must reproduce the published number within ±5%'",
+    "heldOutCount": 5,
+    "heldOutMaxErrorPct": 10,
+    "heldOutSource": ".claude/agents/data-auditor.md: 'Pick 5 held-out published results ... model error over 10% is a blocker.'"
+  },
+  "dataAudit": {
+    "sampleFraction": 0.1,
+    "minPerStratum": 1,
+    "algorithm": "sha256-rank-v1",
+    "seedFormat": "rig-lab-audit:<phase>:<full 40-hex commit SHA of the integration branch being audited>",
+    "source": "BUILD_PROMPT.md §2 Phase 1: 'data-auditor spot-checks 10% of all numbers'; .claude/agents/data-auditor.md: 'random 10% of records (seeded, so the sample is reproducible)'"
+  },
+  "definitionOfDone": {
+    "firstVisitMaxMinutes": 5,
+    "usabilityParticipants": 5,
+    "source": "BUILD_PROMPT.md §9: 'A new visitor can, in under 5 minutes: ...'. Participant count: qa-lead proposal, pending Director approval."
+  }
+}
