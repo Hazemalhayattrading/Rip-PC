@@ -1200,11 +1200,27 @@ an owning team and an `until`: `permanent`, the last day it applies, or an https
   | an uncaught error in a worker | fails | pageerror |
   | `console.error` in a worker | fails | console.error |
   | `console.error` in a popup | fails | console.error |
-  | a page crash (`Page.crash`) | fails | crash |
+  | a page crash (its renderer killed with SIGKILL) | fails | crash |
   | a context the test makes itself, watched | fails | console.error |
 
   Tests the fixture must fail are marked `test.fail()`. A fixture that stops catching a problem
   therefore makes its test pass unexpectedly, and the run fails. The self-test takes about 3.5 s.
+  When a case ends with the wrong outcome, the checker prints that case's own errors.
+- **How the crash case crashes the page** (fixed 2026-09-30, after it failed on GitHub):
+  - It finds the renderer through the browser's DevTools session (`SystemInfo.getProcessInfo`)
+    and kills it with SIGKILL, as the out-of-memory killer does.
+  - Chromium reports a killed renderer through the same `Inspector.targetCrashed` event as any
+    other renderer crash, and Playwright turns that into the page's `crash` event.
+  - It waits at most 10 s for that event. Otherwise it fails with the renderer's process state
+    and the kernel's `core_pattern`, instead of timing out.
+  - The first version used CDP `Page.crash`, which makes the renderer trap (SIGTRAP) and dump
+    core. GitHub's ubuntu-24.04 runners install `systemd-coredump`, so `core_pattern` pipes
+    every core to it. For a piped `core_pattern` the kernel ignores `ulimit -c 0` and keeps the
+    crashing process alive until the handler has read the whole dump.
+  - So the crash was reported long after the test gave up: 46 s on GitHub.
+  - It was reproduced in C with a piped handler and uid 1001: the dump took 42 s, and the same
+    assertion failed. SIGKILL never dumps core, and under the same conditions all 19 cases pass
+    in 3 s.
 - **Mutation M1** (`console.error` in `src/main.tsx`): `npm run verify` exited 1. 110 e2e tests
   failed, each with the message, its source file and the page. The 2 tests that open no page
   passed.
