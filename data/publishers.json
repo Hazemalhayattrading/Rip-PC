@@ -14,6 +14,12 @@
     { "id": "deepcool", "name": "DeepCool", "kind": "manufacturer", "domains": ["deepcool.com"] },
     { "id": "nzxt", "name": "NZXT", "kind": "manufacturer", "domains": ["nzxt.com"] },
     { "id": "arctic", "name": "ARCTIC", "kind": "manufacturer", "domains": ["arctic.de"] },
-    { "id": "fractal", "name": "Fractal Design", "kind": "manufacturer", "domains": ["fractal-design.com"] }
+    { "id": "fractal", "name": "Fractal Design", "kind": "manufacturer", "domains": ["fractal-design.com"] },
+    { "id": "steam", "name": "Steam (Valve)", "kind": "platform", "domains": ["steampowered.com"] },
+    { "id": "steamcharts", "name": "Steam Charts", "kind": "tracker", "domains": ["steamcharts.com"] },
+    { "id": "riot-games", "name": "Riot Games", "kind": "game-publisher", "domains": ["playvalorant.com", "riotgames.com"] },
+    { "id": "kitguru", "name": "KitGuru", "kind": "news", "domains": ["kitguru.net"] },
+    { "id": "esports-news-uk", "name": "Esports News UK", "kind": "news", "domains": ["esports-news.co.uk"] },
+    { "id": "windows-central", "name": "Windows Central", "kind": "news", "domains": ["windowscentral.com"] }
   ]
 }

@@ -68,6 +68,9 @@ export const DOC_TYPES = [
   'benchmark-database',
   'tracker-page',
   'store-page',
+  'news-article',
+  /** A machine-readable response from the publisher's own public API (e.g. the Steam Web API). */
+  'api-response',
 ] as const;
 export const DocType = z.enum(DOC_TYPES);
 export type DocType = z.infer<typeof DocType>;
@@ -76,8 +79,9 @@ export type DocType = z.infer<typeof DocType>;
  * One source behind a record.
  * - `publisher` is an ID from `data/publishers.json`, and `url` must be on one of its domains.
  * - `retrievedAt` is the UTC date the page was read.
- * - `archiveUrl` is a Wayback Machine snapshot of `url`. Allowed for specs only, never for prices
- *   or benchmarks (Owner's rule 1).
+ * - `archiveUrl` is a Wayback Machine snapshot of `url` (full 14-digit timestamp form). Allowed for
+ *   specs and for published benchmark reviews (which then need `publishedAt`); never for prices,
+ *   which carry no `sources` at all (Owner's rule 1).
  * - `fields` lists the dot paths this source backs. Omitted means it backs the whole record.
  */
 export const SourceRef = z.strictObject({

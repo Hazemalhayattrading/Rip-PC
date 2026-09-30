@@ -1,5 +1,5 @@
 import * as z from 'zod';
-import { Id, IsoDate, Notes, PosInt, PublishedDate, Sources } from './common';
+import { Id, IsoDate, Notes, PosInt, PosNum, PublishedDate, Sources } from './common';
 
 export const PlayerCountMetric = z.enum([
   /** Steam concurrent players at the moment the page was read. */
@@ -19,7 +19,8 @@ export type PlayerCountMetric = z.infer<typeof PlayerCountMetric>;
 
 export const PlayerCount = z.strictObject({
   metric: PlayerCountMetric,
-  value: PosInt,
+  /** As published; period averages keep their decimals (Steam Charts prints e.g. 805311.49). */
+  value: PosNum,
   /** The date the figure describes (the last day, for a period). */
   asOf: IsoDate,
   /** The period as the source labels it, e.g. "Last 30 Days". `null` for a point-in-time figure. */
@@ -35,7 +36,8 @@ export const Game = z.strictObject({
   franchiseSlot: z.enum(['call-of-duty', 'ea-sports-fc']).nullable(),
   /** `null` means the game is not sold on Steam. */
   steamAppId: PosInt.nullable(),
-  releaseDate: PublishedDate,
+  /** PC release date. `null` plus a note when no reachable platform, publisher or news source states it. */
+  releaseDate: PublishedDate.nullable(),
   listStatus: z.enum(['confirmed', 'replacement']),
   /** For a replacement, the title it replaced. `null` otherwise. */
   replaces: z.string().min(1).nullable(),
