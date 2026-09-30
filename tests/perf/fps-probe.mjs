@@ -7,9 +7,10 @@
  *
  *   Reference hardware (the absolute gate, headed Chrome with the GPU, frame-rate limit off):
  *     node tests/perf/fps-probe.mjs --mode reference --target referenceLaptop --device "<make model>" \
- *       --url "https://<pages-host>/Rip-PC/build/looks?b=<reference build>&perf=1"
+ *       --notes "<GPU driver, power mode, memory channels, display>" \
+ *       --url "https://hazemalhayattrading.github.io/Rip-PC/build/looks?b=<reference build>&perf=1"
  *   CI proxy (headless Chromium, SwiftShader, relative signal only):
- *     node tests/perf/fps-probe.mjs --mode ci --url "http://localhost:4173/Rip-PC/build/looks?b=...&perf=1" [--cpu-throttle 4]
+ *     node tests/perf/fps-probe.mjs --mode ci --url "http://127.0.0.1:4173/Rip-PC/build/looks?b=...&perf=1" [--cpu-throttle 4]
  *
  * Verdicts: PASS · FAIL · INCONCLUSIVE (frame rate capped below the target, so a miss can't be proven)
  *           INVALID (software rendering or the wrong GPU in reference mode) · PROXY (ci mode, never a §8 pass)
@@ -117,6 +118,8 @@ const USAGE = `Usage: node tests/perf/fps-probe.mjs --url <garage url with perf=
   --mode <ci|reference>     ci: headless Chromium + SwiftShader (default); reference: headed Chrome on the GPU
   --target <name>           budget.json fps.targets key: referenceLaptop (default), desktop, highEndDesktop
   --device <label>          free text: make and model of the machine (reference mode requires it)
+  --notes <text>            what the probe cannot detect: GPU driver version, power mode, memory
+                            channels, display resolution and refresh (reference mode requires it)
   --channel <name>          browser channel for reference mode (default: chrome, i.e. installed Google Chrome)
   --executable <path>       browser executable instead of a channel
   --cpu-throttle <n>        CPU slowdown via DevTools Protocol (ci proxy runs x1 and x4)
@@ -139,6 +142,10 @@ async function probe(args) {
     );
   if (mode === 'reference' && !args.device)
     throw new Error('--device "<make model>" is required in reference mode');
+  if (mode === 'reference' && !args.notes)
+    throw new Error(
+      '--notes "<GPU driver, power mode, memory channels, display>" is required in reference mode',
+    );
   const runs = Number(args.runs ?? fps.runs);
   const cpuThrottle = Number(args['cpu-throttle'] ?? 1);
 
@@ -230,6 +237,7 @@ async function probe(args) {
         logicalCores: os.cpus().length,
         memoryGB: Math.round(os.totalmem() / 1e9),
         platform: `${os.platform()} ${os.release()}`,
+        notes: args.notes ?? null,
       },
       browser: {
         version: browser.version(),
@@ -300,6 +308,7 @@ export async function main(argv = process.argv.slice(2)) {
         mode: { type: 'string' },
         target: { type: 'string' },
         device: { type: 'string' },
+        notes: { type: 'string' },
         channel: { type: 'string' },
         executable: { type: 'string' },
         'cpu-throttle': { type: 'string' },
