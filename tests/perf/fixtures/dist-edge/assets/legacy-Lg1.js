@@ -1,0 +1,1 @@
+window.legacyClassicScript = true;
