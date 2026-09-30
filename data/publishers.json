@@ -3,6 +3,9 @@
   "publishers": [
     { "id": "amd", "name": "AMD", "kind": "manufacturer", "domains": ["amd.com"] },
     { "id": "intel", "name": "Intel", "kind": "manufacturer", "domains": ["intel.com"] },
-    { "id": "asus", "name": "ASUS", "kind": "manufacturer", "domains": ["asus.com"] }
+    { "id": "asus", "name": "ASUS", "kind": "manufacturer", "domains": ["asus.com"] },
+    { "id": "nvidia", "name": "NVIDIA", "kind": "manufacturer", "domains": ["nvidia.com"] },
+    { "id": "pny", "name": "PNY Technologies", "kind": "manufacturer", "domains": ["pny.com"] },
+    { "id": "sapphire", "name": "Sapphire Technology", "kind": "manufacturer", "domains": ["sapphiretech.com"] }
   ]
 }

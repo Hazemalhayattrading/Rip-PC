@@ -1,5 +1,536 @@
 {
   "schemaVersion": 1,
   "category": "gpu-card",
-  "items": []
+  "items": [
+    {
+      "id": "nvidia-geforce-rtx-5090-founders-edition",
+      "category": "gpu-card",
+      "manufacturer": "nvidia",
+      "brand": "NVIDIA",
+      "name": "GeForce RTX 5090 Founders Edition",
+      "chipId": "nvidia-geforce-rtx-5090",
+      "partNumber": null,
+      "lengthMm": 304,
+      "heightMm": 137,
+      "thicknessMm": null,
+      "slots": 2,
+      "powerConnectors": [
+        {
+          "type": "16-pin",
+          "standard": null,
+          "count": 1
+        }
+      ],
+      "cardPowerW": 575,
+      "recommendedPsuW": 1000,
+      "outputs": [
+        {
+          "type": "DisplayPort 2.1b",
+          "count": 3
+        },
+        {
+          "type": "HDMI 2.1b",
+          "count": 1
+        }
+      ],
+      "boostClockMhz": 2410,
+      "ocModeBoostClockMhz": null,
+      "sources": [
+        {
+          "url": "https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5090/",
+          "publisher": "nvidia",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "title": "GeForce RTX 5090 - full specs (Card Dimensions: Founders Edition)"
+        }
+      ],
+      "notes": [
+        {
+          "field": "partNumber",
+          "text": "NVIDIA publishes no part number for the Founders Edition on its spec page."
+        },
+        {
+          "field": "thicknessMm",
+          "text": "NVIDIA lists the Founders Edition as 2-slot but publishes no thickness in millimetres."
+        },
+        {
+          "field": "powerConnectors",
+          "text": "NVIDIA lists the power input as a PCIe Gen 5 cable (the 16-pin connector) or PCIe 8-pin cables via the adapter in the box, and does not name 12V-2x6 or 12VHPWR."
+        },
+        {
+          "field": "cardPowerW",
+          "text": "NVIDIA's spec page gives one Total Graphics Power, required system power and boost clock for the GPU, alongside the Founders Edition card dimensions."
+        }
+      ]
+    },
+    {
+      "id": "nvidia-geforce-rtx-5080-founders-edition",
+      "category": "gpu-card",
+      "manufacturer": "nvidia",
+      "brand": "NVIDIA",
+      "name": "GeForce RTX 5080 Founders Edition",
+      "chipId": "nvidia-geforce-rtx-5080",
+      "partNumber": null,
+      "lengthMm": 304,
+      "heightMm": 137,
+      "thicknessMm": null,
+      "slots": 2,
+      "powerConnectors": [
+        {
+          "type": "16-pin",
+          "standard": null,
+          "count": 1
+        }
+      ],
+      "cardPowerW": 360,
+      "recommendedPsuW": 850,
+      "outputs": [
+        {
+          "type": "DisplayPort 2.1b",
+          "count": 3
+        },
+        {
+          "type": "HDMI 2.1b",
+          "count": 1
+        }
+      ],
+      "boostClockMhz": 2620,
+      "ocModeBoostClockMhz": null,
+      "sources": [
+        {
+          "url": "https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5080/",
+          "publisher": "nvidia",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "title": "GeForce RTX 5080 - full specs (Card Dimensions: Founders Edition)"
+        }
+      ],
+      "notes": [
+        {
+          "field": "partNumber",
+          "text": "NVIDIA publishes no part number for the Founders Edition on its spec page."
+        },
+        {
+          "field": "thicknessMm",
+          "text": "NVIDIA lists the Founders Edition as 2-slot but publishes no thickness in millimetres."
+        },
+        {
+          "field": "powerConnectors",
+          "text": "NVIDIA lists the power input as a PCIe Gen 5 cable (the 16-pin connector) or PCIe 8-pin cables via the adapter in the box, and does not name 12V-2x6 or 12VHPWR."
+        },
+        {
+          "field": "cardPowerW",
+          "text": "NVIDIA's spec page gives one Total Graphics Power, required system power and boost clock for the GPU, alongside the Founders Edition card dimensions."
+        }
+      ]
+    },
+    {
+      "id": "nvidia-geforce-rtx-5070-founders-edition",
+      "category": "gpu-card",
+      "manufacturer": "nvidia",
+      "brand": "NVIDIA",
+      "name": "GeForce RTX 5070 Founders Edition",
+      "chipId": "nvidia-geforce-rtx-5070",
+      "partNumber": null,
+      "lengthMm": 242,
+      "heightMm": 112,
+      "thicknessMm": null,
+      "slots": 2,
+      "powerConnectors": [
+        {
+          "type": "16-pin",
+          "standard": null,
+          "count": 1
+        }
+      ],
+      "cardPowerW": 250,
+      "recommendedPsuW": 650,
+      "outputs": [
+        {
+          "type": "DisplayPort 2.1b",
+          "count": 3
+        },
+        {
+          "type": "HDMI 2.1b",
+          "count": 1
+        }
+      ],
+      "boostClockMhz": 2510,
+      "ocModeBoostClockMhz": null,
+      "sources": [
+        {
+          "url": "https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5070-family/",
+          "publisher": "nvidia",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "title": "GeForce RTX 5070 - full specs (Card Dimensions: Founders Edition)"
+        }
+      ],
+      "notes": [
+        {
+          "field": "partNumber",
+          "text": "NVIDIA publishes no part number for the Founders Edition on its spec page."
+        },
+        {
+          "field": "thicknessMm",
+          "text": "NVIDIA lists the Founders Edition as 2-slot but publishes no thickness in millimetres."
+        },
+        {
+          "field": "powerConnectors",
+          "text": "NVIDIA lists the power input as a PCIe Gen 5 cable (the 16-pin connector) or PCIe 8-pin cables via the adapter in the box, and does not name 12V-2x6 or 12VHPWR."
+        },
+        {
+          "field": "cardPowerW",
+          "text": "NVIDIA's spec page gives one Total Graphics Power, required system power and boost clock for the GPU, alongside the Founders Edition card dimensions."
+        }
+      ]
+    },
+    {
+      "id": "asus-tuf-gaming-geforce-rtx-5070-ti-16gb-oc",
+      "category": "gpu-card",
+      "manufacturer": "asus",
+      "brand": "ASUS",
+      "name": "ASUS TUF Gaming GeForce RTX 5070 Ti 16GB GDDR7 OC Edition",
+      "chipId": "nvidia-geforce-rtx-5070-ti",
+      "partNumber": "TUF-RTX5070TI-O16G-GAMING",
+      "lengthMm": 329,
+      "heightMm": 140,
+      "thicknessMm": 62.5,
+      "slots": 3.125,
+      "powerConnectors": [
+        {
+          "type": "16-pin",
+          "standard": null,
+          "count": 1
+        }
+      ],
+      "cardPowerW": null,
+      "recommendedPsuW": 850,
+      "outputs": [
+        {
+          "type": "HDMI 2.1b",
+          "count": 2
+        },
+        {
+          "type": "DisplayPort 2.1b",
+          "count": 3
+        }
+      ],
+      "boostClockMhz": 2588,
+      "ocModeBoostClockMhz": 2610,
+      "sources": [
+        {
+          "url": "https://www.asus.com/motherboards-components/graphics-cards/tuf-gaming/tuf-rtx5070ti-o16g-gaming/techspec/",
+          "publisher": "asus",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "title": "ASUS TUF Gaming GeForce RTX 5070 Ti 16GB GDDR7 OC Edition - Tech Specs"
+        }
+      ],
+      "notes": [
+        {
+          "field": "cardPowerW",
+          "text": "The ASUS tech spec page lists a recommended PSU but no card power figure."
+        },
+        {
+          "field": "powerConnectors.0.standard",
+          "text": "ASUS lists the connector as '1 x 16-pin' without naming 12V-2x6 or 12VHPWR."
+        }
+      ]
+    },
+    {
+      "id": "asus-dual-geforce-rtx-5060-ti-16gb-oc",
+      "category": "gpu-card",
+      "manufacturer": "asus",
+      "brand": "ASUS",
+      "name": "ASUS Dual GeForce RTX 5060 Ti 16GB GDDR7 OC Edition",
+      "chipId": "nvidia-geforce-rtx-5060-ti-16gb",
+      "partNumber": "DUAL-RTX5060TI-O16G",
+      "lengthMm": 229,
+      "heightMm": 120,
+      "thicknessMm": 50,
+      "slots": 2.5,
+      "powerConnectors": [
+        {
+          "type": "8-pin",
+          "standard": null,
+          "count": 1
+        }
+      ],
+      "cardPowerW": null,
+      "recommendedPsuW": 550,
+      "outputs": [
+        {
+          "type": "HDMI 2.1b",
+          "count": 1
+        },
+        {
+          "type": "DisplayPort 2.1b",
+          "count": 3
+        }
+      ],
+      "boostClockMhz": 2602,
+      "ocModeBoostClockMhz": 2632,
+      "sources": [
+        {
+          "url": "https://www.asus.com/motherboards-components/graphics-cards/dual/dual-rtx5060ti-o16g/techspec/",
+          "publisher": "asus",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "title": "ASUS Dual GeForce RTX 5060 Ti 16GB GDDR7 OC Edition - Tech Specs"
+        }
+      ],
+      "notes": [
+        {
+          "field": "cardPowerW",
+          "text": "The ASUS tech spec page lists a recommended PSU but no card power figure."
+        }
+      ]
+    },
+    {
+      "id": "asus-dual-geforce-rtx-5060-8gb-oc",
+      "category": "gpu-card",
+      "manufacturer": "asus",
+      "brand": "ASUS",
+      "name": "ASUS Dual GeForce RTX 5060 8GB GDDR7 OC Edition",
+      "chipId": "nvidia-geforce-rtx-5060",
+      "partNumber": "DUAL-RTX5060-O8G",
+      "lengthMm": 228,
+      "heightMm": 123,
+      "thicknessMm": 50,
+      "slots": 2.5,
+      "powerConnectors": [
+        {
+          "type": "8-pin",
+          "standard": null,
+          "count": 1
+        }
+      ],
+      "cardPowerW": null,
+      "recommendedPsuW": 550,
+      "outputs": [
+        {
+          "type": "HDMI 2.1b",
+          "count": 1
+        },
+        {
+          "type": "DisplayPort 2.1b",
+          "count": 3
+        }
+      ],
+      "boostClockMhz": 2535,
+      "ocModeBoostClockMhz": 2565,
+      "sources": [
+        {
+          "url": "https://www.asus.com/motherboards-components/graphics-cards/dual/dual-rtx5060-o8g/techspec/",
+          "publisher": "asus",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "title": "ASUS Dual GeForce RTX 5060 8GB GDDR7 OC Edition - Tech Specs"
+        }
+      ],
+      "notes": [
+        {
+          "field": "cardPowerW",
+          "text": "The ASUS tech spec page lists a recommended PSU but no card power figure."
+        }
+      ]
+    },
+    {
+      "id": "asus-dual-geforce-rtx-4060-8gb-oc",
+      "category": "gpu-card",
+      "manufacturer": "asus",
+      "brand": "ASUS",
+      "name": "ASUS Dual GeForce RTX 4060 OC Edition 8GB GDDR6",
+      "chipId": "nvidia-geforce-rtx-4060",
+      "partNumber": "DUAL-RTX4060-O8G",
+      "lengthMm": 227.2,
+      "heightMm": 123.24,
+      "thicknessMm": 49.6,
+      "slots": 2.5,
+      "powerConnectors": [
+        {
+          "type": "8-pin",
+          "standard": null,
+          "count": 1
+        }
+      ],
+      "cardPowerW": null,
+      "recommendedPsuW": 550,
+      "outputs": [
+        {
+          "type": "HDMI 2.1a",
+          "count": 1
+        },
+        {
+          "type": "DisplayPort 1.4a",
+          "count": 3
+        }
+      ],
+      "boostClockMhz": 2505,
+      "ocModeBoostClockMhz": 2535,
+      "sources": [
+        {
+          "url": "https://www.asus.com/motherboards-components/graphics-cards/dual/dual-rtx4060-o8g/techspec/",
+          "publisher": "asus",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "title": "ASUS Dual GeForce RTX 4060 OC Edition 8GB GDDR6 - Tech Specs"
+        }
+      ],
+      "notes": [
+        {
+          "field": "cardPowerW",
+          "text": "The ASUS tech spec page lists a recommended PSU but no card power figure."
+        }
+      ]
+    },
+    {
+      "id": "sapphire-pulse-radeon-rx-9070-xt-16gb",
+      "category": "gpu-card",
+      "manufacturer": "sapphire",
+      "brand": "SAPPHIRE",
+      "name": "SAPPHIRE PULSE AMD Radeon RX 9070 XT 16GB",
+      "chipId": "amd-radeon-rx-9070-xt",
+      "partNumber": "11348-03-20G",
+      "lengthMm": 320,
+      "heightMm": 120.25,
+      "thicknessMm": 61.6,
+      "slots": 3,
+      "powerConnectors": [
+        {
+          "type": "8-pin",
+          "standard": null,
+          "count": 2
+        }
+      ],
+      "cardPowerW": 304,
+      "recommendedPsuW": 750,
+      "outputs": [
+        {
+          "type": "HDMI",
+          "count": 2
+        },
+        {
+          "type": "DisplayPort 2.1a",
+          "count": 2
+        }
+      ],
+      "boostClockMhz": 2970,
+      "ocModeBoostClockMhz": null,
+      "sources": [
+        {
+          "url": "https://www.sapphiretech.com/en/consumer/pulse-radeon-rx-9070-xt-16g-gddr6",
+          "publisher": "sapphire",
+          "retrievedAt": "2026-09-30",
+          "docType": "product-page",
+          "title": "SAPPHIRE PULSE AMD Radeon RX 9070 XT 16GB - specifications (#SKU# 11348-03-20G)"
+        }
+      ],
+      "notes": [
+        {
+          "field": "heightMm",
+          "text": "Sapphire gives the dimensions as L x W x H; W (card height from the slot) is recorded as heightMm and H (thickness) as thicknessMm."
+        }
+      ]
+    },
+    {
+      "id": "sapphire-pulse-radeon-rx-9070-16gb",
+      "category": "gpu-card",
+      "manufacturer": "sapphire",
+      "brand": "SAPPHIRE",
+      "name": "SAPPHIRE PULSE AMD Radeon RX 9070 16GB",
+      "chipId": "amd-radeon-rx-9070",
+      "partNumber": "11349-03-20G",
+      "lengthMm": 280,
+      "heightMm": 120.25,
+      "thicknessMm": 51.5,
+      "slots": 2.5,
+      "powerConnectors": [
+        {
+          "type": "8-pin",
+          "standard": null,
+          "count": 2
+        }
+      ],
+      "cardPowerW": 220,
+      "recommendedPsuW": 650,
+      "outputs": [
+        {
+          "type": "HDMI",
+          "count": 2
+        },
+        {
+          "type": "DisplayPort 2.1a",
+          "count": 2
+        }
+      ],
+      "boostClockMhz": 2520,
+      "ocModeBoostClockMhz": null,
+      "sources": [
+        {
+          "url": "https://www.sapphiretech.com/en/consumer/pulse-radeon-rx-9070-16g-gddr6",
+          "publisher": "sapphire",
+          "retrievedAt": "2026-09-30",
+          "docType": "product-page",
+          "title": "SAPPHIRE PULSE AMD Radeon RX 9070 16GB - specifications (#SKU# 11349-03-20G)"
+        }
+      ],
+      "notes": [
+        {
+          "field": "heightMm",
+          "text": "Sapphire gives the dimensions as L x W x H; W (card height from the slot) is recorded as heightMm and H (thickness) as thicknessMm."
+        }
+      ]
+    },
+    {
+      "id": "sapphire-pulse-radeon-rx-9060-xt-oc-16gb",
+      "category": "gpu-card",
+      "manufacturer": "sapphire",
+      "brand": "SAPPHIRE",
+      "name": "SAPPHIRE PULSE AMD Radeon RX 9060 XT OC 16GB",
+      "chipId": "amd-radeon-rx-9060-xt-16gb",
+      "partNumber": "11350-03-20G",
+      "lengthMm": 240,
+      "heightMm": 111.25,
+      "thicknessMm": 46.08,
+      "slots": 2.3,
+      "powerConnectors": [
+        {
+          "type": "8-pin",
+          "standard": null,
+          "count": 1
+        }
+      ],
+      "cardPowerW": 170,
+      "recommendedPsuW": 450,
+      "outputs": [
+        {
+          "type": "HDMI",
+          "count": 2
+        },
+        {
+          "type": "DisplayPort 2.1a",
+          "count": 1
+        }
+      ],
+      "boostClockMhz": 3290,
+      "ocModeBoostClockMhz": null,
+      "sources": [
+        {
+          "url": "https://www.sapphiretech.com/en/consumer/pulse-radeon-rx-9060-xt-16g-gddr6",
+          "publisher": "sapphire",
+          "retrievedAt": "2026-09-30",
+          "docType": "product-page",
+          "title": "SAPPHIRE PULSE AMD Radeon RX 9060 XT OC 16GB - specifications (#SKU# 11350-03-20G)"
+        }
+      ],
+      "notes": [
+        {
+          "field": "heightMm",
+          "text": "Sapphire gives the dimensions as L x W x H; W (card height from the slot) is recorded as heightMm and H (thickness) as thicknessMm."
+        }
+      ]
+    }
+  ]
 }

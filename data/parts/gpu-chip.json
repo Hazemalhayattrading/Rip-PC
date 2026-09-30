@@ -1,5 +1,1036 @@
 {
   "schemaVersion": 1,
   "category": "gpu-chip",
-  "items": []
+  "items": [
+    {
+      "id": "nvidia-geforce-rtx-5090",
+      "category": "gpu-chip",
+      "manufacturer": "nvidia",
+      "brand": "NVIDIA",
+      "name": "GeForce RTX 5090",
+      "architecture": "Blackwell",
+      "shaders": {
+        "count": 21760,
+        "unit": "CUDA Cores"
+      },
+      "clocks": {
+        "baseMhz": 2010,
+        "gameMhz": null,
+        "boostMhz": 2410
+      },
+      "vram": {
+        "sizeGb": 32,
+        "type": "GDDR7",
+        "busWidthBits": 512,
+        "speedGbps": 28,
+        "bandwidthGBps": 1792
+      },
+      "referenceTbpW": 575,
+      "referencePsuW": 1000,
+      "pcie": {
+        "gen": 5,
+        "lanes": 16
+      },
+      "upscaling": [
+        "DLSS 4 Super Resolution",
+        "DLAA"
+      ],
+      "frameGeneration": [
+        "DLSS 4 Frame Generation",
+        "DLSS 4 Multi Frame Generation"
+      ],
+      "launchDate": "2025-01-30",
+      "sources": [
+        {
+          "url": "https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5090/",
+          "publisher": "nvidia",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "fields": [
+            "brand",
+            "name",
+            "architecture",
+            "shaders",
+            "clocks",
+            "vram.sizeGb",
+            "vram.type",
+            "vram.busWidthBits",
+            "referenceTbpW",
+            "referencePsuW",
+            "pcie.gen",
+            "upscaling",
+            "frameGeneration"
+          ],
+          "title": "GeForce RTX 5090 - full specs"
+        },
+        {
+          "url": "https://nvidianews.nvidia.com/news/nvidia-blackwell-geforce-rtx-50-series-opens-new-world-of-ai-computer-graphics",
+          "publisher": "nvidia",
+          "retrievedAt": "2026-09-30",
+          "docType": "press-release",
+          "fields": [
+            "launchDate"
+          ],
+          "title": "NVIDIA press release: RTX 5090 and RTX 5080 available on Jan. 30"
+        },
+        {
+          "url": "https://www.pny.com/geforce-rtx-5090-models",
+          "publisher": "pny",
+          "retrievedAt": "2026-09-30",
+          "docType": "product-page",
+          "fields": [
+            "pcie.lanes",
+            "vram.speedGbps",
+            "vram.bandwidthGBps"
+          ],
+          "title": "PNY GeForce RTX 5090 models: Bus Type PCI-Express 5.0 x16, 28 Gbps, 1792 GB/sec"
+        }
+      ],
+      "notes": [
+        {
+          "field": "clocks.gameMhz",
+          "text": "NVIDIA publishes base and boost clocks only; no game clock."
+        },
+        {
+          "field": "pcie.lanes",
+          "text": "NVIDIA's spec page lists the PCIe generation only; lane width, memory speed and bandwidth are from PNY's board-partner spec for this GPU."
+        }
+      ]
+    },
+    {
+      "id": "nvidia-geforce-rtx-5080",
+      "category": "gpu-chip",
+      "manufacturer": "nvidia",
+      "brand": "NVIDIA",
+      "name": "GeForce RTX 5080",
+      "architecture": "Blackwell",
+      "shaders": {
+        "count": 10752,
+        "unit": "CUDA Cores"
+      },
+      "clocks": {
+        "baseMhz": 2300,
+        "gameMhz": null,
+        "boostMhz": 2620
+      },
+      "vram": {
+        "sizeGb": 16,
+        "type": "GDDR7",
+        "busWidthBits": 256,
+        "speedGbps": 30,
+        "bandwidthGBps": 960
+      },
+      "referenceTbpW": 360,
+      "referencePsuW": 850,
+      "pcie": {
+        "gen": 5,
+        "lanes": 16
+      },
+      "upscaling": [
+        "DLSS 4 Super Resolution",
+        "DLAA"
+      ],
+      "frameGeneration": [
+        "DLSS 4 Frame Generation",
+        "DLSS 4 Multi Frame Generation"
+      ],
+      "launchDate": "2025-01-30",
+      "sources": [
+        {
+          "url": "https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5080/",
+          "publisher": "nvidia",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "fields": [
+            "brand",
+            "name",
+            "architecture",
+            "shaders",
+            "clocks",
+            "vram.sizeGb",
+            "vram.type",
+            "vram.busWidthBits",
+            "referenceTbpW",
+            "referencePsuW",
+            "pcie.gen",
+            "upscaling",
+            "frameGeneration"
+          ],
+          "title": "GeForce RTX 5080 - full specs"
+        },
+        {
+          "url": "https://nvidianews.nvidia.com/news/nvidia-blackwell-geforce-rtx-50-series-opens-new-world-of-ai-computer-graphics",
+          "publisher": "nvidia",
+          "retrievedAt": "2026-09-30",
+          "docType": "press-release",
+          "fields": [
+            "launchDate"
+          ],
+          "title": "NVIDIA press release: RTX 5090 and RTX 5080 available on Jan. 30"
+        },
+        {
+          "url": "https://www.pny.com/geforce-rtx-5080-models",
+          "publisher": "pny",
+          "retrievedAt": "2026-09-30",
+          "docType": "product-page",
+          "fields": [
+            "pcie.lanes",
+            "vram.speedGbps",
+            "vram.bandwidthGBps"
+          ],
+          "title": "PNY GeForce RTX 5080 models: Bus Type PCI-Express 5.0 x16, 30 Gbps, up to 960 GB/s"
+        }
+      ],
+      "notes": [
+        {
+          "field": "clocks.gameMhz",
+          "text": "NVIDIA publishes base and boost clocks only; no game clock."
+        },
+        {
+          "field": "pcie.lanes",
+          "text": "NVIDIA's spec page lists the PCIe generation only; lane width, memory speed and bandwidth are from PNY's board-partner spec for this GPU."
+        }
+      ]
+    },
+    {
+      "id": "nvidia-geforce-rtx-5070-ti",
+      "category": "gpu-chip",
+      "manufacturer": "nvidia",
+      "brand": "NVIDIA",
+      "name": "GeForce RTX 5070 Ti",
+      "architecture": "Blackwell",
+      "shaders": {
+        "count": 8960,
+        "unit": "CUDA Cores"
+      },
+      "clocks": {
+        "baseMhz": 2300,
+        "gameMhz": null,
+        "boostMhz": 2450
+      },
+      "vram": {
+        "sizeGb": 16,
+        "type": "GDDR7",
+        "busWidthBits": 256,
+        "speedGbps": 28,
+        "bandwidthGBps": 896
+      },
+      "referenceTbpW": 300,
+      "referencePsuW": 750,
+      "pcie": {
+        "gen": 5,
+        "lanes": 16
+      },
+      "upscaling": [
+        "DLSS 4 Super Resolution",
+        "DLAA"
+      ],
+      "frameGeneration": [
+        "DLSS 4 Frame Generation",
+        "DLSS 4 Multi Frame Generation"
+      ],
+      "launchDate": "2025-02",
+      "sources": [
+        {
+          "url": "https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5070-family/",
+          "publisher": "nvidia",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "fields": [
+            "brand",
+            "name",
+            "architecture",
+            "shaders",
+            "clocks",
+            "vram.sizeGb",
+            "vram.type",
+            "vram.busWidthBits",
+            "referenceTbpW",
+            "referencePsuW",
+            "pcie.gen",
+            "upscaling",
+            "frameGeneration"
+          ],
+          "title": "GeForce RTX 5070 Family - full specs (RTX 5070 Ti column)"
+        },
+        {
+          "url": "https://nvidianews.nvidia.com/news/nvidia-blackwell-geforce-rtx-50-series-opens-new-world-of-ai-computer-graphics",
+          "publisher": "nvidia",
+          "retrievedAt": "2026-09-30",
+          "docType": "press-release",
+          "fields": [
+            "launchDate"
+          ],
+          "title": "NVIDIA press release: RTX 5070 Ti and RTX 5070 available starting in February"
+        },
+        {
+          "url": "https://www.pny.com/geforce-rtx-5070-ti-models",
+          "publisher": "pny",
+          "retrievedAt": "2026-09-30",
+          "docType": "product-page",
+          "fields": [
+            "pcie.lanes",
+            "vram.speedGbps",
+            "vram.bandwidthGBps"
+          ],
+          "title": "PNY GeForce RTX 5070 Ti models: Bus Type PCI-Express 5.0 x16, 28 Gbps, up to 896"
+        }
+      ],
+      "notes": [
+        {
+          "field": "clocks.gameMhz",
+          "text": "NVIDIA publishes base and boost clocks only; no game clock."
+        },
+        {
+          "field": "pcie.lanes",
+          "text": "NVIDIA's spec page lists the PCIe generation only; lane width, memory speed and bandwidth are from PNY's board-partner spec for this GPU."
+        }
+      ]
+    },
+    {
+      "id": "nvidia-geforce-rtx-5070",
+      "category": "gpu-chip",
+      "manufacturer": "nvidia",
+      "brand": "NVIDIA",
+      "name": "GeForce RTX 5070",
+      "architecture": "Blackwell",
+      "shaders": {
+        "count": 6144,
+        "unit": "CUDA Cores"
+      },
+      "clocks": {
+        "baseMhz": 2330,
+        "gameMhz": null,
+        "boostMhz": 2510
+      },
+      "vram": {
+        "sizeGb": 12,
+        "type": "GDDR7",
+        "busWidthBits": 192,
+        "speedGbps": 28,
+        "bandwidthGBps": 672
+      },
+      "referenceTbpW": 250,
+      "referencePsuW": 650,
+      "pcie": {
+        "gen": 5,
+        "lanes": 16
+      },
+      "upscaling": [
+        "DLSS 4 Super Resolution",
+        "DLAA"
+      ],
+      "frameGeneration": [
+        "DLSS 4 Frame Generation",
+        "DLSS 4 Multi Frame Generation"
+      ],
+      "launchDate": "2025-02",
+      "sources": [
+        {
+          "url": "https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5070-family/",
+          "publisher": "nvidia",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "fields": [
+            "brand",
+            "name",
+            "architecture",
+            "shaders",
+            "clocks",
+            "vram.sizeGb",
+            "vram.type",
+            "vram.busWidthBits",
+            "referenceTbpW",
+            "referencePsuW",
+            "pcie.gen",
+            "upscaling",
+            "frameGeneration"
+          ],
+          "title": "GeForce RTX 5070 Family - full specs (RTX 5070 column)"
+        },
+        {
+          "url": "https://nvidianews.nvidia.com/news/nvidia-blackwell-geforce-rtx-50-series-opens-new-world-of-ai-computer-graphics",
+          "publisher": "nvidia",
+          "retrievedAt": "2026-09-30",
+          "docType": "press-release",
+          "fields": [
+            "launchDate"
+          ],
+          "title": "NVIDIA press release: RTX 5070 Ti and RTX 5070 available starting in February"
+        },
+        {
+          "url": "https://www.pny.com/geforce-rtx-5070-models",
+          "publisher": "pny",
+          "retrievedAt": "2026-09-30",
+          "docType": "product-page",
+          "fields": [
+            "pcie.lanes",
+            "vram.speedGbps",
+            "vram.bandwidthGBps"
+          ],
+          "title": "PNY GeForce RTX 5070 models: Bus Type PCI-Express 5.0 x16, 28 Gbps, up to 672"
+        }
+      ],
+      "notes": [
+        {
+          "field": "clocks.gameMhz",
+          "text": "NVIDIA publishes base and boost clocks only; no game clock."
+        },
+        {
+          "field": "pcie.lanes",
+          "text": "NVIDIA's spec page lists the PCIe generation only; lane width, memory speed and bandwidth are from PNY's board-partner spec for this GPU."
+        }
+      ]
+    },
+    {
+      "id": "nvidia-geforce-rtx-5060-ti-16gb",
+      "category": "gpu-chip",
+      "manufacturer": "nvidia",
+      "brand": "NVIDIA",
+      "name": "GeForce RTX 5060 Ti 16GB",
+      "architecture": "Blackwell",
+      "shaders": {
+        "count": 4608,
+        "unit": "CUDA Cores"
+      },
+      "clocks": {
+        "baseMhz": 2410,
+        "gameMhz": null,
+        "boostMhz": 2570
+      },
+      "vram": {
+        "sizeGb": 16,
+        "type": "GDDR7",
+        "busWidthBits": 128,
+        "speedGbps": 28,
+        "bandwidthGBps": 448
+      },
+      "referenceTbpW": 180,
+      "referencePsuW": 600,
+      "pcie": {
+        "gen": 5,
+        "lanes": 8
+      },
+      "upscaling": [
+        "DLSS 4 Super Resolution",
+        "DLAA"
+      ],
+      "frameGeneration": [
+        "DLSS 4 Frame Generation",
+        "DLSS 4 Multi Frame Generation"
+      ],
+      "launchDate": "2025-04-16",
+      "sources": [
+        {
+          "url": "https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5060-family/",
+          "publisher": "nvidia",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "fields": [
+            "brand",
+            "name",
+            "architecture",
+            "shaders",
+            "clocks",
+            "vram.sizeGb",
+            "vram.type",
+            "vram.busWidthBits",
+            "referenceTbpW",
+            "referencePsuW",
+            "pcie.gen",
+            "upscaling",
+            "frameGeneration"
+          ],
+          "title": "GeForce RTX 5060 Family - full specs (RTX 5060 Ti column; 16 GB configuration)"
+        },
+        {
+          "url": "https://nvidianews.nvidia.com/news/nvidia-blackwell-geforce-rtx-arrives-for-every-gamer-starting-at-299",
+          "publisher": "nvidia",
+          "retrievedAt": "2026-09-30",
+          "docType": "press-release",
+          "fields": [
+            "launchDate"
+          ],
+          "title": "NVIDIA press release: RTX 5060 Ti 16GB and 8GB available starting April 16"
+        },
+        {
+          "url": "https://www.pny.com/geforce-rtx-5060-ti-16gb-models",
+          "publisher": "pny",
+          "retrievedAt": "2026-09-30",
+          "docType": "product-page",
+          "fields": [
+            "pcie.lanes",
+            "vram.speedGbps",
+            "vram.bandwidthGBps"
+          ],
+          "title": "PNY GeForce RTX 5060 Ti 16GB models: Bus Type PCI-Express 5.0 x8, 28 Gbps, 448 GB/sec"
+        }
+      ],
+      "notes": [
+        {
+          "field": "clocks.gameMhz",
+          "text": "NVIDIA publishes base and boost clocks only; no game clock."
+        },
+        {
+          "field": "pcie.lanes",
+          "text": "NVIDIA's spec page lists the PCIe generation only; lane width, memory speed and bandwidth are from PNY's board-partner spec for this GPU."
+        }
+      ]
+    },
+    {
+      "id": "nvidia-geforce-rtx-5060",
+      "category": "gpu-chip",
+      "manufacturer": "nvidia",
+      "brand": "NVIDIA",
+      "name": "GeForce RTX 5060",
+      "architecture": "Blackwell",
+      "shaders": {
+        "count": 3840,
+        "unit": "CUDA Cores"
+      },
+      "clocks": {
+        "baseMhz": 2280,
+        "gameMhz": null,
+        "boostMhz": 2500
+      },
+      "vram": {
+        "sizeGb": 8,
+        "type": "GDDR7",
+        "busWidthBits": 128,
+        "speedGbps": 28,
+        "bandwidthGBps": 448
+      },
+      "referenceTbpW": 145,
+      "referencePsuW": 550,
+      "pcie": {
+        "gen": 5,
+        "lanes": 8
+      },
+      "upscaling": [
+        "DLSS 4 Super Resolution",
+        "DLAA"
+      ],
+      "frameGeneration": [
+        "DLSS 4 Frame Generation",
+        "DLSS 4 Multi Frame Generation"
+      ],
+      "launchDate": "2025-05-19",
+      "sources": [
+        {
+          "url": "https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5060-family/",
+          "publisher": "nvidia",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "fields": [
+            "brand",
+            "name",
+            "architecture",
+            "shaders",
+            "clocks",
+            "vram.sizeGb",
+            "vram.type",
+            "vram.busWidthBits",
+            "referenceTbpW",
+            "referencePsuW",
+            "pcie.gen",
+            "upscaling",
+            "frameGeneration"
+          ],
+          "title": "GeForce RTX 5060 Family - full specs (RTX 5060 column)"
+        },
+        {
+          "url": "https://www.nvidia.com/en-us/geforce/news/rtx-5060-out-now/",
+          "publisher": "nvidia",
+          "retrievedAt": "2026-09-30",
+          "docType": "press-release",
+          "fields": [
+            "launchDate"
+          ],
+          "title": "GeForce News, May 19, 2025: GeForce RTX 5060 Out Now"
+        },
+        {
+          "url": "https://www.pny.com/geforce-rtx-5060-8gb-models",
+          "publisher": "pny",
+          "retrievedAt": "2026-09-30",
+          "docType": "product-page",
+          "fields": [
+            "pcie.lanes",
+            "vram.speedGbps",
+            "vram.bandwidthGBps"
+          ],
+          "title": "PNY GeForce RTX 5060 8GB models: Bus Type PCI-Express 5.0 x8, 28 Gbps, 448 GB/sec"
+        }
+      ],
+      "notes": [
+        {
+          "field": "clocks.gameMhz",
+          "text": "NVIDIA publishes base and boost clocks only; no game clock."
+        },
+        {
+          "field": "pcie.lanes",
+          "text": "NVIDIA's spec page lists the PCIe generation only; lane width, memory speed and bandwidth are from PNY's board-partner spec for this GPU."
+        }
+      ]
+    },
+    {
+      "id": "nvidia-geforce-rtx-4060",
+      "category": "gpu-chip",
+      "manufacturer": "nvidia",
+      "brand": "NVIDIA",
+      "name": "GeForce RTX 4060",
+      "architecture": "Ada Lovelace",
+      "shaders": {
+        "count": 3072,
+        "unit": "CUDA Cores"
+      },
+      "clocks": {
+        "baseMhz": 1830,
+        "gameMhz": null,
+        "boostMhz": 2460
+      },
+      "vram": {
+        "sizeGb": 8,
+        "type": "GDDR6",
+        "busWidthBits": 128,
+        "speedGbps": 17,
+        "bandwidthGBps": 272
+      },
+      "referenceTbpW": 115,
+      "referencePsuW": 550,
+      "pcie": {
+        "gen": 4,
+        "lanes": 8
+      },
+      "upscaling": [
+        "DLSS 3.5 Super Resolution",
+        "DLAA"
+      ],
+      "frameGeneration": [
+        "DLSS 3.5 Frame Generation"
+      ],
+      "launchDate": "2023-06-29",
+      "sources": [
+        {
+          "url": "https://www.nvidia.com/en-us/geforce/graphics-cards/40-series/rtx-4060-4060ti/",
+          "publisher": "nvidia",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "fields": [
+            "brand",
+            "name",
+            "architecture",
+            "shaders",
+            "clocks",
+            "vram.sizeGb",
+            "vram.type",
+            "vram.busWidthBits",
+            "referenceTbpW",
+            "referencePsuW",
+            "pcie.gen",
+            "upscaling",
+            "frameGeneration"
+          ],
+          "title": "GeForce RTX 4060 Family - full specs (RTX 4060 column)"
+        },
+        {
+          "url": "https://www.nvidia.com/en-us/geforce/news/geforce-rtx-4060-available-june-29/",
+          "publisher": "nvidia",
+          "retrievedAt": "2026-09-30",
+          "docType": "press-release",
+          "fields": [
+            "launchDate"
+          ],
+          "title": "GeForce News: GeForce RTX 4060 Launching June 29th"
+        },
+        {
+          "url": "https://www.pny.com/pny-geforce-rtx-4060-8gb-verto-dual-fan",
+          "publisher": "pny",
+          "retrievedAt": "2026-09-30",
+          "docType": "product-page",
+          "fields": [
+            "pcie.lanes",
+            "vram.speedGbps",
+            "vram.bandwidthGBps"
+          ],
+          "title": "PNY GeForce RTX 4060 8GB VERTO Dual Fan: Bus Type PCI-Express 4.0 x16 (x8 active), 17 Gbps, 272 GB/sec"
+        }
+      ],
+      "notes": [
+        {
+          "field": "clocks.gameMhz",
+          "text": "NVIDIA publishes base and boost clocks only; no game clock."
+        },
+        {
+          "field": "pcie.lanes",
+          "text": "NVIDIA's spec page lists the PCIe generation only; lane width, memory speed and bandwidth are from PNY's board-partner spec for this GPU."
+        }
+      ]
+    },
+    {
+      "id": "amd-radeon-rx-9070-xt",
+      "category": "gpu-chip",
+      "manufacturer": "amd",
+      "brand": "AMD",
+      "name": "Radeon RX 9070 XT",
+      "architecture": "RDNA 4",
+      "shaders": {
+        "count": 4096,
+        "unit": "Stream Processors"
+      },
+      "clocks": {
+        "baseMhz": null,
+        "gameMhz": 2400,
+        "boostMhz": 2970
+      },
+      "vram": {
+        "sizeGb": 16,
+        "type": "GDDR6",
+        "busWidthBits": 256,
+        "speedGbps": 20,
+        "bandwidthGBps": 640
+      },
+      "referenceTbpW": 304,
+      "referencePsuW": 750,
+      "pcie": {
+        "gen": 5,
+        "lanes": 16
+      },
+      "upscaling": [
+        "AMD FSR 4"
+      ],
+      "frameGeneration": [
+        "AMD Fluid Motion Frames",
+        "AMD FSR \"Redstone\" ML frame generation"
+      ],
+      "launchDate": "2025-03-06",
+      "sources": [
+        {
+          "url": "https://www.amd.com/en/products/graphics/desktops/radeon/9000-series/amd-radeon-rx-9070xt.html",
+          "publisher": "amd",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "archiveUrl": "https://web.archive.org/web/20260826081720/https://www.amd.com/en/products/graphics/desktops/radeon/9000-series/amd-radeon-rx-9070xt.html",
+          "fields": [
+            "brand",
+            "name",
+            "shaders",
+            "clocks",
+            "vram",
+            "referenceTbpW",
+            "referencePsuW",
+            "frameGeneration.0"
+          ],
+          "title": "Radeon RX 9070 XT - specifications"
+        },
+        {
+          "url": "https://ir.amd.com/news-events/press-releases/detail/1238/amd-unveils-next-generation-amd-rdna-4-architecture-with-the-launch-of-amd-radeon-rx-9000-series-graphics-cards",
+          "publisher": "amd",
+          "retrievedAt": "2026-09-30",
+          "docType": "press-release",
+          "fields": [
+            "architecture",
+            "upscaling",
+            "launchDate"
+          ],
+          "title": "AMD press release, 2025-02-28: RDNA 4, ML-powered FSR 4, available beginning March 6th, 2025"
+        },
+        {
+          "url": "https://ir.amd.com/news-events/press-releases/detail/1270/amd-expands-ai-leadership-across-client-graphics-and-software-with-new-ryzen-ryzen-ai-and-amd-rocm-announcements-at-ces-2026",
+          "publisher": "amd",
+          "retrievedAt": "2026-09-30",
+          "docType": "press-release",
+          "fields": [
+            "frameGeneration.1"
+          ],
+          "title": "AMD CES 2026 press release: FSR \"Redstone\" brings ML frame generation and upscaling"
+        },
+        {
+          "url": "https://www.sapphiretech.com/en/consumer/pulse-radeon-rx-9070-xt-16g-gddr6",
+          "publisher": "sapphire",
+          "retrievedAt": "2026-09-30",
+          "docType": "product-page",
+          "fields": [
+            "pcie"
+          ],
+          "title": "SAPPHIRE PULSE Radeon RX 9070 XT: Interface PCI-Express 5.0 x16"
+        }
+      ],
+      "notes": [
+        {
+          "field": "clocks.baseMhz",
+          "text": "AMD publishes Game and Boost frequencies only; no base clock."
+        }
+      ]
+    },
+    {
+      "id": "amd-radeon-rx-9070",
+      "category": "gpu-chip",
+      "manufacturer": "amd",
+      "brand": "AMD",
+      "name": "Radeon RX 9070",
+      "architecture": "RDNA 4",
+      "shaders": {
+        "count": 3584,
+        "unit": "Stream Processors"
+      },
+      "clocks": {
+        "baseMhz": null,
+        "gameMhz": 2070,
+        "boostMhz": 2520
+      },
+      "vram": {
+        "sizeGb": 16,
+        "type": "GDDR6",
+        "busWidthBits": 256,
+        "speedGbps": 20,
+        "bandwidthGBps": 640
+      },
+      "referenceTbpW": 220,
+      "referencePsuW": 650,
+      "pcie": {
+        "gen": 5,
+        "lanes": 16
+      },
+      "upscaling": [
+        "AMD FSR 4"
+      ],
+      "frameGeneration": [
+        "AMD Fluid Motion Frames",
+        "AMD FSR \"Redstone\" ML frame generation"
+      ],
+      "launchDate": "2025-03-06",
+      "sources": [
+        {
+          "url": "https://www.amd.com/en/products/graphics/desktops/radeon/9000-series/amd-radeon-rx-9070.html",
+          "publisher": "amd",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "archiveUrl": "https://web.archive.org/web/20260707202254/https://www.amd.com/en/products/graphics/desktops/radeon/9000-series/amd-radeon-rx-9070.html",
+          "fields": [
+            "brand",
+            "name",
+            "shaders",
+            "clocks",
+            "vram",
+            "referenceTbpW",
+            "referencePsuW",
+            "frameGeneration.0"
+          ],
+          "title": "Radeon RX 9070 - specifications"
+        },
+        {
+          "url": "https://ir.amd.com/news-events/press-releases/detail/1238/amd-unveils-next-generation-amd-rdna-4-architecture-with-the-launch-of-amd-radeon-rx-9000-series-graphics-cards",
+          "publisher": "amd",
+          "retrievedAt": "2026-09-30",
+          "docType": "press-release",
+          "fields": [
+            "architecture",
+            "upscaling",
+            "launchDate"
+          ],
+          "title": "AMD press release, 2025-02-28: RDNA 4, ML-powered FSR 4, available beginning March 6th, 2025"
+        },
+        {
+          "url": "https://ir.amd.com/news-events/press-releases/detail/1270/amd-expands-ai-leadership-across-client-graphics-and-software-with-new-ryzen-ryzen-ai-and-amd-rocm-announcements-at-ces-2026",
+          "publisher": "amd",
+          "retrievedAt": "2026-09-30",
+          "docType": "press-release",
+          "fields": [
+            "frameGeneration.1"
+          ],
+          "title": "AMD CES 2026 press release: FSR \"Redstone\" brings ML frame generation and upscaling"
+        },
+        {
+          "url": "https://www.sapphiretech.com/en/consumer/pulse-radeon-rx-9070-16g-gddr6",
+          "publisher": "sapphire",
+          "retrievedAt": "2026-09-30",
+          "docType": "product-page",
+          "fields": [
+            "pcie"
+          ],
+          "title": "SAPPHIRE PULSE Radeon RX 9070: Interface PCI-Express 5.0 x16"
+        }
+      ],
+      "notes": [
+        {
+          "field": "clocks.baseMhz",
+          "text": "AMD publishes Game and Boost frequencies only; no base clock."
+        }
+      ]
+    },
+    {
+      "id": "amd-radeon-rx-9060-xt-16gb",
+      "category": "gpu-chip",
+      "manufacturer": "amd",
+      "brand": "AMD",
+      "name": "Radeon RX 9060 XT 16GB",
+      "architecture": "RDNA 4",
+      "shaders": {
+        "count": 2048,
+        "unit": "Stream Processors"
+      },
+      "clocks": {
+        "baseMhz": null,
+        "gameMhz": 2530,
+        "boostMhz": 3130
+      },
+      "vram": {
+        "sizeGb": 16,
+        "type": "GDDR6",
+        "busWidthBits": 128,
+        "speedGbps": 20,
+        "bandwidthGBps": 320
+      },
+      "referenceTbpW": 160,
+      "referencePsuW": 450,
+      "pcie": {
+        "gen": 5,
+        "lanes": 16
+      },
+      "upscaling": [
+        "AMD FSR 4"
+      ],
+      "frameGeneration": [
+        "AMD Fluid Motion Frames",
+        "AMD FSR \"Redstone\" ML frame generation"
+      ],
+      "launchDate": "2025",
+      "sources": [
+        {
+          "url": "https://www.amd.com/en/products/graphics/desktops/radeon/9000-series/amd-radeon-rx-9060xt.html",
+          "publisher": "amd",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "archiveUrl": "https://web.archive.org/web/20260926122954/https://www.amd.com/en/products/graphics/desktops/radeon/9000-series/amd-radeon-rx-9060xt.html",
+          "fields": [
+            "brand",
+            "name",
+            "shaders",
+            "clocks",
+            "vram",
+            "referenceTbpW",
+            "referencePsuW",
+            "frameGeneration.0",
+            "pcie"
+          ],
+          "title": "Radeon RX 9060 XT 16GB - specifications"
+        },
+        {
+          "url": "https://ir.amd.com/news-events/press-releases/detail/1253/amd-introduces-new-radeon-graphics-cards-and-ryzen-threadripper-processors-at-computex-2025",
+          "publisher": "amd",
+          "retrievedAt": "2026-09-30",
+          "docType": "press-release",
+          "fields": [
+            "architecture",
+            "upscaling",
+            "launchDate"
+          ],
+          "title": "AMD COMPUTEX 2025 press release: RDNA 4, FSR 4 ML upscaling, cards available beginning later this year"
+        },
+        {
+          "url": "https://ir.amd.com/news-events/press-releases/detail/1270/amd-expands-ai-leadership-across-client-graphics-and-software-with-new-ryzen-ryzen-ai-and-amd-rocm-announcements-at-ces-2026",
+          "publisher": "amd",
+          "retrievedAt": "2026-09-30",
+          "docType": "press-release",
+          "fields": [
+            "frameGeneration.1"
+          ],
+          "title": "AMD CES 2026 press release: FSR \"Redstone\" brings ML frame generation and upscaling"
+        }
+      ],
+      "notes": [
+        {
+          "field": "clocks.baseMhz",
+          "text": "AMD publishes Game and Boost frequencies only; no base clock."
+        },
+        {
+          "field": "launchDate",
+          "text": "AMD's COMPUTEX press release (2025-05-20) says partner cards are available 'beginning later this year'; no day is given there."
+        }
+      ]
+    },
+    {
+      "id": "intel-arc-b580",
+      "category": "gpu-chip",
+      "manufacturer": "intel",
+      "brand": "Intel",
+      "name": "Arc B580",
+      "architecture": "Xe2",
+      "shaders": {
+        "count": 20,
+        "unit": "Xe-cores"
+      },
+      "clocks": {
+        "baseMhz": null,
+        "gameMhz": 2670,
+        "boostMhz": null
+      },
+      "vram": {
+        "sizeGb": 12,
+        "type": "GDDR6",
+        "busWidthBits": 192,
+        "speedGbps": 19,
+        "bandwidthGBps": 456
+      },
+      "referenceTbpW": 190,
+      "referencePsuW": 600,
+      "pcie": {
+        "gen": 4,
+        "lanes": 8
+      },
+      "upscaling": [
+        "Intel XeSS 2"
+      ],
+      "frameGeneration": [
+        "Intel XeSS 2 frame generation"
+      ],
+      "launchDate": "2024-Q4",
+      "sources": [
+        {
+          "url": "https://www.intel.com/content/www/us/en/products/sku/241598/intel-arc-b580-graphics/specifications.html",
+          "publisher": "intel",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "fields": [
+            "brand",
+            "name",
+            "architecture",
+            "shaders",
+            "clocks",
+            "vram",
+            "referenceTbpW",
+            "referencePsuW",
+            "pcie",
+            "launchDate"
+          ],
+          "title": "Intel Arc B580 Graphics - Product Specifications (ARK)"
+        },
+        {
+          "url": "https://www.intel.com/content/www/us/en/products/details/discrete-gpus/arc/desktop/b-series.html",
+          "publisher": "intel",
+          "retrievedAt": "2026-09-30",
+          "docType": "product-page",
+          "fields": [
+            "upscaling",
+            "frameGeneration"
+          ],
+          "title": "Intel Arc B-Series Graphics for Desktops: Intel XeSS 2 upscaling technology and frame generation"
+        }
+      ],
+      "notes": [
+        {
+          "field": "clocks.gameMhz",
+          "text": "Intel publishes one 'Graphics Clock' (2670 MHz), defined on ARK as 'the average clock an end user may see in a typical gaming workload'; recorded as the game clock."
+        },
+        {
+          "field": "clocks.baseMhz",
+          "text": "Intel publishes no base clock for the B580."
+        },
+        {
+          "field": "clocks.boostMhz",
+          "text": "Intel publishes no boost clock for the B580."
+        }
+      ]
+    }
+  ]
 }

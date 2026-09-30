@@ -19,7 +19,8 @@ export const GpuCard = z.strictObject({
   category: z.literal('gpu-card'),
   /** The GPU chip this card is built on (`data/parts/gpu-chip.json`). */
   chipId: Id,
-  partNumber: z.string().min(1),
+  /** The maker's SKU. `null` plus a note when none is published (e.g. NVIDIA Founders Editions). */
+  partNumber: z.string().min(1).nullable(),
   lengthMm: PosNum,
   /** Card height (bracket to top edge), as the maker lists it. */
   heightMm: PosNum,
