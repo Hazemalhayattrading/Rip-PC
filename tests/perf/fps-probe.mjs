@@ -125,8 +125,8 @@ const USAGE = `Usage: node tests/perf/fps-probe.mjs --url <garage url with perf=
   --cpu-throttle <n>        CPU slowdown via DevTools Protocol (ci proxy runs x1 and x4)
   --runs <n>                measured passes of the camera path (default: budget.json fps.runs)
   --baseline <file>         ci mode: earlier probe JSON to compare against
-  --out <file>              JSON output (default: docs/qa/perf-runs/<date>-<target>-<device>.json in
-                            reference mode, artifacts/perf/fps-<date>.json in ci mode)
+  --out <file>              JSON output (default: docs/qa/perf-runs/<YYYY-MM-DDTHHMMZ>-<target>-<device>.json
+                            in reference mode, artifacts/perf/fps-<YYYY-MM-DDTHHMMZ>-cpu<n>x.json in ci mode)
   --ready-timeout <ms>      how long to wait for the scene contract (default 120000)
   --headless                force headless in reference mode (only to test the guard; gives INVALID)`;
 
@@ -268,8 +268,10 @@ async function probe(args) {
   }
 }
 
-function defaultOut(record) {
-  const date = record.recordedAt.slice(0, 10);
+export function defaultOut(record) {
+  // UTC date and time to the minute, e.g. 2026-09-30T1845Z: the protocol's two back-to-back runs
+  // (the sustained check) must never overwrite each other.
+  const date = record.recordedAt.slice(0, 16).replace(':', '') + 'Z';
   if (record.mode === 'reference') {
     const slug = record.device.label
       .toLowerCase()

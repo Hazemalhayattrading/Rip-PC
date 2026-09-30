@@ -7,7 +7,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import vm from 'node:vm';
 import { describe, expect, it } from 'vitest';
-import { loadFpsBudget, verdictFor } from './fps-probe.mjs';
+import { defaultOut, loadFpsBudget, verdictFor } from './fps-probe.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const sandbox = { window: {} };
@@ -223,6 +223,24 @@ describe('fps-probe verdicts', () => {
       maxRegressionPct: 10,
     });
     expect(ok).toMatchObject({ verdict: 'PROXY', regression: false });
+  });
+
+  it('names reference runs by UTC minute, so the sustained re-run never overwrites the first', () => {
+    const run = (recordedAt) =>
+      defaultOut({
+        recordedAt,
+        mode: 'reference',
+        target: { name: 'referenceLaptop' },
+        device: { label: 'Acme Book 14, Core Ultra 7 155H' },
+        method: { cpuThrottle: 1 },
+      });
+    const first = run('2026-09-30T18:45:12.345Z');
+    const second = run('2026-09-30T18:51:02.001Z');
+    expect(path.basename(first)).toBe(
+      '2026-09-30T1845Z-referenceLaptop-acme-book-14-core-ultra-7-155h.json',
+    );
+    expect(first).toContain(path.join('docs', 'qa', 'perf-runs'));
+    expect(second).not.toBe(first);
   });
 
   it('reads its targets from budget.json (60 / 60 / 120 fps, Arc expected on the laptop)', () => {
