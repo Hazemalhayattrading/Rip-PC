@@ -23,6 +23,9 @@
     { "id": "windows-central", "name": "Windows Central", "kind": "news", "domains": ["windowscentral.com"] },
     { "id": "techpowerup", "name": "TechPowerUp", "kind": "reviewer", "domains": ["techpowerup.com", "tpucdn.com"] },
     { "id": "computerbase", "name": "ComputerBase", "kind": "reviewer", "domains": ["computerbase.de"] },
-    { "id": "blender-open-data", "name": "Blender Open Data", "kind": "benchmark-database", "domains": ["opendata.blender.org"] }
+    { "id": "blender-open-data", "name": "Blender Open Data", "kind": "benchmark-database", "domains": ["opendata.blender.org"] },
+    { "id": "amazon-us", "name": "Amazon.com", "kind": "retailer", "domains": ["amazon.com"], "markets": ["US"] },
+    { "id": "newegg", "name": "Newegg", "kind": "retailer", "domains": ["newegg.com"], "markets": ["US"] },
+    { "id": "amazon-sa", "name": "Amazon.sa", "kind": "retailer", "domains": ["amazon.sa"], "markets": ["SA"] }
   ]
 }

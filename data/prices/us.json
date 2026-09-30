@@ -1,0 +1,931 @@
+{
+  "schemaVersion": 1,
+  "market": "US",
+  "currency": "USD",
+  "batch": {
+    "id": "2026-09-30-seed",
+    "windowStart": "2026-09-30",
+    "windowEnd": "2026-10-01"
+  },
+  "priceBasis": "Buy-box price in USD as shown on the live product page for delivery to Dallas 75201 (Amazon's default for our fetcher) or on Newegg, before sales tax and delivery fees. Third-party marketplace offers are kept and marked.",
+  "observations": [
+    {
+      "partId": "arctic-p12-pwm-pst-black",
+      "market": "US",
+      "currency": "USD",
+      "amount": 11.99,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B07GJGF56L",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "Black Eagle Retail",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/arctic-p12-pwm-pst-black--amazon-us--2026-09-30.html",
+      "captureSha256": "e5ce254cce041a90952dd7c486715077469ed3c2b75ca33e116669b452bcee25"
+    },
+    {
+      "partId": "fractal-north-charcoal-black-tg-light",
+      "market": "US",
+      "currency": "USD",
+      "amount": 154.97,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B09V8HNWW9",
+      "inStock": true,
+      "isMarketplace": false,
+      "seller": "Amazon.com",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/fractal-north-charcoal-black-tg-light--amazon-us--2026-09-30.html",
+      "captureSha256": "642448fad4ac1fc656054d12c39743bafc3b21b852a9132830d74e19f51610cc"
+    },
+    {
+      "partId": "fractal-pop-air-rgb-black-tg-clear-tint",
+      "market": "US",
+      "currency": "USD",
+      "amount": 99.99,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B08T1GB8D8",
+      "inStock": true,
+      "isMarketplace": false,
+      "seller": "Amazon.com",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/fractal-pop-air-rgb-black-tg-clear-tint--amazon-us--2026-09-30.html",
+      "captureSha256": "29f0f952595bd815f50008cfc5cb3558733689bb57482a10fcf1758004e7d7ba"
+    },
+    {
+      "partId": "fractal-pop-mini-air-rgb-black-tg-clear-tint",
+      "market": "US",
+      "currency": "USD",
+      "amount": 99.99,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B08T1XD4V2",
+      "inStock": true,
+      "isMarketplace": false,
+      "seller": "Amazon.com",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/fractal-pop-mini-air-rgb-black-tg-clear-tint--amazon-us--2026-09-30.html",
+      "captureSha256": "3f9acb152873a76c63c271f3739bd476fc82ad89d978222782dde17f418e0cab"
+    },
+    {
+      "partId": "fractal-terra-graphite",
+      "market": "US",
+      "currency": "USD",
+      "amount": 199.99,
+      "retailer": "newegg",
+      "url": "https://www.newegg.com/fractal-design-small-form-factor-terra-aluminum-steel-computer-case-graphite-fd-c-ter1n-01/p/N82E16811352212",
+      "inStock": false,
+      "isMarketplace": false,
+      "seller": "Newegg",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/fractal-terra-graphite--newegg--2026-09-30.html",
+      "captureSha256": "49b158254cbc61f15012fda3ff1b59b5bc8a24d8fc9abf4b23a6fe02477ec408",
+      "notes": [
+        {
+          "field": "inStock",
+          "text": "Backordered; the page gives an ETA of 10/2/2026 (month/day/year)."
+        }
+      ]
+    },
+    {
+      "partId": "arctic-liquid-freezer-iii-pro-360",
+      "market": "US",
+      "currency": "USD",
+      "amount": 69.89,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B0DLWGG85P",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "ARCTIC Inc",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/arctic-liquid-freezer-iii-pro-360--amazon-us--2026-09-30.html",
+      "captureSha256": "ae74fb3d54e95e4a6b529342dfe6fb0f2b786c6453808f7ff3ad9c503239bbff"
+    },
+    {
+      "partId": "arctic-liquid-freezer-iii-pro-280",
+      "market": "US",
+      "currency": "USD",
+      "amount": 63.69,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B0DPHRVNGL",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "ARCTIC Inc",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/arctic-liquid-freezer-iii-pro-280--amazon-us--2026-09-30.html",
+      "captureSha256": "d239f79f9a37a6a7b1732036dc0fe8a60695d779bd1fe3cf011c124034235398"
+    },
+    {
+      "partId": "nzxt-kraken-plus-240",
+      "market": "US",
+      "currency": "USD",
+      "amount": 151.99,
+      "retailer": "newegg",
+      "url": "https://www.newegg.com/nzxt-aio-radiator-size-281-x-120-x-27-mm-intel-socket-lga-1851-1700-1200-115x-amd-socket-am5-am4/p/N82E16835146166",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "TheKeyKey.",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/nzxt-kraken-plus-240--newegg--2026-09-30.html",
+      "captureSha256": "cadb73a04c95b67da07120a7f4c461cc6aa7fa8fc33e9a81a6ee6cffc1a590d0"
+    },
+    {
+      "partId": "amd-ryzen-7-9850x3d",
+      "market": "US",
+      "currency": "USD",
+      "amount": 484.0,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B0G8JMLXNQ",
+      "inStock": true,
+      "isMarketplace": false,
+      "seller": "Amazon.com",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/amd-ryzen-7-9850x3d--amazon-us--2026-09-30.html",
+      "captureSha256": "eb40f80ccf443ae9218d36217bdd6fd2934c1a4ebc5b2f33b5450903c4b1873c"
+    },
+    {
+      "partId": "amd-ryzen-7-9800x3d",
+      "market": "US",
+      "currency": "USD",
+      "amount": 449.0,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B0DKFMSMYK",
+      "inStock": true,
+      "isMarketplace": false,
+      "seller": "Amazon.com",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/amd-ryzen-7-9800x3d--amazon-us--2026-09-30.html",
+      "captureSha256": "5086a7522377080ea860b1904428006b26d9c9d52c9944edbd904597ace00906"
+    },
+    {
+      "partId": "amd-ryzen-9-9950x",
+      "market": "US",
+      "currency": "USD",
+      "amount": 499.99,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B0D6NNRBGP",
+      "inStock": true,
+      "isMarketplace": false,
+      "seller": "Amazon.com",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/amd-ryzen-9-9950x--amazon-us--2026-09-30.html",
+      "captureSha256": "9125879d06d2b1888b56a0c590d764b04e29596fc0db42e7a9028fdc0a857f4f"
+    },
+    {
+      "partId": "amd-ryzen-7-9700x",
+      "market": "US",
+      "currency": "USD",
+      "amount": 339.0,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B0D6NMDNNX",
+      "inStock": true,
+      "isMarketplace": false,
+      "seller": "Amazon.com",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/amd-ryzen-7-9700x--amazon-us--2026-09-30.html",
+      "captureSha256": "ca6ded551122062072a7ecce5ed988b4f37c24b437d35feab2687d75a622f6a5"
+    },
+    {
+      "partId": "amd-ryzen-5-9600x",
+      "market": "US",
+      "currency": "USD",
+      "amount": 174.0,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B0D6NN6TM7",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "North To South (Serial Number Recorded)",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/amd-ryzen-5-9600x--amazon-us--2026-09-30.html",
+      "captureSha256": "33f65548404e3bdef234607e3114177a456110ad7a69a77f7fd488a12173b61a"
+    },
+    {
+      "partId": "amd-ryzen-7-7800x3d",
+      "market": "US",
+      "currency": "USD",
+      "amount": 327.49,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B0BTZB7F88",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "CoreX Systems Renew",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/amd-ryzen-7-7800x3d--amazon-us--2026-09-30.html",
+      "captureSha256": "811e0649772efc86d72356d4439a9e7022bd6a14ad255b87c7da094f0687000d",
+      "notes": [
+        {
+          "text": "The seller's store is named \"CoreX Systems Renew\"; the buy box is headed \"Buy New\", so the offer is a new unit."
+        }
+      ]
+    },
+    {
+      "partId": "amd-ryzen-5-7600",
+      "market": "US",
+      "currency": "USD",
+      "amount": 208.99,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B0BMQJWBDM",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "C Sky Intl",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/amd-ryzen-5-7600--amazon-us--2026-09-30.html",
+      "captureSha256": "1aae6194934d15496d4354b192c974a4ecea1f6b5323e11e46bd7d362bbde8f0"
+    },
+    {
+      "partId": "amd-ryzen-7-5700x3d",
+      "market": "US",
+      "currency": "USD",
+      "amount": 523.69,
+      "retailer": "newegg",
+      "url": "https://www.newegg.com/p/274-000M-001Z9",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "Infinite Energypmax Co., Limited",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/amd-ryzen-7-5700x3d--newegg--2026-09-30.html",
+      "captureSha256": "9d008f6c94d8b4933a7082bb5aa49f8468f702935cd1d4421945b09541973220",
+      "notes": [
+        {
+          "text": "The seller ships from Hong Kong with a $29.99 delivery fee (not in the amount)."
+        },
+        {
+          "field": "amount",
+          "text": "The page also offers a used unit; the amount is the selected \"Buy New\" offer."
+        },
+        {
+          "text": "Newegg lists the \"International Version\" box, OPN 100-100001503WOZ; AMD's product page gives the boxed OPN as 100-100001503WOF. Same processor, different regional box."
+        }
+      ]
+    },
+    {
+      "partId": "amd-ryzen-5-5600",
+      "market": "US",
+      "currency": "USD",
+      "amount": 140.99,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B09VCHR1VH",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "CoreX Systems Renew",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/amd-ryzen-5-5600--amazon-us--2026-09-30.html",
+      "captureSha256": "ad2cf2707dc23ca3c2e0115d15d72358ab34ee5c3ac709308c9ada8e74e82e00",
+      "notes": [
+        {
+          "text": "The seller's store is named \"CoreX Systems Renew\"; the buy box is headed \"Buy New\", so the offer is a new unit."
+        }
+      ]
+    },
+    {
+      "partId": "intel-core-ultra-9-285k",
+      "market": "US",
+      "currency": "USD",
+      "amount": 509.99,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B0DFKC99VL",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "Wazno Electronics",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/intel-core-ultra-9-285k--amazon-us--2026-09-30.html",
+      "captureSha256": "50e7faf4272f2915cc75b18add0205966eb0dee50f22e16f411cdaf4bd54d85b"
+    },
+    {
+      "partId": "intel-core-ultra-7-270k-plus",
+      "market": "US",
+      "currency": "USD",
+      "amount": 330.0,
+      "retailer": "newegg",
+      "url": "https://www.newegg.com/intel-core-ultra-7-270k-plus-core-ultra-7-series-2-arrow-lake-refresh-lga-1851-desktop-cpu-processor/p/N82E16819118628",
+      "inStock": true,
+      "isMarketplace": false,
+      "seller": "Newegg",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/intel-core-ultra-7-270k-plus--newegg--2026-09-30.html",
+      "captureSha256": "515964cf157ff0922149b95dcf76bfd772fc174473a572ba20c1a5cc40b10402"
+    },
+    {
+      "partId": "intel-core-ultra-7-265k",
+      "market": "US",
+      "currency": "USD",
+      "amount": 337.19,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B0DFK2MH2D",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "planet technology (we record SN)",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/intel-core-ultra-7-265k--amazon-us--2026-09-30.html",
+      "captureSha256": "5db7a39f39d14d3474217622bd01a8b2d88a6180d42855367796cb6145e61781"
+    },
+    {
+      "partId": "intel-core-ultra-5-245k",
+      "market": "US",
+      "currency": "USD",
+      "amount": 189.99,
+      "retailer": "newegg",
+      "url": "https://www.newegg.com/intel-core-ultra-5-245k-arrow-lake-lga-1851-desktop-cpu-processor/p/N82E16819118508",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "antonline",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/intel-core-ultra-5-245k--newegg--2026-09-30.html",
+      "captureSha256": "0bf03abaabe3f309d5ee7153d3ef64442c35a0a821401c5318a1f3f63fcfaa24"
+    },
+    {
+      "partId": "intel-core-i7-14700k",
+      "market": "US",
+      "currency": "USD",
+      "amount": 379.99,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B0CGJ41C9W",
+      "inStock": true,
+      "isMarketplace": false,
+      "seller": "Amazon.com",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/intel-core-i7-14700k--amazon-us--2026-09-30.html",
+      "captureSha256": "158f48fcfb4eb4cd6998f5b2dced002b0b9dd1b1ada8d8d94117e989d11aadd0"
+    },
+    {
+      "partId": "intel-core-i5-14600k",
+      "market": "US",
+      "currency": "USD",
+      "amount": 249.97,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B0CGJ9STNF",
+      "inStock": true,
+      "isMarketplace": false,
+      "seller": "Amazon.com",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/intel-core-i5-14600k--amazon-us--2026-09-30.html",
+      "captureSha256": "a882a6c387d83f92bd684bb07ea02174213054a0384094f86e9a92dcbc243535"
+    },
+    {
+      "partId": "intel-core-i5-12400f",
+      "market": "US",
+      "currency": "USD",
+      "amount": 165.65,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B09NPJRDGD",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "Platinum Micro, Inc.",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/intel-core-i5-12400f--amazon-us--2026-09-30.html",
+      "captureSha256": "4bdfb3bc3e0d324234a7fd91f7dd91ddc29c739d5a1e167ac853d3815954c451"
+    },
+    {
+      "partId": "nvidia-geforce-rtx-5080-founders-edition",
+      "market": "US",
+      "currency": "USD",
+      "amount": 2399.0,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B0DYVCGVK4",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "Everlast Computers",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/nvidia-geforce-rtx-5080-founders-edition--amazon-us--2026-09-30.html",
+      "captureSha256": "94c5ea523360aa09c9ac9d9b2ca468ec92e2adf969b3ee0e81e5e5f06b689d0d",
+      "notes": [
+        {
+          "text": "Marketplace offer far above launch pricing; NVIDIA sells Founders Editions itself, not through Amazon."
+        }
+      ]
+    },
+    {
+      "partId": "asus-tuf-gaming-geforce-rtx-5070-ti-16gb-oc",
+      "market": "US",
+      "currency": "USD",
+      "amount": 1699.0,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B0DS6WTXGP",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "GH Electronics (We Record SN#)",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/asus-tuf-gaming-geforce-rtx-5070-ti-16gb-oc--amazon-us--2026-09-30.html",
+      "captureSha256": "a27084f495ba15cf9d813d8dcdc18c83207068e534546bd938cfbdf7b2d7eb82"
+    },
+    {
+      "partId": "asus-dual-geforce-rtx-5060-ti-16gb-oc",
+      "market": "US",
+      "currency": "USD",
+      "amount": 794.99,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B0F7WB6LSH",
+      "inStock": true,
+      "isMarketplace": false,
+      "seller": "Amazon.com",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/asus-dual-geforce-rtx-5060-ti-16gb-oc--amazon-us--2026-09-30.html",
+      "captureSha256": "137da95cbd0dbb0ba34589bc8f414c55d9e404d931c5b35e14e5cb5147186893"
+    },
+    {
+      "partId": "asus-dual-geforce-rtx-5060-8gb-oc",
+      "market": "US",
+      "currency": "USD",
+      "amount": 469.99,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B0F8PR9L3X",
+      "inStock": true,
+      "isMarketplace": false,
+      "seller": "Amazon.com",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/asus-dual-geforce-rtx-5060-8gb-oc--amazon-us--2026-09-30.html",
+      "captureSha256": "ef5a06fb9c2924da3146cd08baf43e16282b2249d5f7fc3d4d853080bba06fbe"
+    },
+    {
+      "partId": "asus-dual-geforce-rtx-4060-8gb-oc",
+      "market": "US",
+      "currency": "USD",
+      "amount": 583.35,
+      "retailer": "newegg",
+      "url": "https://www.newegg.com/asus-dual-rtx4060-o8g-geforce-rtx-4060-8gb-graphics-card-double-fans/p/N82E16814126665",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "roboshine",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/asus-dual-geforce-rtx-4060-8gb-oc--newegg--2026-09-30.html",
+      "captureSha256": "c1a4db977d0b790a24100b271d80d711612ea67483a9ff1b0ffe64d97f3d30b5",
+      "notes": [
+        {
+          "text": "The seller ships from Hong Kong."
+        },
+        {
+          "field": "amount",
+          "text": "The page also offers a used unit; the amount is the selected \"Buy New\" offer."
+        },
+        {
+          "field": "amount",
+          "text": "The buy box shows a \"Pricing Notice\" label next to the price; its pop-up text is not in the capture."
+        }
+      ]
+    },
+    {
+      "partId": "sapphire-pulse-radeon-rx-9070-xt-16gb",
+      "market": "US",
+      "currency": "USD",
+      "amount": 874.72,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B0DRPRZMK2",
+      "inStock": true,
+      "isMarketplace": false,
+      "seller": "Amazon.com",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/sapphire-pulse-radeon-rx-9070-xt-16gb--amazon-us--2026-09-30.html",
+      "captureSha256": "56a66943e3cf3d9e4abc2685469f592df328a88473e032dc0b970a3d7618abe6"
+    },
+    {
+      "partId": "sapphire-pulse-radeon-rx-9070-16gb",
+      "market": "US",
+      "currency": "USD",
+      "amount": 849.99,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B0DRPSF34T",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "FamilyTech deals",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/sapphire-pulse-radeon-rx-9070-16gb--amazon-us--2026-09-30.html",
+      "captureSha256": "dd67286862dfb1468521a50c50728c76979d9312553fcead78b41925a47f23fd"
+    },
+    {
+      "partId": "sapphire-pulse-radeon-rx-9060-xt-oc-16gb",
+      "market": "US",
+      "currency": "USD",
+      "amount": 519.99,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B0F9LN5VZ6",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "Platinum Micro, Inc.",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/sapphire-pulse-radeon-rx-9060-xt-oc-16gb--amazon-us--2026-09-30.html",
+      "captureSha256": "09c7e3ce8023056be25da783d42795a7b7fbbf534222134ce3d9f6d412e165cb"
+    },
+    {
+      "partId": "asus-tuf-gaming-b650-plus-wifi",
+      "market": "US",
+      "currency": "USD",
+      "amount": 169.99,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B0BHJKR3BV",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "Just Right!",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/asus-tuf-gaming-b650-plus-wifi--amazon-us--2026-09-30.html",
+      "captureSha256": "05d2a01ef15f1abfdc6794ce36a8911eb2b79ea0fe0b3270612e92791045d97a"
+    },
+    {
+      "partId": "asus-tuf-gaming-x870-plus-wifi",
+      "market": "US",
+      "currency": "USD",
+      "amount": 234.99,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B0DGB8Q19Y",
+      "inStock": true,
+      "isMarketplace": false,
+      "seller": "Amazon.com",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/asus-tuf-gaming-x870-plus-wifi--amazon-us--2026-09-30.html",
+      "captureSha256": "00eab3e40cdc6f78a1103459e7eb5647578f97a707748a3d9000c7426b9f1497"
+    },
+    {
+      "partId": "asus-rog-strix-b650e-i-gaming-wifi",
+      "market": "US",
+      "currency": "USD",
+      "amount": 380.0,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B0BHHVC3BS",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "Ironleaf Partners",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/asus-rog-strix-b650e-i-gaming-wifi--amazon-us--2026-09-30.html",
+      "captureSha256": "11edf08c5ae37d816d4106569e4301c98210ea7c7507054901bb39732177e184"
+    },
+    {
+      "partId": "asus-tuf-gaming-b650m-plus-wifi",
+      "market": "US",
+      "currency": "USD",
+      "amount": 221.54,
+      "retailer": "newegg",
+      "url": "https://www.newegg.com/asus-tuf-gaming-b650m-plus-wifi-micro-atx-motherboards-amd-b650-am5/p/N82E16813119594",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "roboshine",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/asus-tuf-gaming-b650m-plus-wifi--newegg--2026-09-30.html",
+      "captureSha256": "1c29c02b7f402a3d93066299d9062ef5d71f6a20a9e6e60a6e01db5655eee985",
+      "notes": [
+        {
+          "text": "The seller ships from Hong Kong."
+        }
+      ]
+    },
+    {
+      "partId": "asus-tuf-gaming-b550-plus-wifi-ii",
+      "market": "US",
+      "currency": "USD",
+      "amount": 121.12,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B09K4QMPL9",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "Assiduus Global Inc",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/asus-tuf-gaming-b550-plus-wifi-ii--amazon-us--2026-09-30.html",
+      "captureSha256": "845264fa1f039ca6c4edcec4d519404e09c54f34bf13e6c5d0a84cd60f2ea3d2"
+    },
+    {
+      "partId": "asus-tuf-gaming-z890-plus-wifi",
+      "market": "US",
+      "currency": "USD",
+      "amount": 242.02,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B0DGWNVCHL",
+      "inStock": true,
+      "isMarketplace": false,
+      "seller": "Amazon.com",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/asus-tuf-gaming-z890-plus-wifi--amazon-us--2026-09-30.html",
+      "captureSha256": "2ea682dabd55f3b7990f32062ab6fecb26f8b397e52ff04307c0394c9a19d9ed"
+    },
+    {
+      "partId": "asus-prime-b760m-a-wifi-d4",
+      "market": "US",
+      "currency": "USD",
+      "amount": 248.49,
+      "retailer": "newegg",
+      "url": "https://www.newegg.com/asus-motherboards-intel-lga-1700/p/1JW-000C-01AH3",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "TECH EDGE",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/asus-prime-b760m-a-wifi-d4--newegg--2026-09-30.html",
+      "captureSha256": "f14b7cd481cc7664e71798c3c53d9b52a5961fad90e7cf5bcd0e99505468ee1f",
+      "notes": [
+        {
+          "text": "The seller ships from China."
+        },
+        {
+          "field": "amount",
+          "text": "The page says other sellers offer a lower price; the amount is the buy-box offer."
+        }
+      ]
+    },
+    {
+      "partId": "nzxt-c850-gold-atx-3-1",
+      "market": "US",
+      "currency": "USD",
+      "amount": 119.99,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B0D1VDTX8B",
+      "inStock": true,
+      "isMarketplace": false,
+      "seller": "Amazon.com",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/nzxt-c850-gold-atx-3-1--amazon-us--2026-09-30.html",
+      "captureSha256": "85c58d5e2e2ade1961be79a5abfd0635b69e3ec1fbb3fd3a44c785b9f7c0e7f0"
+    },
+    {
+      "partId": "nzxt-c1200-gold-atx-3-1",
+      "market": "US",
+      "currency": "USD",
+      "amount": 124.99,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B0D1VDNCT7",
+      "inStock": true,
+      "isMarketplace": false,
+      "seller": "Amazon.com",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/nzxt-c1200-gold-atx-3-1--amazon-us--2026-09-30.html",
+      "captureSha256": "6a3cf465e8ce106d7ac4da7304a92e9b2d47f92a3ebc77e5cbb99eb3d90d190c"
+    },
+    {
+      "partId": "nzxt-c850-sfx-gold",
+      "market": "US",
+      "currency": "USD",
+      "amount": 149.99,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B0GFVSV779",
+      "inStock": true,
+      "isMarketplace": false,
+      "seller": "Amazon.com",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/nzxt-c850-sfx-gold--amazon-us--2026-09-30.html",
+      "captureSha256": "33b478979113e35d82e0a4bf84c7ea50b645e8455f10465d8d6538a1327543ff"
+    },
+    {
+      "partId": "teamgroup-t-force-delta-rgb-ddr5-6000-cl30-2x16gb",
+      "market": "US",
+      "currency": "USD",
+      "amount": 599.99,
+      "retailer": "newegg",
+      "url": "https://www.newegg.com/team-group-t-force-delta-rgb-32gb-ddr5-6000-cas-latency-cl30-desktop-memory-black/p/N82E16820331845",
+      "inStock": true,
+      "isMarketplace": false,
+      "seller": "Newegg",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/teamgroup-t-force-delta-rgb-ddr5-6000-cl30-2x16gb--newegg--2026-09-30.html",
+      "captureSha256": "1892f2c4c66b5e6754335cc4985bc2574174c63119b0a488e6ebe2e784b10395"
+    },
+    {
+      "partId": "gskill-flare-x5-ddr5-6000-cl30-2x16gb",
+      "market": "US",
+      "currency": "USD",
+      "amount": 579.99,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B0C1TKSDKR",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "AsanteEnterprise",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/gskill-flare-x5-ddr5-6000-cl30-2x16gb--amazon-us--2026-09-30.html",
+      "captureSha256": "0b37d9fa56bc7585341df1baa9a703e8adc98972b0f254fb5bbf6d99309f381d"
+    },
+    {
+      "partId": "gskill-trident-z5-neo-rgb-ddr5-6000-cl30-2x16gb",
+      "market": "US",
+      "currency": "USD",
+      "amount": 599.99,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B0BF8FVLSL",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "RACERSPEED INC.",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/gskill-trident-z5-neo-rgb-ddr5-6000-cl30-2x16gb--amazon-us--2026-09-30.html",
+      "captureSha256": "29dd33a4b47f9870c59f581bbe3f88c119392688f39b0b66a496aa36abb4b6b0"
+    },
+    {
+      "partId": "gskill-trident-z5-ck-ddr5-8200-cl40-2x24gb",
+      "market": "US",
+      "currency": "USD",
+      "amount": 999.99,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B0DL18BYK6",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "RACERSPEED INC.",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/gskill-trident-z5-ck-ddr5-8200-cl40-2x24gb--amazon-us--2026-09-30.html",
+      "captureSha256": "b855787d5752f84c64bcf5beb88bc753f1a7678fd3c0d5babee3f7a64e75bab0"
+    },
+    {
+      "partId": "gskill-trident-z-neo-ddr4-3600-cl16-2x16gb",
+      "market": "US",
+      "currency": "USD",
+      "amount": 269.99,
+      "retailer": "newegg",
+      "url": "https://www.newegg.com/g-skill-trident-z-neo-series-32gb-ddr4-3600-cas-latency-cl16-desktop-memory-black/p/N82E16820232861",
+      "inStock": true,
+      "isMarketplace": false,
+      "seller": "Newegg",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/gskill-trident-z-neo-ddr4-3600-cl16-2x16gb--newegg--2026-09-30.html",
+      "captureSha256": "2ffbd734eb2e46dac3280d585eafb766d366781742a420b0677de3e73f9d175a",
+      "notes": [
+        {
+          "field": "amount",
+          "text": "The page also offers a used unit; the amount is the selected \"Buy New\" offer."
+        }
+      ]
+    },
+    {
+      "partId": "wd-black-sn8100-2tb",
+      "market": "US",
+      "currency": "USD",
+      "amount": 479.99,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B0F3BD1W6R",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "Renewed Global",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/wd-black-sn8100-2tb--amazon-us--2026-09-30.html",
+      "captureSha256": "c0aa1f3aa6b1279de5e3afb0991748891d5616ab5b3461b083412a688ea87558",
+      "notes": [
+        {
+          "text": "The seller's store is named \"Renewed Global\"; the offer is on the new-product page (Amazon lists renewed units under separate listings), and the page says \"Only 1 left in stock\"."
+        }
+      ]
+    },
+    {
+      "partId": "wd-black-sn850x-2tb",
+      "market": "US",
+      "currency": "USD",
+      "amount": 419.88,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B0B3RQDGL7",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "Risingstars(Genuine Pro Gaming/Eletronics/Beauty)",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/wd-black-sn850x-2tb--amazon-us--2026-09-30.html",
+      "captureSha256": "979ff79162debfa44e5d13799cc1299c56efde15688e7af65c808faf07d3ca14",
+      "notes": [
+        {
+          "text": "Amazon lists the retail box code WDBB9G0020BNC-WRSN for this drive (SN850X 2TB without heatsink)."
+        }
+      ]
+    },
+    {
+      "partId": "wd-black-sn7100-1tb",
+      "market": "US",
+      "currency": "USD",
+      "amount": 199.0,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B0DN7CYYSD",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "electrolert",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/wd-black-sn7100-1tb--amazon-us--2026-09-30.html",
+      "captureSha256": "85d2950cd6224873106d80fc5f7212792afd45a0f0d038b3f66198cb62635dda"
+    },
+    {
+      "partId": "samsung-990-pro-2tb",
+      "market": "US",
+      "currency": "USD",
+      "amount": 389.99,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B0BHJJ9Y77",
+      "inStock": true,
+      "isMarketplace": false,
+      "seller": "Amazon.com",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/samsung-990-pro-2tb--amazon-us--2026-09-30.html",
+      "captureSha256": "b2e4d7d1f89142b74be9422681cadaf0cee64b6125547a232ce14ed17f74cc3a",
+      "notes": [
+        {
+          "text": "Amazon US lists the Americas model code MZ-V9P2T0B/AM for this drive."
+        }
+      ]
+    }
+  ],
+  "gaps": [
+    {
+      "partId": "arctic-p14-pwm-pst-black",
+      "market": "US",
+      "reasonCode": "not-listed",
+      "reason": "Amazon US lists the white single fan (ACFAN00197A) and the 5-pack, not the black single fan ACFAN00125A. Newegg's ARCTIC-brand P14 PWM PST listing offers only the white fan (black shown as unavailable), and the one black single-fan listing (9SIC72JM0A7633) is filed under another brand with no part number, so neither is ACFAN00125A.",
+      "retailersTried": [
+        "amazon-us",
+        "newegg"
+      ],
+      "checkedAt": "2026-09-30"
+    },
+    {
+      "partId": "deepcool-fc120-3-in-1",
+      "market": "US",
+      "reasonCode": "not-listed",
+      "reason": "Amazon.com: no listing for this exact part in the search results. Newegg: no listing for this exact part in the search results.",
+      "retailersTried": [
+        "amazon-us",
+        "newegg"
+      ],
+      "checkedAt": "2026-09-30"
+    },
+    {
+      "partId": "deepcool-ch560",
+      "market": "US",
+      "reasonCode": "not-listed",
+      "reason": "Amazon.com: no listing for this exact part in the search results. Newegg: no listing for this exact part in the search results.",
+      "retailersTried": [
+        "amazon-us",
+        "newegg"
+      ],
+      "checkedAt": "2026-09-30"
+    },
+    {
+      "partId": "deepcool-ak620",
+      "market": "US",
+      "reasonCode": "not-listed",
+      "reason": "Amazon.com: no listing for this exact part in the search results. Newegg: no listing for this exact part in the search results.",
+      "retailersTried": [
+        "amazon-us",
+        "newegg"
+      ],
+      "checkedAt": "2026-09-30"
+    },
+    {
+      "partId": "deepcool-an400",
+      "market": "US",
+      "reasonCode": "not-listed",
+      "reason": "Amazon.com: no listing for this exact part in the search results. Newegg: no listing for this exact part in the search results.",
+      "retailersTried": [
+        "amazon-us",
+        "newegg"
+      ],
+      "checkedAt": "2026-09-30"
+    },
+    {
+      "partId": "nvidia-geforce-rtx-5090-founders-edition",
+      "market": "US",
+      "reasonCode": "not-listed",
+      "reason": "Amazon.com: no listing for this exact part in the search results. Newegg: no listing for this exact part in the search results.",
+      "retailersTried": [
+        "amazon-us",
+        "newegg"
+      ],
+      "checkedAt": "2026-09-30"
+    },
+    {
+      "partId": "nvidia-geforce-rtx-5070-founders-edition",
+      "market": "US",
+      "reasonCode": "not-listed",
+      "reason": "Amazon.com: no listing for this exact part in the search results. Newegg: no listing for this exact part in the search results.",
+      "retailersTried": [
+        "amazon-us",
+        "newegg"
+      ],
+      "checkedAt": "2026-09-30"
+    },
+    {
+      "partId": "deepcool-pn650m",
+      "market": "US",
+      "reasonCode": "not-listed",
+      "reason": "Amazon.com: no listing for this exact part in the search results. Newegg: no listing for this exact part in the search results.",
+      "retailersTried": [
+        "amazon-us",
+        "newegg"
+      ],
+      "checkedAt": "2026-09-30"
+    },
+    {
+      "partId": "deepcool-pn850m",
+      "market": "US",
+      "reasonCode": "not-listed",
+      "reason": "Amazon.com: no listing for this exact part in the search results. Newegg: no listing for this exact part in the search results.",
+      "retailersTried": [
+        "amazon-us",
+        "newegg"
+      ],
+      "checkedAt": "2026-09-30"
+    },
+    {
+      "partId": "teamgroup-t-force-vulcan-z-ddr4-3200-cl16-2x16gb",
+      "market": "US",
+      "reasonCode": "not-listed",
+      "reason": "Amazon.com: no listing for this exact part in the search results. Newegg: no listing for this exact part in the search results.",
+      "retailersTried": [
+        "amazon-us",
+        "newegg"
+      ],
+      "checkedAt": "2026-09-30"
+    },
+    {
+      "partId": "wd-blue-sa510-2-5-inch-1tb",
+      "market": "US",
+      "reasonCode": "not-listed",
+      "reason": "Amazon US lists only the earlier revision WDS100T3B0A, not the current WDS100T5B0A. Newegg: no listing for this exact part in the search results.",
+      "retailersTried": [
+        "amazon-us",
+        "newegg"
+      ],
+      "checkedAt": "2026-09-30"
+    }
+  ]
+}
