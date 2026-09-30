@@ -211,6 +211,12 @@
       "skillPath": ".claude/skills/threejs-webgl/SKILL.md",
       "computedHash": "9b2cfc1e6512ad6c41e4e9ba56c301d619c2cfd63722793258f4424013ec4b22"
     },
+    "ui-ux-pro-max": {
+      "source": "nextlevelbuilder/ui-ux-pro-max-skill",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/ui-ux-pro-max/SKILL.md",
+      "computedHash": "daa1a7be30edc9cda6b31da821c5285a9f421ee3136dd6335ff47e917215d1a5"
+    },
     "using-git-worktrees": {
       "source": "obra/superpowers",
       "sourceType": "github",
