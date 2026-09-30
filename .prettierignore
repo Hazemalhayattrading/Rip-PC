@@ -1,0 +1,19 @@
+# Build and test output
+dist/
+coverage/
+playwright-report/
+test-results/
+artifacts/
+.lighthouseci/
+
+# QA's hand-made copies of minified build output (bundle budget checker fixtures)
+tests/perf/fixtures/
+
+# Owned by other teams or generated; formatted by their owners, not by this check
+*.md
+docs/
+data/
+.claude/
+.agents/
+skills-lock.json
+package-lock.json

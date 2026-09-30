@@ -58,8 +58,12 @@ These override anything below that says otherwise.
 ## 1. Branches and merging
 
 - This session can push only `claude/keen-lamport-0794zj`. That branch is the **integration branch**
-  for Phase 0 and stands in for `main`. Nothing goes to `main` from this session, so GitHub Pages
-  does not deploy yet. Hazem merges to `main` (PR on request).
+  for Phase 0.
+  - Director-accepted work is merged into it, so the teams can build on each other's work and QA
+    can verify everything in one place.
+  - `main` gets the phase only after Director acceptance **and** a green QA report (WP-Q2), as
+    CLAUDE.md requires. Hazem does that merge (PR on request).
+  - Nothing goes to `main` from this session, so GitHub Pages does not deploy yet.
 - Each lead works in its own git worktree on a local branch:
   `feat/data-foundations`, `feat/build-scaffold`, `feat/design-direction`, `feat/qa-foundations`.
   Feature branches are **never pushed**. The Director merges accepted branches into the integration
