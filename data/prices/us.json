@@ -24,6 +24,28 @@
       "captureSha256": "e5ce254cce041a90952dd7c486715077469ed3c2b75ca33e116669b452bcee25"
     },
     {
+      "partId": "arctic-p14-pwm-pst-black",
+      "market": "US",
+      "currency": "USD",
+      "amount": 27.79,
+      "retailer": "newegg",
+      "url": "https://www.newegg.com/p/2RC-02TR-00047",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "Superior Quality",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/US/arctic-p14-pwm-pst-black--newegg--2026-09-30.html",
+      "captureSha256": "d3d83f1bc3d2422e19acea92a6bcdbf3391811f00e85cf88817af52ab391ca4e",
+      "notes": [
+        {
+          "text": "The seller ships from China."
+        },
+        {
+          "text": "Newegg lists it under the ARCTIC brand as \"P14 PWM PST ... - Black\", a single fan, without ARCTIC's code ACFAN00125A. Newegg's other P14 PWM PST listings are the white fan, or filed under another brand."
+        }
+      ]
+    },
+    {
       "partId": "fractal-north-charcoal-black-tg-light",
       "market": "US",
       "currency": "USD",
@@ -385,12 +407,7 @@
       "seller": "Everlast Computers",
       "retrievedAt": "2026-09-30",
       "capture": "artifacts/prices/US/nvidia-geforce-rtx-5080-founders-edition--amazon-us--2026-09-30.html",
-      "captureSha256": "94c5ea523360aa09c9ac9d9b2ca468ec92e2adf969b3ee0e81e5e5f06b689d0d",
-      "notes": [
-        {
-          "text": "Marketplace offer far above launch pricing; NVIDIA sells Founders Editions itself, not through Amazon."
-        }
-      ]
+      "captureSha256": "94c5ea523360aa09c9ac9d9b2ca468ec92e2adf969b3ee0e81e5e5f06b689d0d"
     },
     {
       "partId": "asus-tuf-gaming-geforce-rtx-5070-ti-16gb-oc",
@@ -807,17 +824,6 @@
   ],
   "gaps": [
     {
-      "partId": "arctic-p14-pwm-pst-black",
-      "market": "US",
-      "reasonCode": "not-listed",
-      "reason": "Amazon US lists the white single fan (ACFAN00197A) and the 5-pack, not the black single fan ACFAN00125A. Newegg's ARCTIC-brand P14 PWM PST listing offers only the white fan (black shown as unavailable), and the one black single-fan listing (9SIC72JM0A7633) is filed under another brand with no part number, so neither is ACFAN00125A.",
-      "retailersTried": [
-        "amazon-us",
-        "newegg"
-      ],
-      "checkedAt": "2026-09-30"
-    },
-    {
       "partId": "deepcool-fc120-3-in-1",
       "market": "US",
       "reasonCode": "not-listed",
@@ -909,7 +915,7 @@
       "partId": "teamgroup-t-force-vulcan-z-ddr4-3200-cl16-2x16gb",
       "market": "US",
       "reasonCode": "not-listed",
-      "reason": "Amazon.com: no listing for this exact part in the search results. Newegg: no listing for this exact part in the search results.",
+      "reason": "Amazon US lists only TLZGD432G3200HC16FDC01 (B08NVQZ9XQ), a separate TeamGroup code for the same kit spec, and shows no buy-box price for it. Newegg: no listing for this exact part in the search results.",
       "retailersTried": [
         "amazon-us",
         "newegg"
@@ -919,8 +925,8 @@
     {
       "partId": "wd-blue-sa510-2-5-inch-1tb",
       "market": "US",
-      "reasonCode": "not-listed",
-      "reason": "Amazon US lists only the earlier revision WDS100T3B0A, not the current WDS100T5B0A. Newegg: no listing for this exact part in the search results.",
+      "reasonCode": "unavailable",
+      "reason": "Amazon US lists the current WDS100T5B0A (B0GR64NJPG) as \"Currently unavailable\" with no price; its other SA510 listings are the earlier revision WDS100T3B0A. Newegg: no listing for this exact part in the search results.",
       "retailersTried": [
         "amazon-us",
         "newegg"

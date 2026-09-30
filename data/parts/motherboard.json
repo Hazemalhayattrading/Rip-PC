@@ -586,7 +586,7 @@
       "brand": "ASUS",
       "name": "ROG STRIX B650E-I GAMING WIFI",
       "socket": "AM5",
-      "chipset": "B650E",
+      "chipset": "B650",
       "formFactor": "Mini-ITX",
       "biosSupport": {
         "families": [
@@ -793,6 +793,10 @@
         }
       ],
       "notes": [
+        {
+          "field": "chipset",
+          "text": "ASUS lists the chipset as \"AMD B650\" on the spec page and in the manual, although the board's name says B650E."
+        },
         {
           "field": "laneSharing",
           "text": "The manual's specifications summary and M.2 section give no shared-bandwidth footnote for any slot or port on this board."

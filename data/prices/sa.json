@@ -7,7 +7,7 @@
     "windowStart": "2026-09-30",
     "windowEnd": "2026-10-01"
   },
-  "priceBasis": "Buy-box price in SAR as shown on the live Amazon.sa product page for delivery to Riyadh; the pages state \"All prices include VAT.\" Delivery fees are excluded. Third-party marketplace offers are kept and marked.",
+  "priceBasis": "Buy-box price in SAR as shown on the live Amazon.sa product page for delivery to Riyadh; the pages state \"All prices include VAT.\" Delivery fees are excluded. Offers imported through Amazon.sa's global store show a total that includes estimated import charges; each such observation has a note with the split. Third-party marketplace offers are kept and marked.",
   "observations": [
     {
       "partId": "arctic-p12-pwm-pst-black",
@@ -26,6 +26,10 @@
         {
           "field": "seller",
           "text": "Sold by Amazon US through Amazon.sa's global store (imported), so it is recorded as a marketplace offer."
+        },
+        {
+          "field": "amount",
+          "text": "The displayed price includes estimated import charges: item SAR 56.96 plus import charges SAR 25.79 (total SAR 82.75)."
         }
       ]
     },
@@ -46,6 +50,10 @@
         {
           "field": "seller",
           "text": "Sold by Amazon UK through Amazon.sa's global store (imported), so it is recorded as a marketplace offer."
+        },
+        {
+          "field": "amount",
+          "text": "The displayed price includes estimated import charges: item SAR 658.64 plus import charges SAR 116.51 (total SAR 775.15)."
         }
       ]
     },
@@ -204,6 +212,25 @@
       "captureSha256": "35a29976538d71341c6705813306b08c0bc35d7e7b00de2f09843b690c0e5878"
     },
     {
+      "partId": "intel-core-ultra-9-285k",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 2959.0,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0DMXB5DVP",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "GameBeatz",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/intel-core-ultra-9-285k--amazon-sa--2026-09-30.html",
+      "captureSha256": "f29c3356dfe4ec7ebb1292defa505ce7279e53d2de8e54ad11d4a8ade9b9f652",
+      "notes": [
+        {
+          "text": "Listed under the reseller brand \"Mavark\"; the listing describes Intel's boxed part BX80768285K. Amazon.sa's Intel-brand listing (B0DFKC99VL) showed no buy-box price."
+        }
+      ]
+    },
+    {
       "partId": "intel-core-ultra-7-270k-plus",
       "market": "SA",
       "currency": "SAR",
@@ -220,6 +247,10 @@
         {
           "field": "seller",
           "text": "Sold by Amazon UK through Amazon.sa's global store (imported), so it is recorded as a marketplace offer."
+        },
+        {
+          "field": "amount",
+          "text": "The displayed price includes estimated import charges: item SAR 1,294.38 plus import charges SAR 258.66 (total SAR 1,553.04)."
         }
       ]
     },
@@ -240,6 +271,10 @@
         {
           "field": "seller",
           "text": "Sold by Amazon US through Amazon.sa's global store (imported), so it is recorded as a marketplace offer."
+        },
+        {
+          "field": "amount",
+          "text": "The displayed price includes estimated import charges: item SAR 1,414.35 plus import charges SAR 276.65 (total SAR 1,691.00)."
         }
       ]
     },
@@ -288,6 +323,10 @@
         {
           "field": "seller",
           "text": "Sold by Amazon Germany through Amazon.sa's global store (imported), so it is recorded as a marketplace offer."
+        },
+        {
+          "field": "amount",
+          "text": "The displayed price includes estimated import charges: item SAR 1,089.05 plus import charges SAR 227.86 (total SAR 1,316.91)."
         }
       ]
     },
@@ -320,7 +359,7 @@
       "captureSha256": "5b17b013b9281b5b049aa83c86b516908f434a92aaacf9bcd35539aac3ec2c2f",
       "notes": [
         {
-          "text": "Marketplace offer far above launch pricing; the page says it usually ships in 10 to 11 days."
+          "text": "Third-party offer; the page says it usually ships in 10 to 11 days."
         }
       ]
     },
@@ -486,6 +525,10 @@
         {
           "field": "seller",
           "text": "Sold by Amazon US through Amazon.sa's global store (imported), so it is recorded as a marketplace offer."
+        },
+        {
+          "field": "amount",
+          "text": "The displayed price includes estimated import charges: item SAR 581.83 plus import charges SAR 104.52 (total SAR 686.35)."
         }
       ]
     },
@@ -506,6 +549,10 @@
         {
           "field": "seller",
           "text": "Sold by Amazon Germany through Amazon.sa's global store (imported), so it is recorded as a marketplace offer."
+        },
+        {
+          "field": "amount",
+          "text": "The displayed price includes estimated import charges: item SAR 816.00 plus import charges SAR 139.65 (total SAR 955.65)."
         }
       ]
     },
@@ -567,6 +614,10 @@
         {
           "field": "seller",
           "text": "Sold by Amazon UK through Amazon.sa's global store (imported), so it is recorded as a marketplace offer."
+        },
+        {
+          "field": "amount",
+          "text": "The displayed price includes estimated import charges: item SAR 788.89 plus import charges SAR 135.58 (total SAR 924.47)."
         }
       ]
     },
@@ -601,6 +652,10 @@
         {
           "field": "seller",
           "text": "Sold by Amazon US through Amazon.sa's global store (imported), so it is recorded as a marketplace offer."
+        },
+        {
+          "field": "amount",
+          "text": "The displayed price includes estimated import charges: item SAR 2,318.88 plus import charges SAR 412.33 (total SAR 2,731.21)."
         }
       ]
     },
@@ -675,6 +730,30 @@
       "captureSha256": "bc709c3b10e2e2bb5f711a134b2a841c5ffe77633188942c928992dc6e31bba4"
     },
     {
+      "partId": "wd-blue-sa510-2-5-inch-1tb",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 1103.78,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0GR64NJPG",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "Amazon Germany",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/wd-blue-sa510-2-5-inch-1tb--amazon-sa--2026-09-30.html",
+      "captureSha256": "b867c930d9ed528d07272a9eaf4fdc56fac522506fa47214bd3150a5a6099e37",
+      "notes": [
+        {
+          "field": "seller",
+          "text": "Sold by Amazon Germany through Amazon.sa's global store (imported), so it is recorded as a marketplace offer."
+        },
+        {
+          "field": "amount",
+          "text": "The displayed price includes estimated import charges: item SAR 944.81 plus import charges SAR 158.97 (total SAR 1,103.78)."
+        }
+      ]
+    },
+    {
       "partId": "samsung-990-pro-2tb",
       "market": "SA",
       "currency": "SAR",
@@ -718,7 +797,12 @@
       "retailersTried": [
         "amazon-sa"
       ],
-      "checkedAt": "2026-09-30"
+      "checkedAt": "2026-09-30",
+      "notes": [
+        {
+          "text": "Amazon.sa has priced listings for other North variants (FD-C-NOR1C-01, FD-C-NOR1C-04); they are different SKUs and are not used."
+        }
+      ]
     },
     {
       "partId": "fractal-pop-air-rgb-black-tg-clear-tint",
@@ -781,16 +865,6 @@
       "checkedAt": "2026-09-30"
     },
     {
-      "partId": "intel-core-ultra-9-285k",
-      "market": "SA",
-      "reasonCode": "no-price-shown",
-      "reason": "Amazon.sa: the product page shows no buy-box price (only other buying options or none).",
-      "retailersTried": [
-        "amazon-sa"
-      ],
-      "checkedAt": "2026-09-30"
-    },
-    {
       "partId": "nvidia-geforce-rtx-5090-founders-edition",
       "market": "SA",
       "reasonCode": "not-listed",
@@ -813,8 +887,8 @@
     {
       "partId": "asus-tuf-gaming-geforce-rtx-5070-ti-16gb-oc",
       "market": "SA",
-      "reasonCode": "not-listed",
-      "reason": "Amazon.sa lists only the White edition (TUF-RTX5070TI-O16G-WHITE-GAMING), a different SKU.",
+      "reasonCode": "unavailable",
+      "reason": "Amazon.sa lists the exact card (B0DS6WTXGP, TUF-RTX5070TI-O16G-GAMING) as \"Currently unavailable\"; its other TUF 5070 Ti listings are the White edition and the non-OC TUF-RTX5070TI-16G-GAMING.",
       "retailersTried": [
         "amazon-sa"
       ],
@@ -843,8 +917,8 @@
     {
       "partId": "teamgroup-t-force-vulcan-z-ddr4-3200-cl16-2x16gb",
       "market": "SA",
-      "reasonCode": "no-price-shown",
-      "reason": "Amazon.sa: the product page shows no buy-box price (only other buying options or none).",
+      "reasonCode": "not-listed",
+      "reason": "Amazon.sa lists only TLZGD432G3200HC16FDC01 (B08NVQZ9XQ), a separate TeamGroup code for the same kit spec, and shows no buy-box price for it.",
       "retailersTried": [
         "amazon-sa"
       ],
@@ -865,16 +939,6 @@
       "market": "SA",
       "reasonCode": "no-price-shown",
       "reason": "Amazon.sa: the product page shows no buy-box price (only other buying options or none).",
-      "retailersTried": [
-        "amazon-sa"
-      ],
-      "checkedAt": "2026-09-30"
-    },
-    {
-      "partId": "wd-blue-sa510-2-5-inch-1tb",
-      "market": "SA",
-      "reasonCode": "not-listed",
-      "reason": "Amazon.sa lists only the earlier revision WDS100T3B0A, not the current WDS100T5B0A.",
       "retailersTried": [
         "amazon-sa"
       ],
