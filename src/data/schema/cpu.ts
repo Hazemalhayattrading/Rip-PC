@@ -122,7 +122,8 @@ export const Cpu = z.strictObject({
     asPublished: z.string().min(1),
   }),
   launchDate: PublishedDate,
-  unlocked: z.boolean(),
+  /** Multiplier unlocked for overclocking. `null` plus a note when the maker's page does not say. */
+  unlocked: z.boolean().nullable(),
   /** Cooler in the retail box. `null` means no cooler is included. */
   boxCooler: z.string().min(1).nullable(),
 });

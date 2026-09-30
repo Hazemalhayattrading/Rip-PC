@@ -34,6 +34,7 @@ function classify(kind: FileKind, issue: ZodIssue): RuleId {
   if (kind === 'price') {
     if (issue.code === 'unrecognized_keys' && issue.keys.includes('archiveUrl')) return 'price-archive';
     if (path[0] === 'gaps' && last === 'reason') return 'price-gap-reason';
+    if (last === 'capture' || last === 'captureSha256') return 'price-capture';
   }
   if (kind === 'benchmark' && last === 'publishedAt') return 'benchmark-published-at';
   if (issue.code === 'invalid_format' && last !== undefined && (last === 'id' || /Ids?$/.test(last))) {

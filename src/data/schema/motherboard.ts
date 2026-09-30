@@ -84,6 +84,28 @@ export type LaneSharingRule = z.infer<typeof LaneSharingRule>;
 
 export const FanHeaderRole = z.enum(['cpu', 'cpu-opt', 'pump', 'cpu-or-pump', 'chassis', 'chassis-or-pump']);
 
+/** Minimum BIOS for a CPU family on this board. */
+export const BiosFamilyRow = z.strictObject({
+  family: CpuFamily,
+  /** Earliest BIOS version that supports the family. `null` means the board's first BIOS already did. */
+  minBiosVersion: z.string().min(1).nullable(),
+  /** The maker's own words behind the value: a CPU support list cell or a BIOS release note, verbatim. */
+  statement: z.string().min(1),
+});
+export type BiosFamilyRow = z.infer<typeof BiosFamilyRow>;
+
+/** How the maker's CPU support list lists one catalogue CPU. */
+export const BiosCpuRow = z.strictObject({
+  cpuId: Id,
+  /** `all`: validated with every BIOS. `since`: from `minBiosVersion` on. `not-listed`: not on the list. */
+  listing: z.enum(['all', 'since', 'not-listed']),
+  /** Set exactly when `listing` is `since`. */
+  minBiosVersion: z.string().min(1).nullable(),
+  /** The support list's cell text for this CPU, verbatim (all rows, if the CPU is listed twice). */
+  asListed: z.string().min(1),
+});
+export type BiosCpuRow = z.infer<typeof BiosCpuRow>;
+
 export const Motherboard = z.strictObject({
   ...specRecordBase,
   category: z.literal('motherboard'),
@@ -91,15 +113,10 @@ export const Motherboard = z.strictObject({
   chipset: Chipset,
   formFactor: MotherboardFormFactor,
   biosSupport: z.strictObject({
-    /** Earliest BIOS that lists any CPU of the family, from the CPU support list. */
-    families: z
-      .array(z.strictObject({ family: CpuFamily, minBiosVersion: z.string().min(1) }))
-      .min(1),
-    /**
-     * One row per catalogue CPU on this socket, from the CPU support list.
-     * `minBiosVersion: null` means the CPU is not on the list (not supported); add a note.
-     */
-    cpus: z.array(z.strictObject({ cpuId: Id, minBiosVersion: z.string().min(1).nullable() })),
+    /** One row per CPU family the catalogue has on this socket (CPU support list or BIOS release notes). */
+    families: z.array(BiosFamilyRow).min(1),
+    /** One row per catalogue CPU on this socket, from the CPU support list. */
+    cpus: z.array(BiosCpuRow),
   }),
   biosFlashback: z.strictObject({
     supported: z.boolean(),

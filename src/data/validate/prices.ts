@@ -91,6 +91,10 @@ export function checkPrices(sink: IssueSink, dataset: Dataset, registry: Registr
         sink.error('price-window', file, `retrievedAt ${o.retrievedAt} is outside the batch window ${windowStart}..${windowEnd}`, rid, `${at}.retrievedAt`);
       }
       if (o.retrievedAt > today) sink.error('date-future', file, `retrievedAt ${o.retrievedAt} is after today (${today})`, rid, `${at}.retrievedAt`);
+      const expected = `artifacts/prices/${market}/${o.partId}--${o.retailer}--${o.retrievedAt}.`;
+      if (!o.capture.startsWith(expected)) {
+        sink.error('price-capture', file, `capture must be named ${expected}<html|png>`, rid, `${at}.capture`);
+      }
       const key = `${o.partId}|${o.retailer}`;
       if (seen.has(key)) sink.error('price-duplicate', file, `two observations for "${o.partId}" at "${o.retailer}"`, rid, at);
       seen.add(key);

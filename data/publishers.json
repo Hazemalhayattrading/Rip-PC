@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "publishers": [
+    { "id": "amd", "name": "AMD", "kind": "manufacturer", "domains": ["amd.com"] },
+    { "id": "intel", "name": "Intel", "kind": "manufacturer", "domains": ["intel.com"] }
+  ]
+}

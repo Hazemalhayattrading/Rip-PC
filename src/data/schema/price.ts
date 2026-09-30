@@ -24,8 +24,16 @@ export const PriceObservation = z.strictObject({
   /** Seller name as the page shows it (e.g. "Amazon.sa", "Newegg"). */
   seller: z.string().min(1),
   retrievedAt: IsoDate,
-  /** Path of the saved capture, relative to the repo root, under `artifacts/`. */
-  capture: z.string().regex(/^artifacts\/[^\s]+$/, { error: 'must be a path under artifacts/' }),
+  /**
+   * The saved live page (HTML or screenshot), relative to the repo root. Fixed convention:
+   * `artifacts/prices/<market>/<partId>--<retailer>--<retrievedAt>.<html|png>`. The validator
+   * enforces the name; `artifacts/` is git-ignored, so the file itself lives in the worktree.
+   */
+  capture: z.string().regex(/^artifacts\/prices\/(?:SA|US)\/[a-z0-9-]+--[a-z0-9-]+--\d{4}-\d{2}-\d{2}\.(?:html|png)$/, {
+    error: 'must be artifacts/prices/<market>/<partId>--<retailer>--<YYYY-MM-DD>.<html|png>',
+  }),
+  /** SHA-256 of the capture file, so an audit can prove it is the file that was read. */
+  captureSha256: z.string().regex(/^[0-9a-f]{64}$/, { error: 'must be a lower-case hex SHA-256' }),
   notes: Notes,
 });
 export type PriceObservation = z.infer<typeof PriceObservation>;

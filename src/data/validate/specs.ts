@@ -13,7 +13,16 @@ function nullMeansNone(record: SpecRecord): string[] {
     case 'cpu':
       return ['hybrid', 'igpu', 'boxCooler', 'memory.speeds.*.config'];
     case 'motherboard':
-      return ['wifi', 'bluetooth', 'lan', ...(record.biosFlashback.supported ? [] : ['biosFlashback.name'])];
+      return [
+        'wifi',
+        'bluetooth',
+        'lan',
+        'biosSupport.families.*.minBiosVersion',
+        ...record.biosSupport.cpus.flatMap((row, i) =>
+          row.listing === 'since' ? [] : [`biosSupport.cpus.${String(i)}.minBiosVersion`],
+        ),
+        ...(record.biosFlashback.supported ? [] : ['biosFlashback.name']),
+      ];
     case 'ram':
       return ['profiles.xmp'];
     case 'gpu-card':
@@ -43,7 +52,8 @@ function specPolicy(record: SpecRecord): RecordPolicy {
     ...(record.category === 'motherboard'
       ? {
           docTypes: [
-            { path: 'biosSupport', docTypes: ['cpu-support-list'] },
+            { path: 'biosSupport.cpus', docTypes: ['cpu-support-list'] },
+            { path: 'biosSupport.families', docTypes: ['cpu-support-list', 'bios-release-notes'] },
             { path: 'laneSharing', docTypes: ['manual'] },
           ],
         }
@@ -143,6 +153,9 @@ function checkMotherboard(sink: IssueSink, file: string, board: Motherboard, cpu
     const at = `biosSupport.cpus.${String(i)}`;
     if (listed.has(row.cpuId)) sink.error('bios-coverage', file, `CPU "${row.cpuId}" is listed twice`, id, at);
     listed.add(row.cpuId);
+    if ((row.listing === 'since') !== (row.minBiosVersion !== null)) {
+      sink.error('sanity', file, 'minBiosVersion is set exactly when listing is "since"', id, at);
+    }
     const cpu = cpuById.get(row.cpuId);
     if (cpu === undefined) {
       sink.error('ref', file, `CPU "${row.cpuId}" is not in ${DATA_PATHS.specs.cpu}`, id, `${at}.cpuId`);

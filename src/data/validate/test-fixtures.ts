@@ -93,8 +93,8 @@ export function fixtureData(): FixtureData {
         chipset: 'B650',
         formFactor: 'ATX',
         biosSupport: {
-          families: [{ family: 'ryzen-9000', minBiosVersion: '2000' }],
-          cpus: [{ cpuId: 'fx-cpu-am5', minBiosVersion: '2000' }],
+          families: [{ family: 'ryzen-9000', minBiosVersion: '2000', statement: 'BIOS 2000: support Ryzen 9000.' }],
+          cpus: [{ cpuId: 'fx-cpu-am5', listing: 'since', minBiosVersion: '2000', asListed: '2000' }],
         },
         biosFlashback: { supported: true, name: 'BIOS FlashBack' },
         memory: { type: 'DDR5', slots: 4, maxCapacityGb: 192, maxSpeedMtps: 8000, speedsAsPublished: '8000(OC)' },
@@ -361,7 +361,8 @@ export function fixtureData(): FixtureData {
           isMarketplace: false,
           seller: 'Fixture Shop',
           retrievedAt: TODAY,
-          capture: `artifacts/prices/fixture/${market.toLowerCase()}-fx-cpu-am5.html`,
+          capture: `artifacts/prices/${market}/fx-cpu-am5--${shop}--${TODAY}.html`,
+          captureSha256: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
         },
       ],
       gaps: unpriced.map((partId) => ({

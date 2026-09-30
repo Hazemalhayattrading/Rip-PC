@@ -169,7 +169,14 @@ describe('references and boards', () => {
   });
   it('bios-coverage: every catalogue CPU on the socket has a BIOS row', () => {
     expectRule(run((d) => { board(d).biosSupport.cpus = []; }), 'bios-coverage');
-    expectRule(run((d) => { board(d).biosSupport.families = [{ family: 'ryzen-7000', minBiosVersion: '1000' }]; }), 'bios-coverage');
+    expectRule(
+      run((d) => { board(d).biosSupport.families = [{ family: 'ryzen-7000', minBiosVersion: null, statement: 'all' }]; }),
+      'bios-coverage',
+    );
+  });
+  it('sanity: a BIOS row has a version exactly when it is listed "since" one', () => {
+    expectRule(run((d) => { first(board(d).biosSupport.cpus).minBiosVersion = null; }), 'sanity');
+    expectClean(run((d) => { Object.assign(first(board(d).biosSupport.cpus), { listing: 'all', minBiosVersion: null, asListed: 'all' }); }));
   });
 });
 
@@ -228,6 +235,12 @@ describe("prices (Owner's rule 1)", () => {
   it('price-coverage: every purchasable part has a price or a gap per market, not both', () => {
     expectRule(run((d) => { d.prices.US.gaps = d.prices.US.gaps.slice(1); }), 'price-coverage');
     expectRule(run((d) => { d.prices.US.gaps.push({ ...usGap(d), partId: 'fx-cpu-am5' }); }), 'price-coverage');
+  });
+  it('price-capture: the capture follows the naming convention and carries its SHA-256', () => {
+    expectNoRule(run(), 'price-capture');
+    expectRule(run((d) => { usObs(d).capture = 'artifacts/prices/US/fx-cpu-am5--shop-us--2026-09-29.html'; }), 'price-capture');
+    expectRule(run((d) => { usObs(d).capture = 'artifacts/tmp/page.html'; }), 'price-capture');
+    expectRule(run((d) => { usObs(d).captureSha256 = 'not-a-hash'; }), 'price-capture');
   });
   it('price-duplicate: one observation per part and retailer', () => {
     expectRule(run((d) => { d.prices.US.observations.push({ ...usObs(d) }); }), 'price-duplicate');

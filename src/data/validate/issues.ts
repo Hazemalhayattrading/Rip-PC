@@ -27,6 +27,8 @@ export const RULES = {
   'price-archive': 'A price never has an archiveUrl and never comes from an archive, cache, tracker or aggregator.',
   'price-retailer': 'A price or gap names retailer-kind publishers that sell in that market.',
   'price-window': "A price's retrievedAt, and a gap's checkedAt, fall inside the batch window.",
+  'price-capture':
+    'A price names its capture as artifacts/prices/<market>/<partId>--<retailer>--<retrievedAt>.<html|png>, with its SHA-256.',
   'price-gap-reason': 'A gap record states its reason.',
   'price-coverage': 'Every purchasable part has, per market, at least one price or exactly one gap, never both.',
   'price-duplicate': 'At most one observation per part, retailer and market.',

@@ -61,6 +61,8 @@ export const DOC_TYPES = [
   'manual',
   'datasheet',
   'cpu-support-list',
+  'bios-release-notes',
+  'support-article',
   'press-release',
   'review',
   'benchmark-database',
