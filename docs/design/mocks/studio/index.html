@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rig Lab mock C: Studio</title>
+<meta name="description" content="Design direction C (Studio): the builder's CPU step as a product studio, with the build filling the screen and controls docked at the edges. Illustrative values, not data.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mona+Sans:wdth,wght@100..125,300..600&display=swap" rel="stylesheet">
+<style>
+/* Direction C: Studio. Tokens are measured for contrast by docs/design/tools/contrast.mjs. */
+:root, :root[data-theme="dark"] {
+  --wall: #131416;
+  --floor: #1c1d20;
+  --floor-2: #0f1012;
+  --key: rgba(255, 244, 232, .12);
+  --panel: #17181b;
+  --panel-2: #212226;
+  --edge: #2d2f34;
+  --ink: #f4f4f3;
+  --ink-2: #babcc0;
+  --ink-3: #9da0a6;
+  --ok: #62d497;
+  --warn: #f4ba4e;
+  --block: #ff8b80;
+  --cta: #f4f4f3;
+  --cta-ink: #111214;
+  --focus: #ffffff;
+  --rgb: #d4e5ff;
+  --shadow: 0 24px 64px rgba(0, 0, 0, .5), 0 2px 8px rgba(0, 0, 0, .3);
+  /* the product itself (a black case) */
+  --c-top: #56585d; --c-side: #2a2b2f; --c-front: #1b1c1f; --c-cavity: #0d0e10;
+  color-scheme: dark;
+}
+:root[data-theme="light"] {
+  --wall: #f3f3f1;
+  --floor: #e8e8e5;
+  --floor-2: #d9d9d5;
+  --key: rgba(255, 255, 255, .95);
+  --panel: #ffffff;
+  --panel-2: #f3f3f1;
+  --edge: #e0e0dc;
+  --ink: #111214;
+  --ink-2: #45484d;
+  --ink-3: #62666c;
+  --ok: #1c7a45;
+  --warn: #8a5900;
+  --block: #b3261e;
+  --cta: #111214;
+  --cta-ink: #ffffff;
+  --focus: #111214;
+  --rgb: #6f9ee0;
+  --shadow: 0 16px 48px rgba(20, 20, 28, .12), 0 1px 3px rgba(20, 20, 28, .08);
+  --c-top: #5a5c61; --c-side: #2c2d31; --c-front: #1c1d20; --c-cavity: #111214;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  background: var(--wall); color: var(--ink); overflow: hidden;
+  font-family: "Mona Sans", system-ui, sans-serif; font-size: 15px; line-height: 22px; font-stretch: 100%;
+  font-variant-numeric: tabular-nums lining-nums; -webkit-font-smoothing: antialiased;
+}
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+svg.i { width: 18px; height: 18px; flex: none; stroke: currentColor; fill: none; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+.x { font-stretch: 125%; }
+.unit { color: var(--ink-3); }
+
+/* ---------- stage ---------- */
+.stage {
+  position: fixed; inset: 0; overflow: hidden;
+  background:
+    radial-gradient(38% 52% at 47% 46%, var(--key) 0%, transparent 74%),
+    linear-gradient(to bottom, var(--wall) 0%, var(--wall) 64%, var(--floor) 64%, var(--floor-2) 100%);
+}
+.stage::after { /* soft horizon: wall meets floor */
+  content: ""; position: absolute; left: 0; right: 0; top: calc(64% - 40px); height: 80px;
+  background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, .10) 50%, transparent); pointer-events: none;
+}
+.rig { position: absolute; left: 432px; top: 176px; width: 500px; z-index: 1; }
+.rig svg.case { width: 100%; height: auto; display: block; overflow: visible; }
+.case .m-cavity { fill: var(--c-cavity); }
+.case .m-board { fill: #1b1c1f; }
+.case .m-board-detail { fill: #2e3034; }
+.case .m-slot { fill: #45474c; }
+.case .m-socket { fill: #7b7d82; }
+.case .m-fan.f-side { fill: #1e1f22; } .case .m-fan.f-top { fill: #2c2d31; } .case .m-fan.f-front { fill: #17181a; }
+.case .m-fan-ring { fill: none; stroke: #3b3d42; stroke-width: 1.4; }
+.case .m-ram.f-side { fill: #26272b; } .case .m-ram.f-top { fill: #3e4045; } .case .m-ram.f-front { fill: #1a1b1e; }
+.case .m-rgb { fill: var(--rgb); filter: url(#glow); opacity: .95; }
+.case .m-gpu.f-side { fill: #2e3034; } .case .m-gpu.f-top { fill: #4a4c51; } .case .m-gpu.f-front { fill: #202125; }
+.case .m-gpu-accent { fill: var(--rgb); opacity: .55; filter: url(#glow); }
+.case .m-cooler.f-side { fill: url(#alu-side); } .case .m-cooler.f-top { fill: #c9cbcf; } .case .m-cooler.f-front { fill: #7d8085; }
+.case .m-fins { stroke: rgba(40, 42, 46, .55); stroke-width: .9; fill: none; }
+.case .m-shroud.f-top { fill: #34363a; } .case .m-shroud.f-side { fill: #232427; }
+.case .m-vent { stroke: #141517; stroke-width: 1.6; fill: none; }
+.case .m-case.f-top { fill: url(#case-top); stroke: rgba(255, 255, 255, .22); stroke-width: .8; }
+.case .m-case.f-side { fill: var(--c-side); }
+.case .m-case.f-front { fill: url(#case-front); }
+.case .m-mesh { stroke: rgba(255, 255, 255, .06); stroke-width: 1; fill: none; }
+.case .m-rgb-ring { stroke: var(--rgb); stroke-width: 2.4; filter: url(#glow); opacity: .9; }
+.case .m-glass { fill: url(#glass); stroke: rgba(255, 255, 255, .18); stroke-width: 1; }
+.case .m-glare { stroke: rgba(255, 255, 255, .035); stroke-width: 7; fill: none; stroke-linecap: round; }
+.case .ann .focus-dot { fill: #ffffff; }
+.case .ann .focus-halo { fill: rgba(255, 255, 255, .06); stroke: rgba(255, 255, 255, .55); stroke-width: 1; stroke-dasharray: 3 4; }
+.floor-shadow { position: absolute; z-index: 0; left: 430px; top: 716px; width: 520px; height: 70px; background: radial-gradient(50% 50% at 50% 50%, rgba(0, 0, 0, .45), transparent 70%); }
+:root[data-theme="light"] .floor-shadow { background: radial-gradient(50% 50% at 50% 50%, rgba(20, 20, 28, .22), transparent 70%); }
+
+/* leader line + callout, placed in JS from the CPU's on-screen position */
+.leader { position: absolute; left: 0; top: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; overflow: visible; }
+.leader line { stroke: var(--ink); stroke-width: 1; opacity: .7; }
+.callout {
+  position: absolute; z-index: 3; min-width: 232px; padding: 12px 14px; border-radius: 14px;
+  background: var(--panel); border: 1px solid var(--edge); box-shadow: var(--shadow);
+}
+.callout .t { font-weight: 600; font-size: 15px; line-height: 20px; }
+.callout .s { color: var(--ink-3); font-size: 13px; line-height: 18px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; line-height: 18px; margin-top: 8px; }
+.chip.ok { color: var(--ok); } .chip.warn { color: var(--warn); } .chip.block { color: var(--block); }
+.chip svg.i { width: 16px; height: 16px; }
+
+/* ---------- chrome ---------- */
+.top { position: fixed; z-index: 10; left: 0; right: 0; top: 0; height: 68px; display: flex; align-items: center; gap: 16px; padding: 0 24px; }
+.wordmark { font-stretch: 125%; font-weight: 600; font-size: 19px; letter-spacing: .01em; }
+.build { color: var(--ink-3); font-size: 14px; }
+.build b { color: var(--ink-2); font-weight: 500; }
+.sp { flex: 1; }
+.pill { display: inline-flex; padding: 3px; border-radius: 999px; background: var(--panel); border: 1px solid var(--edge); box-shadow: var(--shadow); }
+.pill button { border: 0; background: transparent; padding: 6px 14px; border-radius: 999px; cursor: pointer; color: var(--ink-2); font-weight: 500; font-size: 14px; line-height: 18px; }
+.pill button[aria-pressed="true"] { background: var(--cta); color: var(--cta-ink); }
+.round { width: 40px; height: 40px; border-radius: 20px; display: grid; place-items: center; background: var(--panel); border: 1px solid var(--edge); box-shadow: var(--shadow); cursor: pointer; color: var(--ink-2); }
+.round:hover { color: var(--ink); }
+
+.heading { position: fixed; z-index: 4; left: 40px; top: 104px; max-width: 340px; }
+.heading .k { color: var(--ink-3); font-size: 14px; }
+.heading h1 { margin: 2px 0 8px; font-stretch: 125%; font-weight: 300; font-size: 56px; line-height: 60px; letter-spacing: -.01em; }
+.heading p { margin: 0; color: var(--ink-2); font-size: 15px; line-height: 22px; }
+
+.tools { position: fixed; z-index: 4; left: 40px; bottom: 124px; display: flex; gap: 8px; align-items: center; }
+.tools .round[aria-pressed="true"] { color: var(--ink); border-color: var(--ink-3); }
+.swatch { width: 14px; height: 14px; border-radius: 7px; background: var(--rgb); box-shadow: 0 0 0 1px var(--edge); }
+.ph { margin-left: 8px; font-size: 12px; line-height: 16px; color: var(--ink-3); border: 1px dashed var(--edge); border-radius: 999px; padding: 3px 10px; background: var(--panel); }
+
+/* part rail */
+.rail {
+  position: fixed; z-index: 6; right: 16px; top: 80px; bottom: 124px; width: 424px; display: flex; flex-direction: column;
+  background: var(--panel); border: 1px solid var(--edge); border-radius: 20px; box-shadow: var(--shadow); overflow: hidden;
+}
+.rail-h { padding: 16px 18px 10px; }
+.rail-h .row1 { display: flex; align-items: baseline; justify-content: space-between; }
+.rail-h h2 { margin: 0; font-size: 17px; line-height: 22px; font-weight: 600; font-stretch: 112.5%; }
+.rail-h .n { color: var(--ink-3); font-size: 13px; }
+.ph-head { display: none; }
+.mock-b { display: none; padding: 14px 12px 6px; color: var(--ink-3); font-size: 12px; line-height: 16px; }
+.filters { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+.f { height: 30px; padding: 0 12px; border-radius: 15px; border: 1px solid var(--edge); background: transparent; color: var(--ink-2); font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+.f[aria-pressed="true"] { background: var(--panel-2); color: var(--ink); border-color: var(--ink-3); }
+.f svg.i { width: 15px; height: 15px; }
+.list { overflow: auto; padding: 0 8px 8px; flex: 1; scrollbar-width: thin; }
+.part { position: relative; display: grid; grid-template-columns: 22px minmax(0, 1fr) auto; gap: 2px 12px; padding: 11px 10px 11px 12px; border-radius: 14px; cursor: pointer; }
+.part + .part { margin-top: 2px; }
+.part:hover { background: var(--panel-2); }
+.part.sel { background: var(--panel-2); box-shadow: inset 0 0 0 1px var(--edge); }
+.part.sel::before { content: ""; position: absolute; left: 0; top: 14px; bottom: 14px; width: 3px; border-radius: 2px; background: var(--ink); }
+.cbx { width: 18px; height: 18px; margin-top: 2px; border-radius: 5px; border: 1.5px solid var(--ink-3); background: transparent; padding: 0; display: grid; place-items: center; cursor: pointer; }
+.cbx[aria-checked="true"] { background: var(--ink); border-color: var(--ink); }
+.cbx[aria-checked="true"]::after { content: ""; width: 8px; height: 4px; border-left: 2px solid var(--panel); border-bottom: 2px solid var(--panel); transform: translateY(-1px) rotate(-45deg); }
+.cbx:disabled { opacity: .35; cursor: not-allowed; }
+.pn { font-weight: 500; font-size: 15px; line-height: 20px; }
+.ps { color: var(--ink-3); font-size: 13px; line-height: 18px; }
+.pr { text-align: right; font-weight: 500; font-size: 15px; line-height: 20px; white-space: nowrap; }
+.pf { text-align: right; color: var(--ink-2); font-size: 13px; line-height: 18px; white-space: nowrap; }
+.pst { grid-column: 2; display: flex; align-items: center; gap: 6px; font-size: 13px; line-height: 18px; margin-top: 4px; }
+.pst.ok { color: var(--ok); } .pst.warn { color: var(--warn); } .pst.block { color: var(--block); }
+.pst svg.i { width: 15px; height: 15px; }
+.pst .selected { margin-left: auto; color: var(--ink); font-weight: 500; display: inline-flex; gap: 4px; align-items: center; }
+.why { grid-column: 2 / 4; color: var(--ink-2); font-size: 13px; line-height: 19px; margin-top: 2px; }
+.why .rule { color: var(--ink-3); white-space: nowrap; margin-left: 4px; }
+.part.blocked .pn { color: var(--ink-2); }
+.part.blocked .pr { color: var(--ink-3); font-weight: 400; }
+.divider { margin: 10px 12px 4px; color: var(--ink-3); font-size: 12px; line-height: 16px; border-top: 1px solid var(--edge); padding-top: 10px; }
+
+/* dock */
+.dock {
+  position: fixed; z-index: 8; left: 16px; right: 16px; bottom: 16px; height: 92px; display: flex; align-items: center; overflow: hidden;
+  background: var(--panel); border: 1px solid var(--edge); border-radius: 22px; box-shadow: var(--shadow); padding: 0 12px 0 14px; gap: 0;
+}
+.dock > section { display: flex; flex-direction: column; justify-content: center; padding: 0 18px; height: 60px; border-right: 1px solid var(--edge); }
+.dock > section:last-of-type { border-right: 0; }
+.stepper { display: grid !important; grid-template-columns: 36px auto 36px; align-items: center; gap: 10px; padding-left: 6px !important; }
+.stepper .cur { text-align: center; min-width: 124px; }
+.stepper .cur b { display: block; font-weight: 600; font-size: 15px; line-height: 20px; font-stretch: 112.5%; }
+.stepper .cur span { color: var(--ink-3); font-size: 12px; line-height: 16px; }
+.track { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(12, 1fr); gap: 3px; }
+.track i { height: 3px; border-radius: 2px; background: var(--edge); }
+.track i.d { background: var(--ink-3); } .track i.c { background: var(--ink); }
+.stepper button { width: 36px; height: 36px; border-radius: 18px; border: 1px solid var(--edge); background: transparent; display: grid; place-items: center; color: var(--ink-2); cursor: pointer; }
+.big { font-stretch: 125%; font-weight: 300; font-size: 36px; line-height: 40px; letter-spacing: -.01em; white-space: nowrap; }
+.big .unit { font-size: 16px; font-weight: 400; letter-spacing: 0; margin-left: 4px; font-stretch: 100%; }
+.big .cu { font-size: 16px; font-weight: 400; margin-right: 6px; color: var(--ink-3); font-stretch: 100%; letter-spacing: 0; }
+.cap { color: var(--ink-3); font-size: 12px; line-height: 16px; margin-top: 4px; white-space: nowrap; display: flex; gap: 8px; align-items: center; }
+.conf { display: inline-flex; align-items: center; gap: 5px; color: var(--ink-2); }
+.conf i { display: inline-block; width: 12px; height: 4px; border-radius: 2px; background: var(--edge); }
+.conf i.f { background: var(--ink-2); }
+.cap a { color: var(--ink-2); text-decoration: underline; text-decoration-color: var(--ink-3); text-underline-offset: 2px; }
+.dock .sp { flex: 1; }
+.act { display: flex; gap: 10px; align-items: center; }
+.btn { height: 48px; padding: 0 20px; border-radius: 24px; border: 1px solid var(--edge); background: transparent; color: var(--ink); font-weight: 500; cursor: pointer; display: inline-flex; gap: 8px; align-items: center; white-space: nowrap; }
+.btn.primary { background: var(--cta); color: var(--cta-ink); border-color: var(--cta); font-weight: 600; }
+.mock { position: fixed; z-index: 4; left: 40px; bottom: 176px; color: var(--ink-3); font-size: 12px; line-height: 16px; }
+
+/* motion: transform and opacity only */
+.callout { transition: opacity 200ms ease-out, transform 360ms cubic-bezier(.2, .8, .2, 1); }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: 0ms !important; animation-duration: 0ms !important; } }
+
+/* ---------- tablet ---------- */
+@media (max-width: 1100px) {
+  body { overflow: auto; }
+  .stage { position: relative; height: 560px; }
+  .rig { left: 330px; top: 112px; width: 380px; }
+  .floor-shadow { display: none; }
+  .heading { position: absolute; left: 28px; top: 84px; }
+  .heading h1 { font-size: 48px; line-height: 52px; }
+  .tools { position: absolute; left: 28px; bottom: auto; top: 492px; }
+  .mock { position: absolute; left: auto; right: 24px; bottom: auto; top: 484px; }
+  .rail { position: relative; right: auto; top: auto; bottom: auto; width: auto; margin: -36px 16px 0; min-height: 0; }
+  .list { overflow: visible; }
+  .dock { height: 80px; }
+  .dock .fps2, .dock .btn.cmp, .dock .track { display: none; }
+  .dock > section { padding: 0 14px; }
+  .stepper .cur { min-width: 96px; }
+  .dock .big { font-size: 30px; line-height: 34px; }
+  .btn.primary .nl { display: none; }
+  .btn.primary { width: 48px; padding: 0; justify-content: center; }
+  .cap .hide-s { display: none; }
+  body { padding-bottom: 112px; }
+}
+/* ---------- phone ---------- */
+@media (max-width: 640px) {
+  .top { height: 56px; padding: 0 12px; gap: 8px; }
+  .build { display: none; }
+  .top .round.share { display: none; }
+  .stage { height: 380px; }
+  .heading { display: none; }
+  .mock { display: none; }
+  .mock-b { display: block; }
+  .ph-head { display: block; margin-bottom: 4px; }
+  .ph-head .k { display: block; color: var(--ink-3); font-size: 13px; line-height: 18px; }
+  .ph-head .t { display: block; font-stretch: 125%; font-weight: 300; font-size: 30px; line-height: 34px; }
+  .rail-h h2 { display: none; }
+  .rail-h .row1 { justify-content: flex-start; }
+  .rig { left: 45px; top: 58px; width: 300px; }
+  .heading { left: 16px; top: 64px; max-width: 220px; }
+  .heading .k { font-size: 13px; }
+  .heading h1 { font-size: 34px; line-height: 38px; margin: 0 0 4px; }
+  .heading p { display: none; }
+  .tools { top: 290px; left: 16px; gap: 6px; }
+  .tools .round { width: 36px; height: 36px; }
+  .tools .opt { display: none; }
+  .ph { display: none; }
+  .callout { min-width: 0; padding: 8px 10px; border-radius: 12px; }
+  .callout .s { display: none; }
+  .callout .chip { margin-top: 4px; }
+  .rail { margin: -40px 0 0; border-radius: 20px 20px 0 0; border-left: 0; border-right: 0; }
+  .rail::before { content: ""; display: block; width: 40px; height: 4px; border-radius: 2px; background: var(--edge); margin: 8px auto 0; }
+  .rail-h { padding: 10px 16px 8px; }
+  .list { padding: 0 4px 8px; }
+  .part { padding: 12px 12px 12px 14px; }
+  .dock { left: 0; right: 0; bottom: 0; height: 76px; border-radius: 18px 18px 0 0; border-left: 0; border-right: 0; border-bottom: 0; padding: 0 12px; }
+  .dock .stepper { display: none !important; }
+  .dock > section { padding: 0 12px 0 4px; height: 52px; }
+  .dock .tot { border-right: 1px solid var(--edge); }
+  .dock .big { font-size: 24px; line-height: 28px; }
+  .big .unit, .big .cu { font-size: 12px; }
+  .dock .tot { border-right: 0; }
+  .cap { font-size: 11px; }
+  .cap .hide-s { display: none; }
+  .btn.primary { height: 44px; padding: 0 14px; }
+  .btn.primary .nl { display: none; }
+  .mock { padding: 12px 16px 0; }
+}
+
+/* number swap (see swap() in the script) */
+.sw { position: relative; display: inline-block; }
+.sw-new { display: inline-block; }
+.sw-old { position: absolute; inset: 0; text-align: inherit; white-space: nowrap; pointer-events: none; }
+@keyframes rows-in { from { opacity: 0; } to { opacity: 1; } }
+.rows-in { animation: rows-in var(--rows-ms, 120ms) linear; }
+@media (prefers-reduced-motion: reduce) { .rows-in { animation: none; } }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".14"/><stop offset=".35" stop-color="#ffffff" stop-opacity=".02"/><stop offset=".7" stop-color="#ffffff" stop-opacity=".05"/><stop offset="1" stop-color="#ffffff" stop-opacity=".01"/></linearGradient>
+    <linearGradient id="case-top" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6b6d72"/><stop offset="1" stop-color="#3c3e42"/></linearGradient>
+    <linearGradient id="case-front" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a2b2f"/><stop offset="1" stop-color="#141517"/></linearGradient>
+    <linearGradient id="alu-side" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d5d7da"/><stop offset="1" stop-color="#8e9196"/></linearGradient>
+    <symbol id="i-ok" viewBox="0 0 18 18"><circle cx="9" cy="9" r="7"/><path d="M6 9.2l2 2 4.1-4.3"/></symbol>
+    <symbol id="i-warn" viewBox="0 0 18 18"><path d="M9 2.5l7 12.3H2z"/><path d="M9 7.2v3.4M9 12.9v.1"/></symbol>
+    <symbol id="i-block" viewBox="0 0 18 18"><circle cx="9" cy="9" r="7"/><path d="M4.1 13.9l9.8-9.8"/></symbol>
+    <symbol id="i-check" viewBox="0 0 18 18"><path d="M4 9.4l3.2 3.2 6.8-7.2"/></symbol>
+    <symbol id="i-prev" viewBox="0 0 18 18"><path d="M11 4L6 9l5 5"/></symbol>
+    <symbol id="i-next" viewBox="0 0 18 18"><path d="M7 4l5 5-5 5"/></symbol>
+    <symbol id="i-orbit" viewBox="0 0 18 18"><ellipse cx="9" cy="9" rx="7" ry="3.2"/><circle cx="9" cy="9" r="1.2"/></symbol>
+    <symbol id="i-explode" viewBox="0 0 18 18"><rect x="6" y="6" width="6" height="6" rx="1"/><path d="M2 2l2.6 2.6M16 2l-2.6 2.6M2 16l2.6-2.6M16 16l-2.6-2.6"/></symbol>
+    <symbol id="i-panel" viewBox="0 0 18 18"><path d="M3 3h8.5v12H3zM11.5 3L15 4.8v8.4L11.5 15"/></symbol>
+    <symbol id="i-reset" viewBox="0 0 18 18"><path d="M3.3 7A6 6 0 1 1 3.5 11.6"/><path d="M3 3v4h4"/></symbol>
+    <symbol id="i-share" viewBox="0 0 18 18"><path d="M9 11V3M6 6l3-3 3 3M4 10v5h10v-5"/></symbol>
+    <symbol id="i-theme" viewBox="0 0 18 18"><path d="M15 11.4A6.3 6.3 0 0 1 6.6 3a6.3 6.3 0 1 0 8.4 8.4z"/></symbol>
+    <symbol id="i-sort" viewBox="0 0 18 18"><path d="M5.5 3v12M3 12.5L5.5 15 8 12.5M12.5 15V3M10 5.5L12.5 3 15 5.5"/></symbol>
+    <symbol id="i-compare" viewBox="0 0 18 18"><rect x="2.5" y="4" width="5.5" height="10" rx="1.2"/><rect x="10" y="4" width="5.5" height="10" rx="1.2"/></symbol>
+  </defs>
+</svg>
+
+<div class="stage" aria-label="Build view">
+  <div class="floor-shadow" aria-hidden="true"></div>
+  <div class="rig"><!--case:start--><svg class="case case-studio" data-units-per-mm="1.12" viewBox="-116.3 -658.3 586.9 683.5" role="img" aria-label="3D view placeholder: a generic mid-tower case with the parts chosen so far"><g class="geo"><path class="m-cavity f-side" d="M-80.9 -167.8L349.6 -225.2L349.6 -620.6L-80.9 -563.2Z"/><path class="m-board f-side" d="M98 -227.8L344 -260.6L344 -602.2L98 -569.4Z"/><path class="m-board-detail" d="M215.9 -533.6L336.9 -549.8L336.9 -587.8L215.9 -571.7Z"/><path class="m-board-detail" d="M308.7 -436.2L336.9 -440L336.9 -546.4L308.7 -542.6Z"/><path class="m-board-detail" d="M215.9 -267.1L276.4 -275.1L276.4 -325.5L215.9 -317.5Z"/><path class="m-board-detail" d="M115.1 -314.1L316.7 -341L316.7 -354.4L115.1 -327.6Z"/><path class="m-slot" d="M120.2 -402.1L316.7 -428.4L316.7 -434L120.2 -407.7Z"/><path class="m-slot" d="M120.2 -294.6L316.7 -320.8L316.7 -325.3L120.2 -299.1Z"/><path class="m-socket" d="M231.1 -478.5L275.4 -484.4L275.4 -533.7L231.1 -527.8Z"/><path class="m-fan f-side" d="M399.3 -430.5L423.5 -433.7L423.5 -568.1L399.3 -564.9Z"/><path class="m-fan f-top" d="M399.3 -564.9L423.5 -568.1L369.7 -597.7L345.5 -594.5Z"/><path class="m-ram f-side" d="M170.2 -404.9L177.3 -405.9L177.3 -554.8L170.2 -553.9Z"/><path class="m-ram f-top" d="M170.2 -553.9L177.3 -554.8L158.5 -565.2L151.4 -564.2Z"/><path class="m-ram f-front" d="M170.2 -404.9L170.2 -553.9L151.4 -564.2L151.4 -415.3Z"/><path class="m-ram f-side" d="M183.3 -406.7L190.4 -407.6L190.4 -556.6L183.3 -555.6Z"/><path class="m-ram f-top" d="M183.3 -555.6L190.4 -556.6L171.6 -566.9L164.5 -566Z"/><path class="m-ram f-front" d="M183.3 -406.7L183.3 -555.6L164.5 -566L164.5 -417Z"/><path class="m-rgb" d="M170.2 -404.9L177.3 -405.9L177.3 -554.8L170.2 -553.9Z"/><path class="m-rgb" d="M183.3 -406.7L190.4 -407.6L190.4 -556.6L183.3 -555.6Z"/><path class="m-gpu f-side" d="M96.2 -289.4L402.6 -330.3L402.6 -388.5L96.2 -347.6Z"/><path class="m-gpu f-top" d="M96.2 -347.6L402.6 -388.5L346.6 -419.3L40.2 -378.4Z"/><path class="m-gpu f-front" d="M96.2 -289.4L96.2 -347.6L40.2 -378.4L40.2 -320.2Z"/><path class="m-gpu-accent" d="M113.3 -327.5L385.5 -363.8L385.5 -368.3L113.3 -332Z"/><path class="m-cooler f-side" d="M268.2 -391.2L379.1 -406L379.1 -544.9L268.2 -530.1Z"/><path class="m-cooler f-top" d="M268.2 -530.1L379.1 -544.9L313.3 -581.1L202.4 -566.3Z"/><path class="m-cooler f-front" d="M268.2 -391.2L268.2 -530.1L202.4 -566.3L202.4 -427.5Z"/><path class="m-fins" d="M270.3 -399.3L377.1 -413.6M270.3 -406.1L377.1 -420.3M270.3 -412.8L377.1 -427M270.3 -419.5L377.1 -433.8M270.3 -426.2L377.1 -440.5M270.3 -432.9L377.1 -447.2M270.3 -439.7L377.1 -453.9M270.3 -446.4L377.1 -460.6M270.3 -453.1L377.1 -467.4M270.3 -459.8L377.1 -474.1M270.3 -466.5L377.1 -480.8M270.3 -473.3L377.1 -487.5M270.3 -480L377.1 -494.2M270.3 -486.7L377.1 -501M270.3 -493.4L377.1 -507.7M270.3 -500.1L377.1 -514.4M270.3 -506.9L377.1 -521.1M270.3 -513.6L377.1 -527.8M270.3 -520.3L377.1 -534.6"/><path class="m-fan f-side" d="M243 -387.9L268.2 -391.2L268.2 -530.1L243 -526.8Z"/><path class="m-fan f-top" d="M243 -526.8L268.2 -530.1L202.4 -566.3L177.2 -563Z"/><path class="m-fan f-front" d="M243 -387.9L243 -526.8L177.2 -563L177.2 -424.1Z"/><path class="m-fan-ring" d="M185 -489.2L185.2 -497.3L185.9 -505L186.9 -512.2L188.4 -518.7L190.2 -524.6L192.4 -529.5L194.8 -533.6L197.6 -536.6L200.5 -538.7L203.6 -539.6L206.8 -539.4L210.1 -538.1L213.4 -535.8L216.6 -532.4L219.7 -528.1L222.7 -522.8L225.4 -516.8L227.9 -510L230 -502.7L231.8 -494.8L233.3 -486.7L234.3 -478.3L235 -469.9L235.2 -461.6L235 -453.6L234.3 -445.9L233.3 -438.7L231.8 -432.1L230 -426.3L227.9 -421.3L225.4 -417.3L222.7 -414.2L219.7 -412.2L216.6 -411.3L213.4 -411.4L210.1 -412.7L206.8 -415L203.6 -418.4L200.5 -422.8L197.6 -428L194.8 -434.1L192.4 -440.8L190.2 -448.2L188.4 -456L186.9 -464.2L185.9 -472.5L185.2 -480.9Z"/><path class="m-fan f-side" d="M-6.5 -161.7L18.7 -165L18.7 -321.8L-6.5 -318.5Z"/><path class="m-fan f-side" d="M-6.5 -329.7L18.7 -333L18.7 -489.8L-6.5 -486.5Z"/><path class="m-shroud f-side" d="M0 0L450.6 -60.1L450.6 -176.6L0 -116.5Z"/><path class="m-shroud f-top" d="M0 -116.5L450.6 -176.6L354.3 -229.5L-96.3 -169.5Z"/><path class="m-vent" d="M302.4 -73.9L423.4 -90M302.4 -84L423.4 -100.1M302.4 -94.1L423.4 -110.2M302.4 -104.2L423.4 -120.3M302.4 -114.2L423.4 -130.4M302.4 -124.3L423.4 -140.4"/><path class="m-case f-top" d="M0 -525.3L450.6 -585.4L354.3 -638.3L-96.3 -578.3Z"/><path class="m-case f-front" d="M0 0L0 -525.3L-96.3 -578.3L-96.3 -53Z"/><path class="m-case f-side" d="M0 0L12.1 -1.6L12.1 -526.9L0 -525.3Z"/><path class="m-mesh" d="M-8.1 -22.4L-8.1 -509.6M-12.1 -24.6L-12.1 -511.8M-16.1 -26.8L-16.1 -514M-20.2 -29L-20.2 -516.2M-24.2 -31.2L-24.2 -518.4M-28.2 -33.4L-28.2 -520.6M-32.3 -35.7L-32.3 -522.9M-36.3 -37.9L-36.3 -525.1M-40.3 -40.1L-40.3 -527.3M-44.4 -42.3L-44.4 -529.5M-48.4 -44.5L-48.4 -531.7M-52.4 -46.7L-52.4 -533.9M-56.4 -49L-56.4 -536.2M-60.5 -51.2L-60.5 -538.4M-64.5 -53.4L-64.5 -540.6M-68.5 -55.6L-68.5 -542.8M-72.6 -57.8L-72.6 -545M-76.6 -60.1L-76.6 -547.3M-80.6 -62.3L-80.6 -549.5M-84.7 -64.5L-84.7 -551.7M-88.7 -66.7L-88.7 -553.9"/><path class="m-fan-ring m-rgb-ring" d="M-75.9 -271.4L-75.7 -280.3L-75 -288.8L-73.8 -296.8L-72.2 -304L-70.2 -310.5L-67.8 -316L-65.1 -320.5L-62 -323.9L-58.8 -326.1L-55.3 -327.1L-51.8 -326.9L-48.2 -325.5L-44.5 -322.9L-41 -319.2L-37.5 -314.4L-34.3 -308.6L-31.3 -301.9L-28.5 -294.4L-26.1 -286.2L-24.1 -277.6L-22.5 -268.5L-21.3 -259.3L-20.6 -250L-20.4 -240.8L-20.6 -231.9L-21.3 -223.4L-22.5 -215.4L-24.1 -208.1L-26.1 -201.7L-28.5 -196.2L-31.3 -191.7L-34.3 -188.3L-37.5 -186.1L-41 -185.1L-44.5 -185.2L-48.2 -186.6L-51.8 -189.2L-55.3 -193L-58.8 -197.8L-62 -203.6L-65.1 -210.3L-67.8 -217.8L-70.2 -225.9L-72.2 -234.6L-73.8 -243.6L-75 -252.9L-75.7 -262.2Z"/><path class="m-fan-ring m-rgb-ring" d="M-75.9 -439.4L-75.7 -448.3L-75 -456.8L-73.8 -464.8L-72.2 -472L-70.2 -478.5L-67.8 -484L-65.1 -488.5L-62 -491.9L-58.8 -494.1L-55.3 -495.1L-51.8 -494.9L-48.2 -493.5L-44.5 -490.9L-41 -487.2L-37.5 -482.4L-34.3 -476.6L-31.3 -469.9L-28.5 -462.4L-26.1 -454.2L-24.1 -445.6L-22.5 -436.5L-21.3 -427.3L-20.6 -418L-20.4 -408.8L-20.6 -399.9L-21.3 -391.4L-22.5 -383.4L-24.1 -376.1L-26.1 -369.7L-28.5 -364.2L-31.3 -359.7L-34.3 -356.3L-37.5 -354.1L-41 -353.1L-44.5 -353.2L-48.2 -354.6L-51.8 -357.2L-55.3 -361L-58.8 -365.8L-62 -371.6L-65.1 -378.3L-67.8 -385.8L-70.2 -393.9L-72.2 -402.6L-73.8 -411.6L-75 -420.9L-75.7 -430.2Z"/><path class="m-mesh" d="M31.4 -535.6L-47 -578.7M43.5 -537.2L-34.9 -580.3M55.6 -538.8L-22.8 -581.9M67.6 -540.4L-10.8 -583.5M79.7 -542L1.3 -585.2M91.8 -543.6L13.4 -586.8M103.9 -545.3L25.5 -588.4M116 -546.9L37.6 -590M128.1 -548.5L49.7 -591.6M140.2 -550.1L61.8 -593.2M152.3 -551.7L73.9 -594.8M164.4 -553.3L86 -596.4M176.5 -554.9L98.1 -598.1M188.6 -556.6L110.2 -599.7M200.7 -558.2L122.3 -601.3M212.8 -559.8L134.4 -602.9M224.9 -561.4L146.5 -604.5M237 -563L158.6 -606.1M249.1 -564.6L170.7 -607.7M261.2 -566.2L182.8 -609.3M273.3 -567.8L194.9 -611M285.4 -569.5L207 -612.6M297.5 -571.1L219.1 -614.2M309.6 -572.7L231.2 -615.8M321.7 -574.3L243.3 -617.4M333.8 -575.9L255.4 -619M345.9 -577.5L267.5 -620.6M358 -579.1L279.6 -622.2M370 -580.7L291.6 -623.9M382.1 -582.4L303.7 -625.5M394.2 -584L315.8 -627.1M406.3 -585.6L327.9 -628.7"/><path class="m-case f-side" d="M12.1 -1.6L450.6 -60.1L450.6 -75.8L12.1 -17.3Z"/><path class="m-case f-side" d="M12.1 -513.5L450.6 -571.9L450.6 -585.4L12.1 -526.9Z"/><path class="m-case f-side" d="M438.5 -74.1L450.6 -75.8L450.6 -571.9L438.5 -570.3Z"/><path class="m-glass" d="M12.1 -118.1L438.5 -174.9L438.5 -570.3L12.1 -513.5Z"/><path class="m-glare" d="M40.3 -485.9L171.4 -179.6M90.7 -503.8L241.9 -256.3"/><path class="m-case f-side" d="M18.6 5.2L58.9 -0.2L58.9 -10.3L18.6 -4.9Z"/><path class="m-case f-front" d="M18.6 5.2L18.6 -4.9L4.3 -12.8L4.3 -2.7Z"/><path class="m-case f-side" d="M384.5 -43.6L424.8 -49L424.8 -59.1L384.5 -53.7Z"/><path class="m-case f-front" d="M384.5 -43.6L384.5 -53.7L370.2 -61.6L370.2 -51.5Z"/></g><g class="ann"><circle class="focus-dot" cx="259.2" cy="-510.1" r="4"/><circle class="focus-halo" cx="259.2" cy="-510.1" r="44.8"/></g></svg><!--case:end--></div>
+  <svg class="leader" aria-hidden="true"><line id="leader-line" x1="0" y1="0" x2="0" y2="0"/></svg>
+  <div class="callout" id="callout" role="note" aria-label="The part this step changes">
+    <div class="t" data-bind="co-name">Ryzen 7 9800X3D</div>
+    <div class="s">Seated in the AM5 socket, under your air cooler</div>
+    <div class="chip ok" data-bind="co-state"><svg class="i"><use href="#i-ok"/></svg>Fits your board</div>
+  </div>
+  <div class="heading">
+    <div class="k">Step 3 of 12</div>
+    <h1>Processor</h1>
+    <p>The camera is on the socket. Pick a chip and it seats in place.</p>
+  </div>
+  <div class="tools" role="toolbar" aria-label="View">
+    <button class="round" type="button" aria-pressed="true" aria-label="Orbit"><svg class="i"><use href="#i-orbit"/></svg></button>
+    <button class="round" type="button" aria-label="Explode view"><svg class="i"><use href="#i-explode"/></svg></button>
+    <button class="round opt" type="button" aria-label="Open side panel"><svg class="i"><use href="#i-panel"/></svg></button>
+    <button class="round" type="button" aria-label="Lighting colour: ice white"><span class="swatch"></span></button>
+    <button class="round opt" type="button" aria-label="Reset view"><svg class="i"><use href="#i-reset"/></svg></button>
+    <span class="ph">3D view placeholder</span>
+  </div>
+  <div class="mock">Mock C: Studio. Illustrative values, not data.</div>
+</div>
+
+<header class="top">
+  <div class="wordmark">Rig Lab</div>
+  <div class="build"><b>AAA 1440p build</b>, draft saved 17:42</div>
+  <span class="sp"></span>
+  <div class="pill" role="group" aria-label="Market and currency">
+    <button type="button" aria-pressed="true" data-cur="sar" title="Saudi market">SAR</button>
+    <button type="button" aria-pressed="false" data-cur="usd" title="US market">USD</button>
+  </div>
+  <button class="round share" type="button" aria-label="Share build"><svg class="i"><use href="#i-share"/></svg></button>
+  <button class="round" type="button" id="theme" aria-label="Switch theme"><svg class="i"><use href="#i-theme"/></svg></button>
+</header>
+
+<aside class="rail" aria-labelledby="rail-title">
+  <div class="rail-h">
+    <div class="ph-head"><span class="k">Step 3 of 12</span><span class="t">Processor</span></div>
+    <div class="row1"><h2 id="rail-title">Processors</h2><span class="n">38 in stock, 12 fit</span></div>
+    <div class="filters">
+      <button class="f" type="button" aria-pressed="false">Fits my build</button>
+      <button class="f" type="button" aria-pressed="true"><svg class="i"><use href="#i-sort"/></svg>Fastest in my games</button>
+      <button class="f" type="button">AM5</button>
+    </div>
+  </div>
+  <div class="list" id="list"></div>
+  <p class="mock-b">Mock C: Studio. Illustrative values, not data.</p>
+</aside>
+
+<nav class="dock" aria-label="Build summary and steps">
+  <section class="stepper" aria-label="Steps">
+    <button type="button" aria-label="Previous step: Budget"><svg class="i"><use href="#i-prev"/></svg></button>
+    <div class="cur"><b>Processor</b><span>Step 3 of 12</span></div>
+    <button type="button" aria-label="Next step: Motherboard"><svg class="i"><use href="#i-next"/></svg></button>
+    <div class="track" aria-hidden="true"><i class="d"></i><i class="d"></i><i class="c"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  </section>
+  <section class="fps1" aria-label="Estimated frame rate">
+    <div class="big sw" data-bind="fps">96–108<span class="unit">fps</span></div>
+    <div class="cap"><span>Cyberpunk 2077<span class="hide-s">, 1440p High</span></span><span class="conf" aria-label="Medium confidence"><i class="f"></i><i class="f"></i><i></i><span class="hide-s">Medium</span></span></div>
+  </section>
+  <section class="fps2" aria-label="Estimated frame rate, second game">
+    <div class="big sw" style="font-size:26px;line-height:32px" data-bind="fps2">470–540<span class="unit">fps</span></div>
+    <div class="cap"><span>Counter-Strike 2</span><span class="conf" aria-label="Low confidence"><i class="f"></i><i></i><i></i>Low</span></div>
+  </section>
+  <section class="tot" aria-label="Build total">
+    <div class="big sw" data-bind="total"><span class="cu">SAR</span>9,412</div>
+    <div class="cap"><span><span class="hide-s">Prices </span>as of 30 Sep 2026</span><a class="hide-s" href="#">Sources</a></div>
+  </section>
+  <span class="sp"></span>
+  <div class="act">
+    <button class="btn cmp" type="button"><svg class="i"><use href="#i-compare"/></svg><span data-bind="cmp">Compare 2</span></button>
+    <button class="btn primary" type="button"><span class="nl">Next: Motherboard</span><svg class="i"><use href="#i-next"/></svg></button>
+  </div>
+</nav>
+
+<script>
+// Illustrative values only. Prices are per-market observations, never conversions.
+const OTHER = { sar: 7513, usd: 1990 };
+const CPUS = [
+  { id: '9800x3d', name: 'AMD Ryzen 7 9800X3D', short: 'Ryzen 7 9800X3D', sub: '8 cores, 5.2 GHz, 120 W', sar: 1899, usd: 479, cp: [96, 108], cs: [470, 540], state: 'ok' },
+  { id: '7800x3d', name: 'AMD Ryzen 7 7800X3D', short: 'Ryzen 7 7800X3D', sub: '8 cores, 5.0 GHz, 120 W', sar: 1549, usd: 399, cp: [95, 107], cs: [420, 490], state: 'ok' },
+  { id: '9950x3d', name: 'AMD Ryzen 9 9950X3D', short: 'Ryzen 9 9950X3D', sub: '16 cores, 5.7 GHz, 170 W', sar: 2849, usd: 699, cp: [96, 109], cs: [480, 550], state: 'warn',
+    reason: 'Draws up to 230 W under all-core load, so your 120 mm air cooler will run loud in long renders.', rule: 'cooler-tdp-class' },
+  { id: '265k', name: 'Intel Core Ultra 7 265K', short: 'Core Ultra 7 265K', sub: 'LGA1851, 20 cores, 5.5 GHz', sar: 1199, usd: 299, state: 'block',
+    reason: 'Needs an LGA1851 board. Your board is AM5.', rule: 'socket-match' },
+  { id: '14600k', name: 'Intel Core i5-14600K', short: 'Core i5-14600K', sub: 'LGA1700, 14 cores, 5.3 GHz', sar: 799, usd: 199, state: 'block',
+    reason: 'Needs an LGA1700 board. Your board is AM5.', rule: 'socket-match' },
+  { id: '5700x3d', name: 'AMD Ryzen 7 5700X3D', short: 'Ryzen 7 5700X3D', sub: 'AM4, 8 cores, 4.1 GHz', sar: null, usd: 219, state: 'block',
+    reason: 'Needs an AM4 board and DDR4 memory. Your board is AM5 with DDR5.', rule: 'socket-match' },
+];
+const ST = { ok: ['Fits your build', 'i-ok'], warn: ['Fits, with a warning', 'i-warn'], block: ['Incompatible', 'i-block'] };
+let cur = 'sar', selected = '9800x3d';
+const compare = new Set(['9800x3d', '7800x3d']);
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const MOTION = { dy: '55%', inMs: 360, inDelay: 40, outMs: 240, ease: 'cubic-bezier(.2, .8, .2, 1)' };
+// Number change: the new value sits in the layout; the old value leaves as an overlay.
+// Web Animations on transform and opacity only, so it runs on the compositor. Reduced motion: instant swap.
+function swap(el, html) {
+  const cur = el.querySelector(':scope > .sw-new');
+  const prev = cur ? cur.innerHTML : el.innerHTML;
+  if (prev === html) return;
+  if (reduce) { el.innerHTML = `<span class="sw-new">${html}</span>`; return; }
+  el.innerHTML = `<span class="sw-new">${html}</span><span class="sw-old" aria-hidden="true">${prev}</span>`;
+  const n = el.firstElementChild, p = el.lastElementChild;
+  n.animate([{ transform: `translateY(${MOTION.dy})`, opacity: 0 }, { transform: 'translateY(0)', opacity: 1 }],
+    { duration: MOTION.inMs, delay: MOTION.inDelay, easing: MOTION.ease, fill: 'backwards' });
+  p.animate([{ transform: 'translateY(0)', opacity: 1 }, { transform: `translateY(-${MOTION.dy})`, opacity: 0 }],
+    { duration: MOTION.outMs, easing: MOTION.ease, fill: 'forwards' }).onfinish = () => p.remove();
+}
+
+const fmt = (n) => n.toLocaleString('en-US');
+const bind = (k) => document.querySelector(`[data-bind="${k}"]`);
+
+function partHTML(c) {
+  const [lab, icon] = ST[c.state];
+  const blocked = c.state === 'block';
+  const price = c[cur] == null ? '<span class="unit" style="font-weight:400;font-size:13px">No SA price</span>' : `<span class="unit" style="font-weight:400">${cur === 'sar' ? 'SAR' : 'USD'} </span>${fmt(c[cur])}`;
+  return `<div class="part ${c.id === selected ? 'sel' : ''} ${blocked ? 'blocked' : ''}" data-id="${c.id}" role="option" aria-selected="${c.id === selected}" ${blocked ? 'aria-disabled="true"' : ''}>
+    <button class="cbx" type="button" role="checkbox" aria-checked="${compare.has(c.id)}" aria-label="Compare ${c.name}" ${blocked ? 'disabled' : ''}></button>
+    <div><div class="pn">${c.name}</div><div class="ps">${c.sub}</div></div>
+    <div><div class="pr">${price}</div><div class="pf">${c.cp ? `${c.cp[0]}–${c.cp[1]} fps` : '—'}</div></div>
+    <div class="pst ${c.state}"><svg class="i"><use href="#${icon}"/></svg>${lab}${c.id === selected ? '<span class="selected"><svg class="i"><use href="#i-check"/></svg>Selected</span>' : ''}</div>
+    ${c.reason ? `<div class="why"><span class="sr">${lab}: </span>${c.reason}<span class="rule">Rule ${c.rule}</span></div>` : ''}
+  </div>`;
+}
+function render() {
+  const fit = CPUS.filter((c) => c.state !== 'block'), nofit = CPUS.filter((c) => c.state === 'block');
+  document.getElementById('list').innerHTML = fit.map(partHTML).join('') + `<div class="divider">Won't fit your AM5 board</div>` + nofit.map(partHTML).join('');
+  bind('cmp').textContent = `Compare ${compare.size}`;
+}
+function tween(el, from, to, f, ms = 360) {
+  if (reduce || from === to) { el.innerHTML = f(to); return; }
+  const t0 = performance.now();
+  const step = (t) => { const k = Math.min(1, (t - t0) / ms), e = 1 - Math.pow(1 - k, 3); el.innerHTML = f(Math.round(from + (to - from) * e)); if (k < 1) requestAnimationFrame(step); };
+  requestAnimationFrame(step);
+}
+let last = OTHER.sar + 1899;
+function readouts() {
+  const c = CPUS.find((x) => x.id === selected);
+  const total = OTHER[cur] + (c[cur] || 0), code = cur === 'sar' ? 'SAR' : 'USD';
+  swap(bind('total'), `<span class="cu">${code}</span>${fmt(total)}`);
+  swap(bind('fps'), `${c.cp[0]}–${c.cp[1]}<span class="unit">fps</span>`);
+  swap(bind('fps2'), `${c.cs[0]}–${c.cs[1]}<span class="unit">fps</span>`);
+  bind('co-name').textContent = c.short;
+  const [lab, icon] = ST[c.state];
+  const chip = bind('co-state'); chip.className = 'chip ' + c.state; chip.innerHTML = `<svg class="i"><use href="#${icon}"/></svg>${c.state === 'ok' ? 'Fits your board' : 'Fits, see warning'}`;
+}
+// Anchor the callout to the CPU socket's on-screen position.
+function place() {
+  const svg = document.querySelector('.rig svg.case'); const dot = svg && svg.querySelector('.focus-dot');
+  if (!dot) return;
+  const b = dot.getBoundingClientRect(), st = document.querySelector('.stage').getBoundingClientRect();
+  const x = b.left + b.width / 2 - st.left, y = b.top + b.height / 2 - st.top;
+  const co = document.getElementById('callout');
+  const w = co.offsetWidth, h = co.offsetHeight;
+  const phone = innerWidth <= 640;
+  const top = phone ? Math.max(62, y - h - 44) : Math.max(76, y - h - 96);
+  const railBeside = innerWidth > 1100;
+  const left = Math.max(12, Math.min(x - (phone ? w - 24 : w / 2), st.width - w - (railBeside ? 460 : 12)));
+  co.style.left = left + 'px'; co.style.top = top + 'px';
+  const l = document.getElementById('leader-line');
+  l.setAttribute('x1', x); l.setAttribute('y1', y - 6); l.setAttribute('x2', x); l.setAttribute('y2', top + h);
+}
+addEventListener('resize', place);
+document.addEventListener('click', (e) => {
+  const cb = e.target.closest('.cbx');
+  if (cb) { const id = cb.closest('.part').dataset.id; compare.has(id) ? compare.delete(id) : compare.size < 3 && compare.add(id); render(); return; }
+  const p = e.target.closest('.part');
+  if (p && !p.classList.contains('blocked')) { selected = p.dataset.id; render(); readouts(); return; }
+  const m = e.target.closest('.pill button');
+  if (m) { cur = m.dataset.cur; document.querySelectorAll('.pill button').forEach((b) => b.setAttribute('aria-pressed', b === m)); render(); readouts(); return; }
+  if (e.target.closest('#theme')) { const r = document.documentElement; r.dataset.theme = r.dataset.theme === 'light' ? 'dark' : 'light'; }
+});
+if (new URLSearchParams(location.search).get('theme') === 'light') document.documentElement.dataset.theme = 'light';
+render(); readouts(); place();
+document.fonts && document.fonts.ready.then(place);
+</script>
+</body>
+</html>
