@@ -1,5 +1,325 @@
 {
   "schemaVersion": 1,
   "category": "psu",
-  "items": []
+  "items": [
+    {
+      "id": "deepcool-pn650m",
+      "category": "psu",
+      "manufacturer": "deepcool",
+      "brand": "DeepCool",
+      "name": "PN650M",
+      "partNumber": "R-PN650M-FC0B-US",
+      "wattageW": 650,
+      "efficiency80Plus": "Gold",
+      "cybenetics": {
+        "efficiency": "Gold",
+        "noise": null
+      },
+      "atxVersion": "3.1",
+      "formFactor": "ATX",
+      "lengthMm": 140,
+      "modularity": "full",
+      "fanSizeMm": 120,
+      "connectors": {
+        "pcie16pin": 1,
+        "pcie16pinStandard": "12V-2x6",
+        "pcie8pin": 3,
+        "eps8pin": 2,
+        "sata": 8,
+        "molex": 2
+      },
+      "sources": [
+        {
+          "url": "https://www.deepcool.com/products/PowerSupplyUnits/powersupplyunits/PN650M-ATX3.1-Modular-Power-Supply/2023/17878.shtml",
+          "publisher": "deepcool",
+          "retrievedAt": "2026-09-30",
+          "docType": "product-page",
+          "fields": [
+            "brand",
+            "name",
+            "partNumber",
+            "wattageW",
+            "efficiency80Plus",
+            "cybenetics",
+            "atxVersion",
+            "formFactor",
+            "lengthMm",
+            "fanSizeMm",
+            "connectors"
+          ],
+          "title": "PN650M - DeepCool"
+        },
+        {
+          "url": "https://www.deepcool.com/download/pdf/PN_M.pdf",
+          "publisher": "deepcool",
+          "retrievedAt": "2026-09-30",
+          "docType": "manual",
+          "fields": [
+            "modularity",
+            "connectors"
+          ],
+          "title": "PN-M Series Native ATX3.1 Modular Power Supply manual",
+          "locator": "List of parts (PDF pages 6-7)"
+        }
+      ],
+      "notes": [
+        {
+          "field": "partNumber",
+          "text": "DeepCool lists regional variants of the same unit (R-PN650M-FC0B-CN, -AU, -EU, -JP, -UK, -US, -WO, -BP); the US one is recorded."
+        },
+        {
+          "field": "cybenetics",
+          "text": "DeepCool says \"Each unit is also rated Gold by Cybenetics\" and gives no Cybenetics noise rating."
+        },
+        {
+          "field": "lengthMm",
+          "text": "From \"Product Dimensions 150×140×86mm (W x L x H)\"."
+        },
+        {
+          "field": "modularity",
+          "text": "DeepCool calls the PN-M series \"Native ATX3.1 Modular\"; the manual's parts list has the (20+4)-pin main cable as a separate cable, so every cable detaches."
+        },
+        {
+          "field": "connectors",
+          "text": "DeepCool lists connectors per cable and the cable count: CPU (4+4) x1 on 2 cables, PCI-E (6+2) x1 on 3 cables, 12V-2x6 (16-pin) x1 on 1 cable, SATA x4 + 4-pin peripheral x1 on 2 cables."
+        }
+      ]
+    },
+    {
+      "id": "deepcool-pn850m",
+      "category": "psu",
+      "manufacturer": "deepcool",
+      "brand": "DeepCool",
+      "name": "PN850M",
+      "partNumber": "R-PN850M-FC0B-US",
+      "wattageW": 850,
+      "efficiency80Plus": "Gold",
+      "cybenetics": {
+        "efficiency": "Gold",
+        "noise": null
+      },
+      "atxVersion": "3.1",
+      "formFactor": "ATX",
+      "lengthMm": 140,
+      "modularity": "full",
+      "fanSizeMm": 120,
+      "connectors": {
+        "pcie16pin": 1,
+        "pcie16pinStandard": "12V-2x6",
+        "pcie8pin": 3,
+        "eps8pin": 2,
+        "sata": 8,
+        "molex": 2
+      },
+      "sources": [
+        {
+          "url": "https://www.deepcool.com/products/PowerSupplyUnits/powersupplyunits/PN850M-ATX3.1-Modular-Power-Supply/2023/17874.shtml",
+          "publisher": "deepcool",
+          "retrievedAt": "2026-09-30",
+          "docType": "product-page",
+          "fields": [
+            "brand",
+            "name",
+            "partNumber",
+            "wattageW",
+            "efficiency80Plus",
+            "cybenetics",
+            "atxVersion",
+            "formFactor",
+            "lengthMm",
+            "fanSizeMm",
+            "connectors"
+          ],
+          "title": "PN850M - DeepCool"
+        },
+        {
+          "url": "https://www.deepcool.com/download/pdf/PN_M.pdf",
+          "publisher": "deepcool",
+          "retrievedAt": "2026-09-30",
+          "docType": "manual",
+          "fields": [
+            "modularity",
+            "connectors"
+          ],
+          "title": "PN-M Series Native ATX3.1 Modular Power Supply manual",
+          "locator": "List of parts (PDF pages 6-7)"
+        }
+      ],
+      "notes": [
+        {
+          "field": "partNumber",
+          "text": "DeepCool lists regional variants of the same unit (R-PN850M-FC0B-CN, -AU, -EU, -JP, -UK, -US, -WO, -BP); the US one is recorded."
+        },
+        {
+          "field": "cybenetics",
+          "text": "DeepCool says \"Each unit is also rated Gold by Cybenetics\" and gives no Cybenetics noise rating."
+        },
+        {
+          "field": "lengthMm",
+          "text": "From \"Product Dimensions 150×140×86mm (W x L x H)\"."
+        },
+        {
+          "field": "modularity",
+          "text": "DeepCool calls the PN-M series \"Native ATX3.1 Modular\"; the manual's parts list has the (20+4)-pin main cable as a separate cable, so every cable detaches."
+        },
+        {
+          "field": "connectors",
+          "text": "DeepCool lists connectors per cable and the cable count: CPU (4+4) x1 on 2 cables, PCI-E (6+2) x1 on 3 cables, 12V-2x6 (16-pin) x1 on 1 cable, SATA x4 + 4-pin peripheral x1 on 2 cables."
+        }
+      ]
+    },
+    {
+      "id": "nzxt-c850-gold-atx-3-1",
+      "category": "psu",
+      "manufacturer": "nzxt",
+      "brand": "NZXT",
+      "name": "C850 Gold ATX 3.1",
+      "partNumber": "PA-8G2BB-US",
+      "wattageW": 850,
+      "efficiency80Plus": "Gold",
+      "cybenetics": {
+        "efficiency": "Gold",
+        "noise": "A-"
+      },
+      "atxVersion": "3.1",
+      "formFactor": "ATX",
+      "lengthMm": 160,
+      "modularity": "full",
+      "fanSizeMm": 135,
+      "connectors": {
+        "pcie16pin": 1,
+        "pcie16pinStandard": "12V-2x6",
+        "pcie8pin": 3,
+        "eps8pin": 2,
+        "sata": 12,
+        "molex": 4
+      },
+      "sources": [
+        {
+          "url": "https://nzxt.com/products/c850-gold-atx",
+          "publisher": "nzxt",
+          "retrievedAt": "2026-09-30",
+          "docType": "product-page",
+          "title": "C850 Gold ATX 3.1",
+          "locator": "Tech Specs"
+        }
+      ],
+      "notes": [
+        {
+          "field": "partNumber",
+          "text": "NZXT lists regional variants of the black unit (PA-8G2BB-CN, -UK, -US, -EU, -JP, -AU); the US one is recorded."
+        },
+        {
+          "field": "lengthMm",
+          "text": "From \"Dimensions (W x H x D): 150 x 86 x 160 mm\"."
+        },
+        {
+          "field": "connectors",
+          "text": "Counts are the connector quantities in NZXT's \"Cable Length & Connector Quantity\" table: one 4+4-pin and one 8-pin CPU cable, three 6+2-pin PCIe, one 16-pin (12+4) 12V-2x6, 12 SATA, 4 peripheral."
+        }
+      ]
+    },
+    {
+      "id": "nzxt-c1200-gold-atx-3-1",
+      "category": "psu",
+      "manufacturer": "nzxt",
+      "brand": "NZXT",
+      "name": "C1200 Gold ATX 3.1",
+      "partNumber": "PA-2G2BB-US",
+      "wattageW": 1200,
+      "efficiency80Plus": "Gold",
+      "cybenetics": {
+        "efficiency": "Gold",
+        "noise": "A-"
+      },
+      "atxVersion": "3.1",
+      "formFactor": "ATX",
+      "lengthMm": 160,
+      "modularity": "full",
+      "fanSizeMm": 135,
+      "connectors": {
+        "pcie16pin": 1,
+        "pcie16pinStandard": "12V-2x6",
+        "pcie8pin": 3,
+        "eps8pin": 2,
+        "sata": 12,
+        "molex": 4
+      },
+      "sources": [
+        {
+          "url": "https://nzxt.com/products/c1200-gold-atx",
+          "publisher": "nzxt",
+          "retrievedAt": "2026-09-30",
+          "docType": "product-page",
+          "title": "C1200 Gold ATX 3.1",
+          "locator": "Tech Specs"
+        }
+      ],
+      "notes": [
+        {
+          "field": "partNumber",
+          "text": "NZXT lists regional variants of the black unit (PA-2G2BB-CN, -UK, -US, -EU, -JP, -AU); the US one is recorded."
+        },
+        {
+          "field": "lengthMm",
+          "text": "From \"Dimensions (W x H x D): 150 x 86 x 160 mm\"."
+        },
+        {
+          "field": "connectors",
+          "text": "Counts are the connector quantities in NZXT's \"Cable Length & Connector Quantity\" table: one 4+4-pin and one 8-pin CPU cable, three 6+2-pin PCIe, one 16-pin (12+4) 12V-2x6, 12 SATA, 4 peripheral."
+        }
+      ]
+    },
+    {
+      "id": "nzxt-c850-sfx-gold",
+      "category": "psu",
+      "manufacturer": "nzxt",
+      "brand": "NZXT",
+      "name": "C850 SFX Gold",
+      "partNumber": "PS-8G1BB-US",
+      "wattageW": 850,
+      "efficiency80Plus": "Gold",
+      "cybenetics": {
+        "efficiency": "Platinum",
+        "noise": "A-"
+      },
+      "atxVersion": "3.1",
+      "formFactor": "SFX",
+      "lengthMm": 100,
+      "modularity": "full",
+      "fanSizeMm": 92,
+      "connectors": {
+        "pcie16pin": 1,
+        "pcie16pinStandard": "12V-2x6",
+        "pcie8pin": 3,
+        "eps8pin": 1,
+        "sata": 6,
+        "molex": 3
+      },
+      "sources": [
+        {
+          "url": "https://nzxt.com/products/c850-sfx-gold",
+          "publisher": "nzxt",
+          "retrievedAt": "2026-09-30",
+          "docType": "product-page",
+          "title": "C850 SFX Gold",
+          "locator": "Tech Specs"
+        }
+      ],
+      "notes": [
+        {
+          "field": "partNumber",
+          "text": "NZXT lists regional variants (PS-8G1BB-US, -EU, -UK, -JP); the US one is recorded."
+        },
+        {
+          "field": "lengthMm",
+          "text": "From \"Dimensions (W x H x D): 125 x 63.5 x 100 mm\"."
+        },
+        {
+          "field": "connectors",
+          "text": "PCIe 8-pin: one 6+2-pin cable plus one \"16-pin (PSU) to dual 8-pin (6+2)\" cable, so 3 connectors. One 4+4-pin CPU cable. SATA and peripheral counts are NZXT's connector quantities (6 and 3)."
+        }
+      ]
+    }
+  ]
 }

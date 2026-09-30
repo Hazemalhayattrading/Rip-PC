@@ -10,6 +10,8 @@
     { "id": "gskill", "name": "G.SKILL", "kind": "manufacturer", "domains": ["gskill.com"] },
     { "id": "teamgroup", "name": "TEAMGROUP", "kind": "manufacturer", "domains": ["teamgroupinc.com"] },
     { "id": "sandisk", "name": "Sandisk", "kind": "manufacturer", "domains": ["sandisk.com"] },
-    { "id": "samsung", "name": "Samsung Electronics", "kind": "manufacturer", "domains": ["samsung.com"] }
+    { "id": "samsung", "name": "Samsung Electronics", "kind": "manufacturer", "domains": ["samsung.com"] },
+    { "id": "deepcool", "name": "DeepCool", "kind": "manufacturer", "domains": ["deepcool.com"] },
+    { "id": "nzxt", "name": "NZXT", "kind": "manufacturer", "domains": ["nzxt.com"] }
   ]
 }
