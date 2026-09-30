@@ -1,0 +1,28 @@
+{
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(npm:*)",
+      "Bash(npx:*)",
+      "Bash(node:*)",
+      "Bash(git:*)",
+      "Bash(ls:*)",
+      "Bash(mkdir:*)",
+      "WebFetch",
+      "WebSearch",
+      "mcp__playwright",
+      "mcp__context7"
+    ]
+  },
+  "hooks": {
+    "TaskCompleted": [
+      {
+        "hooks": [
+          { "type": "command", "command": "bash scripts/verify-gate.sh" }
+        ]
+      }
+    ]
+  }
+}
