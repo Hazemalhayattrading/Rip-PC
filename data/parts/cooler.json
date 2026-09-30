@@ -1,5 +1,323 @@
 {
   "schemaVersion": 1,
   "category": "cooler",
-  "items": []
+  "items": [
+    {
+      "id": "deepcool-ak620",
+      "category": "cooler",
+      "manufacturer": "deepcool",
+      "brand": "DeepCool",
+      "name": "AK620",
+      "partNumber": "R-AK620-BKNNMT-G",
+      "type": "air",
+      "sockets": [
+        "AM5",
+        "AM4",
+        "LGA1851",
+        "LGA1700"
+      ],
+      "fanSizeMm": 120,
+      "fanCount": 2,
+      "tdpW": 260,
+      "nsprRating": null,
+      "rgb": false,
+      "heightMm": 160,
+      "ramClearanceMm": 43,
+      "sources": [
+        {
+          "url": "https://www.deepcool.com/products/Cooling/cpuaircoolers/AK620-High-Performance-CPU-Cooler-1700-AM5/2021/13067.shtml",
+          "publisher": "deepcool",
+          "retrievedAt": "2026-09-30",
+          "docType": "product-page",
+          "fields": [
+            "brand",
+            "name",
+            "partNumber",
+            "type",
+            "fanSizeMm",
+            "fanCount",
+            "tdpW",
+            "rgb",
+            "heightMm",
+            "ramClearanceMm",
+            "sockets"
+          ],
+          "title": "AK620 - DeepCool"
+        },
+        {
+          "url": "https://www.deepcool.com/download/pdf/AK620_Series.pdf",
+          "publisher": "deepcool",
+          "retrievedAt": "2026-09-30",
+          "docType": "manual",
+          "fields": [
+            "sockets"
+          ],
+          "title": "AK620 Series High Performance CPU Cooler manual",
+          "locator": "PDF page 3: \"AM5/AM4, INTEL-LGA1851/1700/1200/1151/1150/1155\""
+        }
+      ],
+      "notes": [
+        {
+          "field": "sockets",
+          "text": "The product page lists Intel LGA1700 (not LGA1851) and AMD AM5/AM4; the AK620 Series manual adds LGA1851. Only the catalogue's sockets are listed; the maker also lists older ones."
+        },
+        {
+          "field": "tdpW",
+          "text": "From \"a maximum heat dissipation power of 260W\"."
+        },
+        {
+          "field": "ramClearanceMm",
+          "text": "From \"43mm RAM height clearance (59mm in single fan configurations)\"; 43 mm is the cooler as sold, with both fans."
+        },
+        {
+          "field": "rgb",
+          "text": "The page lists no lighting for the heatsink or the fans."
+        }
+      ]
+    },
+    {
+      "id": "deepcool-an400",
+      "category": "cooler",
+      "manufacturer": "deepcool",
+      "brand": "DeepCool",
+      "name": "AN400",
+      "partNumber": "R-AN400-SRWNMN-G",
+      "type": "air",
+      "sockets": [
+        "AM5",
+        "AM4",
+        "LGA1851",
+        "LGA1700"
+      ],
+      "fanSizeMm": 92,
+      "fanCount": 1,
+      "tdpW": 150,
+      "nsprRating": null,
+      "rgb": false,
+      "heightMm": 52.5,
+      "ramClearanceMm": null,
+      "sources": [
+        {
+          "url": "https://www.deepcool.com/products/Cooling/cpuaircoolers/AN400-Top-Flow-Low-Profile-Cooler-1851-1700-AM5/2023/16838.shtml",
+          "publisher": "deepcool",
+          "retrievedAt": "2026-09-30",
+          "docType": "product-page",
+          "title": "AN400 - DeepCool"
+        }
+      ],
+      "notes": [
+        {
+          "field": "sockets",
+          "text": "Only the catalogue's sockets are listed; the maker also lists older ones."
+        },
+        {
+          "field": "tdpW",
+          "text": "From \"provides 150W of TDP in a compact heatsink\"."
+        },
+        {
+          "field": "heightMm",
+          "text": "From \"Product Dimensions 92×92×52.5 mm (L×W×H)\"."
+        },
+        {
+          "field": "ramClearanceMm",
+          "text": "DeepCool gives no number; it says the AN400 has \"unobstructed clearance for RAM modules\" (a 92 x 92 mm top-flow cooler)."
+        },
+        {
+          "field": "rgb",
+          "text": "The fan has a white LED (\"LED Type White LED\"), not RGB lighting."
+        }
+      ]
+    },
+    {
+      "id": "arctic-liquid-freezer-iii-pro-360",
+      "category": "cooler",
+      "manufacturer": "arctic",
+      "brand": "ARCTIC",
+      "name": "Liquid Freezer III Pro 360",
+      "partNumber": "ACFRE00180A",
+      "type": "aio",
+      "sockets": [
+        "AM5",
+        "AM4",
+        "LGA1851",
+        "LGA1700"
+      ],
+      "fanSizeMm": 120,
+      "fanCount": 3,
+      "tdpW": null,
+      "nsprRating": null,
+      "rgb": false,
+      "radiatorSizeMm": 360,
+      "radiatorLengthMm": 398,
+      "radiatorWidthMm": 120,
+      "radiatorThicknessMm": 38,
+      "tubeLengthMm": 450,
+      "sources": [
+        {
+          "url": "https://www.arctic.de/en/Liquid-Freezer-III-Pro-360/ACFRE00180A",
+          "publisher": "arctic",
+          "retrievedAt": "2026-09-30",
+          "docType": "product-page",
+          "fields": [
+            "brand",
+            "name",
+            "partNumber",
+            "type",
+            "sockets",
+            "rgb",
+            "radiatorSizeMm"
+          ],
+          "title": "Liquid Freezer III Pro 360"
+        },
+        {
+          "url": "https://www.arctic.de/media/e3/d9/86/1741780098/Spec_Sheet_Liquid_Freezer_III_Pro_360_EN.pdf",
+          "publisher": "arctic",
+          "retrievedAt": "2026-09-30",
+          "docType": "datasheet",
+          "title": "ARCTIC Specification Sheet: Liquid Freezer III Pro 360",
+          "locator": "PDF page 2, General and Radiator Specifications"
+        }
+      ],
+      "notes": [
+        {
+          "field": "sockets",
+          "text": "The spec sheet lists LGA1851, LGA1700, AM5 and AM4. Only the catalogue's sockets are listed; the maker also lists older ones."
+        },
+        {
+          "field": "tdpW",
+          "text": "ARCTIC publishes no TDP rating for this cooler."
+        },
+        {
+          "field": "rgb",
+          "text": "The product page lists \"Lighting: none\"."
+        },
+        {
+          "field": "fanCount",
+          "text": "From \"3 x P12 Pro\"."
+        }
+      ]
+    },
+    {
+      "id": "arctic-liquid-freezer-iii-pro-280",
+      "category": "cooler",
+      "manufacturer": "arctic",
+      "brand": "ARCTIC",
+      "name": "Liquid Freezer III Pro 280",
+      "partNumber": "ACFRE00179A",
+      "type": "aio",
+      "sockets": [
+        "AM5",
+        "AM4",
+        "LGA1851",
+        "LGA1700"
+      ],
+      "fanSizeMm": 140,
+      "fanCount": 2,
+      "tdpW": null,
+      "nsprRating": null,
+      "rgb": false,
+      "radiatorSizeMm": 280,
+      "radiatorLengthMm": 317,
+      "radiatorWidthMm": 138,
+      "radiatorThicknessMm": 38,
+      "tubeLengthMm": 450,
+      "sources": [
+        {
+          "url": "https://www.arctic.de/en/Liquid-Freezer-III-Pro-280/ACFRE00179A",
+          "publisher": "arctic",
+          "retrievedAt": "2026-09-30",
+          "docType": "product-page",
+          "fields": [
+            "brand",
+            "name",
+            "partNumber",
+            "type",
+            "sockets",
+            "rgb",
+            "radiatorSizeMm"
+          ],
+          "title": "Liquid Freezer III Pro 280"
+        },
+        {
+          "url": "https://www.arctic.de/media/8d/54/b6/1748955792/Spec_Sheet_Liquid_Freezer_III_Pro_280_EN.pdf",
+          "publisher": "arctic",
+          "retrievedAt": "2026-09-30",
+          "docType": "datasheet",
+          "title": "ARCTIC Specification Sheet: Liquid Freezer III Pro 280",
+          "locator": "PDF page 2, General and Radiator Specifications"
+        }
+      ],
+      "notes": [
+        {
+          "field": "sockets",
+          "text": "The spec sheet lists LGA1851, LGA1700, AM5 and AM4. Only the catalogue's sockets are listed; the maker also lists older ones."
+        },
+        {
+          "field": "tdpW",
+          "text": "ARCTIC publishes no TDP rating for this cooler."
+        },
+        {
+          "field": "rgb",
+          "text": "The product page lists \"Lighting: none\"."
+        },
+        {
+          "field": "fanCount",
+          "text": "From \"2 x P14 Pro\"."
+        }
+      ]
+    },
+    {
+      "id": "nzxt-kraken-plus-240",
+      "category": "cooler",
+      "manufacturer": "nzxt",
+      "brand": "NZXT",
+      "name": "Kraken Plus 240",
+      "partNumber": "RL-KN240-B2",
+      "type": "aio",
+      "sockets": [
+        "AM5",
+        "AM4",
+        "LGA1851",
+        "LGA1700"
+      ],
+      "fanSizeMm": 120,
+      "fanCount": 2,
+      "tdpW": null,
+      "nsprRating": null,
+      "rgb": false,
+      "radiatorSizeMm": 240,
+      "radiatorLengthMm": 281,
+      "radiatorWidthMm": 120,
+      "radiatorThicknessMm": 27,
+      "tubeLengthMm": 400,
+      "sources": [
+        {
+          "url": "https://nzxt.com/products/kraken-240",
+          "publisher": "nzxt",
+          "retrievedAt": "2026-09-30",
+          "docType": "product-page",
+          "title": "Kraken Plus 240",
+          "locator": "Tech Specs"
+        }
+      ],
+      "notes": [
+        {
+          "field": "sockets",
+          "text": "NZXT lists Intel LGA 1851, 1700, 1200/115X and AMD AM5, AM4. Only the catalogue's sockets are listed; the maker also lists older ones."
+        },
+        {
+          "field": "tdpW",
+          "text": "NZXT publishes no TDP rating for this cooler."
+        },
+        {
+          "field": "rgb",
+          "text": "The pump has a 1.54-inch LCD; the included F120P fans list \"LED Quantity 0\". NZXT sells lit versions separately (Kraken Plus RGB)."
+        },
+        {
+          "field": "partNumber",
+          "text": "Black version, \"RL-KN240-B2 (Black)\"."
+        }
+      ]
+    }
+  ]
 }
