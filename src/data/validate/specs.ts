@@ -99,7 +99,7 @@ function checkMotherboard(sink: IssueSink, file: string, board: Motherboard, cpu
     }
     if (rule.trigger.deviceType === 'sata') {
       const m2 = board.m2Slots.find((s) => s.id === rule.trigger.slot);
-      if (m2 === undefined || !m2.sataSupport) {
+      if (!m2?.sataSupport) {
         sink.error('sanity', file, `trigger deviceType "sata" needs an M.2 slot that accepts SATA drives`, id, `${at}.trigger`);
       }
     }
@@ -210,7 +210,7 @@ function checkSanity(sink: IssueSink, file: string, r: SpecRecord): void {
       const socketMem = SOCKET_MEMORY[r.socket];
       for (const t of r.memory.types) if (!socketMem.includes(t)) bad(`${r.socket} does not take ${t}`, 'memory.types');
       for (const s of r.memory.speeds) if (!r.memory.types.includes(s.type)) bad(`speed row for ${s.type} not in memory.types`, 'memory.speeds');
-      if (r.has3dVCache !== /X3D/.test(r.name)) bad('has3dVCache must match an X3D model name', 'has3dVCache');
+      if (r.has3dVCache !== r.name.includes('X3D')) bad('has3dVCache must match an X3D model name', 'has3dVCache');
       if (r.igpu !== null && /(?:\d|K)F\b/.test(r.name)) bad('an F SKU has no integrated graphics', 'igpu');
       break;
     }
