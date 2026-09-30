@@ -7,35 +7,11 @@
       "skillPath": "skills/accessibility/SKILL.md",
       "computedHash": "612f913bcb03f0787b103c848cd7664b676a9aaf31f25d3270cc69cf5caaab95"
     },
-    "aframe-webxr": {
-      "source": "freshtechbro/claudedesignskills",
-      "sourceType": "github",
-      "skillPath": ".claude/skills/aframe-webxr/SKILL.md",
-      "computedHash": "805628258210c6504bcab36dd3407c99d1d0e1d44d17f8a8bdbbb706460c2306"
-    },
     "animated-component-libraries": {
       "source": "freshtechbro/claudedesignskills",
       "sourceType": "github",
       "skillPath": ".claude/skills/animated-component-libraries/SKILL.md",
       "computedHash": "af53d0b6930732ec4cc187351a53a43cdf25f18560fb82be8e1b07dccaf017e1"
-    },
-    "animejs": {
-      "source": "freshtechbro/claudedesignskills",
-      "sourceType": "github",
-      "skillPath": ".claude/skills/animejs/SKILL.md",
-      "computedHash": "1ccd0229d51e46aaa5e0d7033f1160c9f21440af470fbaab25fb68d9190c3edb"
-    },
-    "babylonjs-engine": {
-      "source": "freshtechbro/claudedesignskills",
-      "sourceType": "github",
-      "skillPath": ".claude/skills/babylonjs-engine/SKILL.md",
-      "computedHash": "8a3ca92ec7e885e3323473031c7d6f08338d5df7c0e0b9b199635f49094e96a3"
-    },
-    "barba-js": {
-      "source": "freshtechbro/claudedesignskills",
-      "sourceType": "github",
-      "skillPath": ".claude/skills/barba-js/SKILL.md",
-      "computedHash": "8429138b3ce13a7cba2d786ab03ce3309877f4bd43ed6d7cf1d00afa9768e526"
     },
     "best-practices": {
       "source": "addyosmani/web-quality-skills",
@@ -103,18 +79,6 @@
       "skillPath": ".claude/skills/lightweight-3d-effects/SKILL.md",
       "computedHash": "4fb89172f097f03603cb15cb414b8245b6efc927c72e71a26c4ae4b43bb5d1fa"
     },
-    "locomotive-scroll": {
-      "source": "freshtechbro/claudedesignskills",
-      "sourceType": "github",
-      "skillPath": ".claude/skills/locomotive-scroll/SKILL.md",
-      "computedHash": "131f3a40bbb2f73cf7c4c1804fcdf70bca0404a96d09bc92d513e1f875170c31"
-    },
-    "lottie-animations": {
-      "source": "freshtechbro/claudedesignskills",
-      "sourceType": "github",
-      "skillPath": ".claude/skills/lottie-animations/SKILL.md",
-      "computedHash": "dd662e70b8874e7d78a9b32ef42b32467457f0a7b34aae39f9c052fe8493cc39"
-    },
     "modern-web-design": {
       "source": "freshtechbro/claudedesignskills",
       "sourceType": "github",
@@ -132,18 +96,6 @@
       "sourceType": "github",
       "skillPath": "skills/performance/SKILL.md",
       "computedHash": "ce9d36f139a1b2a6a8ac2cb222698963b8076d2dd8b41685e8e8ae589cdcf1e4"
-    },
-    "pixijs-2d": {
-      "source": "freshtechbro/claudedesignskills",
-      "sourceType": "github",
-      "skillPath": ".claude/skills/pixijs-2d/SKILL.md",
-      "computedHash": "f7bb8d68fd3cad99f0fe3b2c26fceed67983f35d970eee66d35b72d487dd63a5"
-    },
-    "playcanvas-engine": {
-      "source": "freshtechbro/claudedesignskills",
-      "sourceType": "github",
-      "skillPath": ".claude/skills/playcanvas-engine/SKILL.md",
-      "computedHash": "173000db3829b3196452f888acb5efdb62d009687e52c5b95830ec6cbc9cc6e9"
     },
     "r3f-animation": {
       "source": "EnzeD/r3f-skills",
@@ -211,12 +163,6 @@
       "skillPath": "skills/r3f-textures/SKILL.md",
       "computedHash": "80a84fc624aa211f01e922877425af9509addd69b5357075fb0858d249feb49b"
     },
-    "react-spring-physics": {
-      "source": "freshtechbro/claudedesignskills",
-      "sourceType": "github",
-      "skillPath": ".claude/skills/react-spring-physics/SKILL.md",
-      "computedHash": "df2dd730f887868d8586ce94b503ef10cf1a4538651705ecd23be878017ca5de"
-    },
     "react-three-fiber": {
       "source": "freshtechbro/claudedesignskills",
       "sourceType": "github",
@@ -235,47 +181,17 @@
       "skillPath": "skills/requesting-code-review/SKILL.md",
       "computedHash": "2abaeac1de432c76abda0ca7ba618901d2e94f8817b3650f9c523acea2d224f5"
     },
-    "rive-interactive": {
-      "source": "freshtechbro/claudedesignskills",
-      "sourceType": "github",
-      "skillPath": ".claude/skills/rive-interactive/SKILL.md",
-      "computedHash": "f36fb49d447a5a688a5a57bd63d7897e282d0eed33560755480a45c476aeceb9"
-    },
-    "scroll-reveal-libraries": {
-      "source": "freshtechbro/claudedesignskills",
-      "sourceType": "github",
-      "skillPath": ".claude/skills/scroll-reveal-libraries/SKILL.md",
-      "computedHash": "f9d89c4871015d6a90b1942d4176829e7bc8cd8582ecc9e8344c34d50350f663"
-    },
     "seo": {
       "source": "addyosmani/web-quality-skills",
       "sourceType": "github",
       "skillPath": "skills/seo/SKILL.md",
       "computedHash": "01a735ac18ceb15536ac40b11a5712b3ab8f78ebe94748b3ebc3afc7f58a6f2f"
     },
-    "skill-creator": {
-      "source": "freshtechbro/claudedesignskills",
-      "sourceType": "github",
-      "skillPath": ".claude/skills/skill-creator/SKILL.md",
-      "computedHash": "0aa401c7d5eb0e8475de2e62519ca01dbaab6f0abce9e34b9e87ff07ffb19312"
-    },
-    "spline-interactive": {
-      "source": "freshtechbro/claudedesignskills",
-      "sourceType": "github",
-      "skillPath": ".claude/skills/spline-interactive/SKILL.md",
-      "computedHash": "d71ae3bd67c771b81c6757a9b23796a25ff2765bf490912da8ec2fbc16289403"
-    },
     "subagent-driven-development": {
       "source": "obra/superpowers",
       "sourceType": "github",
       "skillPath": "skills/subagent-driven-development/SKILL.md",
       "computedHash": "d5caecf77dad1d6b86be893ce3fdeb0222921c64bb955db8b12a5780eecb4ec6"
-    },
-    "substance-3d-texturing": {
-      "source": "freshtechbro/claudedesignskills",
-      "sourceType": "github",
-      "skillPath": ".claude/skills/substance-3d-texturing/SKILL.md",
-      "computedHash": "2e1dfe5482e4c13337d696a9c42e4bcdd40724b403bdd568670ea08b42800662"
     },
     "systematic-debugging": {
       "source": "obra/superpowers",
@@ -348,12 +264,6 @@
       "sourceType": "github",
       "skillPath": "skills/writing-plans/SKILL.md",
       "computedHash": "c2647b5bf067be353a893e5a39a632cbbeb7ad81e61fa5ae227ece5490029073"
-    },
-    "writing-skills": {
-      "source": "obra/superpowers",
-      "sourceType": "github",
-      "skillPath": "skills/writing-skills/SKILL.md",
-      "computedHash": "f06bbb471439736c838e89a57a2a371bcc687931ba878901d97373194e212ea9"
     }
   }
 }
