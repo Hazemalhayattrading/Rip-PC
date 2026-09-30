@@ -21,6 +21,9 @@ Read `BUILD_PROMPT.md` first. This file is the rules everyone follows, every ses
 8. **No invented products.** If a part isn't real and currently or recently sold, it doesn't go in the catalogue.
 9. **No copied branding.** Study other sites for patterns; never copy their logos, text, or assets.
 10. **English only** in the product UI.
+11. **No rabbit holes.** If a task hits the same blocker after 2 real attempts (a blocked site, an environment
+    difference, a failing tool), stop, record the blocker and what was tried in the hand-off, and move to the
+    next task. The Director decides whether to spend more effort on it.
 
 ## File ownership
 | Path | Owner |
