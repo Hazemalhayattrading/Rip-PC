@@ -15,7 +15,10 @@ const section8 = buildPrompt.slice(buildPrompt.indexOf('## 8.'), buildPrompt.ind
 
 function number(re) {
   const m = section8.match(re);
-  if (!m) throw new Error(`BUILD_PROMPT.md §8 no longer contains ${re}; update budget.json and this test together`);
+  if (!m)
+    throw new Error(
+      `BUILD_PROMPT.md §8 no longer contains ${re}; update budget.json and this test together`,
+    );
   return Number(m[1]);
 }
 
@@ -49,7 +52,9 @@ describe('budget.json integrity', () => {
 
 describe('budget.json matches BUILD_PROMPT.md §8', () => {
   it('Lighthouse performance ≥ 90', () => {
-    expect(budget.lighthouse.gates.performanceScore.value * 100).toBe(number(/Lighthouse performance ≥ (\d+)/));
+    expect(budget.lighthouse.gates.performanceScore.value * 100).toBe(
+      number(/Lighthouse performance ≥ (\d+)/),
+    );
     expect(budget.lighthouse.gates.performanceScore.op).toBe('>=');
   });
 
@@ -79,9 +84,13 @@ describe('budget.json matches BUILD_PROMPT.md §8', () => {
   });
 
   it('60 fps on the reference laptop and on desktop, 120 fps on a high-end desktop GPU', () => {
-    expect(budget.fps.targets.referenceLaptop.avgFpsMin).toBe(number(/\*\*(\d+) fps\*\* in the 3D garage/));
+    expect(budget.fps.targets.referenceLaptop.avgFpsMin).toBe(
+      number(/\*\*(\d+) fps\*\* in the 3D garage/),
+    );
     expect(budget.fps.targets.desktop.avgFpsMin).toBe(number(/\*\*(\d+) fps\*\* in the 3D garage/));
-    expect(budget.fps.targets.highEndDesktop.avgFpsMin).toBe(number(/(\d+) fps on a high-end desktop GPU/));
+    expect(budget.fps.targets.highEndDesktop.avgFpsMin).toBe(
+      number(/(\d+) fps on a high-end desktop GPU/),
+    );
     expect(section8).toMatch(/Intel Core Ultra 7 155H with Arc iGPU/);
     expect(budget.fps.targets.referenceLaptop.hardware).toMatch(/Core Ultra 7 155H/);
   });
@@ -89,7 +98,11 @@ describe('budget.json matches BUILD_PROMPT.md §8', () => {
   it('visual regression at 390, 768 and 1440 px', () => {
     const m = section8.match(/at (\d+) px, (\d+) px, (\d+) px/);
     expect(m).not.toBeNull();
-    expect(budget.visual.viewports.map((v) => v.width)).toEqual([Number(m[1]), Number(m[2]), Number(m[3])]);
+    expect(budget.visual.viewports.map((v) => v.width)).toEqual([
+      Number(m[1]),
+      Number(m[2]),
+      Number(m[3]),
+    ]);
   });
 
   it('WCAG 2.1 AA with matching axe tags', () => {
@@ -100,7 +113,11 @@ describe('budget.json matches BUILD_PROMPT.md §8', () => {
 
   it('zero console errors and zero unhandled rejections', () => {
     expect(section8).toMatch(/Zero console errors\. Zero unhandled promise rejections\./);
-    expect(budget.console).toMatchObject({ maxConsoleErrors: 0, maxPageErrors: 0, maxUnhandledRejections: 0 });
+    expect(budget.console).toMatchObject({
+      maxConsoleErrors: 0,
+      maxPageErrors: 0,
+      maxUnhandledRejections: 0,
+    });
   });
 
   it('golden tests within ±5% (BUILD_PROMPT.md §5.3)', () => {

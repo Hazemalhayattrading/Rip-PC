@@ -15,7 +15,6 @@
  *           INVALID (software rendering or the wrong GPU in reference mode) · PROXY (ci mode, never a §8 pass)
  * Exit codes: 0 PASS or PROXY · 1 FAIL (or a blocking CI regression) · 2 INVALID, INCONCLUSIVE or error
  */
-/* global window, document -- used only inside page.evaluate callbacks, which run in the browser */
 import { mkdirSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -37,32 +36,59 @@ export function loadFpsBudget(file = path.join(HERE, 'budget.json')) {
  * capped. Below the target it is a FAIL only if the idle calibration shows the browser was not capped
  * near the target; otherwise the run is INCONCLUSIVE and must be repeated with uncapped Chrome.
  */
-export function verdictFor({ mode, renderer, expectRenderer, medianAvgFps, calibrationFps, targetFps, runAvgFps = [], maxRunSpreadPct = 15, baselineAvgFps = null, maxRegressionPct = 10, regressionBlocking = false }) {
+export function verdictFor({
+  mode,
+  renderer,
+  expectRenderer,
+  medianAvgFps,
+  calibrationFps,
+  targetFps,
+  runAvgFps = [],
+  maxRunSpreadPct = 15,
+  baselineAvgFps = null,
+  maxRegressionPct = 10,
+  regressionBlocking = false,
+}) {
   const reasons = [];
   if (mode === 'reference') {
     if (!renderer || SOFTWARE_RENDERER.test(renderer)) {
-      reasons.push(`WebGL renderer is "${renderer ?? 'unknown'}": hardware acceleration is off, so this is not a reference measurement`);
+      reasons.push(
+        `WebGL renderer is "${renderer ?? 'unknown'}": hardware acceleration is off, so this is not a reference measurement`,
+      );
       return { verdict: 'INVALID', reasons };
     }
     if (expectRenderer && !renderer.toLowerCase().includes(expectRenderer.toLowerCase())) {
-      reasons.push(`WebGL renderer "${renderer}" is not the expected "${expectRenderer}" GPU (hybrid laptops may pick the other GPU)`);
+      reasons.push(
+        `WebGL renderer "${renderer}" is not the expected "${expectRenderer}" GPU (hybrid laptops may pick the other GPU)`,
+      );
       return { verdict: 'INVALID', reasons };
     }
   }
   if (runAvgFps.length > 1) {
     const spreadPct = ((Math.max(...runAvgFps) - Math.min(...runAvgFps)) / medianAvgFps) * 100;
     if (!(spreadPct <= maxRunSpreadPct)) {
-      reasons.push(`runs disagree (${runAvgFps.join(' / ')} fps avg, spread ${spreadPct.toFixed(0)}% > ${maxRunSpreadPct}%): frames may not be reaching the screen, or the machine was busy; not a measurement`);
+      reasons.push(
+        `runs disagree (${runAvgFps.join(' / ')} fps avg, spread ${spreadPct.toFixed(0)}% > ${maxRunSpreadPct}%): frames may not be reaching the screen, or the machine was busy; not a measurement`,
+      );
       return { verdict: 'INCONCLUSIVE', reasons };
     }
   }
   if (mode === 'ci') {
-    reasons.push('CI proxy: SwiftShader software rendering; a relative regression signal, never a pass of the §8 bar');
+    reasons.push(
+      'CI proxy: SwiftShader software rendering; a relative regression signal, never a pass of the §8 bar',
+    );
     if (baselineAvgFps) {
       const dropPct = ((baselineAvgFps - medianAvgFps) / baselineAvgFps) * 100;
       if (dropPct > maxRegressionPct) {
-        reasons.push(`regression: ${dropPct.toFixed(1)}% below the baseline ${baselineAvgFps} fps (limit ${maxRegressionPct}%)${regressionBlocking ? '' : ', non-blocking until the noise floor is calibrated'}`);
-        return { verdict: regressionBlocking ? 'FAIL' : 'PROXY', regression: true, dropPct, reasons };
+        reasons.push(
+          `regression: ${dropPct.toFixed(1)}% below the baseline ${baselineAvgFps} fps (limit ${maxRegressionPct}%)${regressionBlocking ? '' : ', non-blocking until the noise floor is calibrated'}`,
+        );
+        return {
+          verdict: regressionBlocking ? 'FAIL' : 'PROXY',
+          regression: true,
+          dropPct,
+          reasons,
+        };
       }
       reasons.push(`within ${maxRegressionPct}% of the baseline (${dropPct.toFixed(1)}% drop)`);
       return { verdict: 'PROXY', regression: false, dropPct, reasons };
@@ -74,10 +100,14 @@ export function verdictFor({ mode, renderer, expectRenderer, medianAvgFps, calib
     return { verdict: 'PASS', reasons };
   }
   if (calibrationFps < targetFps * 1.05) {
-    reasons.push(`idle frame rate is capped at about ${calibrationFps} fps, below 1.05 x the ${targetFps} fps target; re-run with the frame-rate limit off`);
+    reasons.push(
+      `idle frame rate is capped at about ${calibrationFps} fps, below 1.05 x the ${targetFps} fps target; re-run with the frame-rate limit off`,
+    );
     return { verdict: 'INCONCLUSIVE', reasons };
   }
-  reasons.push(`median avg ${medianAvgFps} fps < target ${targetFps} fps (uncapped: idle ${calibrationFps} fps)`);
+  reasons.push(
+    `median avg ${medianAvgFps} fps < target ${targetFps} fps (uncapped: idle ${calibrationFps} fps)`,
+  );
   return { verdict: 'FAIL', reasons };
 }
 
@@ -103,21 +133,36 @@ async function probe(args) {
   if (!['ci', 'reference'].includes(mode)) throw new Error(`--mode must be ci or reference`);
   const targetName = args.target ?? 'referenceLaptop';
   const target = fps.targets[targetName];
-  if (!target) throw new Error(`unknown --target ${targetName}; budget.json has ${Object.keys(fps.targets).join(', ')}`);
-  if (mode === 'reference' && !args.device) throw new Error('--device "<make model>" is required in reference mode');
+  if (!target)
+    throw new Error(
+      `unknown --target ${targetName}; budget.json has ${Object.keys(fps.targets).join(', ')}`,
+    );
+  if (mode === 'reference' && !args.device)
+    throw new Error('--device "<make model>" is required in reference mode');
   const runs = Number(args.runs ?? fps.runs);
   const cpuThrottle = Number(args['cpu-throttle'] ?? 1);
 
   const { chromium } = await import('@playwright/test');
   const headless = mode === 'ci' || Boolean(args.headless);
-  const launchOptions = mode === 'reference'
-    ? { headless, args: [...UNCAP_FLAGS, '--start-maximized'], ...(args.executable ? { executablePath: args.executable } : { channel: args.channel ?? 'chrome' }) }
-    // No uncap flags in ci mode: with SwiftShader they let rAF run ahead of the GPU queue, which gave
-    // 379 fps then 3.8 fps on the same scene (measured 2026-09-30). Headless is capped at 60 Hz anyway.
-    : { headless: true, args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] };
+  const launchOptions =
+    mode === 'reference'
+      ? {
+          headless,
+          args: [...UNCAP_FLAGS, '--start-maximized'],
+          ...(args.executable
+            ? { executablePath: args.executable }
+            : { channel: args.channel ?? 'chrome' }),
+        }
+      : // No uncap flags in ci mode: with SwiftShader they let rAF run ahead of the GPU queue, which gave
+        // 379 fps then 3.8 fps on the same scene (measured 2026-09-30). Headless is capped at 60 Hz anyway.
+        { headless: true, args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] };
   const browser = await chromium.launch(launchOptions);
   try {
-    const context = await browser.newContext(mode === 'reference' && !headless ? { viewport: null } : { viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
+    const context = await browser.newContext(
+      mode === 'reference' && !headless
+        ? { viewport: null }
+        : { viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 },
+    );
     await context.addInitScript({ path: path.join(HERE, 'fps-meter.js') });
     const page = await context.newPage();
     if (cpuThrottle > 1) {
@@ -125,15 +170,22 @@ async function probe(args) {
       await cdp.send('Emulation.setCPUThrottlingRate', { rate: cpuThrottle });
     }
     const response = await page.goto(args.url, { waitUntil: 'load' });
-    if (!response || response.status() !== 200) throw new Error(`${args.url} returned HTTP ${response?.status() ?? 'no response'}`);
+    if (!response || response.status() !== 200)
+      throw new Error(`${args.url} returned HTTP ${response?.status() ?? 'no response'}`);
     const readyTimeout = Number(args['ready-timeout'] ?? 120_000);
     try {
-      await page.waitForFunction(() => Boolean(window.__RIG_LAB_PERF__), undefined, { timeout: readyTimeout });
+      await page.waitForFunction(() => Boolean(window.__RIG_LAB_PERF__), undefined, {
+        timeout: readyTimeout,
+      });
     } catch {
-      throw new Error(`window.__RIG_LAB_PERF__ did not appear within ${readyTimeout} ms at ${args.url}: open the 3D garage with perf=1 in the URL (scene contract: tests/perf/fps-meter.js)`);
+      throw new Error(
+        `window.__RIG_LAB_PERF__ did not appear within ${readyTimeout} ms at ${args.url}: open the 3D garage with perf=1 in the URL (scene contract: tests/perf/fps-meter.js)`,
+      );
     }
     const gpu = await page.evaluate(() => {
-      const gl = document.createElement('canvas').getContext('webgl2') ?? document.createElement('canvas').getContext('webgl');
+      const gl =
+        document.createElement('canvas').getContext('webgl2') ??
+        document.createElement('canvas').getContext('webgl');
       if (!gl) return { renderer: null, vendor: null };
       const ext = gl.getExtension('WEBGL_debug_renderer_info');
       return {
@@ -141,10 +193,11 @@ async function probe(args) {
         vendor: ext ? gl.getParameter(ext.UNMASKED_VENDOR_WEBGL) : gl.getParameter(gl.VENDOR),
       };
     });
-    const measured = await page.evaluate(
-      (opts) => window.__rigLabFpsMeter.run(opts),
-      { runs, warmupRuns: fps.warmupRuns, calibrationMs: fps.calibrationMs },
-    );
+    const measured = await page.evaluate((opts) => window.__rigLabFpsMeter.run(opts), {
+      runs,
+      warmupRuns: fps.warmupRuns,
+      calibrationMs: fps.calibrationMs,
+    });
     const build = await page.evaluate(() => window.__RIG_LAB_BUILD__ ?? null);
     const baseline = args.baseline ? JSON.parse(readFileSync(args.baseline, 'utf8')) : null;
     const decision = verdictFor({
@@ -165,7 +218,12 @@ async function probe(args) {
       kind: 'fps',
       recordedAt: new Date().toISOString(),
       mode,
-      target: { name: targetName, avgFpsMin: target.avgFpsMin, hardware: target.hardware, source: target.source },
+      target: {
+        name: targetName,
+        avgFpsMin: target.avgFpsMin,
+        hardware: target.hardware,
+        source: target.source,
+      },
       device: {
         label: args.device ?? `ci:${os.hostname()}`,
         cpu: os.cpus()[0]?.model ?? null,
@@ -173,10 +231,21 @@ async function probe(args) {
         memoryGB: Math.round(os.totalmem() / 1e9),
         platform: `${os.platform()} ${os.release()}`,
       },
-      browser: { version: browser.version(), headless, launchArgs: launchOptions.args, channel: launchOptions.channel ?? null },
+      browser: {
+        version: browser.version(),
+        headless,
+        launchArgs: launchOptions.args,
+        channel: launchOptions.channel ?? null,
+      },
       gpu,
       app: { url: args.url, build },
-      method: { runs, warmupRuns: fps.warmupRuns, calibrationMs: fps.calibrationMs, cpuThrottle, metric: fps.metric },
+      method: {
+        runs,
+        warmupRuns: fps.warmupRuns,
+        calibrationMs: fps.calibrationMs,
+        cpuThrottle,
+        metric: fps.metric,
+      },
       calibrationFps: measured.calibrationFps,
       runs: measured.runs,
       median: measured.median,
@@ -194,7 +263,11 @@ async function probe(args) {
 function defaultOut(record) {
   const date = record.recordedAt.slice(0, 10);
   if (record.mode === 'reference') {
-    const slug = record.device.label.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40);
+    const slug = record.device.label
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '')
+      .slice(0, 40);
     return path.join(ROOT, 'docs', 'qa', 'perf-runs', `${date}-${record.target.name}-${slug}.json`);
   }
   return path.join(ROOT, 'artifacts', 'perf', `fps-${date}-cpu${record.method.cpuThrottle}x.json`);
@@ -223,10 +296,19 @@ export async function main(argv = process.argv.slice(2)) {
     ({ values: args } = parseArgs({
       args: argv,
       options: {
-        url: { type: 'string' }, mode: { type: 'string' }, target: { type: 'string' }, device: { type: 'string' },
-        channel: { type: 'string' }, executable: { type: 'string' }, 'cpu-throttle': { type: 'string' },
-        runs: { type: 'string' }, baseline: { type: 'string' }, out: { type: 'string' }, 'ready-timeout': { type: 'string' },
-        headless: { type: 'boolean', default: false }, help: { type: 'boolean', default: false },
+        url: { type: 'string' },
+        mode: { type: 'string' },
+        target: { type: 'string' },
+        device: { type: 'string' },
+        channel: { type: 'string' },
+        executable: { type: 'string' },
+        'cpu-throttle': { type: 'string' },
+        runs: { type: 'string' },
+        baseline: { type: 'string' },
+        out: { type: 'string' },
+        'ready-timeout': { type: 'string' },
+        headless: { type: 'boolean', default: false },
+        help: { type: 'boolean', default: false },
       },
       strict: true,
     }));
@@ -257,7 +339,10 @@ export async function main(argv = process.argv.slice(2)) {
 
 function invokedDirectly() {
   try {
-    return Boolean(process.argv[1]) && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url));
+    return (
+      Boolean(process.argv[1]) &&
+      realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))
+    );
   } catch {
     return false;
   }

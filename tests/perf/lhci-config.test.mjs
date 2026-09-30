@@ -33,22 +33,37 @@ describe('lighthouserc.cjs and lighthouserc.desktop.cjs', () => {
   it('assert every gate at error level with the median of the runs (LHCI defaults to optimistic)', () => {
     for (const cfg of [mobile, desktop]) {
       const a = cfg.ci.assert.assertions;
-      expect(Object.keys(a).sort()).toEqual(['categories:performance', 'cumulative-layout-shift', 'largest-contentful-paint', 'total-blocking-time']);
+      expect(Object.keys(a).sort()).toEqual([
+        'categories:performance',
+        'cumulative-layout-shift',
+        'largest-contentful-paint',
+        'total-blocking-time',
+      ]);
       for (const [level, opts] of Object.values(a)) {
         expect(level).toBe('error');
         expect(opts.aggregationMethod).toBe('median');
       }
-      expect(a['categories:performance'][1].minScore).toBe(budget.lighthouse.gates.performanceScore.value);
+      expect(a['categories:performance'][1].minScore).toBe(
+        budget.lighthouse.gates.performanceScore.value,
+      );
     }
   });
 
   it('turn strict "<" gates into a ceiling just below the §8 number, and ">=" into minScore', () => {
     const g = budget.lighthouse.gates;
     const a = mobile.ci.assert.assertions;
-    expect(a['largest-contentful-paint'][1].maxNumericValue).toBeLessThan(g.largestContentfulPaintMs.value);
-    expect(a['largest-contentful-paint'][1].maxNumericValue).toBeGreaterThan(g.largestContentfulPaintMs.value - 0.001);
-    expect(a['cumulative-layout-shift'][1].maxNumericValue).toBeLessThan(g.cumulativeLayoutShift.value);
-    expect(a['cumulative-layout-shift'][1].maxNumericValue).toBeGreaterThan(g.cumulativeLayoutShift.value - 1e-6);
+    expect(a['largest-contentful-paint'][1].maxNumericValue).toBeLessThan(
+      g.largestContentfulPaintMs.value,
+    );
+    expect(a['largest-contentful-paint'][1].maxNumericValue).toBeGreaterThan(
+      g.largestContentfulPaintMs.value - 0.001,
+    );
+    expect(a['cumulative-layout-shift'][1].maxNumericValue).toBeLessThan(
+      g.cumulativeLayoutShift.value,
+    );
+    expect(a['cumulative-layout-shift'][1].maxNumericValue).toBeGreaterThan(
+      g.cumulativeLayoutShift.value - 1e-6,
+    );
     expect(a['total-blocking-time'][1].maxNumericValue).toBeLessThan(g.totalBlockingTimeMs.value);
     expect(maxFor({ value: 10, op: '<=' })).toBe(10);
     expect(() => maxFor({ value: 10, op: '>=' })).toThrow();

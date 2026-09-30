@@ -73,7 +73,9 @@ function parseEntries(entries) {
       const code = entry.code ?? readFileSync(/** @type {string} */ (entry.file), 'utf8');
       out[entry.key] = { specifiers: parseStaticImportsInProcess(code, entry.file ?? entry.key) };
     } catch (error) {
-      out[entry.key] = { error: error instanceof Error ? `${error.name}: ${error.message}` : String(error) };
+      out[entry.key] = {
+        error: error instanceof Error ? `${error.name}: ${error.message}` : String(error),
+      };
     }
   }
   return out;

@@ -31,13 +31,19 @@
         if (running) root.requestAnimationFrame(tick);
       }
       root.requestAnimationFrame(tick);
-      var done = typeof stop === 'number'
-        ? new Promise(function (r) { root.setTimeout(r, stop); })
-        : Promise.resolve().then(stop);
+      var done =
+        typeof stop === 'number'
+          ? new Promise(function (r) {
+              root.setTimeout(r, stop);
+            })
+          : Promise.resolve().then(stop);
       done.then(function () {
         running = false;
         // One more frame so the last interval of the path is included.
-        root.requestAnimationFrame(function (t) { stamps.push(t); resolve(stamps); });
+        root.requestAnimationFrame(function (t) {
+          stamps.push(t);
+          resolve(stamps);
+        });
       }, reject);
     });
   }
@@ -61,9 +67,16 @@
     for (var i = 1; i < stamps.length; i += 1) intervals.push(stamps[i] - stamps[i - 1]);
     if (intervals.length < 2) throw new Error('fps-meter: fewer than 3 frames were recorded');
     var elapsed = stamps[stamps.length - 1] - stamps[0];
-    var sorted = intervals.slice().sort(function (a, b) { return a - b; });
-    var long = intervals.filter(function (d) { return d > threshold; }).length;
-    var round = function (n, d) { var f = Math.pow(10, d); return Math.round(n * f) / f; };
+    var sorted = intervals.slice().sort(function (a, b) {
+      return a - b;
+    });
+    var long = intervals.filter(function (d) {
+      return d > threshold;
+    }).length;
+    var round = function (n, d) {
+      var f = Math.pow(10, d);
+      return Math.round(n * f) / f;
+    };
     return {
       frames: stamps.length,
       durationMs: round(elapsed, 1),
@@ -80,7 +93,9 @@
   }
 
   function median(values) {
-    var s = values.slice().sort(function (a, b) { return a - b; });
+    var s = values.slice().sort(function (a, b) {
+      return a - b;
+    });
     var m = Math.floor(s.length / 2);
     return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
   }
@@ -89,7 +104,12 @@
   function medianOf(runs) {
     var out = {};
     Object.keys(runs[0]).forEach(function (k) {
-      if (typeof runs[0][k] === 'number') out[k] = median(runs.map(function (r) { return r[k]; }));
+      if (typeof runs[0][k] === 'number')
+        out[k] = median(
+          runs.map(function (r) {
+            return r[k];
+          }),
+        );
     });
     return out;
   }
@@ -102,14 +122,22 @@
     var calibrationMs = opts.calibrationMs || 2000;
     var scene = root.__RIG_LAB_PERF__;
     if (!scene || typeof scene.runCameraPath !== 'function') {
-      throw new Error('fps-meter: window.__RIG_LAB_PERF__ is missing; open the garage with perf=1 in the URL');
+      throw new Error(
+        'fps-meter: window.__RIG_LAB_PERF__ is missing; open the garage with perf=1 in the URL',
+      );
     }
     await scene.ready;
     var calibration = summarize(await recordDuring(calibrationMs));
     for (var w = 0; w < warmupRuns; w += 1) await scene.runCameraPath();
     var results = [];
     for (var r = 0; r < runs; r += 1) {
-      results.push(summarize(await recordDuring(function () { return scene.runCameraPath(); })));
+      results.push(
+        summarize(
+          await recordDuring(function () {
+            return scene.runCameraPath();
+          }),
+        ),
+      );
     }
     return {
       meterVersion: 1,
@@ -117,9 +145,20 @@
       runs: results,
       median: medianOf(results),
       scene: typeof scene.info === 'function' ? scene.info() : null,
-      viewport: { width: root.innerWidth, height: root.innerHeight, devicePixelRatio: root.devicePixelRatio },
+      viewport: {
+        width: root.innerWidth,
+        height: root.innerHeight,
+        devicePixelRatio: root.devicePixelRatio,
+      },
     };
   }
 
-  root.__rigLabFpsMeter = { version: 1, recordDuring: recordDuring, summarize: summarize, percentile: percentile, medianOf: medianOf, run: run };
+  root.__rigLabFpsMeter = {
+    version: 1,
+    recordDuring: recordDuring,
+    summarize: summarize,
+    percentile: percentile,
+    medianOf: medianOf,
+    run: run,
+  };
 })(typeof window !== 'undefined' ? window : globalThis);

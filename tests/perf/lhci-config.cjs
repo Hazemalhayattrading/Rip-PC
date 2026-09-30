@@ -47,10 +47,14 @@ function minScoreFor(gate) {
 function buildLhciConfig({ preset }) {
   const lh = budget.lighthouse;
   if (!lh.presets.includes(preset)) {
-    throw new Error(`preset "${preset}" is not listed in budget.json lighthouse.presets (${lh.presets.join(', ')})`);
+    throw new Error(
+      `preset "${preset}" is not listed in budget.json lighthouse.presets (${lh.presets.join(', ')})`,
+    );
   }
   const base = budget.bundle.basePath;
-  const url = lh.routes.map((route) => new URL(route.replace(/^\//, ''), PREVIEW.origin + base).href);
+  const url = lh.routes.map(
+    (route) => new URL(route.replace(/^\//, ''), PREVIEW.origin + base).href,
+  );
   const aggregationMethod = lh.aggregationMethod;
   const g = lh.gates;
   return {
@@ -70,10 +74,22 @@ function buildLhciConfig({ preset }) {
       },
       assert: {
         assertions: {
-          'categories:performance': ['error', { minScore: minScoreFor(g.performanceScore), aggregationMethod }],
-          'largest-contentful-paint': ['error', { maxNumericValue: maxFor(g.largestContentfulPaintMs), aggregationMethod }],
-          'cumulative-layout-shift': ['error', { maxNumericValue: maxFor(g.cumulativeLayoutShift), aggregationMethod }],
-          'total-blocking-time': ['error', { maxNumericValue: maxFor(g.totalBlockingTimeMs), aggregationMethod }],
+          'categories:performance': [
+            'error',
+            { minScore: minScoreFor(g.performanceScore), aggregationMethod },
+          ],
+          'largest-contentful-paint': [
+            'error',
+            { maxNumericValue: maxFor(g.largestContentfulPaintMs), aggregationMethod },
+          ],
+          'cumulative-layout-shift': [
+            'error',
+            { maxNumericValue: maxFor(g.cumulativeLayoutShift), aggregationMethod },
+          ],
+          'total-blocking-time': [
+            'error',
+            { maxNumericValue: maxFor(g.totalBlockingTimeMs), aggregationMethod },
+          ],
         },
       },
       upload: {

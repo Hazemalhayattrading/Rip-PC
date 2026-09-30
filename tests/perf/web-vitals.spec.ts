@@ -73,13 +73,22 @@ function passes(value: number, gate: Gate): boolean {
   }
 }
 
-function median(values: number[]): number {
+function median(values: readonly number[]): number {
   const sorted = [...values].sort((a, b) => a - b);
   const mid = Math.floor(sorted.length / 2);
-  return sorted.length % 2 ? sorted[mid]! : (sorted[mid - 1]! + sorted[mid]!) / 2;
+  const upper = sorted[mid];
+  const lower = sorted[mid - 1];
+  if (upper === undefined) throw new Error('median of an empty list');
+  return sorted.length % 2 === 1 || lower === undefined ? upper : (lower + upper) / 2;
 }
 
-async function measureOnce(browser: Browser, url: string, cpuRate: number, settleMs: number, script: string): Promise<Sample> {
+async function measureOnce(
+  browser: Browser,
+  url: string,
+  cpuRate: number,
+  settleMs: number,
+  script: string,
+): Promise<Sample> {
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   try {
     await context.addInitScript({ content: script });
@@ -91,58 +100,119 @@ async function measureOnce(browser: Browser, url: string, cpuRate: number, settl
     const response = await page.goto(url, { waitUntil: 'load' });
     expect(response?.status(), `${url} must load directly with HTTP 200`).toBe(200);
     const devServer = await page.locator('script[src*="/@vite/client"]').count();
-    expect(devServer, 'web vitals must be measured on the production build (vite preview), not the dev server').toBe(0);
+    expect(
+      devServer,
+      'web vitals must be measured on the production build (vite preview), not the dev server',
+    ).toBe(0);
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(settleMs);
     // Hide the page: web-vitals reports final LCP and CLS on visibilitychange to hidden.
     await page.evaluate(() => {
-      Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => 'hidden' });
+      Object.defineProperty(document, 'visibilityState', {
+        configurable: true,
+        get: () => 'hidden',
+      });
       document.dispatchEvent(new Event('visibilitychange'));
     });
-    const store = await page.evaluate(() => (window as unknown as { __rigLabVitals?: VitalsStore }).__rigLabVitals ?? null);
-    expect(store, 'the web-vitals collector did not run (was the init script blocked?)').not.toBeNull();
-    expect(store!.error, 'the web-vitals library failed to load in the page').toBeNull();
-    expect(store!.lcp, 'no LCP was reported: the page painted no contentful element').not.toBeNull();
-    expect(store!.cls, 'no CLS was reported: web-vitals reports CLS only after first contentful paint').not.toBeNull();
-    return { lcpMs: store!.lcp!, cls: store!.cls!, lcpTarget: store!.lcpTarget, clsTarget: store!.clsTarget };
+    const store = await page.evaluate(
+      () => (window as unknown as { __rigLabVitals?: VitalsStore }).__rigLabVitals ?? null,
+    );
+    if (store === null)
+      throw new Error('the web-vitals collector did not run (was the init script blocked?)');
+    if (store.error !== null)
+      throw new Error(`the web-vitals library failed to load in the page: ${store.error}`);
+    if (store.lcp === null)
+      throw new Error('no LCP was reported: the page painted no contentful element');
+    if (store.cls === null) {
+      throw new Error(
+        'no CLS was reported: web-vitals reports CLS only after first contentful paint',
+      );
+    }
+    return {
+      lcpMs: store.lcp,
+      cls: store.cls,
+      lcpTarget: store.lcpTarget,
+      clsTarget: store.clsTarget,
+    };
   } finally {
     await context.close();
   }
 }
 
-test('web vitals: LCP and CLS within budget on every route, at every CPU throttle rate', async ({ browser, browserName }, testInfo) => {
+test('web vitals: LCP and CLS within budget on every route, at every CPU throttle rate', async ({
+  browser,
+  browserName,
+}, testInfo) => {
   test.skip(browserName !== 'chromium', 'LCP entries and CPU throttling need Chromium');
   const budgetFile = path.join(path.dirname(testInfo.file), 'budget.json');
-  const budget = (JSON.parse(readFileSync(budgetFile, 'utf8')) as { webVitals: WebVitalsBudget }).webVitals;
+  const budget = (JSON.parse(readFileSync(budgetFile, 'utf8')) as { webVitals: WebVitalsBudget })
+    .webVitals;
   const baseURL = testInfo.project.use.baseURL;
-  if (!baseURL || !baseURL.endsWith('/')) {
-    throw new Error(`the perf project needs use.baseURL ending in "/", e.g. http://localhost:4173/Rip-PC/ (got ${String(baseURL)})`);
+  if (!baseURL?.endsWith('/')) {
+    throw new Error(
+      `the perf project needs use.baseURL ending in "/", e.g. http://127.0.0.1:4173/Rip-PC/ (got ${String(baseURL)})`,
+    );
   }
   const require = createRequire(testInfo.file);
   const webVitalsDir = path.dirname(require.resolve('web-vitals'));
-  const script = readFileSync(path.join(webVitalsDir, 'web-vitals.attribution.iife.js'), 'utf8') + COLLECTOR;
-  test.setTimeout(budget.routes.length * budget.cpuThrottleRates.length * budget.runs * 30_000 + 30_000);
+  const script =
+    readFileSync(path.join(webVitalsDir, 'web-vitals.attribution.iife.js'), 'utf8') + COLLECTOR;
+  test.setTimeout(
+    budget.routes.length * budget.cpuThrottleRates.length * budget.runs * 30_000 + 30_000,
+  );
 
-  const results: Array<Record<string, unknown>> = [];
+  const results: Record<string, unknown>[] = [];
+  const lcpGate = `${budget.gates.lcpMs.op} ${String(budget.gates.lcpMs.value)} ms`;
+  const clsGate = `${budget.gates.cls.op} ${String(budget.gates.cls.value)}`;
   for (const route of budget.routes) {
     for (const cpuRate of budget.cpuThrottleRates) {
-      await test.step(`${route.name} (${route.path}) at CPU x${cpuRate}, median of ${budget.runs} cold loads`, async () => {
+      const where = `${route.name} (${route.path}) at CPU x${String(cpuRate)}`;
+      await test.step(`${where}, median of ${String(budget.runs)} cold loads`, async () => {
         const url = new URL(route.path, baseURL).href;
         const samples: Sample[] = [];
-        for (let i = 0; i < budget.runs; i += 1) samples.push(await measureOnce(browser, url, cpuRate, budget.settleMs, script));
+        for (let i = 0; i < budget.runs; i += 1) {
+          samples.push(await measureOnce(browser, url, cpuRate, budget.settleMs, script));
+        }
         const lcpMs = median(samples.map((s) => s.lcpMs));
         const cls = median(samples.map((s) => s.cls));
         const lcpPass = passes(lcpMs, budget.gates.lcpMs);
         const clsPass = passes(cls, budget.gates.cls);
-        results.push({ route: route.name, url, cpuRate, runs: budget.runs, lcpMs: Math.round(lcpMs), cls: Number(cls.toFixed(4)), lcpPass, clsPass, samples });
-        testInfo.annotations.push({
-          type: `web-vitals ${route.name} CPU x${cpuRate}`,
-          description: `LCP ${Math.round(lcpMs)} ms (${lcpPass ? 'pass' : 'FAIL'}, ${budget.gates.lcpMs.op} ${budget.gates.lcpMs.value}); CLS ${cls.toFixed(4)} (${clsPass ? 'pass' : 'FAIL'}, ${budget.gates.cls.op} ${budget.gates.cls.value})`,
+        const lcpText = `${String(Math.round(lcpMs))} ms`;
+        const clsText = cls.toFixed(4);
+        results.push({
+          route: route.name,
+          url,
+          cpuRate,
+          runs: budget.runs,
+          lcpMs: Math.round(lcpMs),
+          cls: Number(clsText),
+          lcpPass,
+          clsPass,
+          samples,
         });
-        expect.soft(lcpPass, `LCP median ${Math.round(lcpMs)} ms must be ${budget.gates.lcpMs.op} ${budget.gates.lcpMs.value} ms on ${url} at CPU x${cpuRate}; LCP element: ${samples[0]?.lcpTarget ?? 'unknown'}`).toBe(true);
-        expect.soft(clsPass, `CLS median ${cls.toFixed(4)} must be ${budget.gates.cls.op} ${budget.gates.cls.value} on ${url} at CPU x${cpuRate}; largest shift: ${samples[0]?.clsTarget ?? 'none'}`).toBe(true);
+        testInfo.annotations.push({
+          type: `web-vitals ${route.name} CPU x${String(cpuRate)}`,
+          description: `LCP ${lcpText} (${lcpPass ? 'pass' : 'FAIL'}, ${lcpGate}); CLS ${clsText} (${clsPass ? 'pass' : 'FAIL'}, ${clsGate})`,
+        });
+        const lcpElement = samples[0]?.lcpTarget ?? 'unknown';
+        const shiftElement = samples[0]?.clsTarget ?? 'none';
+        expect
+          .soft(
+            lcpPass,
+            `LCP median ${lcpText} must be ${lcpGate} on ${where}; LCP element: ${lcpElement}`,
+          )
+          .toBe(true);
+        expect
+          .soft(
+            clsPass,
+            `CLS median ${clsText} must be ${clsGate} on ${where}; largest shift: ${shiftElement}`,
+          )
+          .toBe(true);
       });
     }
   }
-  await testInfo.attach('web-vitals.json', { body: JSON.stringify({ budgetFile, gates: budget.gates, results }, null, 2), contentType: 'application/json' });
+  await testInfo.attach('web-vitals.json', {
+    body: JSON.stringify({ budgetFile, gates: budget.gates, results }, null, 2),
+    contentType: 'application/json',
+  });
 });

@@ -39,7 +39,8 @@ function makeDist(files) {
   return dir;
 }
 
-const html = (head) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>t</title>${head}</head><body></body></html>`;
+const html = (head) =>
+  `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>t</title>${head}</head><body></body></html>`;
 
 afterAll(() => {
   for (const dir of tempDirs) rmSync(dir, { recursive: true, force: true });
@@ -57,7 +58,15 @@ describe('budget file', () => {
   });
 
   it('rejects a budget without a source', () => {
-    const dir = makeDist({ 'b.json': JSON.stringify({ bundle: { basePath: '/Rip-PC/', gzip: { level: 6, bytesPerKilobyte: 1000 }, initialJs: { maxGzipBytes: 1, op: '<' } } }) });
+    const dir = makeDist({
+      'b.json': JSON.stringify({
+        bundle: {
+          basePath: '/Rip-PC/',
+          gzip: { level: 6, bytesPerKilobyte: 1000 },
+          initialJs: { maxGzipBytes: 1, op: '<' },
+        },
+      }),
+    });
     expect(() => loadBudget(path.join(dir, 'b.json'))).toThrow(/source/);
   });
 });
@@ -84,7 +93,15 @@ describe('initial graph on a Vite-shaped app (fixtures/dist-app)', () => {
   });
 
   it('never counts dynamic imports, __vite__mapDeps entries, strings, regexes or comments', () => {
-    for (const lazy of ['Garage-Hx1qW3', 'three-Qm4zX9', 'Results-Tn8vB5', 'decoy-string-Ds1eR5', 'decoy-regex-Dr1tY6', 'decoy-comment-Dc1wQ0', 'orphan-Zz0kL2']) {
+    for (const lazy of [
+      'Garage-Hx1qW3',
+      'three-Qm4zX9',
+      'Results-Tn8vB5',
+      'decoy-string-Ds1eR5',
+      'decoy-regex-Dr1tY6',
+      'decoy-comment-Dc1wQ0',
+      'orphan-Zz0kL2',
+    ]) {
       expect(initial[`assets/${lazy}.js`]).toBeUndefined();
     }
   });
@@ -109,8 +126,13 @@ describe('initial graph on a Vite-shaped app (fixtures/dist-app)', () => {
     const garage = lazy['assets/Garage-Hx1qW3.js'];
     expect(garage.role).toBe('lazy-root');
     // Garage statically imports three (lazy) and react (already initial): only three is extra.
-    expect(garage.onDemandFiles.sort()).toEqual(['assets/Garage-Hx1qW3.js', 'assets/three-Qm4zX9.js']);
-    expect(garage.onDemandGzipBytes).toBe(gzipOf(dist, 'assets/Garage-Hx1qW3.js') + gzipOf(dist, 'assets/three-Qm4zX9.js'));
+    expect(garage.onDemandFiles.sort()).toEqual([
+      'assets/Garage-Hx1qW3.js',
+      'assets/three-Qm4zX9.js',
+    ]);
+    expect(garage.onDemandGzipBytes).toBe(
+      gzipOf(dist, 'assets/Garage-Hx1qW3.js') + gzipOf(dist, 'assets/three-Qm4zX9.js'),
+    );
     expect(lazy['assets/three-Qm4zX9.js'].contains).toEqual(['three.js']);
     expect(lazy['assets/orphan-Zz0kL2.js'].role).toBe('orphan');
     expect(report.warnings.some((w) => w.includes('orphan-Zz0kL2.js'))).toBe(true);
@@ -148,8 +170,14 @@ describe('budget verdicts', () => {
 
   it('treats a total exactly at the limit as a miss for "<" and a pass for "<="', () => {
     const total = analyzeDist({ distDir: dist, budget }).pages[0].initialJs.totalGzipBytes;
-    const strict = analyzeDist({ distDir: dist, budget: { ...budget, maxGzipBytes: total, op: '<' } });
-    const inclusive = analyzeDist({ distDir: dist, budget: { ...budget, maxGzipBytes: total, op: '<=' } });
+    const strict = analyzeDist({
+      distDir: dist,
+      budget: { ...budget, maxGzipBytes: total, op: '<' },
+    });
+    const inclusive = analyzeDist({
+      distDir: dist,
+      budget: { ...budget, maxGzipBytes: total, op: '<=' },
+    });
     expect(strict.exitCode).toBe(1);
     expect(inclusive.exitCode).toBe(0);
   });
@@ -169,9 +197,23 @@ describe('budget verdicts', () => {
     // Deterministic, JS-like, compressible text (~180 KB): small files compress identically at 6 and 9.
     let seed = 42;
     const next = () => (seed = (seed * 1103515245 + 12345) % 2147483648);
-    const words = ['const', 'let', 'return', 'function', 'props', 'children', 'useState', 'map', 'filter', 'price', 'socket', 'lengthMm'];
+    const words = [
+      'const',
+      'let',
+      'return',
+      'function',
+      'props',
+      'children',
+      'useState',
+      'map',
+      'filter',
+      'price',
+      'socket',
+      'lengthMm',
+    ];
     let body = '';
-    while (body.length < 180000) body += `${words[next() % words.length]}${next() % 997}=${next() % 65536};`;
+    while (body.length < 180000)
+      body += `${words[next() % words.length]}${next() % 997}=${next() % 65536};`;
     const code = `export const v=()=>{${body}};\n`;
     const dist = makeDist({
       'index.html': html('<script type="module" src="/Rip-PC/assets/app.js"></script>'),
@@ -186,7 +228,10 @@ describe('budget verdicts', () => {
 
   it('warns (without failing) at 95% of the budget', () => {
     const total = analyzeDist({ distDir: dist, budget }).pages[0].initialJs.totalGzipBytes;
-    const report = analyzeDist({ distDir: dist, budget: { ...budget, maxGzipBytes: Math.ceil(total / 0.97) } });
+    const report = analyzeDist({
+      distDir: dist,
+      budget: { ...budget, maxGzipBytes: Math.ceil(total / 0.97) },
+    });
     expect(report.exitCode).toBe(0);
     expect(report.warnings.some((w) => /of the budget \(warning at 95%\)/.test(w))).toBe(true);
   });
@@ -263,7 +308,9 @@ describe('cannot measure: exit 2 with a precise reason', () => {
     {
       name: 'the HTML loads an external script',
       files: {
-        'index.html': html('<script src="https://cdn.example.com/lib.js"></script><script type="module" src="/Rip-PC/assets/a.js"></script>'),
+        'index.html': html(
+          '<script src="https://cdn.example.com/lib.js"></script><script type="module" src="/Rip-PC/assets/a.js"></script>',
+        ),
         'assets/a.js': 'export{};',
       },
       message: /external; its size cannot be measured/,
@@ -279,7 +326,9 @@ describe('cannot measure: exit 2 with a precise reason', () => {
     {
       name: 'the HTML uses an import map',
       files: {
-        'index.html': html('<script type="importmap">{"imports":{}}</script><script type="module" src="/Rip-PC/assets/a.js"></script>'),
+        'index.html': html(
+          '<script type="importmap">{"imports":{}}</script><script type="module" src="/Rip-PC/assets/a.js"></script>',
+        ),
         'assets/a.js': 'export{};',
       },
       message: /import map/,
@@ -338,7 +387,10 @@ describe('JSON output', () => {
       'index.html': html('<script type="module" src="/Rip-PC/assets/a.js"></script>'),
       'assets/a.js': 'export{};',
       'assets/dead.js': 'export const dead=1;',
-      '.vite/manifest.json': JSON.stringify({ 'src/main.tsx': { file: 'assets/a.js' }, 'src/dead.ts': { file: 'assets/dead.js' } }),
+      '.vite/manifest.json': JSON.stringify({
+        'src/main.tsx': { file: 'assets/a.js' },
+        'src/dead.ts': { file: 'assets/dead.js' },
+      }),
     });
     const report = analyzeDist({ distDir: dist, budget });
     expect(report.pages[0].lazyJs.find((l) => l.file === 'assets/dead.js')?.role).toBe('orphan');
@@ -347,9 +399,18 @@ describe('JSON output', () => {
 
   it('--all-html measures every HTML page (for per-route copies on GitHub Pages)', () => {
     const page = html('<script type="module" src="/Rip-PC/assets/a.js"></script>');
-    const dist = makeDist({ 'index.html': page, 'build/cpu/index.html': page, '404.html': page, 'assets/a.js': 'export{};' });
+    const dist = makeDist({
+      'index.html': page,
+      'build/cpu/index.html': page,
+      '404.html': page,
+      'assets/a.js': 'export{};',
+    });
     const report = analyzeDist({ distDir: dist, budget, allHtml: true });
-    expect(report.pages.map((p) => p.html).sort()).toEqual(['404.html', 'build/cpu/index.html', 'index.html']);
+    expect(report.pages.map((p) => p.html).sort()).toEqual([
+      '404.html',
+      'build/cpu/index.html',
+      'index.html',
+    ]);
     expect(report.exitCode).toBe(0);
   });
 });
@@ -365,14 +426,31 @@ describe('parseHtml and resolveReference', () => {
   });
 
   it('maps URLs under the base path to dist files and flags everything else', () => {
-    expect(resolveReference('/Rip-PC/assets/a.js', '/Rip-PC/index.html', '/Rip-PC/')).toEqual({ rel: 'assets/a.js' });
-    expect(resolveReference('./b.js', '/Rip-PC/assets/a.js', '/Rip-PC/')).toEqual({ rel: 'assets/b.js' });
+    expect(resolveReference('/Rip-PC/assets/a.js', '/Rip-PC/index.html', '/Rip-PC/')).toEqual({
+      rel: 'assets/a.js',
+    });
+    expect(resolveReference('./b.js', '/Rip-PC/assets/a.js', '/Rip-PC/')).toEqual({
+      rel: 'assets/b.js',
+    });
     expect(resolveReference('../x.js', '/Rip-PC/assets/a.js', '/Rip-PC/')).toEqual({ rel: 'x.js' });
-    expect(resolveReference('/Rip-PC/build/cpu/', '/Rip-PC/index.html', '/Rip-PC/')).toEqual({ rel: 'build/cpu/index.html' });
-    expect(resolveReference('/assets/a.js', '/Rip-PC/index.html', '/Rip-PC/')).toEqual({ outsideBase: '/assets/a.js' });
-    expect(resolveReference('/Rip-PC/../etc/passwd', '/Rip-PC/index.html', '/Rip-PC/')).toEqual({ outsideBase: '/etc/passwd' });
-    expect('external' in resolveReference('https://cdn.example.com/a.js', '/Rip-PC/index.html', '/Rip-PC/')).toBe(true);
-    expect('external' in resolveReference('//cdn.example.com/a.js', '/Rip-PC/index.html', '/Rip-PC/')).toBe(true);
-    expect('external' in resolveReference('data:text/javascript,1', '/Rip-PC/index.html', '/Rip-PC/')).toBe(true);
+    expect(resolveReference('/Rip-PC/build/cpu/', '/Rip-PC/index.html', '/Rip-PC/')).toEqual({
+      rel: 'build/cpu/index.html',
+    });
+    expect(resolveReference('/assets/a.js', '/Rip-PC/index.html', '/Rip-PC/')).toEqual({
+      outsideBase: '/assets/a.js',
+    });
+    expect(resolveReference('/Rip-PC/../etc/passwd', '/Rip-PC/index.html', '/Rip-PC/')).toEqual({
+      outsideBase: '/etc/passwd',
+    });
+    expect(
+      'external' in
+        resolveReference('https://cdn.example.com/a.js', '/Rip-PC/index.html', '/Rip-PC/'),
+    ).toBe(true);
+    expect(
+      'external' in resolveReference('//cdn.example.com/a.js', '/Rip-PC/index.html', '/Rip-PC/'),
+    ).toBe(true);
+    expect(
+      'external' in resolveReference('data:text/javascript,1', '/Rip-PC/index.html', '/Rip-PC/'),
+    ).toBe(true);
   });
 });
