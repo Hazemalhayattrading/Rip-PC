@@ -20,6 +20,9 @@
     { "id": "riot-games", "name": "Riot Games", "kind": "game-publisher", "domains": ["playvalorant.com", "riotgames.com"] },
     { "id": "kitguru", "name": "KitGuru", "kind": "news", "domains": ["kitguru.net"] },
     { "id": "esports-news-uk", "name": "Esports News UK", "kind": "news", "domains": ["esports-news.co.uk"] },
-    { "id": "windows-central", "name": "Windows Central", "kind": "news", "domains": ["windowscentral.com"] }
+    { "id": "windows-central", "name": "Windows Central", "kind": "news", "domains": ["windowscentral.com"] },
+    { "id": "techpowerup", "name": "TechPowerUp", "kind": "reviewer", "domains": ["techpowerup.com", "tpucdn.com"] },
+    { "id": "computerbase", "name": "ComputerBase", "kind": "reviewer", "domains": ["computerbase.de"] },
+    { "id": "blender-open-data", "name": "Blender Open Data", "kind": "benchmark-database", "domains": ["opendata.blender.org"] }
   ]
 }
