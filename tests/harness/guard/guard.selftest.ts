@@ -11,7 +11,8 @@
  * Every page is served by routes on made-up origins, so nothing touches the network and no build
  * is needed. Never part of the e2e suite. Owner: qa-lead.
  */
-import type { BrowserContext, Route } from '@playwright/test';
+import { existsSync, readFileSync } from 'node:fs';
+import type { Browser, BrowserContext, Page, Route } from '@playwright/test';
 import { expect, test, type ProblemGuard } from '../../e2e/fixtures.ts';
 import type { ProblemKind } from '../../e2e/problems.ts';
 
@@ -226,13 +227,96 @@ test('console.error in a popup fails', async ({ page, problemGuard }) => {
   await expect.poll(() => kinds(problemGuard)).toContain('console.error');
 });
 
-test('a page crash fails', async ({ page, problemGuard }) => {
+/** How long a killed renderer may take to be reported as crashed before the test says why not. */
+const CRASH_TIMEOUT_MS = 10_000;
+
+/** Each process's state from /proc, and how this kernel handles core dumps, for a diagnostic. */
+function describeProcesses(pids: readonly number[]): string {
+  const states = pids.map((pid) => {
+    let state = 'gone';
+    try {
+      process.kill(pid, 0);
+      const status = `/proc/${String(pid)}/status`;
+      state = existsSync(status)
+        ? (/^State:\s*(.+)$/m.exec(readFileSync(status, 'utf8'))?.[1] ?? 'alive')
+        : 'alive';
+    } catch {
+      // ESRCH: the process no longer exists.
+    }
+    return `pid ${String(pid)}: ${state}`;
+  });
+  const corePattern = existsSync('/proc/sys/kernel/core_pattern')
+    ? readFileSync('/proc/sys/kernel/core_pattern', 'utf8').trim()
+    : 'n/a';
+  return `Renderer state: ${states.join('; ')}. kernel.core_pattern: ${corePattern}.`;
+}
+
+/**
+ * Crashes `page` by killing its renderer process with SIGKILL, as the out-of-memory killer does,
+ * and waits for Playwright's 'crash' event.
+ *
+ * Not CDP Page.crash: that makes the renderer trap (SIGTRAP), a signal that dumps core. Where
+ * core dumps are piped to a handler, the kernel keeps the dying process alive until the handler
+ * has read the whole dump. GitHub's ubuntu-24.04 runners install systemd-coredump, which does
+ * exactly that. Reproduced 2026-09-30 with a piped handler: the renderer took 42 s to die, and
+ * the crash was reported long after the test gave up.
+ *
+ * SIGKILL never dumps core. Chromium reports a killed renderer through the same
+ * Inspector.targetCrashed event as any other renderer crash, and Playwright turns that into the
+ * page's 'crash' event, which is what the fixture listens to.
+ *
+ * Every renderer of the browser is killed, so no other page may be open. When the crash is not
+ * reported in time, this throws a diagnostic instead of waiting for a timeout.
+ */
+async function crashRenderer(browser: Browser, page: Page): Promise<void> {
+  const others = browser
+    .contexts()
+    .flatMap((context) => context.pages())
+    .filter((other) => other !== page);
+  if (others.length > 0) {
+    throw new Error(
+      `crashRenderer kills every renderer of the browser, but other pages are open: ${others.map((other) => other.url()).join(', ')}`,
+    );
+  }
+  const session = await browser.newBrowserCDPSession();
+  try {
+    const { processInfo } = await session.send('SystemInfo.getProcessInfo');
+    const renderers = processInfo.filter((info) => info.type === 'renderer').map((info) => info.id);
+    if (renderers.length === 0) {
+      throw new Error(
+        `SystemInfo.getProcessInfo listed no renderer process: ${JSON.stringify(processInfo)}`,
+      );
+    }
+    const crashed = page.waitForEvent('crash', { timeout: CRASH_TIMEOUT_MS });
+    // A spare renderer can exit on its own before it is signalled; that is not a failure here.
+    const unsignalled: string[] = [];
+    for (const pid of renderers) {
+      try {
+        process.kill(pid, 'SIGKILL');
+      } catch (error) {
+        unsignalled.push(
+          `${String(pid)} (${error instanceof Error ? error.message : String(error)})`,
+        );
+      }
+    }
+    try {
+      await crashed;
+    } catch {
+      const notSent = unsignalled.length > 0 ? ` Could not signal ${unsignalled.join(', ')}.` : '';
+      throw new Error(
+        `No 'crash' event within ${String(CRASH_TIMEOUT_MS)} ms of SIGKILL to renderer ${renderers.join(', ')}.${notSent} ${describeProcesses(renderers)}`,
+      );
+    }
+  } finally {
+    await session.detach().catch(() => undefined);
+  }
+}
+
+test('a page crash fails', async ({ browser, page, problemGuard }) => {
   test.fail(); // the guard must fail this test; tests/harness/guard.test.ts checks why
   await page.goto('/clean');
-  const session = await page.context().newCDPSession(page);
-  // The renderer dies before it can answer, so the command never settles cleanly.
-  void session.send('Page.crash').catch(() => undefined);
-  await expect.poll(() => kinds(problemGuard)).toContain('crash');
+  await crashRenderer(browser, page);
+  expect(kinds(problemGuard)).toContain('crash');
 });
 
 test('a context the test makes itself fails once watched', async ({ browser, problemGuard }) => {
