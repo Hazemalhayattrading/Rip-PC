@@ -2,3 +2,16 @@ node_modules/
 dist/
 artifacts/
 .DS_Store
+
+# Test and coverage output
+coverage/
+playwright-report/
+test-results/
+blob-report/
+*.tsbuildinfo
+
+# Team worktrees live inside the main checkout
+.claude/worktrees/
+
+# Local environment files
+.env*.local

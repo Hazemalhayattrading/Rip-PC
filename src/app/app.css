@@ -1,0 +1,8 @@
+/*
+ * Tailwind v4 entry. Phase 0 has no visual design: design-lead's tokens (src/styles/, WP-DS1)
+ * get imported here once the direction is chosen.
+ *
+ * source('..') limits class detection to src/. Without it Tailwind scans the whole repository,
+ * including the skill docs under .agents/, and ships utilities the app never uses.
+ */
+@import 'tailwindcss' source('..');
