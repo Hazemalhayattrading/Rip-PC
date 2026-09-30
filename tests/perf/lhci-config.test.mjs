@@ -18,7 +18,7 @@ const desktop = require(path.join(ROOT, 'lighthouserc.desktop.cjs'));
 describe('lighthouserc.cjs and lighthouserc.desktop.cjs', () => {
   it('audit the landing page under the GitHub Pages base path, served by vite preview', () => {
     for (const cfg of [mobile, desktop]) {
-      expect(cfg.ci.collect.url).toEqual(['http://localhost:4173/Rip-PC/']);
+      expect(cfg.ci.collect.url).toEqual(['http://127.0.0.1:4173/Rip-PC/']);
       expect(cfg.ci.collect.startServerCommand).toBe(PREVIEW.command);
       expect(cfg.ci.collect.numberOfRuns).toBe(budget.lighthouse.numberOfRuns);
     }

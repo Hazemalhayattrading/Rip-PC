@@ -207,8 +207,14 @@ function isBareSpecifier(spec) {
 // Files
 // ---------------------------------------------------------------------------------------------
 
+/**
+ * Every file under dist, as posix paths. Dot-paths (e.g. dist/.vite/manifest.json) are skipped: they
+ * are build metadata that GitHub Pages does not publish, and the Vite manifest names every chunk,
+ * which would hide orphaned chunks from the reference check.
+ */
 function walk(dir, root = dir, out = []) {
   for (const name of readdirSync(dir)) {
+    if (name.startsWith('.')) continue;
     const abs = path.join(dir, name);
     const st = statSync(abs);
     if (st.isDirectory()) walk(abs, root, out);

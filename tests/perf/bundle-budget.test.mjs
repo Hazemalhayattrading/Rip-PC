@@ -333,6 +333,18 @@ describe('JSON output', () => {
     expect(printed.result).toBe('PASS');
   });
 
+  it('skips dot-paths such as dist/.vite/manifest.json, so the manifest cannot hide an orphan', () => {
+    const dist = makeDist({
+      'index.html': html('<script type="module" src="/Rip-PC/assets/a.js"></script>'),
+      'assets/a.js': 'export{};',
+      'assets/dead.js': 'export const dead=1;',
+      '.vite/manifest.json': JSON.stringify({ 'src/main.tsx': { file: 'assets/a.js' }, 'src/dead.ts': { file: 'assets/dead.js' } }),
+    });
+    const report = analyzeDist({ distDir: dist, budget });
+    expect(report.pages[0].lazyJs.find((l) => l.file === 'assets/dead.js')?.role).toBe('orphan');
+    expect(report.pages[0].lazyJs.some((l) => l.file.startsWith('.vite/'))).toBe(false);
+  });
+
   it('--all-html measures every HTML page (for per-route copies on GitHub Pages)', () => {
     const page = html('<script type="module" src="/Rip-PC/assets/a.js"></script>');
     const dist = makeDist({ 'index.html': page, 'build/cpu/index.html': page, '404.html': page, 'assets/a.js': 'export{};' });

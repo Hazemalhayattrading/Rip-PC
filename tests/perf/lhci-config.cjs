@@ -12,11 +12,16 @@
 const path = require('node:path');
 const budget = require('./budget.json');
 
-/** `vite preview` serves the production build under the base path. --strictPort fails loudly on a clash. */
+/**
+ * `vite preview` serves the production build under the base path, answering like GitHub Pages
+ * (build-lead's scripts/vite/github-pages-preview.ts). 127.0.0.1 rather than localhost because this
+ * container has no IPv6. --strictPort fails loudly on a clash; LHCI_PORT overrides the port locally.
+ */
+const port = Number(process.env.LHCI_PORT ?? 4173);
 const PREVIEW = {
-  origin: 'http://localhost:4173',
-  command: 'npm run preview -- --port 4173 --strictPort',
-  // vite preview prints "  ➜  Local:   http://localhost:4173/Rip-PC/" when it is ready.
+  origin: `http://127.0.0.1:${String(port)}`,
+  command: `npm run preview -- --host 127.0.0.1 --port ${String(port)} --strictPort`,
+  // vite preview prints "  ➜  Local:   http://127.0.0.1:4173/Rip-PC/" when it is ready.
   readyPattern: 'Local',
   readyTimeoutMs: 60000,
 };
