@@ -5,6 +5,22 @@ Date: 2026-09-30 · Owner: Director · Status: in progress
 Phase goal (BUILD_PROMPT §2): foundations, no product UI. Four teams work in parallel, QA verifies
 every accepted item independently, and the Director closes the phase in `docs/reports/phase-0.md`.
 
+## Owner's rules for Phase 0 (Hazem, 2026-09-30)
+
+These override anything below that says otherwise.
+
+1. **Archived pages are allowed for specs only, never for prices.**
+   - A price must come from a **live retailer product page** fetched during the batch.
+   - Its `retrievedAt` is the UTC date of that live fetch, never a date copied from the page or
+     from an earlier capture.
+   - Keep a capture of each page (screenshot or saved HTML) under `artifacts/` as audit evidence.
+   - If the live page is blocked or shows no price, the price stays missing and gets a gap record.
+   - Archives, caches, search snippets, price trackers and aggregators are never price sources.
+   - Read strictly, "specs only" also keeps archived pages out of **benchmarks**: those come from
+     live publisher pages, unless Hazem says otherwise.
+2. **Hazem picks the design direction.** The Director reviews the three directions, then shows them
+   to Hazem with screenshots and a recommendation. Hazem makes the final pick.
+
 ---
 
 ## 1. Branches and merging
@@ -46,7 +62,7 @@ Need a change in a file you don't own? Message its owner. Never edit it yourself
 |---|---|---|
 | 1 | WP-D0 data · WP-B0 build · WP-DS0 design · WP-Q0 QA plan and budget tooling | now, in parallel |
 | 2 | WP-Q1 Playwright set-up and budget checks in CI · data-lead re-validates on the real harness | WP-B0 accepted and merged |
-| 3 | Director picks the design direction → WP-DS1 tokens · WP-Q2 independent verification → `docs/qa/report-phase-0.md` · Director writes `docs/reports/phase-0.md` | wave 1 accepted |
+| 3 | Director reviews the three directions and shows them to Hazem with screenshots and a recommendation; **Hazem picks** → WP-DS1 tokens · WP-Q2 independent verification → `docs/qa/report-phase-0.md` · Director writes `docs/reports/phase-0.md` | wave 1 accepted |
 
 ## 4. Director's architecture calls (binding for all teams)
 
@@ -67,7 +83,10 @@ Need a change in a file you don't own? Message its owner. Never edit it yourself
 5. **Units live in field names** (`lengthMm`, `tbpW`, `boostClockMhz`, `speedMtps`, `readMBps`).
    IDs are kebab-case, globally unique, and stable, because share URLs depend on them.
 6. **Prices are observations, never conversions.** `{partId, market: SA|US, currency: SAR|USD,
-   amount, retailer, url, inStock, isMarketplace, retrievedAt}`. A missing price stays missing.
+   amount, retailer, url, inStock, isMarketplace, retrievedAt}`. Prices come only from live retailer
+   pages (Owner's rule 1). A missing price stays missing and is recorded as a gap:
+   `{partId, market, reason, retailersTried, checkedAt}`. That lets the UI say "no price found in SA
+   as of <date>", and lets QA audit the gaps.
 7. **Frame generation is never mixed with native numbers,** neither in data nor in the model.
 8. **Routes** (empty in Phase 0), from one typed route table: `/`, `/build/:step` for the 12 steps
    in §2 order (use-case, budget, cpu, motherboard, ram, gpu, storage, psu, cooling, case, looks,
@@ -107,9 +126,12 @@ Need a change in a file you don't own? Message its owner. Never edit it yourself
    - **Coolers ≥ 5**: tall air, low-profile air, and an AIO mix of 240/280/360.
    - **Cases ≥ 5**: at least two ATX mid-towers, one mATX, one Mini-ITX.
    - **Case fans ≥ 3**.
-4. Prices: SA (SAR) and US (USD) attempted for every seed part. The hand-off lists the parts with
-   no price in each market.
-5. Benchmarks:
+4. Prices: SA (SAR) and US (USD) attempted for every seed part, **from live retailer pages only**
+   (Owner's rule 1), each with a capture under `artifacts/`.
+   - Every missing price has a gap record, and the hand-off lists the gaps per market.
+   - The validator rejects any price that has an `archiveUrl`, a publisher that isn't a retailer,
+     or a `retrievedAt` outside the batch window.
+5. Benchmarks, **from live publisher pages only** (Owner's rule 1):
    - **≥ 30 game anchor rows** from **≥ 2 publishers**, with full test conditions. Cover both
      GPU-bound (1440p/4K) and CPU-bound (1080p, top GPU) conditions.
    - **≥ 6 creator anchors** (Blender Open Data and Cinebench R24).
@@ -171,7 +193,9 @@ Need a change in a file you don't own? Message its owner. Never edit it yourself
    illustrative.
 4. None of the rejection-on-sight patterns: purple gradients, centred hero with three cards,
    default shadcn, emoji.
-5. A recommendation with reasons. The Director decides.
+5. A recommendation with reasons. The Director shows the three directions to Hazem with screenshots
+   and a recommendation, and Hazem makes the final pick. Each direction therefore needs a one-screen
+   summary (thesis plus its three mock screenshots) that can be compared side by side.
 6. 3D asset survey (`docs/design/3d-asset-survey.md`): candidate CC0/CC-BY models for case, board,
    GPU, RAM, cooler and fans, with licence, author, URL, quality and poly notes, and fitness.
    Nothing is downloaded into the repo yet.
@@ -210,7 +234,8 @@ Need a change in a file you don't own? Message its owner. Never edit it yourself
 
 ### WP-Q2 — Independent verification (qa-lead, wave 3)
 `docs/qa/report-phase-0.md`: pass/fail for every criterion above, the numbers measured, the
-data-auditor's seeded 10% sample of the seed data, and open defects with severity.
+data-auditor's seeded 10% sample of the seed data, and open defects with severity. It includes a
+compliance check of every price and benchmark against Owner's rule 1.
 
 ## 6. Hand-off format (lead → Director)
 
@@ -248,9 +273,11 @@ Known gaps: <honest list, or "none">
   requests), steamdb.info, pcpartpicker.com, tesla.com, microcenter.com, bestbuy.com.
   - **Never try to get around bot protection:** no stealth plugins, no captcha solving, no
     user-agent games.
-  - Allowed fallbacks, in order: the WebFetch tool, a Wayback Machine snapshot (keep the canonical
-    `url` and add `archiveUrl`), the official PDF manual or datasheet, or a reachable manufacturer
-    or publisher instead.
+  - Allowed fallbacks for **specs**, in order: the WebFetch tool, a Wayback Machine snapshot (keep
+    the canonical `url` and add `archiveUrl`), the official PDF manual or datasheet, or a reachable
+    manufacturer instead.
+  - **Prices and benchmarks never use archives** (Owner's rule 1). A blocked retailer means a
+    missing price with a gap record. A blocked publisher means choosing another reachable publisher.
   - Be polite: one request at a time per host, and cache captures under `artifacts/` (git-ignored).
     Never commit third-party page captures.
 - 4 CPUs and 15 GB RAM are shared by every team. Run at most 3 workers at once per lead and one
