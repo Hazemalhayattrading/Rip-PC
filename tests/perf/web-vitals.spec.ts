@@ -154,7 +154,14 @@ test('web vitals: LCP and CLS within budget on every route, at every CPU throttl
     );
   }
   const require = createRequire(testInfo.file);
-  const webVitalsDir = path.dirname(require.resolve('web-vitals'));
+  let webVitalsDir: string;
+  try {
+    webVitalsDir = path.dirname(require.resolve('web-vitals'));
+  } catch {
+    throw new Error(
+      'web-vitals is not installed: add "web-vitals": "6.2.2" to devDependencies (docs/qa/test-plan.md, Appendix B)',
+    );
+  }
   const script =
     readFileSync(path.join(webVitalsDir, 'web-vitals.attribution.iife.js'), 'utf8') + COLLECTOR;
   test.setTimeout(
