@@ -17,6 +17,8 @@ export default defineConfig({
       thresholds: {
         // BUILD_PROMPT §2 Phase 1: the engine is 100% unit-tested. Enforced from day one.
         'src/engine/**': { 100: true },
+        // The build store, URL codec and URL sync are pure logic that share links depend on.
+        'src/state/**': { 100: true },
       },
     },
   },
