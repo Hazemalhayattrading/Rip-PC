@@ -19,7 +19,7 @@
       "source": "BUILD_PROMPT.md §8: 'Initial JS < 250 KB gzip before the 3D chunk'",
       "counts": "Every JS file the entry HTML loads eagerly (module and classic script src, inline scripts, modulepreload, preload as=script) plus their static-import closure, taken from V8's own module parser. Dynamic-import-only chunks are excluded and reported separately.",
       "warnAtFraction": 0.95,
-      "warnSource": "qa-lead: non-blocking early warning; covers the up-to-1.1% gap between zlib level 6 and served or Vite-reported sizes"
+      "warnSource": "qa-lead: non-blocking early warning; covers the up-to-1.1% gap between zlib level 6 and served or Vite-reported sizes. Approved by the Director, 2026-09-30 (test plan §16)."
     },
     "forbiddenInInitialGraph": [
       {
@@ -64,6 +64,8 @@
   },
   "webVitals": {
     "routes": [{ "name": "landing", "path": "./" }],
+    "viewports": ["390", "1440"],
+    "viewportsSource": "Names from visual.viewports. 390 added in WP-Q1 (2026-09-30): Lighthouse's default mobile run reported CLS 0 for a late 300 px banner that the browser's own Layout Instability API measured at 0.307 at phone width (test plan §6.3).",
     "runs": 3,
     "aggregation": "median",
     "cpuThrottleRates": [1, 4],
@@ -76,7 +78,10 @@
         "value": 200,
         "op": "<",
         "source": "BUILD_PROMPT.md §8: 'INP < 200 ms'",
-        "activeFrom": "Phase 2, once the builder has interactions to script"
+        "activeFrom": "Phase 2, once the builder has interactions to script",
+        "gatedAtCpuThrottleRates": [1, 4],
+        "maxRunSpreadPct": 15,
+        "maxRunSpreadSource": "Approved by the Director, 2026-09-30 (test plan §16): INP is gated at CPU x4 as well as x1. If the x4 runs spread by more than this, (max - min) / median, the x4 result is INCONCLUSIVE, not FAIL."
       }
     }
   },
@@ -86,7 +91,7 @@
     "warmupRuns": 1,
     "calibrationMs": 2000,
     "maxRunSpreadPct": 15,
-    "maxRunSpreadSource": "qa-lead: if (max - min) / median of the per-run averages exceeds this, the runs disagree and the result is INCONCLUSIVE, not a measurement. Added after uncapped SwiftShader gave 379, 3.8 and 2.2 fps on one scene (2026-09-30).",
+    "maxRunSpreadSource": "qa-lead: if (max - min) / median of the per-run averages exceeds this, the runs disagree and the result is INCONCLUSIVE, not a measurement. Added after uncapped SwiftShader gave 379, 3.8 and 2.2 fps on one scene (2026-09-30). Approved by the Director, 2026-09-30 (test plan §16).",
     "metric": "avgFps = (frames - 1) / elapsed seconds while the scene plays its scripted, time-based camera path, with the browser frame-rate limit off. Also recorded: 1% low = 1000 / p99 frame interval, min fps, p50/p95/p99 frame time.",
     "targets": {
       "referenceLaptop": {
@@ -142,7 +147,7 @@
     "deviceScaleFactor": 1,
     "threshold": 0.2,
     "maxDiffPixelRatio": 0.001,
-    "source": "Widths: BUILD_PROMPT.md §8 'every step at 390 px, 768 px, 1440 px'. Themes: BUILD_PROMPT.md §6 'dark theme first, light theme supported'. Heights, deviceScaleFactor and maxDiffPixelRatio: qa-lead proposal, calibrated in WP-Q1. threshold 0.2 is Playwright's default per-pixel YIQ tolerance."
+    "source": "Widths: BUILD_PROMPT.md §8 'every step at 390 px, 768 px, 1440 px'. Themes: BUILD_PROMPT.md §6 'dark theme first, light theme supported'. Heights and maxDiffPixelRatio: approved by the Director, 2026-09-30 (test plan §16); maxDiffPixelRatio is re-checked in the pinned image when the first baselines are made (Phase 2). deviceScaleFactor: qa-lead (test plan §5). threshold 0.2 is Playwright's default per-pixel YIQ tolerance."
   },
   "compatibility": {
     "minPositiveTestsPerRule": 1,
@@ -167,6 +172,8 @@
   "definitionOfDone": {
     "firstVisitMaxMinutes": 5,
     "usabilityParticipants": 5,
-    "source": "BUILD_PROMPT.md §9: 'A new visitor can, in under 5 minutes: ...'. Participant count: qa-lead proposal, pending Director approval."
+    "minFinishingUnaided": 4,
+    "maxMedianMinutes": 5,
+    "source": "BUILD_PROMPT.md §9: 'A new visitor can, in under 5 minutes: ...'. The D1 rule, approved by the Director, 2026-09-30 (test plan §16): of usabilityParticipants first-time visitors, at least minFinishingUnaided finish unaided in under firstVisitMaxMinutes, and the median time is under maxMedianMinutes."
   }
 }

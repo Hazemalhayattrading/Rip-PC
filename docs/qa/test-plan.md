@@ -1,6 +1,6 @@
 # Rig Lab test plan
 
-Owner: qa-lead · Version 1 · 2026-09-30 · Applies to every phase, from Phase 0 to release.
+Owner: qa-lead · Version 2 · 2026-09-30 · Applies to every phase, from Phase 0 to release.
 
 This is a working document. Every team follows it. It says how each quality bar in BUILD_PROMPT §8
 and each item of the definition of done in §9 is measured, where, how often, by whom, and what
@@ -88,7 +88,7 @@ scene measured 5.3 fps and then 8.5 fps ten minutes apart on 2026-09-30.
 
 | # | Item | How it is tested | Tool | Threshold | Env | When | Test owner / fix owner | Blocks |
 |---|---|---|---|---|---|---|---|---|
-| D1 | A new visitor finishes in under 5 minutes | Moderated usability sessions: first-time participants, think-aloud, timed from the landing page to a copied Buy Sheet link. The e2e happy path proves the journey exists | Stopwatch, screen recording; Playwright | `definitionOfDone.firstVisitMaxMinutes` 5 with `usabilityParticipants` 5. Proposal: at least 4 of 5 finish unaided in under 5 minutes, and the median is under 5 | REF-LAPTOP, a phone | Pilot at Phase 2 exit; gate at Phase 5 exit | qa-lead runs, Hazem recruits / design-lead, build-lead | Release |
+| D1 | A new visitor finishes in under 5 minutes | Moderated usability sessions: first-time participants, think-aloud, timed from the landing page to a copied Buy Sheet link. The e2e happy path proves the journey exists | Stopwatch, screen recording; Playwright | `definitionOfDone.firstVisitMaxMinutes` 5 with `usabilityParticipants` 5. Approved rule (Director, 2026-09-30): at least `minFinishingUnaided` 4 of 5 finish unaided in under 5 minutes, and the median is under `maxMedianMinutes` 5 | REF-LAPTOP, a phone | Pilot at Phase 2 exit; gate at Phase 5 exit | qa-lead runs, Hazem recruits / design-lead, build-lead | Release |
 | D2 | Pick a use case and budget | e2e: each of the 8 presets pre-fills a build the visitor can change; the budget changes the lists | Playwright | Pass | CI | Every PR from Phase 2 | e2e-tester / build-lead | Yes |
 | D3 | Build a full PC with looks | e2e happy path per preset. A look option appears only when the product supports it | Playwright | Pass | CI | Every PR from Phase 2 | e2e-tester / build-lead | Yes |
 | D4 | See it assembled in 3D | e2e: after each pick the scene reports that part as placed (perf contract `info()` or a DOM mirror); a SwiftShader screenshot with tolerance | Playwright | Pass | CI | Every PR from Phase 3 | e2e-tester / build-lead | Yes |
@@ -112,9 +112,11 @@ scene measured 5.3 fps and then 8.5 fps ten minutes apart on 2026-09-30.
 - **Required checks.**
   - build-lead's `npm run verify` job, which covers typecheck, lint, unit tests with coverage,
     build and e2e smoke.
-  - The `Performance budgets` job from WP-Q1 (Appendix B), which covers P1, P2, P4–P7.
-  - WP-Q1 (Phase 0, wave 2) also puts the shared console fixture (P9) and axe on every route (P11)
-    into the e2e run.
+    - Since WP-Q1 the unit tests include the harness self-tests (`tests/harness/`).
+    - The e2e smoke carries the shared console fixture (P9) on every test, and axe on every route
+      at 390, 768 and 1440 px (P11).
+  - The `Performance budgets` job from WP-Q1 (Appendix B), which covers P1, P2, P4–P7. It runs
+    after `verify` on every push and PR, and fails on any miss.
   - Later: Phase 1 adds compatibility traceability (P10). Phase 2 adds the keyboard path (P12),
     visual regression (P13) and INP (P7).
   - Hazem makes these required status checks on `main` in GitHub branch settings.
@@ -136,8 +138,8 @@ scene measured 5.3 fps and then 8.5 fps ten minutes apart on 2026-09-30.
   - The QA report.
 - **Waivers.** Only the Director can waive a gate, and Hazem when it changes scope. A waiver is
   written into the phase report with an owner and a date.
-- **Phase 0 today.** CI has only build-lead's `verify` job until WP-Q1 lands. Until then, QA runs
-  the budget tools by hand and attaches the logs (Appendix B lists the wiring).
+- **Phase 0 today.** WP-Q1 put both jobs in `.github/workflows/ci.yml` (Appendix B). They
+  block a merge once Hazem makes them required status checks on `main` (B.5).
 
 ## 5. Viewport and theme matrix
 
@@ -149,6 +151,16 @@ scene measured 5.3 fps and then 8.5 fps ten minutes apart on 2026-09-30.
 - **Themes** are dark (the default) and light. They are set with Playwright's `colorScheme`,
   which emulates `prefers-color-scheme`. Once the app has a theme toggle, its stored override is
   tested once per theme.
+- **As built (WP-Q1).**
+  - `playwright.config.ts` makes one project per width from `visual.viewports`: `e2e-390`,
+    `e2e-768`, `e2e-1440` (tests/e2e), `visual-390`, `visual-768`, `visual-1440` (tests/visual),
+    plus `perf` (tests/perf).
+  - The app has no theme yet: there are no design tokens until WP-DS1, and it sets no
+    `color-scheme`, so both emulated schemes render identically. Each width therefore runs once,
+    with the browser default. Dark and light projects are added with the tokens.
+  - The PR column below is enforced by each project's `grep`. At 768 only `@a11y` (and, from
+    Phase 2, `@keyboard`) runs. `E2E_FULL_MATRIX=1` runs everything at every width, for the
+    nightly job from Phase 2.
 
 | Suite | 390 dark | 390 light | 768 dark | 768 light | 1440 dark | 1440 light |
 |---|---|---|---|---|---|---|
@@ -158,7 +170,7 @@ scene measured 5.3 fps and then 8.5 fps ten minutes apart on 2026-09-30.
 | axe on every route and state (§10.1) | PR | PR | PR | PR | PR | PR |
 | Visual regression (§11) | PR | PR | PR | PR | PR | PR |
 | Reduced motion (§10.3) | — | PR | — | — | PR | — |
-| Web vitals, CPU x1 and x4 (§6.4) | — | — | — | — | PR | — |
+| Web vitals, CPU x1 and x4 (§6.4) | PR | — | — | — | PR | — |
 | Lighthouse (§6.3) | mobile preset (emulates 412×823) | — | — | — | desktop preset (1350×940) | — |
 | fps (§6.5) | — | — | — | — | CI proxy | — |
 
@@ -306,6 +318,30 @@ chunk is requested, and applies the same 250,000 B gate.
   The first negative-control run did not trip TBT, correctly: TBT only counts long tasks between
   FCP and TTI, and the control's first long task ran before first paint. A long task after first
   paint was added, and all four gates tripped.
+- **WP-Q1 runs** (`npm run perf:lhci` and `perf:lhci:desktop`, the CI job's own steps, on the
+  WP-Q1 branch build), medians of 3:
+
+  | Build | Preset | Exit | Performance | LCP | CLS | TBT |
+  |---|---|---|---|---|---|---|
+  | WP-Q1 branch | mobile | 0 | 1.00 | 1399 ms | 0 | 0 ms |
+  | WP-Q1 branch | desktop | 0 | 1.00 | 342 ms | 0 | 0 ms |
+  | Mutation M4: an 800 ms long task, then a late 300 px banner | mobile | 1 | 0.70 ✘ | 1358 ms | **0** | 3152 ms ✘ |
+  | Mutation M4 | desktop | 1 | 0.67 ✘ | 327 ms | 0.159 ✘ | 746 ms ✘ |
+
+- **Finding: Lighthouse's default mobile run can miss a late layout shift** (WP-Q1, 2026-09-30).
+  - On mutation M4, mobile Lighthouse reported CLS 0 and listed no layout shift at all.
+  - The browser's own Layout Instability API measured 0.307 for the same page at 412 × 823.
+  - The same Lighthouse 12.6.1 reported 0.3071 with `--throttling-method=devtools`, and 0.4107
+    with screen emulation off. The miss needs both simulated throttling and mobile screen
+    emulation.
+  - The cause is not proven. It fits the Chromium 1194 behaviour in §6.4, where shifts under
+    mobile emulation are flagged as recent input.
+  - So Lighthouse's CLS assertion is not the only CLS gate at the phone width: web vitals also
+    measures at 390 px (§6.4).
+  - M4 still failed the job on:
+    - mobile performance and TBT;
+    - desktop performance, CLS and TBT;
+    - web-vitals CLS at 390 and 1440 px.
 - **Routes.** §8 gates the landing page. From Phase 2, `/build/cpu` (the densest list) and
   `/results` are audited nightly as tracking.
 
@@ -319,14 +355,31 @@ production preview (Appendix B); the dev server is refused.
 - The web-vitals attribution IIFE build is injected before any page script. Playwright evaluates
   init scripts in a function scope, so the library is reached as `webVitals`, not
   `self.webVitals` (found and fixed on 2026-09-30).
-- Each sample is a cold load in a fresh browser context, at 1440×900.
+- Each sample is a cold load in a fresh browser context, at each width in
+  `webVitals.viewports`: 390×844 (mobile, touch) and 1440×900, sized from `visual.viewports`.
+  WP-Q1 added 390 after the Lighthouse finding in §6.3.
 - CPU throttling uses the DevTools Protocol `Emulation.setCPUThrottlingRate`, at each rate in
   `webVitals.cpuThrottleRates` (x1, x4).
 - After `load`, network idle and `webVitals.settleMs` (1.5 s), the page is set to hidden. That is
   when web-vitals reports final values, as when a visitor leaves. Without it, a page with no
   layout shift reports no CLS at all.
+- **CLS counts every shift.** The gated CLS is the larger of two values:
+  - web-vitals' own CLS;
+  - CLS over every raw layout-shift entry, grouped into the same session windows (a 1 s gap or
+    5 s at most).
+
+  web-vitals leaves out shifts flagged `hadRecentInput`. These loads have no input, yet
+  Chromium 1194 under mobile emulation flags real shifts that way (measured 2026-09-30 on
+  mutation M4, with and without our fixture):
+  - always, while a Playwright trace records DOM snapshots;
+  - sometimes, at CPU x4, with no tracing at all.
+
+  Such shifts would read CLS 0 at 390 px. Each sample records both values and the count of
+  flagged shifts, and an annotation names any route and rate where they differed. The `perf`
+  project records no trace, and mobile e2e projects keep traces without DOM snapshots
+  (`playwright.config.ts`).
 - The median of `webVitals.runs` (3) is compared with `webVitals.gates`, and soft assertions
-  report every failing route and rate.
+  report every failing route, width and rate.
 - The attached JSON records each sample, the LCP element and the largest shift target.
 - Proof, medians of 3:
 
@@ -335,6 +388,10 @@ production preview (Appendix B); the dev server is refused.
   | Trivial page | LCP 32 ms, CLS 0 | LCP 68 ms, CLS 0 | pass, in both CommonJS and ESM packages |
   | Negative control (fixed CPU work, then a late banner) | LCP 740 ms, CLS 0.0774 ✘ | LCP 3152 ms ✘, CLS 0.0774 ✘ | fail |
   | **Accepted scaffold, `/`** | LCP 92 ms, CLS 0 | LCP 316 ms, CLS 0 | pass. LCP element `#main>p` |
+  | **WP-Q1 branch, `/`, 390 px** | LCP 124 ms, CLS 0 | LCP 340 ms, CLS 0 | pass. LCP element `#root>footer>p` |
+  | **WP-Q1 branch, `/`, 1440 px** | LCP 136 ms, CLS 0 | LCP 300 ms, CLS 0 | pass. LCP element `#main>p` |
+  | Mutation M4, 390 px | CLS 0.2914 ✘ | CLS 0.2914 ✘ (web-vitals alone: 0) | fail |
+  | Mutation M4, 1440 px | CLS 0.1562 ✘ | CLS 0.1562 ✘ | fail |
 
   The negative control shows why x4 exists: LCP passes at x1 and fails at x4.
 
@@ -357,8 +414,12 @@ production preview (Appendix B); the dev server is refused.
     animation frames).
   - A raw `PerformanceObserver` for `event` entries with `durationThreshold: 16`, so every
     interaction's duration is logged, not only the worst.
-- **Pass rules.** INP < 200 ms at CPU x1 and at x4 blocks. Any single interaction at 200 ms or
-  more is still a Major defect even when INP passes (§14).
+- **Pass rules.** INP < 200 ms at CPU x1 and at x4 blocks (`webVitals.gates.inpMs`
+  `gatedAtCpuThrottleRates`). Any single interaction at 200 ms or more is still a Major defect
+  even when INP passes (§14).
+- **Spread at x4** (approved by the Director, 2026-09-30). The x4 runs can disagree on a busy
+  runner. When they spread by more than `webVitals.gates.inpMs.maxRunSpreadPct` (15%), measured
+  as (max − min) / median, the x4 result is INCONCLUSIVE, not FAIL, and is re-run.
 
 ### 6.5 3D frame rate: CI proxy and the reference-hardware gate
 
@@ -795,6 +856,20 @@ Two defences beyond the unit tests:
   - the Buy Sheet in print media.
 - **The 3D canvas is not excluded.** It must have an accessible name, a text alternative (the
   parts list), and controls that work without the canvas.
+- **As built (WP-Q1).**
+  - `tests/e2e/a11y.spec.ts`, tagged `@smoke @a11y`, so `npm run verify` runs it.
+  - It checks every route in the route table plus the 404 page, in every e2e project: 18 pages ×
+    3 widths = 54 checks.
+  - Build steps are checked with the 3D preview started, so the canvas and its label are in the
+    tree.
+  - Each check attaches `axe-results.json`, with the violations, the incomplete results and the
+    counts. It also annotates the counts and every "needs review" rule.
+  - One theme until the design tokens exist (§5). The states in the list above arrive with the
+    builder in Phase 2.
+  - Result on the WP-Q1 branch (axe-core 4.13.0): 0 violations and 0 needs-review in all 54
+    checks. 15 rules pass on each plain page, and 21 on each build step.
+  - Mutation M2 (an image with no alt text in `index.html`) failed all 54 checks with
+    `image-alt (critical)`, and `npm run verify` exited 1.
 
 ### 10.2 Keyboard-only path (from Phase 2)
 
@@ -880,8 +955,12 @@ Two defences beyond the unit tests:
   listed per test.
 - **Thresholds:**
   - `visual.threshold` 0.2 is Playwright's per-pixel YIQ tolerance.
-  - `visual.maxDiffPixelRatio` 0.001 means 0.1% of pixels. It is a proposal, calibrated in WP-Q1
-    by capturing each baseline twice in the Docker image.
+  - `visual.maxDiffPixelRatio` 0.001 means 0.1% of pixels (approved by the Director,
+    2026-09-30).
+  - It is re-checked in the Docker image when the first baselines are made: capture, then
+    compare twice.
+  - WP-Q1 could not do that check in C, which has a Docker client but no daemon. In C, a second
+    capture of all 54 pages passed against the first at 0.001.
 - **Baselines.**
   - Stored in `tests/visual/__screenshots__/{projectName}/{testFilePath}/{arg}{ext}` through
     `snapshotPathTemplate`.
@@ -899,6 +978,63 @@ Two defences beyond the unit tests:
   - text overflow and clipping at 390;
   - contrast of non-text elements;
   - focus rings.
+- **As built (WP-Q1): scaffolding, no baselines.**
+  - **Config** (`playwright.config.ts`):
+    - projects `visual-390`, `visual-768` and `visual-1440`, sized from `visual.viewports`, with
+      `en-US`, UTC and reduced motion;
+    - `toHaveScreenshot` defaults from `visual`: threshold, maxDiffPixelRatio, animations
+      disabled, caret hidden, CSS scale;
+    - `snapshotPathTemplate` as above;
+    - `updateSnapshots: 'none'`, so only an explicit `--update-snapshots` writes a baseline.
+  - **Helpers** (`tests/visual/visual.ts`):
+    - a `test` that extends the console fixture and freezes the clock at 2026-09-30T12:00:00Z;
+    - `expectScreenshot()`, which waits for fonts and masks `[data-volatile]` and every
+      `canvas`.
+  - **Where visual tests may run** (`visualRunDecision` in `tests/visual/visual.ts`):
+    - With `QA_SNAPSHOT_DIR` set: against that scratch folder, on any machine.
+    - Otherwise against `tests/visual/__screenshots__`, and only when both:
+      - `REPO_BASELINES_ENABLED` is true (false until Phase 2);
+      - the run is inside the pinned image, detected by `PLAYWRIGHT_BROWSERS_PATH=/ms-playwright`
+        and the `pwuser` account that its Dockerfile creates.
+    - Anything else skips with the reason.
+  - **Spec:** `tests/visual/routes.spec.ts`, every page in its default state.
+  - **Docker recipe:** `tests/visual/run-in-docker.sh`. It runs the visual projects in
+    `mcr.microsoft.com/playwright:v1.56.1-noble`, with `--ipc=host --init` and `node_modules`
+    in a named volume; extra arguments go to Playwright.
+  - **Proof in C** (tool proof only, never baselines):
+    - with no scratch folder, 54 of 54 skipped;
+    - a capture into a scratch folder, then a second capture compared at 0.001: 54 of 54
+      passed;
+    - mutation M5 changed one word of the footer, and 19 of 54 failed, each with a diff image.
+      The 35 that passed are pages where the footer is below the fold, which is the limit of
+      viewport-only shots.
+  - **Phase 2 CI job** (not added yet, because there is nothing to compare). Paste it into
+    `ci.yml` together with the first baselines:
+
+    ```yaml
+      visual:
+        name: Visual regression
+        needs: verify
+        runs-on: ubuntu-24.04
+        timeout-minutes: 20
+        container:
+          image: mcr.microsoft.com/playwright:v1.56.1-noble
+          options: --user 1001
+        steps:
+          - uses: actions/checkout@v7
+            with:
+              persist-credentials: false
+          - run: npm ci
+          - run: npm run build
+          - run: npx playwright test --project='visual-*'
+          - name: Upload diffs
+            if: failure()
+            uses: actions/upload-artifact@v7
+            with:
+              name: visual-diffs
+              path: test-results/
+              retention-days: 14
+    ```
 
 ## 12. End-to-end flows
 
@@ -916,16 +1052,22 @@ build-lead's `tests/e2e/smoke.spec.ts` (tag `@smoke`) already checks:
   shift, and falls back when WebGL 2 is missing.
 - `?b=` survives navigation, Back and reload. Bad codes are dropped with a message.
 
-WP-Q1 adds:
+WP-Q1 added, all done on 2026-09-30 except the last item:
 
-- The shared console and page-error fixture (§13), replacing the per-test `collectProblems` helper.
-- Projects at 390, 768 and 1440.
-- axe on every route.
-- The `perf` project for `web-vitals.spec.ts`.
-- The visual scaffolding.
-- `document.documentElement.lang === 'en'` on every route (CLAUDE.md rule 10).
-- Every asset URL under `/Rip-PC/`.
-- A post-deploy smoke against PAGES once Pages is live.
+- The shared console and page-error fixture (§13). It replaced the per-test `collectProblems`
+  helper, and every spec uses it, build-lead's smoke included.
+- Projects at 390, 768 and 1440 (§5). The smoke runs at 390 and 1440, and axe at all three.
+- axe on every route (§10.1).
+- The `perf` project for `web-vitals.spec.ts` (§6.4).
+- The visual scaffolding (§11).
+- `lang="en"` on `<html>` for every route and the 404 page (CLAUDE.md rule 10).
+- Every request a page makes goes to this site under `/Rip-PC/`.
+- The smoke's layout-shift check ("draws into a canvas without shifting the page") counts every
+  shift, including one flagged as following input. The test gives no input, and at 390 px
+  Chromium flags real shifts that way (§6.4). Mutation M4 fails it at 390 (0.3646) and at 1440
+  (0.2205).
+- Still open: a post-deploy smoke against PAGES once Pages is live. It is blocked until Hazem
+  enables Pages and merges to `main`.
 
 ### 12.2 Builder flows (from Phase 2)
 
@@ -972,87 +1114,100 @@ So `console` plus `pageerror` catch every case in Chromium, including workers. T
 `unhandledrejection` hook is defence in depth, in case a future browser stops reporting
 rejections as page errors.
 
-### 13.2 The shared fixture (WP-Q1)
+### 13.2 The shared fixture (WP-Q1, as built)
 
-`tests/e2e/fixtures.ts` exports `test` and `expect`. Every spec imports them from there; a lint
-rule forbids importing `@playwright/test` directly in specs. It works like this:
+**Files.**
 
-```ts
-import { test as base, expect } from '@playwright/test';
+- `tests/e2e/problems.ts` holds the rules, as pure data and functions: the problem kinds, the
+  allow-list `ALLOWED`, its validation, `classify`, and the same-origin and aborted-request rules.
+- `tests/e2e/fixtures.ts` holds the Playwright side. It exports `test` and `expect`, and every
+  spec imports them from there.
+- `tests/visual/visual.ts` extends that `test` for visual specs.
 
-export interface Problem {
-  kind: 'console.error' | 'pageerror' | 'unhandledrejection' | 'requestfailed' | 'http-error';
-  text: string;
-  url: string;          // where it came from (console location, request URL); '' for page errors
-  documentUrl: string;  // the page's own URL when it happened
-}
+**How it works.**
 
-export interface AllowedProblem {
-  matches: (problem: Problem) => boolean;
-  reason: string;       // why this is not a bug: required, never empty
-  owner: string;        // team that owns the exception
-  until: string;        // ISO date, issue link or 'permanent'; an expired date fails the run
-}
+- The automatic fixture `problemGuard` watches the test's whole browser context, so popups and
+  new tabs (the Buy Sheet) are covered, and so are workers.
+- It records:
+  - `console.error`: every console message of type error, from pages and workers;
+  - `pageerror`: an uncaught error in a page or a worker, from the context's `weberror` event;
+  - `unhandledrejection`: from our own page-side hook, as defence in depth. Chromium also reports
+    each one as a `pageerror`;
+  - `requestfailed`: a same-origin request that fails for any reason other than
+    `net::ERR_ABORTED`, which means the page itself abandoned it by navigating away or closing;
+  - `http-error`: a same-origin response with status 400 or more;
+  - `crash`: a page crash.
+- "Same-origin" means the origin of `use.baseURL`.
+- Console warnings are collected and attached, never failed.
+- When the test ends, the fixture lets every open page hand over the events it has already sent,
+  with a 2 s cap. It then classifies each problem, attaches `page-problems.json` (unexpected,
+  allowed with the entry that allowed it, and warnings), and fails the test on anything
+  unexpected.
 
-export const ALLOWED: readonly AllowedProblem[] = [
-  {
-    // Moved from build-lead's smoke helper isOwnDocument404.
-    matches: (p) =>
-      p.kind === 'console.error' &&
-      p.url === p.documentUrl &&
-      p.text === 'Failed to load resource: the server responded with a status of 404 (Not Found)',
-    reason: 'Chromium logs the 404 document itself as a failed resource; 404 tests ask for that status.',
-    owner: 'qa-lead',
-    until: 'permanent',
-  },
-];
+**The API specs use.**
 
-export const test = base.extend<{ problemGuard: void }>({
-  problemGuard: [
-    async ({ context }, use, testInfo) => {
-      const problems: Problem[] = [];
-      await context.exposeBinding('__qaRejection', ({ page }, reason: string) => {
-        problems.push({ kind: 'unhandledrejection', text: reason, url: '', documentUrl: page.url() });
-      });
-      await context.addInitScript(() => {
-        addEventListener('unhandledrejection', (e) => {
-          (window as unknown as { __qaRejection(r: string): void }).__qaRejection(String(e.reason));
-        });
-      });
-      context.on('console', (m) => {
-        if (m.type() === 'error') {
-          problems.push({ kind: 'console.error', text: m.text(), url: m.location().url, documentUrl: m.page()?.url() ?? '' });
-        }
-      });
-      context.on('weberror', (e) => {
-        problems.push({ kind: 'pageerror', text: e.error().message, url: '', documentUrl: e.page()?.url() ?? '' });
-      });
-      context.on('requestfailed', (r) => { /* same-origin, and not net::ERR_ABORTED: push 'requestfailed' */ });
-      context.on('response', (r) => { /* same-origin status >= 400, except a 404 test's document: push 'http-error' */ });
-      await use();
-      const unexpected = problems.filter((p) => !ALLOWED.some((a) => a.matches(p)));
-      await testInfo.attach('page-problems.json', {
-        body: JSON.stringify({ problems, unexpected }, null, 2),
-        contentType: 'application/json',
-      });
-      expect(unexpected, 'console errors, page errors, unhandled rejections, failed requests').toEqual([]);
-    },
-    { auto: true },
-  ],
-});
-```
+- `test.use({ expectNotFoundDocument: true })` declares that the test asks for a page that does
+  not exist. Only then does the allow-list let through the 404 of that page and Chromium's
+  console error for it. A 404 for anything else still fails.
+- `problemGuard.watch(context)` covers a context the test makes itself with
+  `browser.newContext()`. The web-vitals spec does this for every cold load.
+- `problemGuard.problems()` is a read-only copy of what has been collected, so a test can wait
+  for a problem it causes on purpose (the self-test does).
 
-- **Context level.** Listeners attach to the context, so popups and new tabs (the Buy Sheet) are
-  covered.
-- **Allow-list rules:**
-  - An empty `reason` or `owner`, or a past `until`, fails the run at start-up.
-  - Every entry is reviewed at each phase exit.
-  - build-lead's smoke already has the one justified entry today, a document 404 on the 404 test.
-- **Also failures:**
-  - a same-origin request that fails for any reason other than `net::ERR_ABORTED`;
-  - any same-origin response of 400 or more, other than the document of a 404 test.
-- **Not failures.** `console.warning` is collected and attached, not failed.
-- **Page crash** (`page.on('crash')`) is a Blocker.
+**The allow-list** (`ALLOWED` in `tests/e2e/problems.ts`). Each entry has an `id`, a `reason`,
+an owning team and an `until`: `permanent`, the last day it applies, or an https issue link.
+
+- An empty reason, an unknown owner, a repeated id, a malformed `until` or an expired date stops
+  the whole run before any test starts. `npm run test` fails on it too.
+- Every entry is reviewed at each phase exit.
+- Two entries today, both qa-lead's and permanent:
+  - `not-found-page-status`: the 404 answer of a page that a test declared it asks for.
+  - `not-found-page-console`: Chromium's console error for that same page URL. It moved here
+    from build-lead's `isOwnDocument404`.
+
+**Enforcement and self-tests** (Vitest, so `npm run verify` runs them):
+
+- `tests/harness/spec-imports.test.ts` is the rule the plan asked of a lint rule. ESLint's
+  config is build-lead's, so the rule is a unit test instead. It checks that every
+  `*.spec.ts` and `*.selftest.ts` under `tests/`:
+  - imports `test` from the fixture;
+  - never imports values from `@playwright/test` (an inline `type` import still loads it at run
+    time, so only `import type` is allowed);
+  - calls `problemGuard.watch()` if it calls `newContext()`.
+
+  The rule is itself tested on sample sources.
+- `tests/harness/problems.test.ts` unit-tests the rules and checks that `ALLOWED` is valid
+  today.
+- `tests/harness/guard.test.ts` runs `tests/harness/guard/guard.selftest.ts` in Chromium, with
+  its own config and made-up origins served by routes. It then checks each outcome and each
+  cause:
+
+  | Self-test | Expected | Kinds the fixture reports |
+  |---|---|---|
+  | a clean page | passes | none |
+  | `console.error` | fails | console.error |
+  | a console warning | passes, warning attached | none |
+  | an uncaught error | fails | pageerror |
+  | an unhandled rejection, Error or string reason | fails | pageerror, unhandledrejection |
+  | a same-origin 404 image | fails | console.error, http-error |
+  | a same-origin request that fails (`route.abort('failed')`) | fails | console.error, requestfailed |
+  | a same-origin 500 from `fetch` | fails | console.error, http-error |
+  | a third-party 404 | fails | console.error only |
+  | a request aborted by navigating away | passes | none |
+  | a page that answers 404, not declared | fails | console.error, http-error |
+  | the same page, declared | passes | none; both allowed |
+  | a 404 image on a declared 404 page | fails | console.error, http-error |
+  | an uncaught error in a worker | fails | pageerror |
+  | `console.error` in a worker | fails | console.error |
+  | `console.error` in a popup | fails | console.error |
+  | a page crash (`Page.crash`) | fails | crash |
+  | a context the test makes itself, watched | fails | console.error |
+
+  Tests the fixture must fail are marked `test.fail()`. A fixture that stops catching a problem
+  therefore makes its test pass unexpectedly, and the run fails. The self-test takes about 3.5 s.
+- **Mutation M1** (`console.error` in `src/main.tsx`): `npm run verify` exited 1. 110 e2e tests
+  failed, each with the message, its source file and the page. The 2 tests that open no page
+  passed.
 
 ## 14. Defects and severity
 
@@ -1093,6 +1248,8 @@ QA re-tests every fix on the integration branch before closing the defect.
 | Date | Version | Change | Approved by |
 |---|---|---|---|
 | 2026-09-30 | 1 | First version (WP-Q0). QA proposals pending the Director's approval: the visual `maxDiffPixelRatio` of 0.001, the viewport heights, `fps.maxRunSpreadPct` of 15%, the D1 pass rule (4 of 5 participants and the median under 5 minutes), the 95% bundle warning, and INP gated at x4 as well as x1 | — |
+| 2026-09-30 | 1.1 | The six WP-Q0 proposals approved, as written in v1: `visual.maxDiffPixelRatio` 0.001; viewport heights 390×844, 768×1024 and 1440×900; `fps.maxRunSpreadPct` 15%; the D1 rule (at least 4 of 5 testers finish unaided in under 5 minutes, and the median is under 5); the 95% bundle warning; INP gated at CPU x4 as well as x1, where x4 runs that spread by more than 15% are INCONCLUSIVE, not FAIL. Recorded in `budget.json` sources (`definitionOfDone.minFinishingUnaided`, `.maxMedianMinutes`, `webVitals.gates.inpMs.maxRunSpreadPct`) with no gate value changed | Approved by: Director, 2026-09-30 |
+| 2026-09-30 | 2 | WP-Q1 as built: §4, §5, §6.3 finding, §6.4, §10.1, §11, §12.1, §13.2 and Appendix B. Two method changes, with no threshold changed: web vitals also measures at 390 px (`webVitals.viewports`), and the gated CLS counts shifts that Chromium flags as recent input on loads with no input (§6.4) | pending the Director's WP-Q1 review |
 
 ---
 
@@ -1160,8 +1317,20 @@ QA: <date>. Director: <date, or pending>.
 
 ## Appendix B. Wave-2 wiring (WP-Q1)
 
-This is applied in WP-Q1 under the Director's time-boxed write lock on `package.json` and
-`.github/workflows/ci.yml`. build-lead has already merged these in WP-B0:
+**Applied in WP-Q1 (2026-09-30)** under the Director's time-boxed write lock on `package.json`
+and `.github/workflows/ci.yml`. Where the result differs from the text below:
+
+- The projects are named per width: `e2e-390`, `e2e-768`, `e2e-1440`, then `perf`, then
+  `visual-390`, `visual-768`, `visual-1440`. `"e2e"` is therefore
+  `playwright test --project=e2e-*`, not `--project=chromium`.
+- The `perf` project records no trace (§6.4), and mobile projects trace without DOM snapshots.
+- In the `budgets` job, every measuring step runs once the build has succeeded, even after an
+  earlier step fails (`if: ${{ !cancelled() && steps.build.outcome == 'success' }}`). One run
+  then shows every miss, and any miss still fails the job.
+- `package-lock.json` changed only by the three new packages. No existing package's version,
+  flags or integrity changed.
+
+build-lead has already merged these in WP-B0:
 
 - Vitest collects `tests/**/*.test.{ts,mts,mjs}` and excludes `*.spec.*` and the fixtures.
 - ESLint and Prettier ignore `tests/perf/fixtures/`, `artifacts/` and `.lighthouseci/`.
