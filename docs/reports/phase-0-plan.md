@@ -21,6 +21,21 @@ These override anything below that says otherwise.
 2. **Hazem picks the design direction.** The Director reviews the three directions, then shows them
    to Hazem with screenshots and a recommendation. Hazem makes the final pick.
 
+## Agent teams: tested 2026-09-30, not available
+
+- `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is set in this environment.
+- The only spawn path is the `Agent` tool, and its `team_name` parameter is ignored (documented as
+  deprecated). No team-creation tool exists.
+- An explicit spawn named `qa-lead`, of type `qa-lead`, with `team_name: rig-lab`, launched with no
+  error. It launched as a named, messageable **background subagent**: `ListAgents` lists every agent
+  under "Subagents" and has no Teammates section. The new agent also took over the name `qa-lead`
+  from the earlier instance, which is now addressable only by its agent ID.
+- Phase 0 therefore runs under the **BUILD_PROMPT §1 fallback**:
+  - one lead-type subagent per work package, which does the work and reviews its own output;
+  - then a **fresh** `qa-lead` subagent verifies independently;
+  - then the Director reviews.
+  The independent QA step is never skipped.
+
 ---
 
 ## 1. Branches and merging
