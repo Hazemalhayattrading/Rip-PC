@@ -10,8 +10,12 @@ const storageBase = {
   capacityGb: PosInt,
   seqReadMBps: PosInt,
   seqWriteMBps: PosInt,
-  /** `dram`: dedicated DRAM cache. `hmb`: DRAM-less using Host Memory Buffer. `none`: DRAM-less, no HMB. */
-  cache: z.enum(['dram', 'hmb', 'none']),
+  /**
+   * Cache design as the maker states it. `dram`: dedicated DRAM cache. `hmb`: DRAM-less, uses the
+   * Host Memory Buffer. `dram-less`: DRAM-less, and the maker does not say whether it uses HMB.
+   * `null` plus a note when the maker publishes nothing about it.
+   */
+  cache: z.enum(['dram', 'hmb', 'dram-less']).nullable(),
   nandType: z.enum(['SLC', 'MLC', 'TLC', 'QLC']).nullable(),
   /** Rated endurance in terabytes written. */
   enduranceTbw: PosInt.nullable(),
