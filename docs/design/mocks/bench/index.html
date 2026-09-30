@@ -1,0 +1,691 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rig Lab mock A: Bench</title>
+<meta name="description" content="Design direction A (Bench): the builder's CPU step as a calibrated instrument panel. Illustrative values, not data.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,400..700&display=swap" rel="stylesheet">
+<style>
+/* Direction A: Bench. Tokens are measured for contrast by docs/design/tools/contrast.mjs. */
+:root, :root[data-theme="dark"] {
+  --bench: #0e1114;
+  --panel: #171b20;
+  --panel-raised: #1f252c;
+  --panel-sunk: #13171b;
+  --seam: #262d35;
+  --line: #2c343d;
+  --ink: #e8edf1;
+  --ink-2: #aeb8c2;
+  --ink-3: #85919d;
+  --trace: #56d4dd;
+  --trace-band: rgba(86, 212, 221, .30);
+  --ok: #56c990;
+  --warn: #ebbe55;
+  --block: #f2837b;
+  --focus: #ffffff;
+  --btn-bg: #e8edf1;
+  --btn-ink: #0e1114;
+  --drawing: #8e9aa6;
+  --drawing-fill: #171b20;
+  --grid-minor: rgba(142, 154, 166, .05);
+  --grid-major: rgba(142, 154, 166, .10);
+  color-scheme: dark;
+}
+:root[data-theme="light"] {
+  --bench: #c3cad1;
+  --panel: #f4f6f8;
+  --panel-raised: #ffffff;
+  --panel-sunk: #e8ecf0;
+  --seam: #c3cad1;
+  --line: #d6dce2;
+  --ink: #0f1419;
+  --ink-2: #3d4853;
+  --ink-3: #5a6672;
+  --trace: #0a7a87;
+  --trace-band: rgba(10, 122, 135, .20);
+  --ok: #1b7f4c;
+  --warn: #8c5a00;
+  --block: #b3261e;
+  --focus: #0f1419;
+  --btn-bg: #0f1419;
+  --btn-ink: #ffffff;
+  --drawing: #5a6672;
+  --drawing-fill: #f4f6f8;
+  --grid-minor: rgba(90, 102, 114, .07);
+  --grid-major: rgba(90, 102, 114, .14);
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  background: var(--bench);
+  color: var(--ink);
+  font-family: "Archivo", system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  font-variant-numeric: tabular-nums lining-nums;
+  -webkit-font-smoothing: antialiased;
+}
+button, input, select { font: inherit; color: inherit; }
+.num { font-variant-numeric: tabular-nums lining-nums slashed-zero; }
+.cond { font-stretch: 82%; }
+.unit { color: var(--ink-3); font-weight: 400; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+svg.i { width: 16px; height: 16px; flex: none; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: square; stroke-linejoin: miter; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+/* ---------- app frame ---------- */
+.app {
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 232px minmax(0, 1fr) 344px;
+  grid-template-rows: 48px minmax(0, 1fr) 32px;
+  gap: 1px;
+  background: var(--seam);
+}
+.bar { grid-column: 1 / -1; background: var(--panel); display: flex; align-items: center; gap: 16px; padding: 0 16px; }
+.mark { display: flex; align-items: center; gap: 10px; font-weight: 700; font-stretch: 75%; font-size: 18px; letter-spacing: .01em; }
+.mark svg { width: 18px; height: 18px; stroke: var(--ink); stroke-width: 1.5; fill: none; }
+.build-name { color: var(--ink-2); display: flex; gap: 10px; align-items: center; padding-left: 16px; border-left: 1px solid var(--line); height: 24px; }
+.build-name b { color: var(--ink); font-weight: 500; }
+.spacer { flex: 1; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 3px; overflow: hidden; }
+.seg button { border: 0; background: transparent; padding: 3px 10px; cursor: pointer; color: var(--ink-2); font-stretch: 87%; font-weight: 500; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--bench); }
+.seg-label { color: var(--ink-3); font-stretch: 87%; margin-right: 8px; }
+.tbtn { display: inline-flex; align-items: center; gap: 6px; background: transparent; border: 1px solid var(--line); border-radius: 3px; padding: 3px 10px; cursor: pointer; color: var(--ink-2); font-stretch: 87%; }
+.tbtn:hover { color: var(--ink); border-color: var(--ink-3); }
+
+/* ---------- step rail ---------- */
+.rail { background: var(--panel); display: flex; flex-direction: column; min-height: 0; }
+.rail-head { padding: 14px 16px 10px; display: flex; justify-content: space-between; align-items: baseline; }
+.label { font-stretch: 82%; font-weight: 500; color: var(--ink-3); font-size: 12px; line-height: 16px; letter-spacing: .02em; }
+.rail ol { list-style: none; margin: 0; padding: 0 8px; overflow: auto; }
+.step { display: grid; grid-template-columns: 24px 1fr 16px; gap: 2px 8px; align-items: center; padding: 6px 8px; border-radius: 3px; position: relative; text-decoration: none; color: inherit; }
+.step .n { color: var(--ink-3); font-stretch: 82%; font-size: 12px; }
+.step .t { font-weight: 500; }
+.step .v { grid-column: 2 / 3; color: var(--ink-3); font-size: 12px; line-height: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.step .s { grid-row: 1 / 3; grid-column: 3; color: var(--ink-3); }
+.step .s.done { color: var(--ink-2); }
+.step[aria-current="step"] { background: var(--panel-raised); }
+.step[aria-current="step"]::before { content: ""; position: absolute; left: -8px; top: 6px; bottom: 6px; width: 2px; background: var(--ink); }
+.step[aria-current="step"] .n, .step[aria-current="step"] .v { color: var(--ink-2); }
+.rail-foot { margin-top: auto; padding: 12px 16px; border-top: 1px solid var(--line); color: var(--ink-3); font-size: 12px; line-height: 18px; display: grid; gap: 4px; }
+.rail-foot span { display: inline-flex; align-items: center; gap: 6px; }
+
+/* ---------- centre: specimen + table ---------- */
+.centre { display: grid; grid-template-rows: 356px minmax(0, 1fr); gap: 1px; background: var(--seam); min-height: 0; }
+.specimen { background: var(--panel); position: relative; display: grid; grid-template-columns: minmax(0, 1fr) 272px; min-height: 0; }
+.spec-head { position: absolute; left: 16px; top: 12px; right: 288px; display: flex; align-items: center; gap: 10px; z-index: 2; }
+.tag { font-stretch: 82%; font-size: 12px; line-height: 16px; color: var(--ink-3); border: 1px dashed var(--line); border-radius: 2px; padding: 1px 6px; }
+.tools { margin-left: auto; display: flex; gap: 4px; }
+.ibtn { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 8px; border: 1px solid var(--line); background: var(--panel-sunk); border-radius: 3px; color: var(--ink-2); cursor: pointer; font-stretch: 87%; font-size: 13px; }
+.ibtn:hover { color: var(--ink); }
+.ibtn[aria-pressed="true"] { color: var(--ink); border-color: var(--ink-3); }
+.drawing {
+  display: flex; align-items: center; justify-content: center; padding: 44px 12px 30px; min-height: 0;
+  /* measurement grid: one minor cell = 10 mm at the drawing's scale, one major cell = 50 mm */
+  background-image:
+    linear-gradient(var(--grid-major) 1px, transparent 1px), linear-gradient(90deg, var(--grid-major) 1px, transparent 1px),
+    linear-gradient(var(--grid-minor) 1px, transparent 1px), linear-gradient(90deg, var(--grid-minor) 1px, transparent 1px);
+  background-size: var(--mm100, 41px) var(--mm100, 41px), var(--mm100, 41px) var(--mm100, 41px),
+    calc(var(--mm100, 41px) / 5) calc(var(--mm100, 41px) / 5), calc(var(--mm100, 41px) / 5) calc(var(--mm100, 41px) / 5);
+  background-position: -1px -1px;
+}
+.drawing svg.case { height: 100%; max-height: 300px; width: auto; }
+.case .geo path { fill: var(--drawing-fill); stroke: var(--drawing); stroke-width: 1; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
+.case .geo .m-cavity { fill: var(--panel-sunk); stroke: none; }
+.case .geo .m-glass { fill: none; stroke-opacity: .9; }
+.case .geo .m-fins, .case .geo .m-mesh, .case .geo .m-vent { fill: none; stroke-opacity: .55; }
+.case .geo .m-glare { fill: none; stroke-opacity: .25; stroke-dasharray: 2 4; }
+.case .geo .m-board-detail, .case .geo .m-slot { stroke-opacity: .6; }
+.case .geo .m-rgb { fill: var(--drawing); stroke: none; opacity: .35; }
+.case .geo .m-socket { stroke: var(--trace); stroke-width: 1.5; }
+.case .geo .m-cooler, .case .geo .m-fan-ring { stroke: var(--trace); }
+.case .geo .m-rgb-ring { stroke: var(--drawing); }
+.case .geo .m-cooler.f-side ~ .m-fins { stroke: var(--trace); }
+.case .ann .dim { fill: none; stroke: var(--trace); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.case .ann .focus-ring { fill: none; stroke: var(--trace); stroke-width: 1.25; stroke-dasharray: 3 3; vector-effect: non-scaling-stroke; }
+.scale { position: absolute; left: 16px; bottom: 12px; display: flex; align-items: center; gap: 8px; color: var(--ink-3); font-size: 12px; font-stretch: 82%; }
+.scale i { display: block; width: var(--mm100, 41px); height: 6px; border: 1px solid var(--ink-3); border-top: 0; }
+.callouts { border-left: 1px solid var(--line); padding: 14px 16px; display: flex; flex-direction: column; gap: 14px; }
+.callout .k { display: flex; justify-content: space-between; gap: 8px; }
+.callout .k span:first-child { color: var(--ink-2); }
+.callout .reading { font-stretch: 82%; font-size: 20px; line-height: 24px; font-weight: 500; margin-top: 2px; }
+.meter { position: relative; height: 6px; background: var(--panel-sunk); border: 1px solid var(--line); margin-top: 6px; border-radius: 1px; }
+.meter b { position: absolute; left: 0; top: 0; bottom: 0; background: var(--trace); transform-origin: left; }
+.meter i { position: absolute; top: -4px; bottom: -4px; width: 1px; background: var(--ink-2); }
+.callout small { display: block; color: var(--ink-3); font-size: 12px; line-height: 16px; margin-top: 4px; }
+
+.list { background: var(--panel); display: flex; flex-direction: column; min-height: 0; }
+.list-head { display: flex; align-items: center; gap: 12px; padding: 12px 16px 10px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+.list-head h1 { margin: 0; font-size: 20px; line-height: 24px; font-weight: 600; font-stretch: 82%; }
+.count { color: var(--ink-3); }
+.field { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 8px; background: var(--panel-sunk); border: 1px solid var(--line); border-radius: 3px; color: var(--ink-3); min-width: 172px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border: 1px solid var(--line); border-radius: 3px; background: transparent; color: var(--ink-2); cursor: pointer; font-stretch: 87%; }
+.chip[aria-pressed="true"] { border-color: var(--ink-2); color: var(--ink); }
+.scroller { overflow: auto; min-height: 0; flex: 1; }
+table { width: 100%; border-collapse: collapse; }
+thead th { position: sticky; top: 0; background: var(--panel); z-index: 1; text-align: left; font-weight: 500; font-stretch: 82%; font-size: 12px; line-height: 16px; color: var(--ink-3); padding: 8px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th.r, td.r { text-align: right; }
+tbody td { padding: 9px 8px; border-bottom: 1px solid var(--line); vertical-align: middle; white-space: nowrap; }
+tbody tr.part { cursor: pointer; }
+tbody tr.part:hover td { background: var(--panel-raised); }
+tr.part.selected td { background: var(--panel-raised); }
+tr.part.selected td:first-child { box-shadow: inset 2px 0 0 var(--ink); }
+tr.has-reason td { border-bottom: 0; padding-bottom: 2px; }
+tr.reason td { padding: 0 8px 9px 44px; border-bottom: 1px solid var(--line); white-space: normal; color: var(--ink-2); font-size: 13px; line-height: 18px; }
+tr.reason .why { display: inline-flex; gap: 6px; align-items: flex-start; }
+tr.reason .why svg.i { width: 14px; height: 14px; margin-top: 2px; }
+tr.reason .why.warn svg { color: var(--warn); } tr.reason .why.block svg { color: var(--block); }
+tr.reason .rule { color: var(--ink-3); margin-left: 8px; font-stretch: 82%; font-size: 12px; white-space: nowrap; }
+tr.part.selected + tr.reason td { background: var(--panel-raised); }
+tr.blocked .cbx { opacity: .45; cursor: not-allowed; }
+td.cb { width: 36px; padding-left: 16px; }
+.cbx { width: 16px; height: 16px; border: 1.5px solid var(--ink-3); border-radius: 2px; display: grid; place-items: center; background: transparent; padding: 0; cursor: pointer; }
+.cbx[aria-checked="true"] { background: var(--ink); border-color: var(--ink); }
+.cbx[aria-checked="true"]::after { content: ""; width: 8px; height: 4px; border-left: 2px solid var(--bench); border-bottom: 2px solid var(--bench); transform: translateY(-1px) rotate(-45deg); }
+.pname { font-weight: 500; }
+.psub { display: block; color: var(--ink-3); font-size: 12px; line-height: 16px; }
+tr.blocked .pname { color: var(--ink-2); }
+tr.blocked td.num-cell { color: var(--ink-3); }
+.state { display: inline-flex; align-items: center; gap: 6px; font-stretch: 87%; font-weight: 500; }
+.state.ok { color: var(--ok); } .state.warn { color: var(--warn); } .state.block { color: var(--block); }
+.fps { display: inline-flex; align-items: center; gap: 8px; justify-content: flex-end; }
+.mini { position: relative; width: 64px; height: 8px; border-left: 1px solid var(--line); border-right: 1px solid var(--line); }
+.mini::before { content: ""; position: absolute; left: 0; right: 0; top: 3.5px; height: 1px; background: var(--line); }
+.mini b { position: absolute; top: 1px; height: 6px; background: var(--trace-band); border-left: 1px solid var(--trace); border-right: 1px solid var(--trace); left: 0; width: 100%; transform-origin: left; }
+.sel { height: 26px; padding: 0 10px; border-radius: 3px; border: 1px solid var(--line); background: transparent; color: var(--ink); cursor: pointer; font-stretch: 87%; font-weight: 500; }
+.sel.on { background: var(--btn-bg); color: var(--btn-ink); border-color: var(--btn-bg); display: inline-flex; align-items: center; gap: 4px; }
+.sel[aria-disabled="true"] { color: var(--ink-3); cursor: not-allowed; border-style: dashed; }
+.price-cell { position: relative; }
+.price-cell.focused { outline: 1px dashed var(--trace); outline-offset: -5px; }
+.nogap { color: var(--ink-3); font-size: 12px; }
+.list-foot { border-top: 1px solid var(--line); display: flex; align-items: center; gap: 12px; padding: 8px 16px; min-height: 44px; }
+.compare-chips { display: flex; gap: 6px; }
+.cchip { border: 1px solid var(--line); border-radius: 2px; padding: 1px 6px; color: var(--ink-2); font-size: 12px; }
+.primary { height: 28px; padding: 0 12px; border: 0; border-radius: 3px; background: var(--btn-bg); color: var(--btn-ink); font-weight: 600; font-stretch: 87%; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+.keys { margin-left: auto; color: var(--ink-3); font-size: 12px; font-stretch: 82%; display: flex; gap: 10px; }
+kbd { font-family: inherit; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 3px; padding: 0 4px; color: var(--ink-2); font-size: 11px; }
+
+/* ---------- readout column ---------- */
+.readout { display: grid; grid-auto-rows: min-content; gap: 1px; background: var(--seam); min-height: 0; overflow: auto; }
+.rpanel { background: var(--panel); padding: 12px 16px 14px; }
+.rpanel h2 { margin: 0 0 8px; display: flex; justify-content: space-between; align-items: baseline; font-size: 12px; line-height: 16px; font-weight: 500; font-stretch: 82%; color: var(--ink-3); letter-spacing: .02em; }
+.big { font-size: 40px; line-height: 44px; font-weight: 500; font-stretch: 75%; letter-spacing: -.005em; }
+.big .unit { font-size: 20px; margin-right: 4px; }
+.row { display: flex; justify-content: space-between; gap: 12px; color: var(--ink-2); }
+.row + .row { margin-top: 4px; }
+.prov { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px 12px; color: var(--ink-3); font-size: 12px; line-height: 16px; }
+.prov a, .link { color: var(--ink-2); text-decoration: underline; text-decoration-color: var(--ink-3); text-underline-offset: 2px; }
+.budget { position: relative; height: 6px; margin-top: 8px; background: var(--panel-sunk); border: 1px solid var(--line); }
+.budget b { position: absolute; left: 0; top: 0; bottom: 0; width: 100%; background: var(--ink-2); transform-origin: left; }
+.game + .game { margin-top: 10px; }
+.game .gt { display: flex; justify-content: space-between; gap: 8px; }
+.game .gt span:first-child { color: var(--ink); font-weight: 500; }
+.game .cond-l { color: var(--ink-3); font-size: 12px; line-height: 16px; }
+.range { position: relative; height: 18px; margin: 6px 0 2px; }
+.range .axis { position: absolute; left: 0; right: 0; top: 8px; height: 1px; background: var(--line); }
+.range .tick { position: absolute; top: 4px; width: 1px; height: 9px; background: var(--line); }
+.range .band { position: absolute; top: 3px; height: 11px; left: 0; width: 100%; background: var(--trace-band); border-left: 1.5px solid var(--trace); border-right: 1.5px solid var(--trace); transform-origin: left; }
+.range .med { position: absolute; top: 1px; width: 2px; height: 15px; background: var(--trace); }
+.range-scale { display: flex; justify-content: space-between; color: var(--ink-3); font-size: 11px; line-height: 14px; font-stretch: 82%; }
+.reading-line { display: flex; align-items: baseline; justify-content: space-between; margin-top: 4px; }
+.reading-line .v { font-size: 24px; line-height: 28px; font-weight: 500; font-stretch: 75%; }
+.conf { display: inline-flex; align-items: center; gap: 6px; color: var(--ink-2); font-size: 12px; font-stretch: 87%; }
+.conf i { display: inline-block; width: 10px; height: 6px; border: 1px solid var(--ink-2); }
+.conf i.f { background: var(--ink-2); }
+.limiter { color: var(--ink-3); font-size: 12px; line-height: 16px; margin-top: 2px; }
+.power { position: relative; height: 10px; margin: 10px 0 4px; background: var(--panel-sunk); border: 1px solid var(--line); }
+.power .g { position: absolute; top: 0; bottom: 0; background: var(--ink-3); opacity: .55; }
+.power .p { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--ink-2); }
+.power .cap { position: absolute; top: -5px; bottom: -5px; width: 2px; background: var(--ink); }
+.checks { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; }
+.checks li { display: grid; grid-template-columns: 16px 1fr; gap: 0 8px; align-items: center; align-content: start; color: var(--ink); }
+.checks li svg { grid-row: 1 / 3; align-self: start; margin-top: 2px; }
+.checks li em { font-style: normal; color: var(--ink-3); font-size: 12px; line-height: 16px; grid-column: 2; }
+
+/* ---------- status line ---------- */
+.status { grid-column: 1 / -1; background: var(--panel); display: flex; align-items: stretch; font-size: 12px; line-height: 16px; font-stretch: 87%; color: var(--ink-3); }
+.status > * { display: flex; align-items: center; gap: 6px; padding: 0 12px; border-right: 1px solid var(--line); white-space: nowrap; }
+.status .hl { color: var(--ink); font-weight: 500; }
+.status .mocklabel { margin-left: auto; border-right: 0; border-left: 1px solid var(--line); color: var(--ink-2); }
+
+/* ---------- motion (transform and opacity only) ---------- */
+.band, .mini b, .meter b, .budget b, .med { transition: transform 180ms cubic-bezier(.2, 0, 0, 1); }
+tr.part td { transition: background-color 120ms linear; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0ms !important; animation-duration: 0ms !important; }
+}
+
+/* ---------- docked readout (tablet and phone only) ---------- */
+.dock { display: none; }
+.stepper { display: none; }
+.cur, .ph { display: none; }
+.phone-note { display: none; margin: 0; padding: 0 12px 10px; color: var(--ink-3); font-size: 12px; line-height: 16px; border-bottom: 1px solid var(--line); }
+
+/* ---------- tablet (768) ---------- */
+@media (max-width: 1100px) {
+  .app { height: auto; min-height: 100vh; grid-template-columns: minmax(0, 1fr); grid-template-rows: 48px auto auto auto; padding-bottom: 72px; }
+  .rail { min-width: 0; overflow: hidden; }
+  .rail-head, .rail-foot { display: none; }
+  .rail ol { display: flex; gap: 2px; padding: 6px 8px; overflow-x: auto; scrollbar-width: none; }
+  .step { grid-template-columns: auto auto; padding: 8px 10px; flex: none; white-space: nowrap; }
+  .step .v, .step .s { display: none; }
+  .step[aria-current="step"]::before { left: 8px; right: 8px; top: auto; bottom: 0; width: auto; height: 2px; }
+  .centre { grid-template-rows: auto auto; }
+  .specimen { grid-template-columns: minmax(0, 1fr) 248px; height: 320px; }
+  .spec-head { right: 264px; }
+  .readout { grid-template-columns: 1fr 1fr; overflow: visible; }
+  .rp-total { display: none; }
+  .scroller { overflow: visible; }
+  .col-tdp, .col-boost { display: none; }
+  .list-foot .keys, .list-foot { display: none; }
+  .status { display: none; }
+  .dock {
+    display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; height: 64px;
+    background: var(--panel); border-top: 1px solid var(--seam); align-items: stretch;
+  }
+  .dock > div { display: flex; flex-direction: column; justify-content: center; padding: 0 16px; border-right: 1px solid var(--line); min-width: 0; }
+  .dock .d-total b { font-size: 26px; line-height: 30px; font-weight: 500; font-stretch: 75%; }
+  .dock .d-total b .unit { font-size: 14px; margin-right: 3px; }
+  .dock small { color: var(--ink-3); font-size: 12px; line-height: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dock .d-fps b { font-size: 18px; line-height: 22px; font-weight: 500; font-stretch: 75%; }
+  .dock .d-fps b .unit { font-size: 13px; }
+  .dock .d-cmp { margin-left: auto; border-right: 0; border-left: 1px solid var(--line); }
+  .dock .d-cs { border-right: 0; }
+}
+/* ---------- phone (390) ---------- */
+@media (max-width: 640px) {
+  .build-name, .tbtn .tl, .seg-label { display: none; }
+  .bar { gap: 8px; padding: 0 12px; }
+  .rail ol { display: none; }
+  .stepper { display: grid; grid-template-columns: 36px 1fr 36px; align-items: center; padding: 6px 8px 8px; gap: 4px; }
+  .stepper .st-mid { text-align: center; }
+  .stepper .st-mid b { display: block; font-weight: 600; font-stretch: 82%; font-size: 17px; line-height: 22px; }
+  .stepper .st-mid span { color: var(--ink-3); font-size: 12px; line-height: 16px; }
+  .stepper button { height: 36px; border: 1px solid var(--line); border-radius: 3px; background: transparent; color: var(--ink-2); display: grid; place-items: center; }
+  .ticks { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(12, 1fr); gap: 3px; margin-top: 6px; }
+  .ticks i { height: 3px; background: var(--line); }
+  .ticks i.d { background: var(--ink-3); } .ticks i.c { background: var(--ink); }
+  .specimen { grid-template-columns: 1fr; height: auto; }
+  .spec-head { position: static; padding: 10px 12px 0; }
+  .spec-head .label { display: none; }
+  .tools .ibtn .tl { display: none; }
+  .drawing { padding: 4px 12px 8px; height: 156px; }
+  .drawing svg.case { max-height: 146px; }
+  .scale { display: none; }
+  .callouts { border-left: 0; border-top: 1px solid var(--line); flex-direction: row; gap: 16px; padding: 10px 12px; }
+  .callout { flex: 1; min-width: 0; }
+  .callout .reading { font-size: 18px; }
+  .callout small, .callout.board { display: none; }
+  .list-head { padding: 12px; gap: 8px; }
+  .list-head .spacer { display: none; }
+  .count { flex-basis: 100%; margin-top: -6px; font-size: 13px; }
+  .field { flex: 1 1 100%; min-width: 0; order: 3; }
+  .chip { order: 4; }
+  thead { display: none; }
+  table, tbody { display: block; }
+  tr.part { display: grid; grid-template-columns: 24px minmax(0, 1fr) auto; grid-template-areas: "cb name price" "cb fps state"; gap: 6px 10px; padding: 12px; border-bottom: 1px solid var(--line); }
+  tr.part td { display: block; padding: 0; border: 0; white-space: normal; background: transparent !important; box-shadow: none !important; outline: 0 !important; }
+  tr.part.selected { background: var(--panel-raised); box-shadow: inset 2px 0 0 var(--ink); }
+  tr.part.has-reason { border-bottom: 0; padding-bottom: 6px; }
+  td.cb { grid-area: cb; width: auto; padding-top: 2px !important; }
+  td.c-name { grid-area: name; }
+  td.c-price { grid-area: price; font-weight: 500; }
+  td.c-fps { grid-area: fps; text-align: left !important; }
+  td.c-state { grid-area: state; text-align: right; }
+  td.c-cores, td.col-boost, td.col-tdp, td.c-act { display: none !important; }
+  .fps { justify-content: flex-start; }
+  tr.reason { display: block; }
+  tr.reason td { display: block; padding: 0 12px 12px 46px; }
+  tr.part.selected + tr.reason td { background: var(--panel-raised); box-shadow: inset 2px 0 0 var(--ink); }
+  .readout { grid-template-columns: 1fr; }
+  .dock > div { padding: 0 12px; }
+  .dock .d-cs { display: none !important; }
+  .dock .d-total, .dock .d-fps { flex: 1 1 0; }
+  .dock .d-fps { border-right: 0; }
+  .dock .d-cmp { flex: none; padding: 0 12px; }
+  .dock .d-cmp .primary { padding: 0 10px; }
+  .dock .d-cmp .cl { display: none; }
+  .cur, .ph { display: inline !important; }
+  .phone-note { display: block !important; }
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-ok" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.25"/><path d="M5.2 8.2l1.9 1.9 3.8-4"/></symbol>
+    <symbol id="i-warn" viewBox="0 0 16 16"><path d="M8 1.9l6.6 11.6H1.4z"/><path d="M8 6.2v3.6M8 11.3v.3"/></symbol>
+    <symbol id="i-block" viewBox="0 0 16 16"><path d="M5.3 1.8h5.4l3.5 3.5v5.4l-3.5 3.5H5.3l-3.5-3.5V5.3z"/><path d="M5.8 5.8l4.4 4.4M10.2 5.8l-4.4 4.4"/></symbol>
+    <symbol id="i-preset" viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.5"/></symbol>
+    <symbol id="i-empty" viewBox="0 0 16 16"><path d="M4.5 8h7"/></symbol>
+    <symbol id="i-orbit" viewBox="0 0 16 16"><ellipse cx="8" cy="8" rx="6.5" ry="3"/><path d="M12.3 4.2l1.8.9-.9 1.8"/><circle cx="8" cy="8" r="1"/></symbol>
+    <symbol id="i-explode" viewBox="0 0 16 16"><path d="M5.5 5.5h5v5h-5z"/><path d="M1.5 1.5l2.5 2.5M14.5 1.5L12 4M1.5 14.5L4 12M14.5 14.5L12 12"/></symbol>
+    <symbol id="i-panel" viewBox="0 0 16 16"><path d="M2.5 2.5h8v11h-8zM10.5 2.5l3 1.5v8l-3 1.5"/></symbol>
+    <symbol id="i-reset" viewBox="0 0 16 16"><path d="M2.8 6.2A5.5 5.5 0 1 1 3 10.4"/><path d="M2.5 2.8v3.6h3.6"/></symbol>
+    <symbol id="i-search" viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.5"/><path d="M10.4 10.4l3.6 3.6"/></symbol>
+    <symbol id="i-sort" viewBox="0 0 16 16"><path d="M5 2.5v11M2.5 11L5 13.5 7.5 11M11 13.5v-11M8.5 5L11 2.5 13.5 5"/></symbol>
+    <symbol id="i-share" viewBox="0 0 16 16"><path d="M8 10V2.5M5 5.5l3-3 3 3M3 8.5v5h10v-5"/></symbol>
+    <symbol id="i-theme" viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.5"/><path d="M8 2.5v11" /><path d="M8 2.5a5.5 5.5 0 0 1 0 11z" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-ext" viewBox="0 0 16 16"><path d="M9.5 2.5h4v4M13.5 2.5L7.5 8.5M11.5 9.5v4h-9v-9h4"/></symbol>
+    <symbol id="i-compare" viewBox="0 0 16 16"><path d="M2.5 3.5h4.5v9H2.5zM9 3.5h4.5v9H9z"/></symbol>
+    <symbol id="i-check" viewBox="0 0 16 16"><path d="M3.5 8.3l3 3 6-6.3"/></symbol>
+    <symbol id="i-mark" viewBox="0 0 18 18"><path d="M1.5 1.5h15v15h-15z"/><path d="M9 1.5v3.5M9 13v3.5M1.5 9H5M13 9h3.5"/><circle cx="9" cy="9" r="1.2" fill="currentColor"/></symbol>
+  </defs>
+</svg>
+
+<div class="app">
+  <header class="bar">
+    <div class="mark"><svg viewBox="0 0 18 18"><use href="#i-mark"/></svg>Rig Lab</div>
+    <div class="build-name"><b>AAA 1440p build</b><span>Draft, saved 17:42</span></div>
+    <div class="spacer"></div>
+    <span class="seg-label">Market</span>
+    <div class="seg" role="group" aria-label="Market and currency">
+      <button type="button" aria-pressed="true" data-cur="sar" title="Saudi market, prices in SAR">SAR</button>
+      <button type="button" aria-pressed="false" data-cur="usd" title="US market, prices in USD">USD</button>
+    </div>
+    <button class="tbtn" type="button"><svg class="i"><use href="#i-share"/></svg><span class="tl">Share</span></button>
+    <button class="tbtn" type="button" id="theme" aria-label="Switch theme"><svg class="i"><use href="#i-theme"/></svg><span class="tl">Theme</span></button>
+  </header>
+
+  <nav class="rail" aria-label="Build steps">
+    <div class="rail-head"><span class="label">Build steps</span><span class="label num">3 of 12</span></div>
+    <div class="stepper">
+      <button type="button" aria-label="Previous step: Budget"><svg class="i"><path d="M10 3.5L5.5 8l4.5 4.5"/></svg></button>
+      <div class="st-mid"><b>Processor</b><span class="num">Step 3 of 12</span></div>
+      <button type="button" aria-label="Next step: Motherboard"><svg class="i"><path d="M6 3.5L10.5 8 6 12.5"/></svg></button>
+      <div class="ticks" aria-hidden="true"><i class="d"></i><i class="d"></i><i class="c"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    </div>
+    <ol>
+      <li><a class="step" href="#"><span class="n num">01</span><span class="t">Use case</span><span class="v">AAA gaming at 1440p</span><svg class="i s done"><use href="#i-check"/></svg></a></li>
+      <li><a class="step" href="#"><span class="n num">02</span><span class="t">Budget</span><span class="v num">SAR 9,500</span><svg class="i s done"><use href="#i-check"/></svg></a></li>
+      <li><a class="step" href="#" aria-current="step"><span class="n num">03</span><span class="t">Processor</span><span class="v" data-bind="cpu-name">Ryzen 7 9800X3D</span><svg class="i s"><use href="#i-preset"/></svg></a></li>
+      <li><a class="step" href="#"><span class="n num">04</span><span class="t">Motherboard</span><span class="v">ASUS TUF Gaming B650-Plus WiFi</span><svg class="i s"><use href="#i-preset"/></svg></a></li>
+      <li><a class="step" href="#"><span class="n num">05</span><span class="t">Memory</span><span class="v">32 GB DDR5-6000 CL30</span><svg class="i s"><use href="#i-preset"/></svg></a></li>
+      <li><a class="step" href="#"><span class="n num">06</span><span class="t">Graphics</span><span class="v">ASUS Prime RTX 5070 Ti OC</span><svg class="i s"><use href="#i-preset"/></svg></a></li>
+      <li><a class="step" href="#"><span class="n num">07</span><span class="t">Storage</span><span class="v">WD_BLACK SN850X 2 TB</span><svg class="i s"><use href="#i-preset"/></svg></a></li>
+      <li><a class="step" href="#"><span class="n num">08</span><span class="t">Power supply</span><span class="v">be quiet! Pure Power 12 M 850 W</span><svg class="i s"><use href="#i-preset"/></svg></a></li>
+      <li><a class="step" href="#"><span class="n num">09</span><span class="t">Cooling</span><span class="v">Peerless Assassin 120 SE</span><svg class="i s"><use href="#i-preset"/></svg></a></li>
+      <li><a class="step" href="#"><span class="n num">10</span><span class="t">Case</span><span class="v">Fractal Design North</span><svg class="i s"><use href="#i-preset"/></svg></a></li>
+      <li><a class="step" href="#"><span class="n num">11</span><span class="t">Fans and looks</span><span class="v">Not set</span><svg class="i s"><use href="#i-empty"/></svg></a></li>
+      <li><a class="step" href="#"><span class="n num">12</span><span class="t">Review</span><span class="v">Buy sheet</span><svg class="i s"><use href="#i-empty"/></svg></a></li>
+    </ol>
+    <div class="rail-foot">
+      <span><svg class="i"><use href="#i-check"/></svg>Chosen by you</span>
+      <span><svg class="i"><use href="#i-preset"/></svg>Filled by the preset, change any time</span>
+    </div>
+  </nav>
+
+  <main class="centre">
+    <section class="specimen" aria-label="Build view">
+      <div class="spec-head">
+        <span class="label">Build view</span><span class="tag">3D view placeholder</span>
+        <div class="tools">
+          <button class="ibtn" type="button" aria-pressed="true"><svg class="i"><use href="#i-orbit"/></svg><span class="tl">Orbit</span></button>
+          <button class="ibtn" type="button"><svg class="i"><use href="#i-explode"/></svg><span class="tl">Explode</span></button>
+          <button class="ibtn" type="button"><svg class="i"><use href="#i-panel"/></svg><span class="tl">Side panel</span></button>
+          <button class="ibtn" type="button" aria-label="Reset view"><svg class="i"><use href="#i-reset"/></svg></button>
+        </div>
+      </div>
+      <div class="drawing"><!--case:start--><svg class="case case-bench" data-units-per-mm="0.78" viewBox="-84.3 -497.5 446 534.2" role="img" aria-label="3D view placeholder: a generic mid-tower case with the parts chosen so far"><g class="geo"><path class="m-cavity f-side" d="M-40.2 -122L272.9 -175.2L272.9 -450.6L-40.2 -397.3Z"/><path class="m-board f-side" d="M89 -168.9L267.9 -199.3L267.9 -437.2L89 -406.8Z"/><path class="m-board-detail" d="M174.8 -385.5L262.8 -400.5L262.8 -427L174.8 -412Z"/><path class="m-board-detail" d="M242.3 -320.6L262.8 -324.1L262.8 -398.2L242.3 -394.7Z"/><path class="m-board-detail" d="M174.8 -199.9L218.8 -207.4L218.8 -242.5L174.8 -235Z"/><path class="m-board-detail" d="M101.5 -229.5L248.1 -254.5L248.1 -263.8L101.5 -238.9Z"/><path class="m-slot" d="M105.1 -291L248.1 -315.3L248.1 -319.2L105.1 -294.9Z"/><path class="m-slot" d="M105.1 -216.1L248.1 -240.4L248.1 -243.6L105.1 -219.2Z"/><path class="m-socket" d="M185.8 -347.6L218.1 -353.1L218.1 -387.4L185.8 -381.9Z"/><path class="m-fan f-side" d="M294.7 -313.9L312.3 -316.9L312.3 -410.5L294.7 -407.5Z"/><path class="m-fan f-top" d="M294.7 -407.5L312.3 -410.5L284.3 -433.9L266.7 -430.9Z"/><path class="m-ram f-side" d="M137.7 -292.9L142.8 -293.8L142.8 -397.5L137.7 -396.6Z"/><path class="m-ram f-top" d="M137.7 -396.6L142.8 -397.5L133 -405.7L127.9 -404.8Z"/><path class="m-ram f-front" d="M137.7 -292.9L137.7 -396.6L127.9 -404.8L127.9 -301.1Z"/><path class="m-ram f-side" d="M147.2 -294.5L152.4 -295.4L152.4 -399.1L147.2 -398.3Z"/><path class="m-ram f-top" d="M147.2 -398.3L152.4 -399.1L142.5 -407.3L137.4 -406.5Z"/><path class="m-ram f-front" d="M147.2 -294.5L147.2 -398.3L137.4 -406.5L137.4 -302.7Z"/><path class="m-rgb" d="M137.7 -292.9L142.8 -293.8L142.8 -397.5L137.7 -396.6Z"/><path class="m-rgb" d="M147.2 -294.5L152.4 -295.4L152.4 -399.1L147.2 -398.3Z"/><path class="m-gpu f-side" d="M75.7 -206.8L298.6 -244.8L298.6 -285.3L75.7 -247.4Z"/><path class="m-gpu f-top" d="M75.7 -247.4L298.6 -285.3L269.3 -309.7L46.4 -271.8Z"/><path class="m-gpu f-front" d="M75.7 -206.8L75.7 -247.4L46.4 -271.8L46.4 -231.2Z"/><path class="m-gpu-accent" d="M88.1 -233.9L286.1 -267.6L286.1 -270.7L88.1 -237Z"/><path class="m-cooler f-side" d="M198.6 -282.2L279.3 -295.9L279.3 -392.6L198.6 -378.9Z"/><path class="m-cooler f-top" d="M198.6 -378.9L279.3 -392.6L244.9 -421.3L164.2 -407.6Z"/><path class="m-cooler f-front" d="M198.6 -282.2L198.6 -378.9L164.2 -407.6L164.2 -310.9Z"/><path class="m-fins" d="M200.1 -287.9L277.8 -301.1M200.1 -292.6L277.8 -305.8M200.1 -297.3L277.8 -310.5M200.1 -301.9L277.8 -315.2M200.1 -306.6L277.8 -319.8M200.1 -311.3L277.8 -324.5M200.1 -316L277.8 -329.2M200.1 -320.7L277.8 -333.9M200.1 -325.3L277.8 -338.6M200.1 -330L277.8 -343.2M200.1 -334.7L277.8 -347.9M200.1 -339.4L277.8 -352.6M200.1 -344.1L277.8 -357.3M200.1 -348.7L277.8 -362M200.1 -353.4L277.8 -366.6M200.1 -358.1L277.8 -371.3M200.1 -362.8L277.8 -376M200.1 -367.5L277.8 -380.7M200.1 -372.1L277.8 -385.4"/><path class="m-fan f-side" d="M180.3 -279.1L198.6 -282.2L198.6 -378.9L180.3 -375.8Z"/><path class="m-fan f-top" d="M180.3 -375.8L198.6 -378.9L164.2 -407.6L145.9 -404.5Z"/><path class="m-fan f-front" d="M180.3 -279.1L180.3 -375.8L145.9 -404.5L145.9 -307.7Z"/><path class="m-fan-ring" d="M150 -352.7L150.1 -358.3L150.4 -363.6L151 -368.6L151.7 -373.1L152.7 -377L153.8 -380.4L155.1 -383.1L156.5 -385L158.1 -386.3L159.7 -386.8L161.4 -386.5L163.1 -385.4L164.8 -383.6L166.5 -381.1L168.1 -377.9L169.6 -374.1L171.1 -369.8L172.3 -364.9L173.5 -359.7L174.4 -354.1L175.2 -348.4L175.7 -342.5L176.1 -336.6L176.2 -330.8L176.1 -325.2L175.7 -319.9L175.2 -315L174.4 -310.5L173.5 -306.5L172.3 -303.2L171.1 -300.5L169.6 -298.5L168.1 -297.2L166.5 -296.7L164.8 -297L163.1 -298.1L161.4 -299.9L159.7 -302.4L158.1 -305.6L156.5 -309.4L155.1 -313.8L153.8 -318.6L152.7 -323.8L151.7 -329.4L151 -335.1L150.4 -341L150.1 -346.9Z"/><path class="m-fan f-side" d="M-1.3 -113.8L17 -116.9L17 -226.1L-1.3 -223Z"/><path class="m-fan f-side" d="M-1.3 -230.8L17 -233.9L17 -343.1L-1.3 -340Z"/><path class="m-shroud f-side" d="M0 0L327.7 -55.8L327.7 -136.9L0 -81.1Z"/><path class="m-shroud f-top" d="M0 -81.1L327.7 -136.9L277.4 -178.8L-50.3 -123Z"/><path class="m-vent" d="M220 -60.8L307.9 -75.8M220 -67.9L307.9 -82.8M220 -74.9L307.9 -89.9M220 -81.9L307.9 -96.9M220 -88.9L307.9 -103.9M220 -95.9L307.9 -110.9"/><path class="m-case f-top" d="M0 -365.8L327.7 -421.6L277.4 -463.5L-50.3 -407.7Z"/><path class="m-case f-front" d="M0 0L0 -365.8L-50.3 -407.7L-50.3 -41.9Z"/><path class="m-case f-side" d="M0 0L8.8 -1.5L8.8 -367.3L0 -365.8Z"/><path class="m-mesh" d="M-4.2 -16L-4.2 -355.3M-6.3 -17.7L-6.3 -357M-8.4 -19.5L-8.4 -358.8M-10.5 -21.3L-10.5 -360.6M-12.6 -23L-12.6 -362.3M-14.7 -24.8L-14.7 -364.1M-16.8 -26.5L-16.8 -365.8M-19 -28.3L-19 -367.6M-21.1 -30L-21.1 -369.3M-23.2 -31.8L-23.2 -371.1M-25.3 -33.5L-25.3 -372.8M-27.4 -35.3L-27.4 -374.6M-29.5 -37.1L-29.5 -376.3M-31.6 -38.8L-31.6 -378.1M-33.7 -40.6L-33.7 -379.9M-35.8 -42.3L-35.8 -381.6M-37.9 -44.1L-37.9 -383.4M-40 -45.8L-40 -385.1M-42.1 -47.6L-42.1 -386.9M-44.2 -49.3L-44.2 -388.6M-46.3 -51.1L-46.3 -390.4"/><path class="m-fan-ring m-rgb-ring" d="M-39.7 -193L-39.5 -199.2L-39.2 -205.1L-38.6 -210.5L-37.7 -215.5L-36.7 -219.9L-35.4 -223.6L-34 -226.6L-32.4 -228.8L-30.7 -230.2L-28.9 -230.7L-27 -230.4L-25.2 -229.2L-23.3 -227.2L-21.4 -224.4L-19.6 -220.9L-17.9 -216.7L-16.3 -211.9L-14.9 -206.5L-13.6 -200.7L-12.6 -194.6L-11.8 -188.2L-11.1 -181.7L-10.8 -175.2L-10.6 -168.8L-10.8 -162.6L-11.1 -156.7L-11.8 -151.2L-12.6 -146.2L-13.6 -141.8L-14.9 -138.1L-16.3 -135.1L-17.9 -132.9L-19.6 -131.6L-21.4 -131L-23.3 -131.3L-25.2 -132.5L-27 -134.5L-28.9 -137.3L-30.7 -140.8L-32.4 -145L-34 -149.9L-35.4 -155.2L-36.7 -161L-37.7 -167.2L-38.6 -173.5L-39.2 -180L-39.5 -186.5Z"/><path class="m-fan-ring m-rgb-ring" d="M-39.7 -310L-39.5 -316.2L-39.2 -322.1L-38.6 -327.5L-37.7 -332.5L-36.7 -336.9L-35.4 -340.6L-34 -343.6L-32.4 -345.8L-30.7 -347.2L-28.9 -347.7L-27 -347.4L-25.2 -346.2L-23.3 -344.2L-21.4 -341.4L-19.6 -337.9L-17.9 -333.7L-16.3 -328.9L-14.9 -323.5L-13.6 -317.7L-12.6 -311.6L-11.8 -305.2L-11.1 -298.7L-10.8 -292.2L-10.6 -285.8L-10.8 -279.6L-11.1 -273.7L-11.8 -268.2L-12.6 -263.2L-13.6 -258.8L-14.9 -255.1L-16.3 -252.1L-17.9 -249.9L-19.6 -248.6L-21.4 -248L-23.3 -248.3L-25.2 -249.5L-27 -251.5L-28.9 -254.3L-30.7 -257.8L-32.4 -262L-34 -266.9L-35.4 -272.2L-36.7 -278L-37.7 -284.2L-38.6 -290.5L-39.2 -297L-39.5 -303.5Z"/><path class="m-mesh" d="M24.6 -374.7L-16.3 -408.8M33.4 -376.2L-7.5 -410.3M42.2 -377.7L1.3 -411.8M51 -379.2L10.1 -413.3M59.8 -380.7L18.9 -414.8M68.6 -382.2L27.7 -416.3M77.4 -383.7L36.5 -417.8M86.2 -385.2L45.3 -419.3M95 -386.7L54.1 -420.8M103.8 -388.2L62.9 -422.3M112.6 -389.7L71.7 -423.8M121.4 -391.2L80.5 -425.3M130.2 -392.7L89.3 -426.8M139 -394.2L98.1 -428.3M147.8 -395.7L106.9 -429.8M156.6 -397.2L115.7 -431.3M165.4 -398.7L124.5 -432.8M174.2 -400.2L133.3 -434.3M183 -401.7L142.1 -435.8M191.8 -403.2L150.9 -437.3M200.6 -404.7L159.7 -438.8M209.4 -406.2L168.5 -440.3M218.2 -407.7L177.3 -441.8M227 -409.2L186.1 -443.3M235.8 -410.7L194.9 -444.8M244.6 -412.2L203.7 -446.3M253.4 -413.6L212.5 -447.8M262.2 -415.1L221.3 -449.3M271 -416.6L230.1 -450.8M279.8 -418.1L238.9 -452.3M288.6 -419.6L247.7 -453.8M297.4 -421.1L256.4 -455.3"/><path class="m-case f-side" d="M8.8 -1.5L327.7 -55.8L327.7 -66.7L8.8 -12.4Z"/><path class="m-case f-side" d="M8.8 -358L327.7 -412.2L327.7 -421.6L8.8 -367.3Z"/><path class="m-case f-side" d="M318.9 -65.2L327.7 -66.7L327.7 -412.2L318.9 -410.7Z"/><path class="m-glass" d="M8.8 -82.6L318.9 -135.4L318.9 -410.7L8.8 -358Z"/><path class="m-glare" d="M29.3 -339.6L124.6 -130.4M66 -353.7L176 -186"/><path class="m-case f-side" d="M14.3 2.7L43.6 -2.3L43.6 -9.3L14.3 -4.3Z"/><path class="m-case f-front" d="M14.3 2.7L14.3 -4.3L6.8 -10.5L6.8 -3.5Z"/><path class="m-case f-side" d="M280.4 -42.6L309.7 -47.6L309.7 -54.6L280.4 -49.6Z"/><path class="m-case f-front" d="M280.4 -42.6L280.4 -49.6L272.9 -55.8L272.9 -48.8Z"/></g><g class="ann"><path class="dim" d="M90.2 -187L313.1 -224.9M90.2 -192L90.2 -182M313.1 -229.9L313.1 -219.9"/><path class="dim" d="M211.1 -388L176.7 -416.7M211.1 -393L211.1 -383M176.7 -421.7L176.7 -411.7"/><circle class="focus-ring" cx="181.9" cy="-363.5" r="31.2"/></g></svg><!--case:end--></div>
+      <div class="scale"><i></i><span class="num">100 mm</span></div>
+      <div class="callouts">
+        <div class="callout">
+          <div class="k"><span>Cooler height</span><span class="state ok"><svg class="i"><use href="#i-ok"/></svg>Fits</span></div>
+          <div class="reading num">155<span class="unit"> mm</span> <span class="unit">of 170 mm</span></div>
+          <div class="meter"><b style="transform:scaleX(.912)"></b><i style="left:100%"></i></div>
+          <small>15 mm to the side panel</small>
+        </div>
+        <div class="callout">
+          <div class="k"><span>GPU length</span><span class="state ok"><svg class="i"><use href="#i-ok"/></svg>Fits</span></div>
+          <div class="reading num">304<span class="unit"> mm</span> <span class="unit">of 355 mm</span></div>
+          <div class="meter"><b style="transform:scaleX(.856)"></b><i style="left:100%"></i></div>
+          <small>51 mm to the front fans</small>
+        </div>
+        <div class="callout board">
+          <div class="k"><span>Socket</span><span class="state ok"><svg class="i"><use href="#i-ok"/></svg>AM5</span></div>
+          <small>The highlighted part is the one this step changes.</small>
+        </div>
+      </div>
+    </section>
+
+    <section class="list" aria-labelledby="step-title">
+      <div class="list-head">
+        <h1 id="step-title">Processor</h1>
+        <span class="count num">38 processors, 12 fit your board</span>
+        <span class="spacer"></span>
+        <span class="field"><svg class="i"><use href="#i-search"/></svg>Filter by name</span>
+        <button class="chip" type="button" aria-pressed="false">Only parts that fit</button>
+        <button class="chip" type="button"><svg class="i"><use href="#i-sort"/></svg>Est. fps, high to low</button>
+      </div>
+      <p class="phone-note">Frame rates: Cyberpunk 2077, 1440p High, native, with your RTX 5070 Ti.</p>
+      <div class="scroller">
+        <table>
+          <thead>
+            <tr>
+              <th class="cb"><span class="sr">Compare</span></th>
+              <th>Processor</th>
+              <th class="r c-cores">Cores</th>
+              <th class="r col-boost">Boost</th>
+              <th class="r col-tdp">TDP</th>
+              <th class="r">Est. fps, Cyberpunk 2077</th>
+              <th class="r" data-bind="price-head">Price, SAR</th>
+              <th>Status</th>
+              <th><span class="sr">Action</span></th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <div class="list-foot">
+        <span class="label">Compare</span>
+        <span class="num" data-bind="cmp-count">2 of 3</span>
+        <span class="compare-chips" data-bind="cmp-chips"></span>
+        <button class="primary" type="button"><svg class="i"><use href="#i-compare"/></svg>Compare</button>
+        <span class="keys"><span><kbd>J</kbd> <kbd>K</kbd> move</span><span><kbd>Space</kbd> compare</span><span><kbd>Enter</kbd> select</span></span>
+      </div>
+    </section>
+  </main>
+
+  <aside class="readout" aria-label="Live readouts">
+    <section class="rpanel rp-total" aria-label="Build total">
+      <h2><span>Build total</span><span data-bind="market">SA market</span></h2>
+      <div class="big num" data-bind="total"><span class="unit">SAR</span>9,412</div>
+      <div class="row"><span>Budget</span><span class="num" data-bind="budget">SAR 9,500, SAR 88 left</span></div>
+      <div class="budget"><b data-bind="budget-bar" style="transform:scaleX(.991)"></b></div>
+      <div class="prov"><span>Prices as of 30 Sep 2026</span><span class="num">9 of 10 parts priced</span><a href="#">Sources</a></div>
+    </section>
+
+    <section class="rpanel" aria-label="Estimated frame rates">
+      <h2><span>Estimated fps</span><span>RTX 5070 Ti, native</span></h2>
+      <div class="game">
+        <div class="gt"><span>Cyberpunk 2077</span><span class="cond-l">1440p High</span></div>
+        <div class="range" aria-hidden="true">
+          <span class="axis"></span>
+          <span class="tick" style="left:0"></span><span class="tick" style="left:25%"></span><span class="tick" style="left:50%"></span><span class="tick" style="left:75%"></span><span class="tick" style="left:calc(100% - 1px)"></span>
+          <span class="band" data-bind="cp-band" style="left:0;transform:translateX(160px) scaleX(.0625)"></span>
+        </div>
+        <div class="range-scale num"><span>0</span><span>40</span><span>80</span><span>120</span><span>160</span></div>
+        <div class="reading-line"><span class="v num" data-bind="fps-cp">96–108<span class="unit"> fps</span></span><span class="conf">Medium<i class="f"></i><i class="f"></i><i></i></span></div>
+        <div class="limiter">Limited by the graphics card. A faster CPU adds about 1%.</div>
+      </div>
+      <div class="game">
+        <div class="gt"><span>Counter-Strike 2</span><span class="cond-l">1440p High</span></div>
+        <div class="range" aria-hidden="true">
+          <span class="axis"></span>
+          <span class="tick" style="left:0"></span><span class="tick" style="left:25%"></span><span class="tick" style="left:50%"></span><span class="tick" style="left:75%"></span><span class="tick" style="left:calc(100% - 1px)"></span>
+          <span class="band" data-bind="cs-band" style="left:0;transform:translateX(200px) scaleX(.1)"></span>
+        </div>
+        <div class="range-scale num"><span>0</span><span>150</span><span>300</span><span>450</span><span>600</span></div>
+        <div class="reading-line"><span class="v num" data-bind="fps-cs">470–540<span class="unit"> fps</span></span><span class="conf">Low<i class="f"></i><i></i><i></i></span></div>
+        <div class="limiter">Limited by the processor. Varies by map.</div>
+      </div>
+      <div class="prov"><span>Estimates from published reviews, not measured on this build.</span><a href="#">Method</a></div>
+    </section>
+
+    <section class="rpanel" aria-label="Power">
+      <h2><span>Power draw</span><span>PSU 850 W</span></h2>
+      <div class="row"><span>Gaming, peaks</span><span class="num" data-bind="pw-gaming">430–490 W, up to 620 W</span></div>
+      <div class="power" aria-hidden="true"><span class="g" data-bind="pw-band" style="left:50.6%;width:7.1%"></span><span class="p" data-bind="pw-peak-mark" style="left:72.9%"></span><span class="cap" style="left:calc(100% - 2px)"></span></div>
+      <div class="prov"><span data-bind="pw-headroom">27% headroom at peak</span></div>
+    </section>
+
+    <section class="rpanel" aria-label="Compatibility checks">
+      <h2><span>Checks</span><span class="num" data-bind="checks-sum">6 of 6 pass</span></h2>
+      <ul class="checks">
+        <li><svg class="i state ok"><use href="#i-ok"/></svg><span>Socket</span><em>AM5 and AM5</em></li>
+        <li><svg class="i state ok" data-bind="bios-icon"><use href="#i-ok"/></svg><span>BIOS</span><em data-bind="bios">Supported</em></li>
+        <li><svg class="i state ok"><use href="#i-ok"/></svg><span>Memory</span><em>DDR5, 2 of 4 slots</em></li>
+        <li><svg class="i state ok" data-bind="cool-icon"><use href="#i-ok"/></svg><span>Cooling</span><em data-bind="cool">Rated for this CPU</em></li>
+        <li><svg class="i state ok"><use href="#i-ok"/></svg><span>Clearance</span><em>GPU and cooler fit</em></li>
+        <li><svg class="i state ok"><use href="#i-ok"/></svg><span>Power</span><em>850 W covers peaks</em></li>
+      </ul>
+    </section>
+  </aside>
+
+  <footer class="status" aria-live="polite">
+    <span>Focus</span>
+    <span class="hl" data-bind="st-what">Price, Ryzen 7 9800X3D</span>
+    <span class="num" data-bind="st-val">SAR 1,899</span>
+    <span data-bind="st-src">Amazon.sa, product page</span>
+    <span class="num" data-bind="st-date">Retrieved 30 Sep 2026, 09:14 UTC</span>
+    <a class="link" href="#" style="display:flex;align-items:center;gap:6px;padding:0 12px"><svg class="i"><use href="#i-ext"/></svg>Open source</a>
+    <span class="mocklabel">Mock A: Bench. Illustrative values, not data.</span>
+  </footer>
+</div>
+
+<div class="dock" aria-label="Live readout">
+  <div class="d-total"><b class="num" data-bind="dock-total"><span class="unit">SAR</span>9,412</b><small>As of 30 Sep 2026</small></div>
+  <div class="d-fps"><b class="num" data-bind="dock-cp">96–108<span class="unit"> fps</span></b><small>Cyberpunk, medium</small></div>
+  <div class="d-fps d-cs"><b class="num" data-bind="dock-cs">470–540<span class="unit"> fps</span></b><small>Counter-Strike 2, low</small></div>
+  <div class="d-cmp"><button class="primary" type="button"><svg class="i"><use href="#i-compare"/></svg><span class="cl">Compare </span><span data-bind="dock-cmp">2</span></button></div>
+</div>
+<p class="sr">Mock A: Bench. Illustrative values, not data.</p>
+
+<script>
+// Illustrative values only. Prices are per market observations, never conversions.
+const OTHER = { sar: 7513, usd: 1990 };
+const CPUS = [
+  { id: '9800x3d', name: 'AMD Ryzen 7 9800X3D', short: 'Ryzen 7 9800X3D', socket: 'AM5', sub: 'AM5, 96 MB L3', cores: '8 / 16', boost: '5.2', tdp: '120', sar: 1899, usd: 479, cp: [96, 108], cs: [470, 540], state: 'ok' },
+  { id: '9950x3d', name: 'AMD Ryzen 9 9950X3D', short: 'Ryzen 9 9950X3D', socket: 'AM5', sub: 'AM5, 128 MB L3', cores: '16 / 32', boost: '5.7', tdp: '170', sar: 2849, usd: 699, cp: [96, 109], cs: [480, 550], state: 'warn',
+    reason: 'Draws up to 230 W under all-core load, so your 120 mm air cooler will run loud in long renders.', rule: 'cooler-tdp-class' },
+  { id: '7800x3d', name: 'AMD Ryzen 7 7800X3D', short: 'Ryzen 7 7800X3D', socket: 'AM5', sub: 'AM5, 96 MB L3', cores: '8 / 16', boost: '5.0', tdp: '120', sar: 1549, usd: 399, cp: [95, 107], cs: [420, 490], state: 'ok' },
+  { id: '9600x', name: 'AMD Ryzen 5 9600X', short: 'Ryzen 5 9600X', socket: 'AM5', sub: 'AM5, 32 MB L3', cores: '6 / 12', boost: '5.4', tdp: '65', sar: 899, usd: 229, cp: [92, 104], cs: [360, 420], state: 'warn',
+    reason: 'May need a BIOS update before first boot. Your board can update without a CPU installed.', rule: 'bios-min-version' },
+  { id: '265k', name: 'Intel Core Ultra 7 265K', short: 'Core Ultra 7 265K', socket: 'LGA1851', sub: 'LGA1851, 30 MB', cores: '20 / 20', boost: '5.5', tdp: '125', sar: 1199, usd: 299, state: 'block',
+    reason: 'Needs an LGA1851 board. Your board is AM5.', rule: 'socket-match' },
+  { id: '245k', name: 'Intel Core Ultra 5 245K', short: 'Core Ultra 5 245K', socket: 'LGA1851', sub: 'LGA1851, 24 MB', cores: '14 / 14', boost: '5.2', tdp: '125', sar: 949, usd: 239, state: 'block',
+    reason: 'Needs an LGA1851 board. Your board is AM5.', rule: 'socket-match' },
+  { id: '14600k', name: 'Intel Core i5-14600K', short: 'Core i5-14600K', socket: 'LGA1700', sub: 'LGA1700, 24 MB', cores: '14 / 20', boost: '5.3', tdp: '125', sar: 799, usd: 199, state: 'block',
+    reason: 'Needs an LGA1700 board. Your board is AM5.', rule: 'socket-match' },
+  { id: '5700x3d', name: 'AMD Ryzen 7 5700X3D', short: 'Ryzen 7 5700X3D', socket: 'AM4', sub: 'AM4, 96 MB L3', cores: '8 / 16', boost: '4.1', tdp: '105', sar: null, usd: 219, state: 'block',
+    reason: 'Needs an AM4 board and DDR4 memory. Your board is AM5 with DDR5.', rule: 'socket-match' },
+];
+const STATE = { ok: ['Compatible', 'i-ok'], warn: ['Warning', 'i-warn'], block: ['Incompatible', 'i-block'] };
+let cur = 'sar', selected = '9800x3d';
+const compare = new Set(['9800x3d', '7800x3d']);
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const fmt = (n) => n.toLocaleString('en-US');
+const money = (n) => n == null ? null : (cur === 'sar' ? 'SAR ' : 'USD ') + fmt(n);
+const $ = (s) => document.querySelector(s);
+const bind = (k) => document.querySelector(`[data-bind="${k}"]`);
+
+function render() {
+  const rows = CPUS.map((c) => {
+    const [label, icon] = STATE[c.state];
+    const price = c[cur];
+    const pc = price == null ? `<span class="nogap">No SA price found</span>` : `<span class="cur unit">${cur === 'sar' ? 'SAR' : 'USD'} </span>${fmt(price)}`;
+    const blocked = c.state === 'block';
+    const fps = c.cp ? `<span class="fps"><span class="mini" aria-hidden="true"><b style="transform:translateX(${(c.cp[0] - 80) / 40 * 64}px) scaleX(${(c.cp[1] - c.cp[0]) / 40})"></b></span><span class="num">${c.cp[0]}–${c.cp[1]}<span class="ph unit"> fps</span></span></span>` : '<span class="num" aria-label="Not estimated">—</span>';
+    const act = blocked ? `<button class="sel" type="button" aria-disabled="true" title="${c.reason}">Select</button>`
+      : c.id === selected ? `<button class="sel on" type="button"><svg class="i"><use href="#i-check"/></svg>Selected</button>`
+      : `<button class="sel" type="button">Select</button>`;
+    const main = `<tr class="part ${c.id === selected ? 'selected' : ''} ${blocked ? 'blocked' : ''} ${c.reason ? 'has-reason' : ''}" data-id="${c.id}">
+      <td class="cb"><button class="cbx" type="button" role="checkbox" aria-checked="${compare.has(c.id)}" aria-label="Compare ${c.name}" ${blocked ? 'disabled' : ''}></button></td>
+      <td class="c-name"><span class="pname">${c.name}</span><span class="psub">${c.sub}</span></td>
+      <td class="r num num-cell c-cores">${c.cores}</td>
+      <td class="r num num-cell col-boost">${c.boost}<span class="unit"> GHz</span></td>
+      <td class="r num num-cell col-tdp">${c.tdp}<span class="unit"> W</span></td>
+      <td class="r c-fps">${fps}</td>
+      <td class="r num price-cell c-price ${c.id === selected ? 'focused' : ''}">${pc}</td>
+      <td class="c-state"><span class="state ${c.state}"><svg class="i"><use href="#${icon}"/></svg>${label}</span></td>
+      <td class="c-act">${act}</td></tr>`;
+    const reason = c.reason ? `<tr class="reason"><td colspan="9"><span class="why ${c.state}"><svg class="i" aria-hidden="true"><use href="#${icon}"/></svg><span><span class="sr">${label}: </span>${c.reason}<span class="rule">Rule ${c.rule}</span></span></span></td></tr>` : '';
+    return main + reason;
+  }).join('');
+  $('#rows').innerHTML = rows;
+  bind('price-head').textContent = cur === 'sar' ? 'Price, SAR' : 'Price, USD';
+  bind('market').textContent = cur === 'sar' ? 'SA market' : 'US market';
+  bind('cmp-count').textContent = `${compare.size} of 3`;
+  bind('cmp-chips').innerHTML = [...compare].map((id) => `<span class="cchip">${CPUS.find((c) => c.id === id).short}</span>`).join('');
+}
+
+function tween(el, from, to, fmtFn, ms = 240) {
+  if (reduce || from === to) { el.innerHTML = fmtFn(to); return; }
+  const t0 = performance.now();
+  const step = (t) => {
+    const k = Math.min(1, (t - t0) / ms), e = 1 - Math.pow(1 - k, 3);
+    el.innerHTML = fmtFn(Math.round(from + (to - from) * e));
+    if (k < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+let lastTotal = OTHER.sar + 1899, lastDock = lastTotal;
+// Keep the grid and scale bar true to the drawing: 100 mm in screen pixels, measured after layout.
+function calibrate() {
+  const svg = document.querySelector('.drawing svg.case');
+  if (!svg) return;
+  const unitsPerMm = parseFloat(svg.dataset.unitsPerMm);
+  const pxPerUnit = svg.getBoundingClientRect().height / svg.viewBox.baseVal.height;
+  document.querySelector('.specimen').style.setProperty('--mm100', (100 * unitsPerMm * pxPerUnit).toFixed(1) + 'px');
+}
+addEventListener('resize', calibrate);
+function readouts() {
+  const c = CPUS.find((x) => x.id === selected);
+  const total = OTHER[cur] + (c[cur] || 0);
+  const code = cur === 'sar' ? 'SAR' : 'USD';
+  tween(bind('total'), lastTotal, total, (v) => `<span class="unit">${code}</span>${fmt(v)}`);
+  lastTotal = total;
+  const budget = cur === 'sar' ? 9500 : 2530;
+  bind('budget').textContent = `${code} ${fmt(budget)}, ${code} ${fmt(Math.abs(budget - total))} ${budget >= total ? 'left' : 'over'}`;
+  bind('budget-bar').style.transform = `scaleX(${Math.min(1, total / budget)})`;
+  bind('fps-cp').innerHTML = `${c.cp[0]}–${c.cp[1]}<span class="unit"> fps</span>`;
+  bind('fps-cs').innerHTML = `${c.cs[0]}–${c.cs[1]}<span class="unit"> fps</span>`;
+  bind('dock-cp').innerHTML = `${c.cp[0]}–${c.cp[1]}<span class="unit"> fps</span>`;
+  bind('dock-cs').innerHTML = `${c.cs[0]}–${c.cs[1]}<span class="unit"> fps</span>`;
+  tween(bind('dock-total'), lastDock, total, (v) => `<span class="unit">${code}</span>${fmt(v)}`);
+  lastDock = total;
+  bind('dock-cmp').textContent = `${compare.size}`;
+  const w = document.querySelector('.range').clientWidth || 312;
+  bind('cp-band').style.transform = `translateX(${c.cp[0] / 160 * w}px) scaleX(${(c.cp[1] - c.cp[0]) / 160})`;
+  bind('cs-band').style.transform = `translateX(${c.cs[0] / 600 * w}px) scaleX(${(c.cs[1] - c.cs[0]) / 600})`;
+  bind('cpu-name').textContent = c.short;
+  bind('st-what').textContent = `Price, ${c.short}`;
+  bind('st-val').textContent = c[cur] == null ? 'No price' : money(c[cur]);
+  bind('st-src').textContent = cur === 'sar' ? 'Amazon.sa, product page' : 'Newegg, product page';
+  bind('cool').textContent = c.state === 'warn' && c.rule === 'cooler-tdp-class' ? 'Near the cooler’s limit' : 'Rated for this CPU';
+  bind('bios').textContent = c.rule === 'bios-min-version' ? 'Update may be needed' : 'Supported';
+  bind('checks-sum').textContent = c.state === 'warn' ? '5 of 6 pass, 1 warning' : '6 of 6 pass';
+}
+
+document.addEventListener('click', (e) => {
+  const cb = e.target.closest('.cbx');
+  if (cb) { const id = cb.closest('tr').dataset.id; compare.has(id) ? compare.delete(id) : compare.size < 3 && compare.add(id); render(); return; }
+  const tr = e.target.closest('tr.part');
+  if (tr && !tr.classList.contains('blocked')) { selected = tr.dataset.id; render(); readouts(); return; }
+  const seg = e.target.closest('.seg button');
+  if (seg) { cur = seg.dataset.cur; document.querySelectorAll('.seg button').forEach((b) => b.setAttribute('aria-pressed', b === seg)); render(); readouts(); return; }
+  if (e.target.closest('#theme')) { const r = document.documentElement; r.dataset.theme = r.dataset.theme === 'light' ? 'dark' : 'light'; }
+});
+const q = new URLSearchParams(location.search);
+if (q.get('theme') === 'light') document.documentElement.dataset.theme = 'light';
+render(); readouts(); calibrate();
+</script>
+</body>
+</html>
