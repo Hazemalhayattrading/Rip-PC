@@ -293,6 +293,8 @@ function checkSanity(sink: IssueSink, file: string, r: SpecRecord): void {
     case 'case-fan': {
       if (r.minRpm !== null && r.minRpm > r.maxRpm) bad('min RPM > max RPM', 'minRpm');
       if (![80, 92, 120, 140, 200].includes(r.sizeMm)) bad('unusual fan size', 'sizeMm');
+      const [noiseLo, noiseHi] = r.noise.unit === 'dBA' ? [5, 60] : [0.05, 10];
+      if (r.noise.value < noiseLo || r.noise.value > noiseHi) bad(`noise out of range for ${r.noise.unit}`, 'noise');
       break;
     }
   }

@@ -331,7 +331,7 @@ export function fixtureData(): FixtureData {
         minRpm: 200,
         airflowCfm: 56,
         staticPressureMmH2O: 2.2,
-        noiseDba: 22,
+        noise: { value: 22, unit: 'dBA' },
         connector: '4-pin PWM',
         lighting: 'none',
         packSize: 1,

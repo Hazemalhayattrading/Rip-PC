@@ -11,7 +11,11 @@ export const CaseFan = z.strictObject({
   minRpm: PosInt.nullable(),
   airflowCfm: PosNum,
   staticPressureMmH2O: PosNum,
-  noiseDba: PosNum,
+  /**
+   * Maximum noise in the unit the maker publishes. Sone and dB(A) do not convert exactly, so the
+   * value is never converted.
+   */
+  noise: z.strictObject({ value: PosNum, unit: z.enum(['dBA', 'sone']) }),
   connector: z.enum(['4-pin PWM', '3-pin DC']),
   lighting: z.enum(['none', 'argb-5v-3pin', 'rgb-12v-4pin']),
   /** Fans in one retail box. */
