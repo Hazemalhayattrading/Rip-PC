@@ -9,15 +9,18 @@ every accepted item independently, and the Director closes the phase in `docs/re
 
 These override anything below that says otherwise.
 
-1. **Archived pages are allowed for specs only, never for prices.**
-   - A price must come from a **live retailer product page** fetched during the batch.
+1. **Archived pages are allowed for specs and benchmarks, never for prices.**
+   - A price must come from a **live retailer product page** fetched during the batch. There are no
+     exceptions.
    - Its `retrievedAt` is the UTC date of that live fetch, never a date copied from the page or
      from an earlier capture.
    - Keep a capture of each page (screenshot or saved HTML) under `artifacts/` as audit evidence.
    - If the live page is blocked or shows no price, the price stays missing and gets a gap record.
    - Archives, caches, search snippets, price trackers and aggregators are never price sources.
-   - Read strictly, "specs only" also keeps archived pages out of **benchmarks**: those come from
-     live publisher pages, unless Hazem says otherwise.
+   - **Benchmarks** may come from an archived copy of a published review, because a review's
+     numbers don't change after publication (amended by Hazem, 2026-09-30). Every benchmark row
+     records the review's original publish date (`publishedAt`). A row read from an archive also
+     keeps the review's original `url` and adds the `archiveUrl`.
 2. **Hazem picks the design direction.** The Director reviews the three directions, then shows them
    to Hazem with screenshots and a recommendation. Hazem makes the final pick.
 
@@ -146,7 +149,14 @@ Need a change in a file you don't own? Message its owner. Never edit it yourself
    - Every missing price has a gap record, and the hand-off lists the gaps per market.
    - The validator rejects any price that has an `archiveUrl`, a publisher that isn't a retailer,
      or a `retrievedAt` outside the batch window.
-5. Benchmarks, **from live publisher pages only** (Owner's rule 1):
+5. Benchmarks, from live publisher pages or archived copies of published reviews (Owner's rule 1).
+   Every row records `publishedAt`. An archived row keeps the original `url` and adds `archiveUrl`.
+   The validator rejects:
+   - an archived row with no `publishedAt`;
+   - a row whose `url` is itself an archive link;
+   - a snapshot dated before the review's `publishedAt`.
+
+   Minimums:
    - **≥ 30 game anchor rows** from **≥ 2 publishers**, with full test conditions. Cover both
      GPU-bound (1440p/4K) and CPU-bound (1080p, top GPU) conditions.
    - **≥ 6 creator anchors** (Blender Open Data and Cinebench R24).
@@ -291,8 +301,10 @@ Known gaps: <honest list, or "none">
   - Allowed fallbacks for **specs**, in order: the WebFetch tool, a Wayback Machine snapshot (keep
     the canonical `url` and add `archiveUrl`), the official PDF manual or datasheet, or a reachable
     manufacturer instead.
-  - **Prices and benchmarks never use archives** (Owner's rule 1). A blocked retailer means a
-    missing price with a gap record. A blocked publisher means choosing another reachable publisher.
+  - **Prices never use archives** (Owner's rule 1). A blocked retailer means a missing price with a
+    gap record.
+  - **Benchmarks may use an archived copy of a published review**, for example TechPowerUp through
+    the Wayback Machine. Keep the original review `url`, add `archiveUrl`, and record `publishedAt`.
   - Be polite: one request at a time per host, and cache captures under `artifacts/` (git-ignored).
     Never commit third-party page captures.
 - 4 CPUs and 15 GB RAM are shared by every team. Run at most 3 workers at once per lead and one
