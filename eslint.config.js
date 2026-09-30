@@ -21,6 +21,9 @@ export default defineConfig([
     'docs/',
     '.claude/',
     '.agents/',
+    '.lighthouseci/',
+    // QA's hand-made copies of minified build output, for the bundle budget checker's tests.
+    'tests/perf/fixtures/',
   ]),
 
   // Every TypeScript file: type-aware strict and stylistic rules.
@@ -93,12 +96,20 @@ export default defineConfig([
     },
   },
 
-  // Plain JavaScript (this file): no type information.
+  // Plain JavaScript (this file, QA's tooling): no type information.
   {
     files: ['**/*.{js,mjs,cjs}'],
     extends: [js.configs.recommended, tseslint.configs.disableTypeChecked],
     languageOptions: {
       globals: globals.node,
+    },
+  },
+
+  // Test tooling in plain JS may also run inside the page (for example an injected fps meter).
+  {
+    files: ['tests/**/*.{js,mjs,cjs}'],
+    languageOptions: {
+      globals: { ...globals.node, ...globals.browser },
     },
   },
 

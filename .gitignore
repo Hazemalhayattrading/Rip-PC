@@ -8,6 +8,7 @@ coverage/
 playwright-report/
 test-results/
 blob-report/
+.lighthouseci/
 *.tsbuildinfo
 
 # Team worktrees live inside the main checkout

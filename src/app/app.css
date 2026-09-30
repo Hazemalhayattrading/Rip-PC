@@ -1,8 +1,12 @@
 /*
- * Tailwind v4 entry. Phase 0 has no visual design: design-lead's tokens (src/styles/, WP-DS1)
- * get imported here once the direction is chosen.
+ * Tailwind v4 entry. Phase 0 has no visual design, so the browser's own defaults stay on:
+ * Preflight (Tailwind's reset) is left out on purpose. It would strip link underlines and
+ * heading sizes, and links inside text would then look like plain text (WCAG 1.4.1).
+ * design-lead's tokens (src/styles/, WP-DS1) decide on Preflight when the direction lands.
  *
  * source('..') limits class detection to src/. Without it Tailwind scans the whole repository,
  * including the skill docs under .agents/, and ships utilities the app never uses.
  */
-@import 'tailwindcss' source('..');
+@layer theme, base, components, utilities;
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities) source('..');
