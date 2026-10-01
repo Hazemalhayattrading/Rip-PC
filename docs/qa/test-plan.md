@@ -691,8 +691,23 @@ the whole record when `fields` is absent). Outcomes:
 
 These checks run on 100% of rows. Field names follow data-lead's validator on
 `feat/data-foundations` @ `8c1fc07` (rule ids `price-capture`, `archive-form`,
-`benchmark-snapshot-date`, `url-is-archive`). WP-Q2 automates them as
-`tests/audit/rule1.mjs`; any failure is a **Blocker**.
+`benchmark-snapshot-date`, `url-is-archive`). Any failure is a **Blocker**.
+
+**Tool** (WP-Q2): `node tests/audit/rule1.mjs --data-dir data --evidence-root <folder holding
+artifacts/> --manifest <sha256 manifest> [--today YYYY-MM-DD] [--json <out>]`. Exit 0 when every
+check passes, 1 on any failure, 2 on bad input. It reads raw JSON with zero dependencies, never
+data-lead's schemas, so it checks the data independently.
+
+- On the home PC the captures are in `C:\Projects\rig-lab-evidence\data-lead-artifacts\`, and
+  the manifest is `docs/reports/phase-0-wip/evidence/data-lead-evidence-manifest.sha256.txt`.
+- Beyond the rows below it adds: R1-P3b (an HTML capture names the url's product id), R1-P6a
+  (the amount appears in an HTML capture: an aid for R1-P6, never a pass of it, since a product
+  page shows many prices), R1-P7 (real part, unique key, positive amount), gap checks R1-G1 to
+  R1-G5, R1-C1 (every purchasable part has a price or a gap in each market) and R1-B6.
+- R1-P4's independent evidence: the capture's modification time, Amazon's own
+  `pageLoadTimestampUTC` inside the hashed capture, and the price runner's fetch log.
+- Proof (2026-10-01): 78 unit tests. A mutation run that planted one violation for each of 11
+  checks in a copy of the real data failed exactly those 11 checks.
 
 **Prices** (`{partId, market, currency, amount, retailer, url, inStock, isMarketplace,
 retrievedAt, capture, captureSha256}`):
@@ -701,7 +716,7 @@ retrievedAt, capture, captureSha256}`):
 |---|---|
 | R1-P1 | `url` is a retailer product page, and the retailer is in the source registry as a retailer. Never web.archive.org, archive.today or archive.ph, a search engine cache or snippet, a price tracker, or an aggregator |
 | R1-P2 | No `archiveUrl` on a price row |
-| R1-P3 | `capture` = `artifacts/prices/<SA\|US>/<partId>--<retailer>--<retrievedAt>.<html\|png>`, matching the row's own market, partId, retailer and retrievedAt. The file exists under data-lead's worktree `/home/user/Rip-PC/.claude/worktrees/agent-a74ed87deec045ea0/artifacts/prices/` (git-ignored, so it is read in C). Its SHA-256 equals `captureSha256` |
+| R1-P3 | `capture` = `artifacts/prices/<SA\|US>/<partId>--<retailer>--<retrievedAt>.<html\|png>`, matching the row's own market, partId, retailer and retrievedAt. The file exists under the evidence root (git-ignored `artifacts/`; on the home PC, `C:\Projects\rig-lab-evidence\data-lead-artifacts\artifacts\prices\`). Its SHA-256 equals `captureSha256` |
 | R1-P4 | `retrievedAt` is the UTC date of that live fetch, falls in the batch window, and matches independent evidence rather than just the file name (which is built from `retrievedAt`). The evidence is the capture file's modification time (UTC date), and, for saved HTML, any fetch timestamp the capture records |
 | R1-P5 | `currency` matches `market` (SA with SAR, US with USD) |
 | R1-P6 | For the 10% sample: the captured page shows the recorded amount, stock state and seller type. A saved HTML capture is searched for the amount; a screenshot is read by eye |
