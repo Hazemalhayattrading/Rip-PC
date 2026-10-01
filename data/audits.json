@@ -371,6 +371,40 @@
           "findings": [],
           "followUp": null
         }
+      ],
+      "reviews": [
+        {
+          "by": "Director",
+          "at": "2026-10-01",
+          "scope": "Spot checks against the captures: CPU cores, threads, clocks, L3, power and PCIe lanes (all 16); GPU chip shaders, VRAM, bus, TBP and lanes; the B650 boards' M.2 layout and lane sharing; the RTX 5080 FE's dimensions, connector and PSU; prices for Owner's rule 1, archives, the batch window and marketplace flags; the Pop Air, Pop Mini Air and Terra cases against their structured fields and attribute notes.",
+          "findings": [
+            {
+              "items": [
+                "fractal-north-charcoal-black-tg-light"
+              ],
+              "field": "coolerClearance",
+              "found": "Recorded 145 mm with no condition. Fractal's note limits 145 mm to the Mesh version with its side fan bracket: \"145 mm with Fan Bracket (Mesh version only) / 170 mm without\". This TG Light SKU has no bracket.",
+              "fix": "coolerClearance set to 170 mm, unconditional, with a note quoting the maker. The DeepCool AK620 (160 mm) now fits.",
+              "fixedIn": "067eb7e"
+            }
+          ]
+        },
+        {
+          "by": "data-lead (sweep after the Director's review)",
+          "at": "2026-10-01",
+          "scope": "Every case's GPU, cooler, PSU and radiator limits against the page's structured fields and attribute notes (the four Fractal cases), and against the product page, the press release and manual pages 3, 8 and 10 (DeepCool CH560); coolers and GPU cards for values that depend on a variant or configuration.",
+          "findings": [
+            {
+              "items": [
+                "fractal-north-charcoal-black-tg-light"
+              ],
+              "field": "psu",
+              "found": "Recorded 255 mm with no condition. Fractal's note gives two limits, \"1 HDD tray: 255 mm max; 2 HDD tray: 155 mm max\", and the page does not say how many trays ship fitted.",
+              "fix": "PSU limits became per-configuration rows (psu.clearance, a schema change): 255 mm \"with 1 HDD tray\" and 155 mm \"with 2 HDD trays\", neither unconditional.",
+              "fixedIn": "bf7caad"
+            }
+          ]
+        }
       ]
     }
   ]

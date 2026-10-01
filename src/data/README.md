@@ -230,5 +230,6 @@ a benchmark without its test conditions, or a price outside its batch window wit
   condition.
 - Fix every finding. A finding in the sample means a re-check of the whole batch for the same fault.
 - Record the audit in `data/audits.json`: per batch, the sample, what it was read against, the findings
-  with the commit that fixed each, and any follow-up outside the sample. `src/data/audits.test.ts`
-  checks it.
+  with the commit that fixed each, and any follow-up outside the sample. A later check of the batch
+  (the Director's review, or a sweep it leads to) goes in `reviews`: who, when, the scope, and its
+  findings with their fix commits. `src/data/audits.test.ts` checks it.

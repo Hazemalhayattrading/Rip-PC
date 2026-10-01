@@ -57,6 +57,17 @@ describe('audits (data/audits.json)', () => {
     }
   });
 
+  it.each(audits)('%s: every review finding names real records', (_, audit) => {
+    const ids = new Set([
+      ...Object.values(dataset.specs).flatMap((list) => (list ?? []).map((r) => r.id)),
+      ...(dataset.gameBenchmarks ?? []).map((r) => r.id),
+      ...(dataset.creatorBenchmarks ?? []).map((r) => r.id),
+      ...(dataset.games?.games ?? []).map((g) => g.id),
+    ]);
+    const unknown = audit.reviews.flatMap((r) => r.findings.flatMap((f) => f.items)).filter((id) => !ids.has(id));
+    expect(unknown).toEqual([]);
+  });
+
   it.each(audits)('%s: every sampled item is in the data, or a finding covers it', (_, audit) => {
     for (const b of audit.batches) {
       const covered = new Set(b.findings.flatMap((f) => f.items));
