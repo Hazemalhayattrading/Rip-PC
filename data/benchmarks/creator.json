@@ -1,0 +1,1904 @@
+{
+  "schemaVersion": 1,
+  "items": [
+    {
+      "id": "tpu-9800x3d-cinebench-2024-multi-core-intel-core-ultra-9-285k",
+      "app": "cinebench-2024",
+      "appVersion": "2024",
+      "test": "multi-core",
+      "device": "cpu",
+      "backend": null,
+      "subject": {
+        "type": "cpu",
+        "cpuId": "intel-core-ultra-9-285k"
+      },
+      "score": 2448,
+      "unit": "points",
+      "aggregate": null,
+      "testSystem": {
+        "cpu": "Intel Core Ultra 9 285K on ASUS Z890 Maximus Hero (BIOS 0805)",
+        "gpu": "PNY GeForce RTX 4090 XLR8",
+        "ram": "2 x 16 GB DDR5-6000 36-36-36-76, 2T, Gear 2",
+        "os": "Windows 11 Professional 64-bit 23H2 (VBS enabled)"
+      },
+      "publishedAt": "2024-11-06",
+      "sources": [
+        {
+          "url": "https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/9.html",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241111154913/https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/9.html",
+          "fields": [
+            "app",
+            "appVersion",
+            "device",
+            "test",
+            "publishedAt"
+          ],
+          "title": "AMD Ryzen 7 9800X3D Review - The Best Gaming Processor: Rendering",
+          "locator": "Rendering - Cinebench"
+        },
+        {
+          "url": "https://tpucdn.com/review/amd-ryzen-7-9800x3d/images/cinebench-multi.png",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241111155400/https://tpucdn.com/review/amd-ryzen-7-9800x3d/images/cinebench-multi.png",
+          "fields": [
+            "score",
+            "unit",
+            "test",
+            "app"
+          ],
+          "title": "Chart image (Cinebench 2024 Multi)"
+        },
+        {
+          "url": "https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/5.html",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241128204037/https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/5.html",
+          "fields": [
+            "testSystem",
+            "publishedAt"
+          ],
+          "title": "AMD Ryzen 7 9800X3D Review - The Best Gaming Processor: Test Setup"
+        }
+      ],
+      "notes": [
+        {
+          "field": "appVersion",
+          "text": "TechPowerUp names \"Cinebench 2024\" without a build number."
+        },
+        {
+          "text": "Read from the Internet Archive (techpowerup.com answers our fetcher with 403); stock settings, the chart's plain bar for this CPU."
+        }
+      ]
+    },
+    {
+      "id": "tpu-9800x3d-cinebench-2024-multi-core-amd-ryzen-9-9950x",
+      "app": "cinebench-2024",
+      "appVersion": "2024",
+      "test": "multi-core",
+      "device": "cpu",
+      "backend": null,
+      "subject": {
+        "type": "cpu",
+        "cpuId": "amd-ryzen-9-9950x"
+      },
+      "score": 2305,
+      "unit": "points",
+      "aggregate": null,
+      "testSystem": {
+        "cpu": "AMD Ryzen 9 9950X on ASUS X670E Crosshair Hero (BIOS 2201)",
+        "gpu": "PNY GeForce RTX 4090 XLR8",
+        "ram": "2 x 16 GB DDR5-6000 36-36-36-76, Infinity Fabric 2000 MHz",
+        "os": "Windows 11 Professional 64-bit 23H2 (VBS enabled)"
+      },
+      "publishedAt": "2024-11-06",
+      "sources": [
+        {
+          "url": "https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/9.html",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241111154913/https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/9.html",
+          "fields": [
+            "app",
+            "appVersion",
+            "device",
+            "test",
+            "publishedAt"
+          ],
+          "title": "AMD Ryzen 7 9800X3D Review - The Best Gaming Processor: Rendering",
+          "locator": "Rendering - Cinebench"
+        },
+        {
+          "url": "https://tpucdn.com/review/amd-ryzen-7-9800x3d/images/cinebench-multi.png",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241111155400/https://tpucdn.com/review/amd-ryzen-7-9800x3d/images/cinebench-multi.png",
+          "fields": [
+            "score",
+            "unit",
+            "test",
+            "app"
+          ],
+          "title": "Chart image (Cinebench 2024 Multi)"
+        },
+        {
+          "url": "https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/5.html",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241128204037/https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/5.html",
+          "fields": [
+            "testSystem",
+            "publishedAt"
+          ],
+          "title": "AMD Ryzen 7 9800X3D Review - The Best Gaming Processor: Test Setup"
+        }
+      ],
+      "notes": [
+        {
+          "field": "appVersion",
+          "text": "TechPowerUp names \"Cinebench 2024\" without a build number."
+        },
+        {
+          "text": "Read from the Internet Archive (techpowerup.com answers our fetcher with 403); stock settings, the chart's plain bar for this CPU."
+        }
+      ]
+    },
+    {
+      "id": "tpu-9800x3d-cinebench-2024-multi-core-intel-core-ultra-7-265k",
+      "app": "cinebench-2024",
+      "appVersion": "2024",
+      "test": "multi-core",
+      "device": "cpu",
+      "backend": null,
+      "subject": {
+        "type": "cpu",
+        "cpuId": "intel-core-ultra-7-265k"
+      },
+      "score": 2090,
+      "unit": "points",
+      "aggregate": null,
+      "testSystem": {
+        "cpu": "Intel Core Ultra 7 265K on ASUS Z890 Maximus Hero (BIOS 0805)",
+        "gpu": "PNY GeForce RTX 4090 XLR8",
+        "ram": "2 x 16 GB DDR5-6000 36-36-36-76, 2T, Gear 2",
+        "os": "Windows 11 Professional 64-bit 23H2 (VBS enabled)"
+      },
+      "publishedAt": "2024-11-06",
+      "sources": [
+        {
+          "url": "https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/9.html",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241111154913/https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/9.html",
+          "fields": [
+            "app",
+            "appVersion",
+            "device",
+            "test",
+            "publishedAt"
+          ],
+          "title": "AMD Ryzen 7 9800X3D Review - The Best Gaming Processor: Rendering",
+          "locator": "Rendering - Cinebench"
+        },
+        {
+          "url": "https://tpucdn.com/review/amd-ryzen-7-9800x3d/images/cinebench-multi.png",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241111155400/https://tpucdn.com/review/amd-ryzen-7-9800x3d/images/cinebench-multi.png",
+          "fields": [
+            "score",
+            "unit",
+            "test",
+            "app"
+          ],
+          "title": "Chart image (Cinebench 2024 Multi)"
+        },
+        {
+          "url": "https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/5.html",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241128204037/https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/5.html",
+          "fields": [
+            "testSystem",
+            "publishedAt"
+          ],
+          "title": "AMD Ryzen 7 9800X3D Review - The Best Gaming Processor: Test Setup"
+        }
+      ],
+      "notes": [
+        {
+          "field": "appVersion",
+          "text": "TechPowerUp names \"Cinebench 2024\" without a build number."
+        },
+        {
+          "text": "Read from the Internet Archive (techpowerup.com answers our fetcher with 403); stock settings, the chart's plain bar for this CPU."
+        }
+      ]
+    },
+    {
+      "id": "tpu-9800x3d-cinebench-2024-multi-core-intel-core-i7-14700k",
+      "app": "cinebench-2024",
+      "appVersion": "2024",
+      "test": "multi-core",
+      "device": "cpu",
+      "backend": null,
+      "subject": {
+        "type": "cpu",
+        "cpuId": "intel-core-i7-14700k"
+      },
+      "score": 1950,
+      "unit": "points",
+      "aggregate": null,
+      "testSystem": {
+        "cpu": "Intel Core i7-14700K on ASUS Z790 Maximus Dark Hero (BIOS 1302)",
+        "gpu": "PNY GeForce RTX 4090 XLR8",
+        "ram": "2 x 16 GB DDR5-6000 36-36-36-76, 2T, Gear 2",
+        "os": "Windows 11 Professional 64-bit 23H2 (VBS enabled)"
+      },
+      "publishedAt": "2024-11-06",
+      "sources": [
+        {
+          "url": "https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/9.html",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241111154913/https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/9.html",
+          "fields": [
+            "app",
+            "appVersion",
+            "device",
+            "test",
+            "publishedAt"
+          ],
+          "title": "AMD Ryzen 7 9800X3D Review - The Best Gaming Processor: Rendering",
+          "locator": "Rendering - Cinebench"
+        },
+        {
+          "url": "https://tpucdn.com/review/amd-ryzen-7-9800x3d/images/cinebench-multi.png",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241111155400/https://tpucdn.com/review/amd-ryzen-7-9800x3d/images/cinebench-multi.png",
+          "fields": [
+            "score",
+            "unit",
+            "test",
+            "app"
+          ],
+          "title": "Chart image (Cinebench 2024 Multi)"
+        },
+        {
+          "url": "https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/5.html",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241128204037/https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/5.html",
+          "fields": [
+            "testSystem",
+            "publishedAt"
+          ],
+          "title": "AMD Ryzen 7 9800X3D Review - The Best Gaming Processor: Test Setup"
+        }
+      ],
+      "notes": [
+        {
+          "field": "appVersion",
+          "text": "TechPowerUp names \"Cinebench 2024\" without a build number."
+        },
+        {
+          "text": "Read from the Internet Archive (techpowerup.com answers our fetcher with 403); stock settings, the chart's plain bar for this CPU."
+        }
+      ]
+    },
+    {
+      "id": "tpu-9800x3d-cinebench-2024-multi-core-intel-core-i5-14600k",
+      "app": "cinebench-2024",
+      "appVersion": "2024",
+      "test": "multi-core",
+      "device": "cpu",
+      "backend": null,
+      "subject": {
+        "type": "cpu",
+        "cpuId": "intel-core-i5-14600k"
+      },
+      "score": 1410,
+      "unit": "points",
+      "aggregate": null,
+      "testSystem": {
+        "cpu": "Intel Core i5-14600K on ASUS Z790 Maximus Dark Hero (BIOS 1302)",
+        "gpu": "PNY GeForce RTX 4090 XLR8",
+        "ram": "2 x 16 GB DDR5-6000 36-36-36-76, 2T, Gear 2",
+        "os": "Windows 11 Professional 64-bit 23H2 (VBS enabled)"
+      },
+      "publishedAt": "2024-11-06",
+      "sources": [
+        {
+          "url": "https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/9.html",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241111154913/https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/9.html",
+          "fields": [
+            "app",
+            "appVersion",
+            "device",
+            "test",
+            "publishedAt"
+          ],
+          "title": "AMD Ryzen 7 9800X3D Review - The Best Gaming Processor: Rendering",
+          "locator": "Rendering - Cinebench"
+        },
+        {
+          "url": "https://tpucdn.com/review/amd-ryzen-7-9800x3d/images/cinebench-multi.png",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241111155400/https://tpucdn.com/review/amd-ryzen-7-9800x3d/images/cinebench-multi.png",
+          "fields": [
+            "score",
+            "unit",
+            "test",
+            "app"
+          ],
+          "title": "Chart image (Cinebench 2024 Multi)"
+        },
+        {
+          "url": "https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/5.html",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241128204037/https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/5.html",
+          "fields": [
+            "testSystem",
+            "publishedAt"
+          ],
+          "title": "AMD Ryzen 7 9800X3D Review - The Best Gaming Processor: Test Setup"
+        }
+      ],
+      "notes": [
+        {
+          "field": "appVersion",
+          "text": "TechPowerUp names \"Cinebench 2024\" without a build number."
+        },
+        {
+          "text": "Read from the Internet Archive (techpowerup.com answers our fetcher with 403); stock settings, the chart's plain bar for this CPU."
+        }
+      ]
+    },
+    {
+      "id": "tpu-9800x3d-cinebench-2024-multi-core-amd-ryzen-7-9800x3d",
+      "app": "cinebench-2024",
+      "appVersion": "2024",
+      "test": "multi-core",
+      "device": "cpu",
+      "backend": null,
+      "subject": {
+        "type": "cpu",
+        "cpuId": "amd-ryzen-7-9800x3d"
+      },
+      "score": 1372,
+      "unit": "points",
+      "aggregate": null,
+      "testSystem": {
+        "cpu": "AMD Ryzen 7 9800X3D on ASUS X870E Crosshair Hero (BIOS 0605)",
+        "gpu": "PNY GeForce RTX 4090 XLR8",
+        "ram": "2 x 16 GB DDR5-6000 36-36-36-76, Infinity Fabric 2000 MHz",
+        "os": "Windows 11 Professional 64-bit 23H2 (VBS enabled)"
+      },
+      "publishedAt": "2024-11-06",
+      "sources": [
+        {
+          "url": "https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/9.html",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241111154913/https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/9.html",
+          "fields": [
+            "app",
+            "appVersion",
+            "device",
+            "test",
+            "publishedAt"
+          ],
+          "title": "AMD Ryzen 7 9800X3D Review - The Best Gaming Processor: Rendering",
+          "locator": "Rendering - Cinebench"
+        },
+        {
+          "url": "https://tpucdn.com/review/amd-ryzen-7-9800x3d/images/cinebench-multi.png",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241111155400/https://tpucdn.com/review/amd-ryzen-7-9800x3d/images/cinebench-multi.png",
+          "fields": [
+            "score",
+            "unit",
+            "test",
+            "app"
+          ],
+          "title": "Chart image (Cinebench 2024 Multi)"
+        },
+        {
+          "url": "https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/5.html",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241128204037/https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/5.html",
+          "fields": [
+            "testSystem",
+            "publishedAt"
+          ],
+          "title": "AMD Ryzen 7 9800X3D Review - The Best Gaming Processor: Test Setup"
+        }
+      ],
+      "notes": [
+        {
+          "field": "appVersion",
+          "text": "TechPowerUp names \"Cinebench 2024\" without a build number."
+        },
+        {
+          "text": "Read from the Internet Archive (techpowerup.com answers our fetcher with 403); stock settings, the chart's plain bar for this CPU."
+        }
+      ]
+    },
+    {
+      "id": "tpu-9800x3d-cinebench-2024-multi-core-amd-ryzen-7-9700x",
+      "app": "cinebench-2024",
+      "appVersion": "2024",
+      "test": "multi-core",
+      "device": "cpu",
+      "backend": null,
+      "subject": {
+        "type": "cpu",
+        "cpuId": "amd-ryzen-7-9700x"
+      },
+      "score": 1208,
+      "unit": "points",
+      "aggregate": null,
+      "testSystem": {
+        "cpu": "AMD Ryzen 7 9700X on ASUS X670E Crosshair Hero (BIOS 2201)",
+        "gpu": "PNY GeForce RTX 4090 XLR8",
+        "ram": "2 x 16 GB DDR5-6000 36-36-36-76, Infinity Fabric 2000 MHz",
+        "os": "Windows 11 Professional 64-bit 23H2 (VBS enabled)"
+      },
+      "publishedAt": "2024-11-06",
+      "sources": [
+        {
+          "url": "https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/9.html",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241111154913/https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/9.html",
+          "fields": [
+            "app",
+            "appVersion",
+            "device",
+            "test",
+            "publishedAt"
+          ],
+          "title": "AMD Ryzen 7 9800X3D Review - The Best Gaming Processor: Rendering",
+          "locator": "Rendering - Cinebench"
+        },
+        {
+          "url": "https://tpucdn.com/review/amd-ryzen-7-9800x3d/images/cinebench-multi.png",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241111155400/https://tpucdn.com/review/amd-ryzen-7-9800x3d/images/cinebench-multi.png",
+          "fields": [
+            "score",
+            "unit",
+            "test",
+            "app"
+          ],
+          "title": "Chart image (Cinebench 2024 Multi)"
+        },
+        {
+          "url": "https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/5.html",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241128204037/https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/5.html",
+          "fields": [
+            "testSystem",
+            "publishedAt"
+          ],
+          "title": "AMD Ryzen 7 9800X3D Review - The Best Gaming Processor: Test Setup"
+        }
+      ],
+      "notes": [
+        {
+          "field": "appVersion",
+          "text": "TechPowerUp names \"Cinebench 2024\" without a build number."
+        },
+        {
+          "text": "Read from the Internet Archive (techpowerup.com answers our fetcher with 403); stock settings, the chart's plain bar for this CPU."
+        }
+      ]
+    },
+    {
+      "id": "tpu-9800x3d-cinebench-2024-multi-core-amd-ryzen-7-7800x3d",
+      "app": "cinebench-2024",
+      "appVersion": "2024",
+      "test": "multi-core",
+      "device": "cpu",
+      "backend": null,
+      "subject": {
+        "type": "cpu",
+        "cpuId": "amd-ryzen-7-7800x3d"
+      },
+      "score": 1104,
+      "unit": "points",
+      "aggregate": null,
+      "testSystem": {
+        "cpu": "AMD Ryzen 7 7800X3D on ASUS X670E Crosshair Hero (BIOS 2007)",
+        "gpu": "PNY GeForce RTX 4090 XLR8",
+        "ram": "2 x 16 GB DDR5-6000 36-36-36-76, Infinity Fabric 2000 MHz",
+        "os": "Windows 11 Professional 64-bit 23H2 (VBS enabled)"
+      },
+      "publishedAt": "2024-11-06",
+      "sources": [
+        {
+          "url": "https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/9.html",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241111154913/https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/9.html",
+          "fields": [
+            "app",
+            "appVersion",
+            "device",
+            "test",
+            "publishedAt"
+          ],
+          "title": "AMD Ryzen 7 9800X3D Review - The Best Gaming Processor: Rendering",
+          "locator": "Rendering - Cinebench"
+        },
+        {
+          "url": "https://tpucdn.com/review/amd-ryzen-7-9800x3d/images/cinebench-multi.png",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241111155400/https://tpucdn.com/review/amd-ryzen-7-9800x3d/images/cinebench-multi.png",
+          "fields": [
+            "score",
+            "unit",
+            "test",
+            "app"
+          ],
+          "title": "Chart image (Cinebench 2024 Multi)"
+        },
+        {
+          "url": "https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/5.html",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241128204037/https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/5.html",
+          "fields": [
+            "testSystem",
+            "publishedAt"
+          ],
+          "title": "AMD Ryzen 7 9800X3D Review - The Best Gaming Processor: Test Setup"
+        }
+      ],
+      "notes": [
+        {
+          "field": "appVersion",
+          "text": "TechPowerUp names \"Cinebench 2024\" without a build number."
+        },
+        {
+          "text": "Read from the Internet Archive (techpowerup.com answers our fetcher with 403); stock settings, the chart's plain bar for this CPU."
+        }
+      ]
+    },
+    {
+      "id": "tpu-9800x3d-cinebench-2024-multi-core-amd-ryzen-5-9600x",
+      "app": "cinebench-2024",
+      "appVersion": "2024",
+      "test": "multi-core",
+      "device": "cpu",
+      "backend": null,
+      "subject": {
+        "type": "cpu",
+        "cpuId": "amd-ryzen-5-9600x"
+      },
+      "score": 975,
+      "unit": "points",
+      "aggregate": null,
+      "testSystem": {
+        "cpu": "AMD Ryzen 5 9600X on ASUS X670E Crosshair Hero (BIOS 2201)",
+        "gpu": "PNY GeForce RTX 4090 XLR8",
+        "ram": "2 x 16 GB DDR5-6000 36-36-36-76, Infinity Fabric 2000 MHz",
+        "os": "Windows 11 Professional 64-bit 23H2 (VBS enabled)"
+      },
+      "publishedAt": "2024-11-06",
+      "sources": [
+        {
+          "url": "https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/9.html",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241111154913/https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/9.html",
+          "fields": [
+            "app",
+            "appVersion",
+            "device",
+            "test",
+            "publishedAt"
+          ],
+          "title": "AMD Ryzen 7 9800X3D Review - The Best Gaming Processor: Rendering",
+          "locator": "Rendering - Cinebench"
+        },
+        {
+          "url": "https://tpucdn.com/review/amd-ryzen-7-9800x3d/images/cinebench-multi.png",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241111155400/https://tpucdn.com/review/amd-ryzen-7-9800x3d/images/cinebench-multi.png",
+          "fields": [
+            "score",
+            "unit",
+            "test",
+            "app"
+          ],
+          "title": "Chart image (Cinebench 2024 Multi)"
+        },
+        {
+          "url": "https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/5.html",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241128204037/https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/5.html",
+          "fields": [
+            "testSystem",
+            "publishedAt"
+          ],
+          "title": "AMD Ryzen 7 9800X3D Review - The Best Gaming Processor: Test Setup"
+        }
+      ],
+      "notes": [
+        {
+          "field": "appVersion",
+          "text": "TechPowerUp names \"Cinebench 2024\" without a build number."
+        },
+        {
+          "text": "Read from the Internet Archive (techpowerup.com answers our fetcher with 403); stock settings, the chart's plain bar for this CPU."
+        }
+      ]
+    },
+    {
+      "id": "tpu-9800x3d-cinebench-2024-single-core-intel-core-ultra-9-285k",
+      "app": "cinebench-2024",
+      "appVersion": "2024",
+      "test": "single-core",
+      "device": "cpu",
+      "backend": null,
+      "subject": {
+        "type": "cpu",
+        "cpuId": "intel-core-ultra-9-285k"
+      },
+      "score": 143,
+      "unit": "points",
+      "aggregate": null,
+      "testSystem": {
+        "cpu": "Intel Core Ultra 9 285K on ASUS Z890 Maximus Hero (BIOS 0805)",
+        "gpu": "PNY GeForce RTX 4090 XLR8",
+        "ram": "2 x 16 GB DDR5-6000 36-36-36-76, 2T, Gear 2",
+        "os": "Windows 11 Professional 64-bit 23H2 (VBS enabled)"
+      },
+      "publishedAt": "2024-11-06",
+      "sources": [
+        {
+          "url": "https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/9.html",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241111154913/https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/9.html",
+          "fields": [
+            "app",
+            "appVersion",
+            "device",
+            "test",
+            "publishedAt"
+          ],
+          "title": "AMD Ryzen 7 9800X3D Review - The Best Gaming Processor: Rendering",
+          "locator": "Rendering - Cinebench"
+        },
+        {
+          "url": "https://tpucdn.com/review/amd-ryzen-7-9800x3d/images/cinebench-single.png",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241111155046/https://tpucdn.com/review/amd-ryzen-7-9800x3d/images/cinebench-single.png",
+          "fields": [
+            "score",
+            "unit",
+            "test",
+            "app"
+          ],
+          "title": "Chart image (Cinebench 2024 Single)"
+        },
+        {
+          "url": "https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/5.html",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241128204037/https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/5.html",
+          "fields": [
+            "testSystem",
+            "publishedAt"
+          ],
+          "title": "AMD Ryzen 7 9800X3D Review - The Best Gaming Processor: Test Setup"
+        }
+      ],
+      "notes": [
+        {
+          "field": "appVersion",
+          "text": "TechPowerUp names \"Cinebench 2024\" without a build number."
+        },
+        {
+          "text": "Read from the Internet Archive (techpowerup.com answers our fetcher with 403); stock settings, the chart's plain bar for this CPU."
+        }
+      ]
+    },
+    {
+      "id": "tpu-9800x3d-cinebench-2024-single-core-amd-ryzen-9-9950x",
+      "app": "cinebench-2024",
+      "appVersion": "2024",
+      "test": "single-core",
+      "device": "cpu",
+      "backend": null,
+      "subject": {
+        "type": "cpu",
+        "cpuId": "amd-ryzen-9-9950x"
+      },
+      "score": 138,
+      "unit": "points",
+      "aggregate": null,
+      "testSystem": {
+        "cpu": "AMD Ryzen 9 9950X on ASUS X670E Crosshair Hero (BIOS 2201)",
+        "gpu": "PNY GeForce RTX 4090 XLR8",
+        "ram": "2 x 16 GB DDR5-6000 36-36-36-76, Infinity Fabric 2000 MHz",
+        "os": "Windows 11 Professional 64-bit 23H2 (VBS enabled)"
+      },
+      "publishedAt": "2024-11-06",
+      "sources": [
+        {
+          "url": "https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/9.html",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241111154913/https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/9.html",
+          "fields": [
+            "app",
+            "appVersion",
+            "device",
+            "test",
+            "publishedAt"
+          ],
+          "title": "AMD Ryzen 7 9800X3D Review - The Best Gaming Processor: Rendering",
+          "locator": "Rendering - Cinebench"
+        },
+        {
+          "url": "https://tpucdn.com/review/amd-ryzen-7-9800x3d/images/cinebench-single.png",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241111155046/https://tpucdn.com/review/amd-ryzen-7-9800x3d/images/cinebench-single.png",
+          "fields": [
+            "score",
+            "unit",
+            "test",
+            "app"
+          ],
+          "title": "Chart image (Cinebench 2024 Single)"
+        },
+        {
+          "url": "https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/5.html",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241128204037/https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/5.html",
+          "fields": [
+            "testSystem",
+            "publishedAt"
+          ],
+          "title": "AMD Ryzen 7 9800X3D Review - The Best Gaming Processor: Test Setup"
+        }
+      ],
+      "notes": [
+        {
+          "field": "appVersion",
+          "text": "TechPowerUp names \"Cinebench 2024\" without a build number."
+        },
+        {
+          "text": "Read from the Internet Archive (techpowerup.com answers our fetcher with 403); stock settings, the chart's plain bar for this CPU."
+        }
+      ]
+    },
+    {
+      "id": "tpu-9800x3d-cinebench-2024-single-core-intel-core-ultra-7-265k",
+      "app": "cinebench-2024",
+      "appVersion": "2024",
+      "test": "single-core",
+      "device": "cpu",
+      "backend": null,
+      "subject": {
+        "type": "cpu",
+        "cpuId": "intel-core-ultra-7-265k"
+      },
+      "score": 137,
+      "unit": "points",
+      "aggregate": null,
+      "testSystem": {
+        "cpu": "Intel Core Ultra 7 265K on ASUS Z890 Maximus Hero (BIOS 0805)",
+        "gpu": "PNY GeForce RTX 4090 XLR8",
+        "ram": "2 x 16 GB DDR5-6000 36-36-36-76, 2T, Gear 2",
+        "os": "Windows 11 Professional 64-bit 23H2 (VBS enabled)"
+      },
+      "publishedAt": "2024-11-06",
+      "sources": [
+        {
+          "url": "https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/9.html",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241111154913/https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/9.html",
+          "fields": [
+            "app",
+            "appVersion",
+            "device",
+            "test",
+            "publishedAt"
+          ],
+          "title": "AMD Ryzen 7 9800X3D Review - The Best Gaming Processor: Rendering",
+          "locator": "Rendering - Cinebench"
+        },
+        {
+          "url": "https://tpucdn.com/review/amd-ryzen-7-9800x3d/images/cinebench-single.png",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241111155046/https://tpucdn.com/review/amd-ryzen-7-9800x3d/images/cinebench-single.png",
+          "fields": [
+            "score",
+            "unit",
+            "test",
+            "app"
+          ],
+          "title": "Chart image (Cinebench 2024 Single)"
+        },
+        {
+          "url": "https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/5.html",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241128204037/https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/5.html",
+          "fields": [
+            "testSystem",
+            "publishedAt"
+          ],
+          "title": "AMD Ryzen 7 9800X3D Review - The Best Gaming Processor: Test Setup"
+        }
+      ],
+      "notes": [
+        {
+          "field": "appVersion",
+          "text": "TechPowerUp names \"Cinebench 2024\" without a build number."
+        },
+        {
+          "text": "Read from the Internet Archive (techpowerup.com answers our fetcher with 403); stock settings, the chart's plain bar for this CPU."
+        }
+      ]
+    },
+    {
+      "id": "tpu-9800x3d-cinebench-2024-single-core-intel-core-i7-14700k",
+      "app": "cinebench-2024",
+      "appVersion": "2024",
+      "test": "single-core",
+      "device": "cpu",
+      "backend": null,
+      "subject": {
+        "type": "cpu",
+        "cpuId": "intel-core-i7-14700k"
+      },
+      "score": 129,
+      "unit": "points",
+      "aggregate": null,
+      "testSystem": {
+        "cpu": "Intel Core i7-14700K on ASUS Z790 Maximus Dark Hero (BIOS 1302)",
+        "gpu": "PNY GeForce RTX 4090 XLR8",
+        "ram": "2 x 16 GB DDR5-6000 36-36-36-76, 2T, Gear 2",
+        "os": "Windows 11 Professional 64-bit 23H2 (VBS enabled)"
+      },
+      "publishedAt": "2024-11-06",
+      "sources": [
+        {
+          "url": "https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/9.html",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241111154913/https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/9.html",
+          "fields": [
+            "app",
+            "appVersion",
+            "device",
+            "test",
+            "publishedAt"
+          ],
+          "title": "AMD Ryzen 7 9800X3D Review - The Best Gaming Processor: Rendering",
+          "locator": "Rendering - Cinebench"
+        },
+        {
+          "url": "https://tpucdn.com/review/amd-ryzen-7-9800x3d/images/cinebench-single.png",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241111155046/https://tpucdn.com/review/amd-ryzen-7-9800x3d/images/cinebench-single.png",
+          "fields": [
+            "score",
+            "unit",
+            "test",
+            "app"
+          ],
+          "title": "Chart image (Cinebench 2024 Single)"
+        },
+        {
+          "url": "https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/5.html",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241128204037/https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/5.html",
+          "fields": [
+            "testSystem",
+            "publishedAt"
+          ],
+          "title": "AMD Ryzen 7 9800X3D Review - The Best Gaming Processor: Test Setup"
+        }
+      ],
+      "notes": [
+        {
+          "field": "appVersion",
+          "text": "TechPowerUp names \"Cinebench 2024\" without a build number."
+        },
+        {
+          "text": "Read from the Internet Archive (techpowerup.com answers our fetcher with 403); stock settings, the chart's plain bar for this CPU."
+        }
+      ]
+    },
+    {
+      "id": "tpu-9800x3d-cinebench-2024-single-core-intel-core-i5-14600k",
+      "app": "cinebench-2024",
+      "appVersion": "2024",
+      "test": "single-core",
+      "device": "cpu",
+      "backend": null,
+      "subject": {
+        "type": "cpu",
+        "cpuId": "intel-core-i5-14600k"
+      },
+      "score": 122,
+      "unit": "points",
+      "aggregate": null,
+      "testSystem": {
+        "cpu": "Intel Core i5-14600K on ASUS Z790 Maximus Dark Hero (BIOS 1302)",
+        "gpu": "PNY GeForce RTX 4090 XLR8",
+        "ram": "2 x 16 GB DDR5-6000 36-36-36-76, 2T, Gear 2",
+        "os": "Windows 11 Professional 64-bit 23H2 (VBS enabled)"
+      },
+      "publishedAt": "2024-11-06",
+      "sources": [
+        {
+          "url": "https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/9.html",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241111154913/https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/9.html",
+          "fields": [
+            "app",
+            "appVersion",
+            "device",
+            "test",
+            "publishedAt"
+          ],
+          "title": "AMD Ryzen 7 9800X3D Review - The Best Gaming Processor: Rendering",
+          "locator": "Rendering - Cinebench"
+        },
+        {
+          "url": "https://tpucdn.com/review/amd-ryzen-7-9800x3d/images/cinebench-single.png",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241111155046/https://tpucdn.com/review/amd-ryzen-7-9800x3d/images/cinebench-single.png",
+          "fields": [
+            "score",
+            "unit",
+            "test",
+            "app"
+          ],
+          "title": "Chart image (Cinebench 2024 Single)"
+        },
+        {
+          "url": "https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/5.html",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241128204037/https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/5.html",
+          "fields": [
+            "testSystem",
+            "publishedAt"
+          ],
+          "title": "AMD Ryzen 7 9800X3D Review - The Best Gaming Processor: Test Setup"
+        }
+      ],
+      "notes": [
+        {
+          "field": "appVersion",
+          "text": "TechPowerUp names \"Cinebench 2024\" without a build number."
+        },
+        {
+          "text": "Read from the Internet Archive (techpowerup.com answers our fetcher with 403); stock settings, the chart's plain bar for this CPU."
+        }
+      ]
+    },
+    {
+      "id": "tpu-9800x3d-cinebench-2024-single-core-amd-ryzen-7-9800x3d",
+      "app": "cinebench-2024",
+      "appVersion": "2024",
+      "test": "single-core",
+      "device": "cpu",
+      "backend": null,
+      "subject": {
+        "type": "cpu",
+        "cpuId": "amd-ryzen-7-9800x3d"
+      },
+      "score": 134,
+      "unit": "points",
+      "aggregate": null,
+      "testSystem": {
+        "cpu": "AMD Ryzen 7 9800X3D on ASUS X870E Crosshair Hero (BIOS 0605)",
+        "gpu": "PNY GeForce RTX 4090 XLR8",
+        "ram": "2 x 16 GB DDR5-6000 36-36-36-76, Infinity Fabric 2000 MHz",
+        "os": "Windows 11 Professional 64-bit 23H2 (VBS enabled)"
+      },
+      "publishedAt": "2024-11-06",
+      "sources": [
+        {
+          "url": "https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/9.html",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241111154913/https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/9.html",
+          "fields": [
+            "app",
+            "appVersion",
+            "device",
+            "test",
+            "publishedAt"
+          ],
+          "title": "AMD Ryzen 7 9800X3D Review - The Best Gaming Processor: Rendering",
+          "locator": "Rendering - Cinebench"
+        },
+        {
+          "url": "https://tpucdn.com/review/amd-ryzen-7-9800x3d/images/cinebench-single.png",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241111155046/https://tpucdn.com/review/amd-ryzen-7-9800x3d/images/cinebench-single.png",
+          "fields": [
+            "score",
+            "unit",
+            "test",
+            "app"
+          ],
+          "title": "Chart image (Cinebench 2024 Single)"
+        },
+        {
+          "url": "https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/5.html",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241128204037/https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/5.html",
+          "fields": [
+            "testSystem",
+            "publishedAt"
+          ],
+          "title": "AMD Ryzen 7 9800X3D Review - The Best Gaming Processor: Test Setup"
+        }
+      ],
+      "notes": [
+        {
+          "field": "appVersion",
+          "text": "TechPowerUp names \"Cinebench 2024\" without a build number."
+        },
+        {
+          "text": "Read from the Internet Archive (techpowerup.com answers our fetcher with 403); stock settings, the chart's plain bar for this CPU."
+        }
+      ]
+    },
+    {
+      "id": "tpu-9800x3d-cinebench-2024-single-core-amd-ryzen-7-9700x",
+      "app": "cinebench-2024",
+      "appVersion": "2024",
+      "test": "single-core",
+      "device": "cpu",
+      "backend": null,
+      "subject": {
+        "type": "cpu",
+        "cpuId": "amd-ryzen-7-9700x"
+      },
+      "score": 135,
+      "unit": "points",
+      "aggregate": null,
+      "testSystem": {
+        "cpu": "AMD Ryzen 7 9700X on ASUS X670E Crosshair Hero (BIOS 2201)",
+        "gpu": "PNY GeForce RTX 4090 XLR8",
+        "ram": "2 x 16 GB DDR5-6000 36-36-36-76, Infinity Fabric 2000 MHz",
+        "os": "Windows 11 Professional 64-bit 23H2 (VBS enabled)"
+      },
+      "publishedAt": "2024-11-06",
+      "sources": [
+        {
+          "url": "https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/9.html",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241111154913/https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/9.html",
+          "fields": [
+            "app",
+            "appVersion",
+            "device",
+            "test",
+            "publishedAt"
+          ],
+          "title": "AMD Ryzen 7 9800X3D Review - The Best Gaming Processor: Rendering",
+          "locator": "Rendering - Cinebench"
+        },
+        {
+          "url": "https://tpucdn.com/review/amd-ryzen-7-9800x3d/images/cinebench-single.png",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241111155046/https://tpucdn.com/review/amd-ryzen-7-9800x3d/images/cinebench-single.png",
+          "fields": [
+            "score",
+            "unit",
+            "test",
+            "app"
+          ],
+          "title": "Chart image (Cinebench 2024 Single)"
+        },
+        {
+          "url": "https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/5.html",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241128204037/https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/5.html",
+          "fields": [
+            "testSystem",
+            "publishedAt"
+          ],
+          "title": "AMD Ryzen 7 9800X3D Review - The Best Gaming Processor: Test Setup"
+        }
+      ],
+      "notes": [
+        {
+          "field": "appVersion",
+          "text": "TechPowerUp names \"Cinebench 2024\" without a build number."
+        },
+        {
+          "text": "Read from the Internet Archive (techpowerup.com answers our fetcher with 403); stock settings, the chart's plain bar for this CPU."
+        }
+      ]
+    },
+    {
+      "id": "tpu-9800x3d-cinebench-2024-single-core-amd-ryzen-7-7800x3d",
+      "app": "cinebench-2024",
+      "appVersion": "2024",
+      "test": "single-core",
+      "device": "cpu",
+      "backend": null,
+      "subject": {
+        "type": "cpu",
+        "cpuId": "amd-ryzen-7-7800x3d"
+      },
+      "score": 114,
+      "unit": "points",
+      "aggregate": null,
+      "testSystem": {
+        "cpu": "AMD Ryzen 7 7800X3D on ASUS X670E Crosshair Hero (BIOS 2007)",
+        "gpu": "PNY GeForce RTX 4090 XLR8",
+        "ram": "2 x 16 GB DDR5-6000 36-36-36-76, Infinity Fabric 2000 MHz",
+        "os": "Windows 11 Professional 64-bit 23H2 (VBS enabled)"
+      },
+      "publishedAt": "2024-11-06",
+      "sources": [
+        {
+          "url": "https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/9.html",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241111154913/https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/9.html",
+          "fields": [
+            "app",
+            "appVersion",
+            "device",
+            "test",
+            "publishedAt"
+          ],
+          "title": "AMD Ryzen 7 9800X3D Review - The Best Gaming Processor: Rendering",
+          "locator": "Rendering - Cinebench"
+        },
+        {
+          "url": "https://tpucdn.com/review/amd-ryzen-7-9800x3d/images/cinebench-single.png",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241111155046/https://tpucdn.com/review/amd-ryzen-7-9800x3d/images/cinebench-single.png",
+          "fields": [
+            "score",
+            "unit",
+            "test",
+            "app"
+          ],
+          "title": "Chart image (Cinebench 2024 Single)"
+        },
+        {
+          "url": "https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/5.html",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241128204037/https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/5.html",
+          "fields": [
+            "testSystem",
+            "publishedAt"
+          ],
+          "title": "AMD Ryzen 7 9800X3D Review - The Best Gaming Processor: Test Setup"
+        }
+      ],
+      "notes": [
+        {
+          "field": "appVersion",
+          "text": "TechPowerUp names \"Cinebench 2024\" without a build number."
+        },
+        {
+          "text": "Read from the Internet Archive (techpowerup.com answers our fetcher with 403); stock settings, the chart's plain bar for this CPU."
+        }
+      ]
+    },
+    {
+      "id": "tpu-9800x3d-cinebench-2024-single-core-amd-ryzen-5-9600x",
+      "app": "cinebench-2024",
+      "appVersion": "2024",
+      "test": "single-core",
+      "device": "cpu",
+      "backend": null,
+      "subject": {
+        "type": "cpu",
+        "cpuId": "amd-ryzen-5-9600x"
+      },
+      "score": 133,
+      "unit": "points",
+      "aggregate": null,
+      "testSystem": {
+        "cpu": "AMD Ryzen 5 9600X on ASUS X670E Crosshair Hero (BIOS 2201)",
+        "gpu": "PNY GeForce RTX 4090 XLR8",
+        "ram": "2 x 16 GB DDR5-6000 36-36-36-76, Infinity Fabric 2000 MHz",
+        "os": "Windows 11 Professional 64-bit 23H2 (VBS enabled)"
+      },
+      "publishedAt": "2024-11-06",
+      "sources": [
+        {
+          "url": "https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/9.html",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241111154913/https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/9.html",
+          "fields": [
+            "app",
+            "appVersion",
+            "device",
+            "test",
+            "publishedAt"
+          ],
+          "title": "AMD Ryzen 7 9800X3D Review - The Best Gaming Processor: Rendering",
+          "locator": "Rendering - Cinebench"
+        },
+        {
+          "url": "https://tpucdn.com/review/amd-ryzen-7-9800x3d/images/cinebench-single.png",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241111155046/https://tpucdn.com/review/amd-ryzen-7-9800x3d/images/cinebench-single.png",
+          "fields": [
+            "score",
+            "unit",
+            "test",
+            "app"
+          ],
+          "title": "Chart image (Cinebench 2024 Single)"
+        },
+        {
+          "url": "https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/5.html",
+          "publisher": "techpowerup",
+          "retrievedAt": "2026-09-30",
+          "docType": "review",
+          "archiveUrl": "https://web.archive.org/web/20241128204037/https://www.techpowerup.com/review/amd-ryzen-7-9800x3d/5.html",
+          "fields": [
+            "testSystem",
+            "publishedAt"
+          ],
+          "title": "AMD Ryzen 7 9800X3D Review - The Best Gaming Processor: Test Setup"
+        }
+      ],
+      "notes": [
+        {
+          "field": "appVersion",
+          "text": "TechPowerUp names \"Cinebench 2024\" without a build number."
+        },
+        {
+          "text": "Read from the Internet Archive (techpowerup.com answers our fetcher with 403); stock settings, the chart's plain bar for this CPU."
+        }
+      ]
+    },
+    {
+      "id": "blender-od-5-2-0-optix-nvidia-geforce-rtx-5090",
+      "app": "blender",
+      "appVersion": "5.2.0",
+      "test": "benchmark score (all scenes summed)",
+      "device": "gpu",
+      "backend": "OptiX",
+      "subject": {
+        "type": "gpu",
+        "chipId": "nvidia-geforce-rtx-5090"
+      },
+      "score": 16066.37,
+      "unit": "samples-per-minute",
+      "aggregate": {
+        "statistic": "median",
+        "sampleSize": 126
+      },
+      "testSystem": null,
+      "publishedAt": "2026-09-30",
+      "sources": [
+        {
+          "url": "https://opendata.blender.org/benchmarks/query/?compute_type=OPTIX&blender_version=5.2.0&group_by=device_name",
+          "publisher": "blender-open-data",
+          "retrievedAt": "2026-09-30",
+          "docType": "benchmark-database",
+          "fields": [
+            "app",
+            "appVersion",
+            "device",
+            "backend",
+            "score",
+            "aggregate",
+            "publishedAt"
+          ],
+          "title": "Blender Open Data query (group by device)",
+          "locator": "row \"NVIDIA GeForce RTX 5090\", Median Score and Number of Benchmarks"
+        },
+        {
+          "url": "https://opendata.blender.org/about/",
+          "publisher": "blender-open-data",
+          "retrievedAt": "2026-09-30",
+          "docType": "benchmark-database",
+          "fields": [
+            "test",
+            "unit"
+          ],
+          "title": "About - Blender Open Data",
+          "locator": "Benchmark Score: \"the estimated number of samples per minute, summed for all benchmark scenes\""
+        }
+      ],
+      "notes": [
+        {
+          "field": "score",
+          "text": "Median of 126 submitted results, as shown (rounded to 2 decimals from 16066.367391397402)."
+        },
+        {
+          "field": "publishedAt",
+          "text": "A live database has no publication date; this is the date the median was read."
+        }
+      ]
+    },
+    {
+      "id": "blender-od-5-2-0-optix-nvidia-geforce-rtx-5080",
+      "app": "blender",
+      "appVersion": "5.2.0",
+      "test": "benchmark score (all scenes summed)",
+      "device": "gpu",
+      "backend": "OptiX",
+      "subject": {
+        "type": "gpu",
+        "chipId": "nvidia-geforce-rtx-5080"
+      },
+      "score": 9128.28,
+      "unit": "samples-per-minute",
+      "aggregate": {
+        "statistic": "median",
+        "sampleSize": 303
+      },
+      "testSystem": null,
+      "publishedAt": "2026-09-30",
+      "sources": [
+        {
+          "url": "https://opendata.blender.org/benchmarks/query/?compute_type=OPTIX&blender_version=5.2.0&group_by=device_name",
+          "publisher": "blender-open-data",
+          "retrievedAt": "2026-09-30",
+          "docType": "benchmark-database",
+          "fields": [
+            "app",
+            "appVersion",
+            "device",
+            "backend",
+            "score",
+            "aggregate",
+            "publishedAt"
+          ],
+          "title": "Blender Open Data query (group by device)",
+          "locator": "row \"NVIDIA GeForce RTX 5080\", Median Score and Number of Benchmarks"
+        },
+        {
+          "url": "https://opendata.blender.org/about/",
+          "publisher": "blender-open-data",
+          "retrievedAt": "2026-09-30",
+          "docType": "benchmark-database",
+          "fields": [
+            "test",
+            "unit"
+          ],
+          "title": "About - Blender Open Data",
+          "locator": "Benchmark Score: \"the estimated number of samples per minute, summed for all benchmark scenes\""
+        }
+      ],
+      "notes": [
+        {
+          "field": "score",
+          "text": "Median of 303 submitted results, as shown (rounded to 2 decimals from 9128.279431166382)."
+        },
+        {
+          "field": "publishedAt",
+          "text": "A live database has no publication date; this is the date the median was read."
+        }
+      ]
+    },
+    {
+      "id": "blender-od-5-2-0-optix-nvidia-geforce-rtx-5070-ti",
+      "app": "blender",
+      "appVersion": "5.2.0",
+      "test": "benchmark score (all scenes summed)",
+      "device": "gpu",
+      "backend": "OptiX",
+      "subject": {
+        "type": "gpu",
+        "chipId": "nvidia-geforce-rtx-5070-ti"
+      },
+      "score": 7729.45,
+      "unit": "samples-per-minute",
+      "aggregate": {
+        "statistic": "median",
+        "sampleSize": 175
+      },
+      "testSystem": null,
+      "publishedAt": "2026-09-30",
+      "sources": [
+        {
+          "url": "https://opendata.blender.org/benchmarks/query/?compute_type=OPTIX&blender_version=5.2.0&group_by=device_name",
+          "publisher": "blender-open-data",
+          "retrievedAt": "2026-09-30",
+          "docType": "benchmark-database",
+          "fields": [
+            "app",
+            "appVersion",
+            "device",
+            "backend",
+            "score",
+            "aggregate",
+            "publishedAt"
+          ],
+          "title": "Blender Open Data query (group by device)",
+          "locator": "row \"NVIDIA GeForce RTX 5070 Ti\", Median Score and Number of Benchmarks"
+        },
+        {
+          "url": "https://opendata.blender.org/about/",
+          "publisher": "blender-open-data",
+          "retrievedAt": "2026-09-30",
+          "docType": "benchmark-database",
+          "fields": [
+            "test",
+            "unit"
+          ],
+          "title": "About - Blender Open Data",
+          "locator": "Benchmark Score: \"the estimated number of samples per minute, summed for all benchmark scenes\""
+        }
+      ],
+      "notes": [
+        {
+          "field": "score",
+          "text": "Median of 175 submitted results, as shown (rounded to 2 decimals from 7729.4487381388035)."
+        },
+        {
+          "field": "publishedAt",
+          "text": "A live database has no publication date; this is the date the median was read."
+        }
+      ]
+    },
+    {
+      "id": "blender-od-5-2-0-optix-nvidia-geforce-rtx-5070",
+      "app": "blender",
+      "appVersion": "5.2.0",
+      "test": "benchmark score (all scenes summed)",
+      "device": "gpu",
+      "backend": "OptiX",
+      "subject": {
+        "type": "gpu",
+        "chipId": "nvidia-geforce-rtx-5070"
+      },
+      "score": 5798.32,
+      "unit": "samples-per-minute",
+      "aggregate": {
+        "statistic": "median",
+        "sampleSize": 131
+      },
+      "testSystem": null,
+      "publishedAt": "2026-09-30",
+      "sources": [
+        {
+          "url": "https://opendata.blender.org/benchmarks/query/?compute_type=OPTIX&blender_version=5.2.0&group_by=device_name",
+          "publisher": "blender-open-data",
+          "retrievedAt": "2026-09-30",
+          "docType": "benchmark-database",
+          "fields": [
+            "app",
+            "appVersion",
+            "device",
+            "backend",
+            "score",
+            "aggregate",
+            "publishedAt"
+          ],
+          "title": "Blender Open Data query (group by device)",
+          "locator": "row \"NVIDIA GeForce RTX 5070\", Median Score and Number of Benchmarks"
+        },
+        {
+          "url": "https://opendata.blender.org/about/",
+          "publisher": "blender-open-data",
+          "retrievedAt": "2026-09-30",
+          "docType": "benchmark-database",
+          "fields": [
+            "test",
+            "unit"
+          ],
+          "title": "About - Blender Open Data",
+          "locator": "Benchmark Score: \"the estimated number of samples per minute, summed for all benchmark scenes\""
+        }
+      ],
+      "notes": [
+        {
+          "field": "score",
+          "text": "Median of 131 submitted results, as shown (rounded to 2 decimals from 5798.320400580914)."
+        },
+        {
+          "field": "publishedAt",
+          "text": "A live database has no publication date; this is the date the median was read."
+        }
+      ]
+    },
+    {
+      "id": "blender-od-5-2-0-optix-nvidia-geforce-rtx-5060",
+      "app": "blender",
+      "appVersion": "5.2.0",
+      "test": "benchmark score (all scenes summed)",
+      "device": "gpu",
+      "backend": "OptiX",
+      "subject": {
+        "type": "gpu",
+        "chipId": "nvidia-geforce-rtx-5060"
+      },
+      "score": 3635.98,
+      "unit": "samples-per-minute",
+      "aggregate": {
+        "statistic": "median",
+        "sampleSize": 78
+      },
+      "testSystem": null,
+      "publishedAt": "2026-09-30",
+      "sources": [
+        {
+          "url": "https://opendata.blender.org/benchmarks/query/?compute_type=OPTIX&blender_version=5.2.0&group_by=device_name",
+          "publisher": "blender-open-data",
+          "retrievedAt": "2026-09-30",
+          "docType": "benchmark-database",
+          "fields": [
+            "app",
+            "appVersion",
+            "device",
+            "backend",
+            "score",
+            "aggregate",
+            "publishedAt"
+          ],
+          "title": "Blender Open Data query (group by device)",
+          "locator": "row \"NVIDIA GeForce RTX 5060\", Median Score and Number of Benchmarks"
+        },
+        {
+          "url": "https://opendata.blender.org/about/",
+          "publisher": "blender-open-data",
+          "retrievedAt": "2026-09-30",
+          "docType": "benchmark-database",
+          "fields": [
+            "test",
+            "unit"
+          ],
+          "title": "About - Blender Open Data",
+          "locator": "Benchmark Score: \"the estimated number of samples per minute, summed for all benchmark scenes\""
+        }
+      ],
+      "notes": [
+        {
+          "field": "score",
+          "text": "Median of 78 submitted results, as shown (rounded to 2 decimals from 3635.9835184642457)."
+        },
+        {
+          "field": "publishedAt",
+          "text": "A live database has no publication date; this is the date the median was read."
+        }
+      ]
+    },
+    {
+      "id": "blender-od-5-2-0-optix-nvidia-geforce-rtx-4060",
+      "app": "blender",
+      "appVersion": "5.2.0",
+      "test": "benchmark score (all scenes summed)",
+      "device": "gpu",
+      "backend": "OptiX",
+      "subject": {
+        "type": "gpu",
+        "chipId": "nvidia-geforce-rtx-4060"
+      },
+      "score": 2964.35,
+      "unit": "samples-per-minute",
+      "aggregate": {
+        "statistic": "median",
+        "sampleSize": 52
+      },
+      "testSystem": null,
+      "publishedAt": "2026-09-30",
+      "sources": [
+        {
+          "url": "https://opendata.blender.org/benchmarks/query/?compute_type=OPTIX&blender_version=5.2.0&group_by=device_name",
+          "publisher": "blender-open-data",
+          "retrievedAt": "2026-09-30",
+          "docType": "benchmark-database",
+          "fields": [
+            "app",
+            "appVersion",
+            "device",
+            "backend",
+            "score",
+            "aggregate",
+            "publishedAt"
+          ],
+          "title": "Blender Open Data query (group by device)",
+          "locator": "row \"NVIDIA GeForce RTX 4060\", Median Score and Number of Benchmarks"
+        },
+        {
+          "url": "https://opendata.blender.org/about/",
+          "publisher": "blender-open-data",
+          "retrievedAt": "2026-09-30",
+          "docType": "benchmark-database",
+          "fields": [
+            "test",
+            "unit"
+          ],
+          "title": "About - Blender Open Data",
+          "locator": "Benchmark Score: \"the estimated number of samples per minute, summed for all benchmark scenes\""
+        }
+      ],
+      "notes": [
+        {
+          "field": "score",
+          "text": "Median of 52 submitted results, as shown (rounded to 2 decimals from 2964.35454074492)."
+        },
+        {
+          "field": "publishedAt",
+          "text": "A live database has no publication date; this is the date the median was read."
+        }
+      ]
+    },
+    {
+      "id": "blender-od-5-2-0-hip-amd-radeon-rx-9070-xt",
+      "app": "blender",
+      "appVersion": "5.2.0",
+      "test": "benchmark score (all scenes summed)",
+      "device": "gpu",
+      "backend": "HIP",
+      "subject": {
+        "type": "gpu",
+        "chipId": "amd-radeon-rx-9070-xt"
+      },
+      "score": 3385.34,
+      "unit": "samples-per-minute",
+      "aggregate": {
+        "statistic": "median",
+        "sampleSize": 306
+      },
+      "testSystem": null,
+      "publishedAt": "2026-09-30",
+      "sources": [
+        {
+          "url": "https://opendata.blender.org/benchmarks/query/?compute_type=HIP&blender_version=5.2.0&group_by=device_name",
+          "publisher": "blender-open-data",
+          "retrievedAt": "2026-09-30",
+          "docType": "benchmark-database",
+          "fields": [
+            "app",
+            "appVersion",
+            "device",
+            "backend",
+            "score",
+            "aggregate",
+            "publishedAt"
+          ],
+          "title": "Blender Open Data query (group by device)",
+          "locator": "row \"AMD Radeon RX 9070 XT\", Median Score and Number of Benchmarks"
+        },
+        {
+          "url": "https://opendata.blender.org/about/",
+          "publisher": "blender-open-data",
+          "retrievedAt": "2026-09-30",
+          "docType": "benchmark-database",
+          "fields": [
+            "test",
+            "unit"
+          ],
+          "title": "About - Blender Open Data",
+          "locator": "Benchmark Score: \"the estimated number of samples per minute, summed for all benchmark scenes\""
+        }
+      ],
+      "notes": [
+        {
+          "field": "score",
+          "text": "Median of 306 submitted results, as shown (rounded to 2 decimals from 3385.340450371907)."
+        },
+        {
+          "field": "publishedAt",
+          "text": "A live database has no publication date; this is the date the median was read."
+        }
+      ]
+    },
+    {
+      "id": "blender-od-5-2-0-hip-amd-radeon-rx-9070",
+      "app": "blender",
+      "appVersion": "5.2.0",
+      "test": "benchmark score (all scenes summed)",
+      "device": "gpu",
+      "backend": "HIP",
+      "subject": {
+        "type": "gpu",
+        "chipId": "amd-radeon-rx-9070"
+      },
+      "score": 3004.18,
+      "unit": "samples-per-minute",
+      "aggregate": {
+        "statistic": "median",
+        "sampleSize": 18
+      },
+      "testSystem": null,
+      "publishedAt": "2026-09-30",
+      "sources": [
+        {
+          "url": "https://opendata.blender.org/benchmarks/query/?compute_type=HIP&blender_version=5.2.0&group_by=device_name",
+          "publisher": "blender-open-data",
+          "retrievedAt": "2026-09-30",
+          "docType": "benchmark-database",
+          "fields": [
+            "app",
+            "appVersion",
+            "device",
+            "backend",
+            "score",
+            "aggregate",
+            "publishedAt"
+          ],
+          "title": "Blender Open Data query (group by device)",
+          "locator": "row \"AMD Radeon RX 9070\", Median Score and Number of Benchmarks"
+        },
+        {
+          "url": "https://opendata.blender.org/about/",
+          "publisher": "blender-open-data",
+          "retrievedAt": "2026-09-30",
+          "docType": "benchmark-database",
+          "fields": [
+            "test",
+            "unit"
+          ],
+          "title": "About - Blender Open Data",
+          "locator": "Benchmark Score: \"the estimated number of samples per minute, summed for all benchmark scenes\""
+        }
+      ],
+      "notes": [
+        {
+          "field": "score",
+          "text": "Median of 18 submitted results, as shown (rounded to 2 decimals from 3004.17540966681)."
+        },
+        {
+          "field": "publishedAt",
+          "text": "A live database has no publication date; this is the date the median was read."
+        }
+      ]
+    },
+    {
+      "id": "blender-od-5-2-0-oneapi-intel-arc-b580",
+      "app": "blender",
+      "appVersion": "5.2.0",
+      "test": "benchmark score (all scenes summed)",
+      "device": "gpu",
+      "backend": "oneAPI",
+      "subject": {
+        "type": "gpu",
+        "chipId": "intel-arc-b580"
+      },
+      "score": 2818.35,
+      "unit": "samples-per-minute",
+      "aggregate": {
+        "statistic": "median",
+        "sampleSize": 19
+      },
+      "testSystem": null,
+      "publishedAt": "2026-09-30",
+      "sources": [
+        {
+          "url": "https://opendata.blender.org/benchmarks/query/?compute_type=ONEAPI&blender_version=5.2.0&group_by=device_name",
+          "publisher": "blender-open-data",
+          "retrievedAt": "2026-09-30",
+          "docType": "benchmark-database",
+          "fields": [
+            "app",
+            "appVersion",
+            "device",
+            "backend",
+            "score",
+            "aggregate",
+            "publishedAt"
+          ],
+          "title": "Blender Open Data query (group by device)",
+          "locator": "row \"Intel Arc B580 Graphics\", Median Score and Number of Benchmarks"
+        },
+        {
+          "url": "https://opendata.blender.org/about/",
+          "publisher": "blender-open-data",
+          "retrievedAt": "2026-09-30",
+          "docType": "benchmark-database",
+          "fields": [
+            "test",
+            "unit"
+          ],
+          "title": "About - Blender Open Data",
+          "locator": "Benchmark Score: \"the estimated number of samples per minute, summed for all benchmark scenes\""
+        }
+      ],
+      "notes": [
+        {
+          "field": "score",
+          "text": "Median of 19 submitted results, as shown (rounded to 2 decimals from 2818.3452875948515)."
+        },
+        {
+          "field": "publishedAt",
+          "text": "A live database has no publication date; this is the date the median was read."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "publishers": [
+    { "id": "amd", "name": "AMD", "kind": "manufacturer", "domains": ["amd.com"] },
+    { "id": "intel", "name": "Intel", "kind": "manufacturer", "domains": ["intel.com"] },
+    { "id": "asus", "name": "ASUS", "kind": "manufacturer", "domains": ["asus.com"] },
+    { "id": "nvidia", "name": "NVIDIA", "kind": "manufacturer", "domains": ["nvidia.com"] },
+    { "id": "pny", "name": "PNY Technologies", "kind": "manufacturer", "domains": ["pny.com"] },
+    { "id": "sapphire", "name": "Sapphire Technology", "kind": "manufacturer", "domains": ["sapphiretech.com"] },
+    { "id": "gskill", "name": "G.SKILL", "kind": "manufacturer", "domains": ["gskill.com"] },
+    { "id": "teamgroup", "name": "TEAMGROUP", "kind": "manufacturer", "domains": ["teamgroupinc.com"] },
+    { "id": "sandisk", "name": "Sandisk", "kind": "manufacturer", "domains": ["sandisk.com"] },
+    { "id": "samsung", "name": "Samsung Electronics", "kind": "manufacturer", "domains": ["samsung.com"] },
+    { "id": "deepcool", "name": "DeepCool", "kind": "manufacturer", "domains": ["deepcool.com"] },
+    { "id": "nzxt", "name": "NZXT", "kind": "manufacturer", "domains": ["nzxt.com"] },
+    { "id": "arctic", "name": "ARCTIC", "kind": "manufacturer", "domains": ["arctic.de"] },
+    { "id": "fractal", "name": "Fractal Design", "kind": "manufacturer", "domains": ["fractal-design.com"] },
+    { "id": "steam", "name": "Steam (Valve)", "kind": "platform", "domains": ["steampowered.com"] },
+    { "id": "steamcharts", "name": "Steam Charts", "kind": "tracker", "domains": ["steamcharts.com"] },
+    { "id": "riot-games", "name": "Riot Games", "kind": "game-publisher", "domains": ["playvalorant.com", "riotgames.com"] },
+    { "id": "kitguru", "name": "KitGuru", "kind": "news", "domains": ["kitguru.net"] },
+    { "id": "esports-news-uk", "name": "Esports News UK", "kind": "news", "domains": ["esports-news.co.uk"] },
+    { "id": "windows-central", "name": "Windows Central", "kind": "news", "domains": ["windowscentral.com"] },
+    { "id": "techpowerup", "name": "TechPowerUp", "kind": "reviewer", "domains": ["techpowerup.com", "tpucdn.com"] },
+    { "id": "computerbase", "name": "ComputerBase", "kind": "reviewer", "domains": ["computerbase.de"] },
+    { "id": "blender-open-data", "name": "Blender Open Data", "kind": "benchmark-database", "domains": ["opendata.blender.org"] },
+    { "id": "amazon-us", "name": "Amazon.com", "kind": "retailer", "domains": ["amazon.com"], "markets": ["US"] },
+    { "id": "newegg", "name": "Newegg", "kind": "retailer", "domains": ["newegg.com"], "markets": ["US"] },
+    { "id": "amazon-sa", "name": "Amazon.sa", "kind": "retailer", "domains": ["amazon.sa"], "markets": ["SA"] }
+  ]
+}

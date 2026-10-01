@@ -508,6 +508,16 @@ More views: [768 dark](mocks/studio/768-dark.jpg), [390 light](mocks/studio/390-
   `--action`). [tokens.md](tokens.md) has the full table and the usage rules.
 - **The font** is self-hosted as Rig Lab Sans, the renamed Mona Sans subset, with a calibrated
   fallback ([tokens.md §4](tokens.md#4-the-font-rig-lab-sans-its-fallback-swap-and-lcp)).
+- **Two contrast fixes** in the shipped tokens (2026-10-01). The tables below keep the mock's
+  values as history.
+  - Light `--ink-3` is `#5a5e64`, not `#62666c`. The mock's value fell to 4.08:1 at the floor's
+    near edge: QA finding DS0-01.
+  - Selected text is solid, `--stage` on `--ink`.
+
+  [tokens.md §2.1](tokens.md#21-colour), rules 3 and 11.
+- **Text over the case at 768.** The mock's 768 layout lets the hint and the mock label run over
+  the case drawing (DS0-01). Text never sits over the scene ([tokens.md §2.1](tokens.md#21-colour),
+  rule 4), and Phase 2's layout reserves the text zones.
 
 ### Palette
 

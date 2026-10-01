@@ -15,7 +15,7 @@ document is the contract between design and build:
 | [`src/styles/base.css`](../../src/styles/base.css) | What Preflight removes and Rig Lab needs back (section 3) |
 | [`src/styles/motion.ts`](../../src/styles/motion.ts) | The motion tokens for Motion and the 3D scene, in milliseconds and seconds |
 | [`src/styles/fonts/`](../../src/styles/fonts/) | `rig-lab-sans.woff2` (72,332 bytes), `OFL.txt`, `FONTLOG.txt` |
-| [`src/styles/tokens.test.ts`](../../src/styles/tokens.test.ts) | 95 tests, run by `npm run test` (section 6) |
+| [`src/styles/tokens.test.ts`](../../src/styles/tokens.test.ts) | 96 tests, run by `npm run test` (section 6) |
 
 Every value below is the value in `tokens.css`. If the two ever disagree, `tokens.css` wins, and
 this document has a bug.
@@ -146,10 +146,12 @@ layout utilities stay.
 **The tokens reproduce the picked look.** `tools/studio-parity.mjs` renders the Studio mock on its
 own inline values and on the shipped `tokens.css` with Rig Lab Sans, at 390, 768 and 1440 in both
 themes. The results:
-- every pixel outside text is identical;
-- no text box moves or re-wraps (0 of 73 to 91 per size);
-- text drifts by at most 0.19 px. The differing glyph-edge pixels (0.7–1.0 %) come from the
-  subset's advances, which differ from the full Mona Sans by at most 4 font units per glyph.
+- no text box moves or re-wraps (0 of 73 to 91 per size), and text drifts by at most 0.19 px;
+- in dark, every pixel outside text is identical;
+- in light, the shipped `--ink-3` is deliberately 8 levels per channel darker than the
+  mock's (section 2.1, rule 3), which also touches the mock's checkbox borders;
+- the differing pixels (0.74–1.01 %) are almost all glyph edges. They come from the subset's
+  advances, which differ from the full Mona Sans by at most 4 font units per glyph.
 
 ### 2.1 Colour
 
@@ -164,7 +166,7 @@ themes. The results:
 | `--line` | `border-line` | `#2d2f34` | `#e0e0dc` | Panel edges and dividers |
 | `--ink` | `text-ink` | `#f4f4f3` | `#111214` | Primary text |
 | `--ink-2` | `text-ink-2` | `#babcc0` | `#45484d` | Secondary text, reasons, hints |
-| `--ink-3` | `text-ink-3` | `#9da0a6` | `#62666c` | Meta, units, captions; control borders |
+| `--ink-3` | `text-ink-3` | `#9da0a6` | `#5a5e64` | Meta, units, captions; control borders |
 | `--ok` | `text-ok` | `#62d497` | `#1c7a45` | "Fits": the state icon and its label |
 | `--warn` | `text-warn` | `#f4ba4e` | `#8a5900` | "Warning": the state icon and its label |
 | `--block` | `text-block` | `#ff8b80` | `#b3261e` | "Incompatible": the state icon and its label |
@@ -173,7 +175,8 @@ themes. The results:
 | `--focus` | `outline-focus` | `#ffffff` | `#111214` | Focus rings |
 | `--scene-light` | `bg-scene-light` | `#d4e5ff` | `#6f9ee0` | The scene's default RGB light; the build's chosen colour replaces it in 3D |
 | `--scrim` | `bg-scrim` | `rgba(0,0,0,.6)` | `rgba(17,18,20,.32)` | Behind an expanded sheet or the Specs panel |
-| `--selection` | (base.css) | `rgba(244,244,243,.22)` | `rgba(17,18,20,.16)` | Selected text |
+
+Selected text has no token of its own: `base.css` sets it as `--stage` on a solid `--ink` (rule 11).
 
 Any colour utility takes Tailwind's opacity modifier (`bg-ink/10`); it compiles to `color-mix()`.
 
@@ -186,10 +189,19 @@ Any colour utility takes Tailwind's opacity modifier (`bg-ink/10`); it compiles 
    colour is never the only signal (WCAG 1.4.1).
 3. **Three text tiers, no others.** `--ink`, `--ink-2`, `--ink-3`. Never fade text with opacity:
    the contrast table below measures these three tokens, not faded copies of them.
-4. **Text sits on a surface, or on the stage only where it was measured:** the step label,
-   heading and hint, over the wall or the key light, and labels over the floor (section 2.2).
-   Never set text over the 3D model itself. A callout over the scene is a `--surface` panel.
-5. **Control borders use `--ink-3`** (checkbox, input, pressed chip): at least 5.20:1. `--line` is
+   - Light `--ink-3` is `#5a5e64`, darker than the picked mock's `#62666c` (changed 2026-10-01).
+     The mock's value passed at the top of the floor (4.70:1) but fell to 4.08:1 at its near
+     edge, `--stage-floor-deep`: QA finding DS0-01.
+4. **Text sits on a surface, or on the stage only in the measured zones:** the wall, the key light
+   and the floor (section 2.2). Every text tier is measured at both ends of the floor gradient and
+   under the key light.
+   - **The 3D scene never sits behind text.** No measurement can cover text over the build.
+   - The camera frames the build outside the text zones: the step heading and its hint, the 3D
+     tools row and their captions. A callout over the scene is a `--surface` panel.
+   - The Studio mock breaks this at 768 (DS0-01): the hint paragraph's last word runs into the
+     case top (1.56:1), and the mock label sits over the case (2.38:1). Phase 2's layout
+     reserves the zones ([backlog.md](backlog.md), item 41).
+5. **Control borders use `--ink-3`** (checkbox, input, pressed chip): at least 5.87:1. `--line` is
    for panel edges and dividers only, and is never a control's only boundary.
 6. **Focus is always visible:** a 2 px ring in `--focus`, offset 3 px, from `base.css`. Never remove
    it, on the stage too.
@@ -200,6 +212,12 @@ Any colour utility takes Tailwind's opacity modifier (`bg-ink/10`); it compiles 
 9. **One primary action per view** (`bg-action text-action-ink`), usually "Next: …".
 10. **No raw colour values in components.** Every colour is a token. If a design needs a new one,
     design-lead adds it here and to the contrast check first.
+11. **Selected text is solid:** `--stage` text on an `--ink` highlight, from `base.css`. That is
+    16.75:1 in dark and 16.87:1 in light, on every surface.
+    - Changed on 2026-10-01. The first version tinted the highlight and kept each tier's own
+      text colour, which fell to 3.06:1 (`--ink-3` on a raised row).
+    - Forcing `--ink` text onto that tint fails too: `--action` surfaces are `--ink`-coloured,
+      so the result is 1:1.
 
 **The stage background**, behind and around the 3D canvas, and the whole picture when WebGL is
 missing. It is the mock's recipe in tokens:
@@ -214,7 +232,7 @@ background:
 ### 2.2 Contrast, measured
 
 Generated by `node docs/design/tools/contrast.mjs` from `tokens.css` itself. WCAG 2.1: text 4.5:1
-(1.4.3), non-text UI 3:1 (1.4.11). Overlays such as `--stage-key` are composited first. **All 29
+(1.4.3), non-text UI 3:1 (1.4.11). Overlays such as `--stage-key` are composited first. **All 34
 pairs pass in both themes.** `node docs/design/tools/contrast.mjs --check` exits non-zero on any
 failure, and a unit test runs it.
 
@@ -222,18 +240,22 @@ failure, and a unit test runs it.
 |---|---|---|---|---|---|
 | `--ink` | `--surface` | primary text on panels | text (4.5:1) | 16.13:1 | 18.74:1 |
 | `--ink-2` | `--surface` | secondary text | text (4.5:1) | 9.33:1 | 9.18:1 |
-| `--ink-3` | `--surface` | meta, units, captions | text (4.5:1) | 6.77:1 | 5.77:1 |
+| `--ink-3` | `--surface` | meta, units, captions | text (4.5:1) | 6.77:1 | 6.52:1 |
 | `--ink` | `--surface-raised` | text on a selected or hovered row | text (4.5:1) | 14.44:1 | 16.87:1 |
 | `--ink-2` | `--surface-raised` | secondary on a selected row | text (4.5:1) | 8.36:1 | 8.26:1 |
-| `--ink-3` | `--surface-raised` | meta on a selected row | text (4.5:1) | 6.06:1 | 5.20:1 |
+| `--ink-3` | `--surface-raised` | meta on a selected row | text (4.5:1) | 6.06:1 | 5.87:1 |
 | `--ink` | `--stage` | step heading on the stage | text (4.5:1) | 16.75:1 | 16.87:1 |
 | `--ink-2` | `--stage` | hint on the stage | text (4.5:1) | 9.69:1 | 8.26:1 |
-| `--ink-3` | `--stage` | step label on the stage | text (4.5:1) | 7.03:1 | 5.20:1 |
+| `--ink-3` | `--stage` | step label on the stage | text (4.5:1) | 7.03:1 | 5.87:1 |
 | `--ink` | `--stage` + `--stage-key` | heading where the key light is brightest | text (4.5:1) | 12.17:1 | 18.65:1 |
 | `--ink-2` | `--stage` + `--stage-key` | hint where the key light is brightest | text (4.5:1) | 7.04:1 | 9.13:1 |
-| `--ink-3` | `--stage` + `--stage-key` | label where the key light is brightest | text (4.5:1) | 5.11:1 | 5.75:1 |
+| `--ink-3` | `--stage` + `--stage-key` | label where the key light is brightest | text (4.5:1) | 5.11:1 | 6.49:1 |
 | `--ink-2` | `--stage-floor` | text over the floor | text (4.5:1) | 8.86:1 | 7.48:1 |
-| `--ink-3` | `--stage-floor` | labels over the floor | text (4.5:1) | 6.43:1 | 4.70:1 |
+| `--ink-3` | `--stage-floor` | labels over the floor | text (4.5:1) | 6.43:1 | 5.31:1 |
+| `--ink-2` | `--stage-floor-deep` | text at the floor's near edge | text (4.5:1) | 10.01:1 | 6.49:1 |
+| `--ink-3` | `--stage-floor-deep` | labels at the floor's near edge | text (4.5:1) | 7.26:1 | 4.61:1 |
+| `--ink-2` | `--stage-floor` + `--stage-key` | text on the floor in the key light (full strength, worst case) | text (4.5:1) | 6.26:1 | 9.09:1 |
+| `--ink-3` | `--stage-floor` + `--stage-key` | labels on the floor in the key light (full strength, worst case) | text (4.5:1) | 4.54:1 | 6.46:1 |
 | `--ok` | `--surface` | Fits | text (4.5:1) | 9.62:1 | 5.36:1 |
 | `--warn` | `--surface` | Warning | text (4.5:1) | 10.13:1 | 5.98:1 |
 | `--block` | `--surface` | Incompatible | text (4.5:1) | 7.83:1 | 6.54:1 |
@@ -241,17 +263,24 @@ failure, and a unit test runs it.
 | `--warn` | `--surface-raised` | Warning on a selected row | text (4.5:1) | 9.07:1 | 5.39:1 |
 | `--block` | `--surface-raised` | Incompatible on a hovered row | text (4.5:1) | 7.00:1 | 5.88:1 |
 | `--action-ink` | `--action` | primary button, pressed pill | text (4.5:1) | 17.03:1 | 18.74:1 |
-| `--ink-3` | `--surface` | control borders: checkbox, input, pressed chip | ui (3:1) | 6.77:1 | 5.77:1 |
-| `--ink-3` | `--surface-raised` | control borders on a raised row | ui (3:1) | 6.06:1 | 5.20:1 |
+| `--ink-3` | `--surface` | control borders: checkbox, input, pressed chip | ui (3:1) | 6.77:1 | 6.52:1 |
+| `--ink-3` | `--surface-raised` | control borders on a raised row | ui (3:1) | 6.06:1 | 5.87:1 |
 | `--focus` | `--surface` | focus ring on panels | ui (3:1) | 17.75:1 | 18.74:1 |
 | `--focus` | `--surface-raised` | focus ring on a raised row | ui (3:1) | 15.89:1 | 16.87:1 |
 | `--focus` | `--stage` | focus ring on the stage | ui (3:1) | 18.43:1 | 16.87:1 |
 | `--focus` | `--stage` + `--stage-key` | focus ring in the key light | ui (3:1) | 13.39:1 | 18.65:1 |
 | `--ink` | `--surface-raised` | selected-row bar | ui (3:1) | 14.44:1 | 16.87:1 |
 | `--action` | `--surface` | primary button against its panel | ui (3:1) | 16.13:1 | 18.74:1 |
+| `--stage` | `--ink` | selected text: --stage on the --ink selection, any surface | text (4.5:1) | 16.75:1 | 16.87:1 |
 
-The tightest pairs are in light: `--ink-3` over the floor (4.70:1) and "Fits" on a selected row
-(4.82:1). Any change to `--ink-3`, `--ok`, `--stage-floor` or `--surface-raised` must re-run the check.
+The tightest pairs:
+- `--ink-3` on the floor in the key light, dark (4.54:1). This is a worst case, with the key at
+  full strength; at the horizon it is about half that, which gives 5.42:1.
+- `--ink-3` at the floor's near edge, light (4.61:1).
+- "Fits" on a selected row, light (4.82:1).
+
+Any change to `--ink-3`, `--ok`, `--stage-key`, the floor tokens or `--surface-raised` must re-run
+the check.
 
 ### 2.3 Elevation
 
@@ -388,7 +417,7 @@ component's utilities can still restyle any of them.
 | Focus: the browser's default ring (Preflight leaves it) | A 2 px ring in `--focus`, offset 3 px, on `:focus-visible` | WCAG 2.4.7, with a ring measured on every surface (section 2.2) |
 | Page: `line-height: 1.5`, a system font stack | `--stage` background, `--ink` text, Rig Lab Sans, 15 / 22 body, tabular figures, no faked bold, antialiased | The page is the stage before any component paints |
 | Buttons: `cursor: default` | `pointer` on buttons, `[role=button]`, `summary`, `label[for]`; `not-allowed` when disabled | The click affordance a mouse user expects |
-| Selection: the browser's highlight | `--selection` | Selected text stays readable in both themes |
+| Selection: the browser's highlight | Solid: `--stage` text on `--ink` | Selected text stays at least 16.75:1 on every surface (section 2.1, rule 11) |
 
 Two Preflight rules that components must allow for:
 - **Lists lose their markers** (`list-style: none`). Safari then stops announcing them as lists. A
@@ -536,7 +565,7 @@ node docs/design/tools/tokens-check.mjs                     # browser check, on 
 
 | What | Command | Proves |
 |---|---|---|
-| `src/styles/tokens.test.ts`, 95 tests | `npm run test` (in `verify`) | Every utility compiles with Tailwind 4.3.3, and the removed defaults stay removed. `tokens.css` fails inside a layer (the wiring rule). `motion.ts` equals the CSS, and reduced motion zeroes everything but `cut`. The fallback's overrides stay Rig Lab Sans's metrics ÷ `size-adjust`. The font is a WOFF2 within the 80 KB budget, with its licence. The contrast check passes. |
+| `src/styles/tokens.test.ts`, 96 tests | `npm run test` (in `verify`) | Every utility compiles with Tailwind 4.3.3, and the removed defaults stay removed. `tokens.css` fails inside a layer (the wiring rule). `motion.ts` equals the CSS, and reduced motion zeroes everything but `cut`. The fallback's overrides stay Rig Lab Sans's metrics ÷ `size-adjust`. The font is a WOFF2 within the 80 KB budget, with its licence. Selected text is `--stage` on `--ink`, the pair the contrast check measures, and the contrast check passes. |
 | `docs/design/tools/contrast.mjs` | `node docs/design/tools/contrast.mjs [--check]` | WCAG 2.1 AA for every pair in section 2.2, dark and light, from `tokens.css` itself |
 | `docs/design/tools/tokens-check.mjs` | `node docs/design/tools/tokens-check.mjs` | The real Vite and Tailwind build under `/Rip-PC/`: hashed font, preload rewritten to the same file, no default palette. Six specimen screenshots (390, 768 and 1440, dark and light), both variable axes, the fallback's width and baselines, and the slow-font LCP and CLS |
 | `docs/design/tools/calibrate-fallback.mjs` | section 4.4 | The fallback descriptors from the font files |

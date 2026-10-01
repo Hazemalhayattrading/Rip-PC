@@ -49,12 +49,13 @@ Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
 | 2026-10-01 | Context7 check: no API key in any tracked or untracked repo file, nor in history. The keyless Context7 entry was dropped from `.mcp.json` so Hazem's user-level server (with his key) applies | Director | `8a8a645`; `claude mcp get context7` shows "Scope: User config" |
 | 2026-10-01 | **WP-B1 Part 1 accepted:** `gpu` → `gpu-card` (URL code `g` kept, test-first); README Windows and perf sections; ESLint `no-import-type-side-effects` | build-lead | **Merged as `c7a099b`**, with the README Context7 follow-up (`77d20f9`). verify on the merged branch: 266 unit, 112 e2e. The probe shows 77.40 → 320.49 KB gzip without the rule |
 | 2026-10-01 | **WP-DS1 accepted and merged** (`21ac5fb`): `tokens.css` dark and light, AA (29 pairs, lowest 4.70:1), Rig Lab Sans (OFL) with its fallback calibrated to 103.14% (corpus width error 0.00%, swap CLS 0.0008), `tokens.md`, `studio-3d-brief.md`, `specs-view.md`, the pick in `direction.md` | design-lead | verify on the merged branch: 361 unit, 112 e2e; initial JS 77.42 KB gzip; the Director re-ran `contrast.mjs --check` (exit 0); parity shots in the design-lead worktree `artifacts/screenshots/phase-0/WP-DS1/` |
+| 2026-10-01 | **WP-DS1 addendum requested**, two AA defects in shipped styles: (1) `::selection` sets no text colour, so selected text falls to 3.06:1 (design-lead's own skill review); (2) light `--ink-3` on the darker floor tone `--floor-2` is 4.08:1 and missing from `contrast.mjs` (QA visual-tester, DS0-01). The spec gaps go to `docs/design/backlog.md`, becoming WP-DS2 in Phase 1 | design-lead | pending: an addendum with the head id and contrast log |
+| 2026-10-01 | **WP-D0 accepted and merged** (`98d2be5`): Zod schemas, a validator with 34 rules, 73 seed spec records (all plan 5.3 minimums and mixes), live prices (US 52 + 10 gaps, SA 45 + 17 gaps), 116 game and 27 creator anchors, 15 games, the 20% audit (78 items, 8 findings fixed). The Director's review caught the North cooler limit (145 → 170 mm); data-lead's sweep caught the North PSU limit by tray count (schema: `psu.clearance` list) | data-lead | verify on the merged branch: 454 unit, 112 e2e; initial JS 77.42 KB gzip (no catalogue data in the bundle); 21 new evidence files copied and checked (`docs/reports/evidence/data-lead-evidence-2026-10-01.sha256`) |
 
 ## In progress
 
 | Task | Who | Branch / worktree | State | Exact next step |
 |---|---|---|---|---|
-| WP-D0 Data foundations | data-lead | `feat/data-foundations` / `.claude/worktrees/data-lead` | Handed off at `594866c` (verify: 357 unit, 112 e2e). **Sent back by the Director with 1 blocker:** the Fractal North TG Light's `coolerClearance` says 145 mm, but the page's note says "145 mm with Fan Bracket (Mesh version only) / 170 mm without", so this SKU is 170 mm. Everything else in the spot check passed | data-lead: fix the North; sweep every case's clearances against the pages' structured fields and attribute notes; add the finding to `data/audits.json`; add the README audit line; re-hand-off. Director: copy its 14 new evidence files to `C:\Projects\rig-lab-evidence`, then merge. After the purge, update the 2 commit ids cited in `data/audits.json` |
 | WP-B1 Tokens wiring and follow-ups | build-lead | `feat/build-tokens-wiring` / `.claude/worktrees/build-lead` | Part 1 merged (`c7a099b`). **Part 2 started** after WP-DS1 merged at `21ac5fb` | wire `tokens.css` per `docs/design/tokens.md` §1 (test-first); evidence per §1.5 plus 12 screenshots; hand off, then stay idle for the purge |
 | WP-Q2 Independent verification | qa-lead | `feat/qa-phase0-verification` / `.claude/worktrees/qa-lead` | Part 1 running: Windows tooling fixed (`258c76e`); 3 workers (data-auditor, e2e-tester, visual-tester) running since 16:55 UTC | its `docs/qa/WIP-STATUS.md` |
 | **Evidence purge** (approved by Hazem 2026-10-01) | Director | the 5 branches above | Waiting for all four leads to be idle at once | see "Evidence purge" below |
@@ -90,14 +91,22 @@ Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
   Review stage 1's output before running stage 2.
 - **After it runs:**
   - send each lead its new head id;
-  - send data-lead the old-to-new map, for `data/audits.json`;
+  - send data-lead the old-to-new map for the 4 commit IDs in `data/audits.json` (7451f52, 2cedf51, 067eb7e, bf7caad). data-lead updates them on `feat/data-audit-ids`;
   - update this file's commit ids;
   - draft the GitHub Support request for Hazem (purge cached views and run GC).
 
 ## Open items for Hazem
 
-- Branch protection on `main`: make `npm run verify` and `Performance budgets` required checks.
-  The API reports "Branch not protected". GitHub Pages already deploys from GitHub Actions.
+- **The `main` ruleset's check name doesn't match.** Ruleset "main" (id 24320209, active, default
+  branch only) requires `verify` and `Performance budgets`. CI reports the first job as
+  `npm run verify`, so `verify` never reports and a PR to `main` would stay blocked. Fix: rename
+  the required check to `npm run verify` (source: GitHub Actions), or have build-lead rename the
+  CI job. The Director recommends changing the ruleset. Found by QA (V4, Major); confirmed by the
+  Director through the API. GitHub Pages already deploys from GitHub Actions.
+- **KTX2 texture tool, decide before Phase 3.** `toktx` (KTX-Software, free, Apache 2.0) is a
+  system install, and this PC doesn't have it. Without it, textures ship as WebP, which decodes
+  to uncompressed GPU memory (about 22 MB per 2K map). The 160 MB texture budget then holds only
+  about 7 maps. BUILD_PROMPT §7 asks for KTX2. Installing it needs Hazem's OK.
 - **Decided 2026-10-01:** the 222 MB of third-party page captures leave the public repo. They are
   kept in `C:\Projects\rig-lab-evidence`, listed by checksum in a manifest in the repo, and purged
   from branch history before anything merges to `main`. The Director shows Hazem the purge plan
