@@ -58,6 +58,7 @@ is built yet.
 | 38 | 3D pipeline | **KTX2 needs KTX-Software's `toktx`** (gltf-transform `etc1s`, `uastc`). It is not on this PC, and installing it is a system install on Hazem's PC, which the Director is putting to him. **Phase 3 depends on his answer.** Without it, textures ship as WebP, and the 160 MB budget holds about 7 uncompressed 2K maps | CLAUDE.md (Hazem decides installs) | `where toktx` found nothing, 2026-10-01 |
 | 39 | Team | 3d-artist worker prompts include the seven 3D skills | Director's skills note, 2026-10-01 | — |
 | 40 | 3D assets | The paid-asset research did not cover ArtStation or Unity Asset Store licences | studio-3d-brief.md §8 | The 3d-artist worker's report |
+| 41 | Layout | Text zones at every width: the camera's view offset frames the build outside the step heading and its hint, the 3D tools row and their captions, so nothing of the scene sits behind text. Small text on the floor is token-safe since DS0-01 (`--ink-3` 4.61:1 at the floor's near edge) | [tokens.md §2.1](tokens.md#21-colour), rule 4; WCAG 1.4.3 | QA DS0-01 at 768 light: the hint's last word runs into the case top (1.56:1), and the mock label sits over the case (2.38:1). qa-lead's `defects/studio-768-light-text-over-case.png` |
 
 **Already recorded by the Director for Phase 2:**
 - the compare checkbox drawn at 18 px needs a 24 px hit area (44 px on touch, item 4);

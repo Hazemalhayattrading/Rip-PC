@@ -60,6 +60,9 @@ const PAIRS = {
     ['ink', 'stage', 'text', 'step heading on the stage'], ['ink-2', 'stage', 'text', 'hint on the stage'], ['ink-3', 'stage', 'text', 'step label on the stage'],
     ['ink', 'stage+stage-key', 'text', 'heading where the key light is brightest'], ['ink-2', 'stage+stage-key', 'text', 'hint where the key light is brightest'], ['ink-3', 'stage+stage-key', 'text', 'label where the key light is brightest'],
     ['ink-2', 'stage-floor', 'text', 'text over the floor'], ['ink-3', 'stage-floor', 'text', 'labels over the floor'],
+    // The floor is a gradient down to stage-floor-deep, and the key light reaches it: measure both ends.
+    ['ink-2', 'stage-floor-deep', 'text', "text at the floor's near edge"], ['ink-3', 'stage-floor-deep', 'text', "labels at the floor's near edge"],
+    ['ink-2', 'stage-floor+stage-key', 'text', 'text on the floor in the key light (full strength, worst case)'], ['ink-3', 'stage-floor+stage-key', 'text', 'labels on the floor in the key light (full strength, worst case)'],
     ['ok', 'surface', 'text', 'Fits'], ['warn', 'surface', 'text', 'Warning'], ['block', 'surface', 'text', 'Incompatible'],
     ['ok', 'surface-raised', 'text', 'Fits on a selected row'], ['warn', 'surface-raised', 'text', 'Warning on a selected row'], ['block', 'surface-raised', 'text', 'Incompatible on a hovered row'],
     ['action-ink', 'action', 'text', 'primary button, pressed pill'],

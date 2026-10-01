@@ -112,7 +112,8 @@
 
   --ink: #111214;
   --ink-2: #45484d;
-  --ink-3: #62666c;
+  /* Darker than the picked mock's #62666c (4.08:1 at the floor's near edge, QA DS0-01): 4.61:1. */
+  --ink-3: #5a5e64;
 
   --ok: #1c7a45;
   --warn: #8a5900;
