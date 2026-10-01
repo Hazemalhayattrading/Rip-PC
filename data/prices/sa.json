@@ -209,7 +209,13 @@
       "seller": "DIGI_MART",
       "retrievedAt": "2026-09-30",
       "capture": "artifacts/prices/SA/amd-ryzen-5-5600--amazon-sa--2026-09-30.html",
-      "captureSha256": "35a29976538d71341c6705813306b08c0bc35d7e7b00de2f09843b690c0e5878"
+      "captureSha256": "35a29976538d71341c6705813306b08c0bc35d7e7b00de2f09843b690c0e5878",
+      "notes": [
+        {
+          "field": "amount",
+          "text": "The displayed price includes an estimated import fees deposit: item SAR 513.78 plus \"Estimated Import Fees Deposit\" SAR 94.32 (total SAR 608.10)."
+        }
+      ]
     },
     {
       "partId": "intel-core-ultra-9-285k",
@@ -342,7 +348,13 @@
       "seller": "Maxideals",
       "retrievedAt": "2026-09-30",
       "capture": "artifacts/prices/SA/intel-core-i5-12400f--amazon-sa--2026-09-30.html",
-      "captureSha256": "37db0bd1e55465b17fceb2ee3edbbb8e7a69cc5189a86240e408b782be6f87b6"
+      "captureSha256": "37db0bd1e55465b17fceb2ee3edbbb8e7a69cc5189a86240e408b782be6f87b6",
+      "notes": [
+        {
+          "field": "amount",
+          "text": "The displayed price includes an estimated import fees deposit: item SAR 724.02 plus \"Estimated Import Fees Deposit\" SAR 125.85 (total SAR 849.87)."
+        }
+      ]
     },
     {
       "partId": "nvidia-geforce-rtx-5080-founders-edition",

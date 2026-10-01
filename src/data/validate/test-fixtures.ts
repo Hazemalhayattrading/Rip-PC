@@ -286,6 +286,7 @@ export function fixtureData(): FixtureData {
         name: 'Acme Fixture Mid',
         partNumber: null,
         size: 'mid-tower',
+        makerSizeClass: 'Mid Tower',
         supportedBoards: ['ATX', 'Micro-ATX', 'Mini-ITX'],
         gpuClearance: [
           { maxLengthMm: 380, condition: null },

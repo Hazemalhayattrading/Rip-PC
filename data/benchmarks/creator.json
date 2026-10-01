@@ -68,6 +68,10 @@
       ],
       "notes": [
         {
+          "field": "testSystem.cpu",
+          "text": "TechPowerUp's Test Setup runs \"All Intel Core 200 Series processors (Intel stock power settings / ASUS MCE disabled)\"."
+        },
+        {
           "field": "appVersion",
           "text": "TechPowerUp names \"Cinebench 2024\" without a build number."
         },
@@ -218,6 +222,10 @@
       ],
       "notes": [
         {
+          "field": "testSystem.cpu",
+          "text": "TechPowerUp's Test Setup runs \"All Intel Core 200 Series processors (Intel stock power settings / ASUS MCE disabled)\"."
+        },
+        {
           "field": "appVersion",
           "text": "TechPowerUp names \"Cinebench 2024\" without a build number."
         },
@@ -293,6 +301,10 @@
       ],
       "notes": [
         {
+          "field": "testSystem.cpu",
+          "text": "TechPowerUp's Test Setup runs \"All Intel 14th, 13th & 12th Gen processors (Intel stock power settings / ASUS MCE disabled)\"."
+        },
+        {
           "field": "appVersion",
           "text": "TechPowerUp names \"Cinebench 2024\" without a build number."
         },
@@ -367,6 +379,10 @@
         }
       ],
       "notes": [
+        {
+          "field": "testSystem.cpu",
+          "text": "TechPowerUp's Test Setup runs \"All Intel 14th, 13th & 12th Gen processors (Intel stock power settings / ASUS MCE disabled)\"."
+        },
         {
           "field": "appVersion",
           "text": "TechPowerUp names \"Cinebench 2024\" without a build number."
@@ -743,6 +759,10 @@
       ],
       "notes": [
         {
+          "field": "testSystem.cpu",
+          "text": "TechPowerUp's Test Setup runs \"All Intel Core 200 Series processors (Intel stock power settings / ASUS MCE disabled)\"."
+        },
+        {
           "field": "appVersion",
           "text": "TechPowerUp names \"Cinebench 2024\" without a build number."
         },
@@ -893,6 +913,10 @@
       ],
       "notes": [
         {
+          "field": "testSystem.cpu",
+          "text": "TechPowerUp's Test Setup runs \"All Intel Core 200 Series processors (Intel stock power settings / ASUS MCE disabled)\"."
+        },
+        {
           "field": "appVersion",
           "text": "TechPowerUp names \"Cinebench 2024\" without a build number."
         },
@@ -968,6 +992,10 @@
       ],
       "notes": [
         {
+          "field": "testSystem.cpu",
+          "text": "TechPowerUp's Test Setup runs \"All Intel 14th, 13th & 12th Gen processors (Intel stock power settings / ASUS MCE disabled)\"."
+        },
+        {
           "field": "appVersion",
           "text": "TechPowerUp names \"Cinebench 2024\" without a build number."
         },
@@ -1042,6 +1070,10 @@
         }
       ],
       "notes": [
+        {
+          "field": "testSystem.cpu",
+          "text": "TechPowerUp's Test Setup runs \"All Intel 14th, 13th & 12th Gen processors (Intel stock power settings / ASUS MCE disabled)\"."
+        },
         {
           "field": "appVersion",
           "text": "TechPowerUp names \"Cinebench 2024\" without a build number."

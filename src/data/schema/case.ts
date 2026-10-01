@@ -34,14 +34,40 @@ export const LayoutPosition = z.strictObject({
   gpuMaxThicknessMm: PosNum,
   /** A tighter thickness limit for GPUs taller than `aboveGpuHeightMm`, when the maker publishes one. */
   tallGpuLimit: z.strictObject({ aboveGpuHeightMm: PosNum, maxThicknessMm: PosNum }).nullable(),
+  /**
+   * The thickest radiator plus its fan that fits at this position, as the maker gives it (the
+   * Fractal Terra: 49 to 79 mm). `null` plus a note when the maker gives none.
+   */
+  radiatorFanMaxThicknessMm: PosNum.nullable(),
 });
 export type LayoutPosition = z.infer<typeof LayoutPosition>;
+
+export const CaseSize = z.enum(['full-tower', 'mid-tower', 'mini-tower', 'small-form-factor']);
+export type CaseSize = z.infer<typeof CaseSize>;
+
+/**
+ * The size class rule (README, "Case size"): by the largest supported board. ATX or E-ATX is a
+ * mid-tower, or a full tower when the maker's own class says so; Micro-ATX is a mini-tower; Mini-ITX
+ * only is small form factor.
+ */
+export function deriveCaseSize(boards: readonly MotherboardFormFactor[], makerSizeClass: string | null): CaseSize {
+  if (boards.includes('E-ATX') || boards.includes('ATX')) {
+    return makerSizeClass !== null && /full[\s-]?tower/i.test(makerSizeClass) ? 'full-tower' : 'mid-tower';
+  }
+  return boards.includes('Micro-ATX') ? 'mini-tower' : 'small-form-factor';
+}
 
 export const Case = z.strictObject({
   ...specRecordBase,
   category: z.literal('case'),
   partNumber: z.string().min(1).nullable(),
-  size: z.enum(['full-tower', 'mid-tower', 'mini-tower', 'small-form-factor']),
+  /** Derived by `deriveCaseSize`, not sourced. The validator checks it; the maker's wording is below. */
+  size: CaseSize,
+  /**
+   * The maker's own size class, word for word (Fractal "Regular" or "Small", DeepCool "mid-tower").
+   * Makers' classes don't map one to one onto `size`. `null` plus a note when the maker gives none.
+   */
+  makerSizeClass: z.string().min(1).nullable(),
   supportedBoards: z.array(MotherboardFormFactor).min(1),
   /** GPU length limits. One row per published condition (e.g. "with front radiator"). */
   gpuClearance: z.array(GpuClearance).min(1),

@@ -115,13 +115,24 @@ For some fields the schema documents `null` as "none", so no note is needed (rul
   300 mm "with a 360 mm front radiator"). GPU and cooler limits have exactly one default row. A PSU limit
   may have none, when the maker only gives per-configuration limits (the North: 255 mm "with 1 HDD
   tray", 155 mm "with 2 HDD trays").
+- **Case size**: `size` is derived, not sourced, so it needs no source. It goes by the largest
+  supported board: ATX or E-ATX is `mid-tower` (`full-tower` only when the maker's own class says
+  full tower), Micro-ATX is `mini-tower`, and Mini-ITX only is `small-form-factor` (`deriveCaseSize`
+  in `schema/case.ts`, checked by the validator). `makerSizeClass` keeps the maker's own words,
+  sourced like any value (Fractal "Regular" or "Small", DeepCool "mid-tower"); they don't map one to
+  one onto `size`.
 - **Variants and configurations**: makers often share one value across a product family and qualify
   it in a note ("145 mm with Fan Bracket (Mesh version only) / 170 mm without"). Record the value for
   this record's exact SKU, with any configuration as a condition, and quote the maker's note.
 - **Case `layoutPositions`**: only for cases with a movable motherboard plate (the Fractal Terra's
   spine). Each position gives a cooler height limit and a GPU thickness limit, plus an optional tighter
-  thickness limit for tall GPUs (`tallGpuLimit`). A build fits when one position fits both parts. When
-  present it supersedes the single cooler and GPU-thickness limits.
+  thickness limit for tall GPUs (`tallGpuLimit`) and the thickest radiator plus fan that fits
+  (`radiatorFanMaxThicknessMm`). A build fits when one position fits all its parts. When present it
+  supersedes the single cooler and GPU-thickness limits.
+- **Case `radiatorSupport`**: one entry per position and size group, with `maxThicknessMm` as the
+  maker's manual or page states it. When the limit differs by size at one position (the North's front:
+  55 mm for 120/240/360, 35 mm for 140/280), use one entry per group. Read the manual's radiator page,
+  not only the product page. Radiator width limits have no field yet; quote them in a note.
 - **GPU power**: `powerConnectors[].type` is `16-pin`, `8-pin` or `6-pin`. For 16-pin, `standard` is
   `12V-2x6` or `12VHPWR` only when the maker names it; otherwise `null` with a note.
 - **Storage `cache`**: `dram`, `hmb` (DRAM-less, uses host memory), `dram-less` (host memory use not
@@ -162,6 +173,9 @@ One file per market, one batch per file:
   `data/tools/capture-name.mjs`. They need Python 3, Node, `npm ci` and
   `npx playwright install chromium`. They append what they did to `artifacts/prices/results-*.jsonl`,
   and every pick is reviewed against its capture before it becomes a record.
+- **Delivery location**: Amazon prices follow the delivery location. From Hazem's PC in Saudi Arabia,
+  amazon.com shows SAR prices with delivery to Saudi Arabia (QA, 2026-10-01). Before a US batch, set a
+  US delivery location, and check that every US capture shows USD with US delivery.
 - **Gap**: every purchasable part without a price gets one gap record per market:
   `{ partId, market, reasonCode, reason, retailersTried, checkedAt }`. `reasonCode` is `not-listed`,
   `blocked` (a bot challenge, which we never work around), `no-price-shown` or `unavailable`. The UI

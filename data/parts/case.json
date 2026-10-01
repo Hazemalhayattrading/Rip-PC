@@ -10,6 +10,7 @@
       "name": "North Charcoal Black TG Light",
       "partNumber": "FD-C-NOR1C-02",
       "size": "mid-tower",
+      "makerSizeClass": "Regular",
       "supportedBoards": [
         "ATX",
         "Micro-ATX",
@@ -38,12 +39,18 @@
           "position": "front",
           "sizesMm": [
             120,
-            140,
             240,
-            280,
             360
           ],
-          "maxThicknessMm": null
+          "maxThicknessMm": 55
+        },
+        {
+          "position": "front",
+          "sizesMm": [
+            140,
+            280
+          ],
+          "maxThicknessMm": 35
         },
         {
           "position": "top",
@@ -51,7 +58,7 @@
             120,
             240
           ],
-          "maxThicknessMm": null
+          "maxThicknessMm": 35
         },
         {
           "position": "rear",
@@ -150,9 +157,25 @@
           "docType": "product-page",
           "title": "North Charcoal Black TG Light | Fractal Design",
           "locator": "Specifications; \"Gaming ready\" feature text"
+        },
+        {
+          "url": "https://assets.fractal-design.com/files/uxzbxy2o/production/6f9ccb3a36843c7b3e696a62dfa5e7370db78da7.pdf",
+          "publisher": "fractal",
+          "retrievedAt": "2026-10-01",
+          "docType": "manual",
+          "fields": [
+            "radiatorSupport",
+            "psu.clearance"
+          ],
+          "title": "North User Guide",
+          "locator": "p. 26 PSU length per drive-tray position; p. 33 Water Cooling Radiator Options; p. 34 Front 360 Radiator Limitation"
         }
       ],
       "notes": [
+        {
+          "field": "makerSizeClass",
+          "text": "From Fractal's page data \"cases_size\":\"Regular\", the size its case listing filters by."
+        },
         {
           "field": "gpuClearance",
           "text": "From \"Choose a GPU up to 355 mm, or up to 300 mm with a 360 mm front radiator.\""
@@ -163,11 +186,7 @@
         },
         {
           "field": "psu.clearance",
-          "text": "From Fractal's note \"1 HDD tray: 255 mm max; 2 HDD tray: 155 mm max\". The page does not say how many trays are fitted as shipped, so neither limit is recorded as unconditional."
-        },
-        {
-          "field": "size",
-          "text": "The product page gives no size class; recorded from the supported boards and volume. (ATX, 42 L)"
+          "text": "From Fractal's note \"1 HDD tray: 255 mm max; 2 HDD tray: 155 mm max\". The page does not say how many trays are fitted as shipped, so neither limit is recorded as unconditional. The user guide p. 26 gives the limit per drive-tray position: one tray at A 255 mm, B 215, C 180, D 140, E 155; two trays 140 or 155 mm."
         },
         {
           "field": "gpuMaxThicknessMm",
@@ -175,7 +194,11 @@
         },
         {
           "field": "radiatorSupport",
-          "text": "Radiator thickness limits are not published."
+          "text": "From the user guide p. 33, \"Water Cooling Radiator Options\": front 120/240/360 \"Radiator width up to 125 mm\", \"Radiator thickness max 55 mm\"; front 140/280 \"up to 151 mm\", \"max 35 mm\"; top 120/240 \"35 mm max\" thick and \"122 mm max\" wide. The guide gives no limit for the rear 120 mm position."
+        },
+        {
+          "field": "radiatorSupport.0",
+          "text": "A front 360 mm radiator: the user guide p. 34 gives \"Radiator End tank 30 mm max\" with the tubes up (AIO); an end tank over 30 mm goes tubes down. Its p. 26 table allows a front 360 only with no drive tray at floor position A; with a tray at A, front radiators go up to 280 mm."
         },
         {
           "field": "verticalGpuMount",
@@ -203,6 +226,7 @@
       "name": "Pop Air RGB Black TG Clear Tint",
       "partNumber": "FD-C-POR1A-06",
       "size": "mid-tower",
+      "makerSizeClass": "Regular",
       "supportedBoards": [
         "ATX",
         "Micro-ATX",
@@ -227,6 +251,7 @@
           "position": "front",
           "sizesMm": [
             120,
+            140,
             240,
             280
           ],
@@ -238,7 +263,7 @@
             120,
             240
           ],
-          "maxThicknessMm": null
+          "maxThicknessMm": 47
         },
         {
           "position": "rear",
@@ -333,12 +358,23 @@
           "docType": "product-page",
           "title": "Pop Air RGB Black TG Clear Tint | Fractal Design",
           "locator": "Specifications"
+        },
+        {
+          "url": "https://assets.fractal-design.com/files/uxzbxy2o/production/85e656d49b0fff7a27b6d827a5f39774bbaa5ba8.pdf",
+          "publisher": "fractal",
+          "retrievedAt": "2026-10-01",
+          "docType": "manual",
+          "fields": [
+            "radiatorSupport"
+          ],
+          "title": "Pop Air User Guide",
+          "locator": "p. 25 Water Cooling Radiator Options"
         }
       ],
       "notes": [
         {
-          "field": "size",
-          "text": "The product page gives no size class; recorded from the supported boards and volume. (ATX, 44 L)"
+          "field": "makerSizeClass",
+          "text": "From Fractal's page data \"cases_size\":\"Regular\", the size its case listing filters by."
         },
         {
           "field": "gpuMaxThicknessMm",
@@ -346,7 +382,11 @@
         },
         {
           "field": "radiatorSupport",
-          "text": "Radiator thickness limits are not published."
+          "text": "From the user guide p. 25, \"Water Cooling Radiator Options\": top 120/240 (the Pop Air, not the Pop Silent) \"47 mm max\" thick and \"121 mm max\" wide; front 140/280 \"145 mm max\" wide. The guide gives no thickness limit for the front or the rear."
+        },
+        {
+          "field": "radiatorSupport.0",
+          "text": "The guide shows a 140 mm front radiator, which the product page list (120, 240, 280) leaves out."
         },
         {
           "field": "verticalGpuMount",
@@ -370,6 +410,7 @@
       "name": "Pop Mini Air RGB Black TG Clear Tint",
       "partNumber": "FD-C-POR1M-06",
       "size": "mini-tower",
+      "makerSizeClass": "Small",
       "supportedBoards": [
         "Micro-ATX",
         "Mini-ITX"
@@ -393,6 +434,7 @@
           "position": "front",
           "sizesMm": [
             120,
+            140,
             240
           ],
           "maxThicknessMm": null
@@ -403,7 +445,7 @@
             120,
             240
           ],
-          "maxThicknessMm": null
+          "maxThicknessMm": 47
         },
         {
           "position": "rear",
@@ -498,12 +540,23 @@
           "docType": "product-page",
           "title": "Pop Mini Air RGB Black TG Clear Tint | Fractal Design",
           "locator": "Specifications"
+        },
+        {
+          "url": "https://assets.fractal-design.com/files/uxzbxy2o/production/2805a576bd01092cb18fa1777afd1be6433d05f5.pdf",
+          "publisher": "fractal",
+          "retrievedAt": "2026-10-01",
+          "docType": "manual",
+          "fields": [
+            "radiatorSupport"
+          ],
+          "title": "Pop Mini Air User Guide",
+          "locator": "p. 25 Water Cooling Radiator Options"
         }
       ],
       "notes": [
         {
-          "field": "size",
-          "text": "The product page gives no size class; recorded from the supported boards and volume. (Micro ATX, 36.5 L)"
+          "field": "makerSizeClass",
+          "text": "From Fractal's page data \"cases_size\":\"Small\", the size its case listing filters by."
         },
         {
           "field": "gpuMaxThicknessMm",
@@ -511,7 +564,11 @@
         },
         {
           "field": "radiatorSupport",
-          "text": "Radiator thickness limits are not published."
+          "text": "From the user guide p. 25, \"Water Cooling Radiator Options\": top 120/240 (the Air version) \"47 mm max\" thick and \"121 mm max\" wide; front 140 \"144 mm max\" wide. The guide gives no thickness limit for the front or the rear."
+        },
+        {
+          "field": "radiatorSupport.0",
+          "text": "The guide shows a 140 mm front radiator, which the product page list (120, 240) leaves out."
         },
         {
           "field": "verticalGpuMount",
@@ -539,6 +596,7 @@
       "name": "Terra Graphite",
       "partNumber": "FD-C-TER1N-01",
       "size": "small-form-factor",
+      "makerSizeClass": "Small",
       "supportedBoards": [
         "Mini-ITX"
       ],
@@ -568,7 +626,8 @@
           "tallGpuLimit": {
             "aboveGpuHeightMm": 131,
             "maxThicknessMm": 33
-          }
+          },
+          "radiatorFanMaxThicknessMm": 49
         },
         {
           "position": "2",
@@ -577,7 +636,8 @@
           "tallGpuLimit": {
             "aboveGpuHeightMm": 131,
             "maxThicknessMm": 38
-          }
+          },
+          "radiatorFanMaxThicknessMm": 54
         },
         {
           "position": "3",
@@ -586,7 +646,8 @@
           "tallGpuLimit": {
             "aboveGpuHeightMm": 131,
             "maxThicknessMm": 43
-          }
+          },
+          "radiatorFanMaxThicknessMm": 59
         },
         {
           "position": "4",
@@ -595,7 +656,8 @@
           "tallGpuLimit": {
             "aboveGpuHeightMm": 131,
             "maxThicknessMm": 48
-          }
+          },
+          "radiatorFanMaxThicknessMm": 64
         },
         {
           "position": "5",
@@ -604,7 +666,8 @@
           "tallGpuLimit": {
             "aboveGpuHeightMm": 131,
             "maxThicknessMm": 53
-          }
+          },
+          "radiatorFanMaxThicknessMm": 69
         },
         {
           "position": "6",
@@ -613,7 +676,8 @@
           "tallGpuLimit": {
             "aboveGpuHeightMm": 131,
             "maxThicknessMm": 57
-          }
+          },
+          "radiatorFanMaxThicknessMm": 74
         },
         {
           "position": "7",
@@ -622,7 +686,8 @@
           "tallGpuLimit": {
             "aboveGpuHeightMm": 131,
             "maxThicknessMm": 62
-          }
+          },
+          "radiatorFanMaxThicknessMm": 79
         }
       ],
       "radiatorSupport": [
@@ -695,7 +760,7 @@
             "brand",
             "name",
             "partNumber",
-            "size",
+            "makerSizeClass",
             "supportedBoards",
             "gpuClearance.0",
             "gpuMaxThicknessMm",
@@ -725,6 +790,18 @@
             "layoutPositions"
           ],
           "title": "Terra CPU cooler/GPU support : Fractal Design Support"
+        },
+        {
+          "url": "https://assets.fractal-design.com/files/uxzbxy2o/production/8e13311ba49350bea72a93cfa8d7c70f67b608dc.pdf",
+          "publisher": "fractal",
+          "retrievedAt": "2026-10-01",
+          "docType": "manual",
+          "fields": [
+            "radiatorSupport",
+            "layoutPositions"
+          ],
+          "title": "Terra User Guide",
+          "locator": "p. 47 Water Cooling Radiator Options"
         }
       ],
       "notes": [
@@ -735,6 +812,10 @@
         {
           "field": "coolerClearance",
           "text": "The product page lists 48 mm, which is spine setting 7; see layoutPositions for the other settings."
+        },
+        {
+          "field": "makerSizeClass",
+          "text": "From Fractal's page data \"cases_size\":\"Small\", the size its case listing filters by."
         },
         {
           "field": "gpuClearance",
@@ -762,7 +843,7 @@
         },
         {
           "field": "radiatorSupport",
-          "text": "Radiator thickness limits are not published."
+          "text": "The user guide p. 47, \"Water Cooling Radiator Options\", gives the radiator plus fan thickness per spine setting (\"Radiator + Fan\" 49, 54, 59, 64, 69, 74, 79 mm for settings 1 to 7, recorded in layoutPositions), not a limit for the radiator alone; with a radiator, \"GPU max length 200 mm\"."
         }
       ]
     },
@@ -774,6 +855,7 @@
       "name": "CH560",
       "partNumber": "R-CH560-BKAPE4-G-1",
       "size": "mid-tower",
+      "makerSizeClass": "mid-tower",
       "supportedBoards": [
         "E-ATX",
         "ATX",
@@ -931,6 +1013,10 @@
       ],
       "notes": [
         {
+          "field": "makerSizeClass",
+          "text": "From \"The CH560 is a newly designed mid-tower case\" on the product page."
+        },
+        {
           "field": "frontIo",
           "text": "DeepCool lists \"USB3.0×1, Audio×1, TYPE-C×1\" and gives no speed for the Type-C port; USB 3.0 is recorded as 5 Gbps."
         },
@@ -940,7 +1026,7 @@
         },
         {
           "field": "radiatorSupport",
-          "text": "Radiator thickness limits are not published."
+          "text": "Neither the product page nor the manual (pp. 3 and 8 to 11: sizes only) gives a radiator thickness limit."
         },
         {
           "field": "verticalGpuMount",
