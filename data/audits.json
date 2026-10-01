@@ -313,7 +313,7 @@
               "field": "sources.1.locator",
               "found": "The locator cites the bar as \"Ryzen 7 9850X3D (stock)\"; the chart reads \"Ryzen 7 9850X3D / Stock\".",
               "fix": "The locator quotes the chart label exactly. No value changed.",
-              "fixedIn": "7451f52"
+              "fixedIn": "c5605b4"
             },
             {
               "items": [
@@ -335,7 +335,7 @@
               "field": "sources.0.locator",
               "found": "The locator rewrites the chart title (\"2560 x 1440\", a hyphen); the page reads \"2.560 × 1.440\" with an en dash, so a search of the page finds nothing.",
               "fix": "The locator quotes the chart title exactly. No value changed.",
-              "fixedIn": "2cedf51"
+              "fixedIn": "18bde24"
             }
           ],
           "followUp": "The same fixes went to the unsampled rows: the fourth 9850X3D locator (Cyberpunk 2077) and the other 66 ComputerBase locators. All 80 ComputerBase rows were re-read against the chart HTML; every value matches."
@@ -385,7 +385,7 @@
               "field": "coolerClearance",
               "found": "Recorded 145 mm with no condition. Fractal's note limits 145 mm to the Mesh version with its side fan bracket: \"145 mm with Fan Bracket (Mesh version only) / 170 mm without\". This TG Light SKU has no bracket.",
               "fix": "coolerClearance set to 170 mm, unconditional, with a note quoting the maker. The DeepCool AK620 (160 mm) now fits.",
-              "fixedIn": "067eb7e"
+              "fixedIn": "4722094"
             }
           ]
         },
@@ -401,7 +401,7 @@
               "field": "psu",
               "found": "Recorded 255 mm with no condition. Fractal's note gives two limits, \"1 HDD tray: 255 mm max; 2 HDD tray: 155 mm max\", and the page does not say how many trays ship fitted.",
               "fix": "PSU limits became per-configuration rows (psu.clearance, a schema change): 255 mm \"with 1 HDD tray\" and 155 mm \"with 2 HDD trays\", neither unconditional.",
-              "fixedIn": "bf7caad"
+              "fixedIn": "dc7a11e"
             }
           ]
         }
