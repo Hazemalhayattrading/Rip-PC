@@ -1,0 +1,243 @@
+{
+  "schemaVersion": 1,
+  "category": "storage",
+  "items": [
+    {
+      "id": "wd-black-sn8100-2tb",
+      "category": "storage",
+      "manufacturer": "sandisk",
+      "brand": "WD_BLACK",
+      "name": "WD_BLACK SN8100 NVMe SSD 2TB (without heatsink)",
+      "partNumber": "WDS200T1X0M-00CMT0",
+      "interface": "NVMe",
+      "formFactor": "M.2 2280",
+      "pcieGen": 5,
+      "pcieLanes": 4,
+      "capacityGb": 2000,
+      "seqReadMBps": 14900,
+      "seqWriteMBps": 14000,
+      "cache": null,
+      "nandType": "TLC",
+      "enduranceTbw": 1200,
+      "heatsink": false,
+      "warrantyYears": 5,
+      "sources": [
+        {
+          "url": "https://www.sandisk.com/products/ssd/internal-ssd/wd-black-sn8100-ssd?sku=WDS200T1X0M-00CMT0",
+          "publisher": "sandisk",
+          "retrievedAt": "2026-09-30",
+          "docType": "product-page",
+          "title": "2TB WD_BLACK SN8100 NVMe SSD Without Heatsink"
+        }
+      ],
+      "notes": [
+        {
+          "field": "cache",
+          "text": "Sandisk does not say on the product page whether the SN8100 has a DRAM cache."
+        },
+        {
+          "field": "pcieLanes",
+          "text": "From \"PCIe Gen 5.0x4 NVMe M.2 SSD\" in Product Features."
+        },
+        {
+          "field": "nandType",
+          "text": "From \"TLC 3D CBA NAND\" in Product Features."
+        }
+      ]
+    },
+    {
+      "id": "wd-black-sn850x-2tb",
+      "category": "storage",
+      "manufacturer": "sandisk",
+      "brand": "WD_BLACK",
+      "name": "WD_BLACK SN850X NVMe SSD 2TB (without heatsink)",
+      "partNumber": "WDS200T2X0E-00BCA0",
+      "interface": "NVMe",
+      "formFactor": "M.2 2280",
+      "pcieGen": 4,
+      "pcieLanes": 4,
+      "capacityGb": 2000,
+      "seqReadMBps": 7300,
+      "seqWriteMBps": 6600,
+      "cache": null,
+      "nandType": "TLC",
+      "enduranceTbw": 1200,
+      "heatsink": false,
+      "warrantyYears": 5,
+      "sources": [
+        {
+          "url": "https://www.sandisk.com/products/ssd/internal-ssd/wd-black-sn850x-nvme-ssd?sku=WDS200T2X0E-00BCA0",
+          "publisher": "sandisk",
+          "retrievedAt": "2026-09-30",
+          "docType": "product-page",
+          "title": "2TB WD_BLACK SN850X NVMe SSD Without Heatsink"
+        }
+      ],
+      "notes": [
+        {
+          "field": "cache",
+          "text": "Sandisk does not say on the product page whether the SN850X has a DRAM cache."
+        },
+        {
+          "field": "nandType",
+          "text": "From \"Sandisk TLC 3D NAND\" in Product Features."
+        }
+      ]
+    },
+    {
+      "id": "wd-black-sn7100-1tb",
+      "category": "storage",
+      "manufacturer": "sandisk",
+      "brand": "WD_BLACK",
+      "name": "WD_BLACK SN7100 NVMe SSD 1TB",
+      "partNumber": "WDS100T4X0E-00CJA0",
+      "interface": "NVMe",
+      "formFactor": "M.2 2280",
+      "pcieGen": 4,
+      "pcieLanes": 4,
+      "capacityGb": 1000,
+      "seqReadMBps": 7250,
+      "seqWriteMBps": 6900,
+      "cache": "dram-less",
+      "nandType": "TLC",
+      "enduranceTbw": 600,
+      "heatsink": false,
+      "warrantyYears": 5,
+      "sources": [
+        {
+          "url": "https://www.sandisk.com/products/ssd/internal-ssd/wd-black-sn7100-nvme-internal-ssd?sku=WDS100T4X0E-00CJA0",
+          "publisher": "sandisk",
+          "retrievedAt": "2026-09-30",
+          "docType": "product-page",
+          "fields": [
+            "brand",
+            "name",
+            "partNumber",
+            "interface",
+            "formFactor",
+            "pcieGen",
+            "capacityGb",
+            "seqReadMBps",
+            "seqWriteMBps",
+            "cache",
+            "nandType",
+            "heatsink",
+            "warrantyYears"
+          ],
+          "title": "1TB WD_BLACK SN7100 NVMe SSD"
+        },
+        {
+          "url": "https://documents.sandisk.com/content/dam/asset-library/en_us/assets/public/sandisk/product/internal-drives/wd-black-ssd/data-sheet-wd-black-sn7100-nvme-ssd.pdf",
+          "publisher": "sandisk",
+          "retrievedAt": "2026-09-30",
+          "docType": "datasheet",
+          "title": "WD_BLACK SN7100 NVMe SSD data sheet (July 2025)",
+          "locator": "p. 2, Product Specifications, 1TB column"
+        }
+      ],
+      "notes": [
+        {
+          "field": "cache",
+          "text": "Sandisk calls it \"this DRAM-less drive\" and does not say whether it uses HMB."
+        },
+        {
+          "field": "pcieLanes",
+          "text": "The product page says \"PCIe Gen 4.0\"; the data sheet gives \"PCIe Gen 4x4 NVMe\"."
+        },
+        {
+          "field": "enduranceTbw",
+          "text": "The product page omits TBW; the data sheet lists 600 TBW for the 1TB model."
+        }
+      ]
+    },
+    {
+      "id": "wd-blue-sa510-2-5-inch-1tb",
+      "category": "storage",
+      "manufacturer": "sandisk",
+      "brand": "WD Blue",
+      "name": "WD Blue SA510 SATA SSD 2.5\"/7mm 1TB",
+      "partNumber": "WDS100T5B0A-00LMP0",
+      "interface": "SATA",
+      "formFactor": "2.5-inch",
+      "capacityGb": 1000,
+      "seqReadMBps": 560,
+      "seqWriteMBps": 520,
+      "cache": null,
+      "nandType": null,
+      "enduranceTbw": 400,
+      "heatsink": false,
+      "warrantyYears": 5,
+      "sources": [
+        {
+          "url": "https://www.sandisk.com/products/ssd/internal-ssd/wd-blue-sa510-sata-2-5-ssd?sku=WDS100T5B0A-00LMP0",
+          "publisher": "sandisk",
+          "retrievedAt": "2026-09-30",
+          "docType": "product-page",
+          "title": "1TB WD Blue SA510 SATA SSD 2.5\"/7mm Cased"
+        }
+      ],
+      "notes": [
+        {
+          "field": "cache",
+          "text": "Sandisk does not say on the product page whether the SA510 has a DRAM cache."
+        },
+        {
+          "field": "nandType",
+          "text": "Sandisk says \"SANDISK 3D NAND\" without giving the bits per cell."
+        }
+      ]
+    },
+    {
+      "id": "samsung-990-pro-2tb",
+      "category": "storage",
+      "manufacturer": "samsung",
+      "brand": "Samsung",
+      "name": "Samsung 990 PRO 2TB",
+      "partNumber": "MZ-V9P2T0BW",
+      "interface": "NVMe",
+      "formFactor": "M.2 2280",
+      "pcieGen": 4,
+      "pcieLanes": 4,
+      "capacityGb": 2000,
+      "seqReadMBps": 7450,
+      "seqWriteMBps": 6900,
+      "cache": "dram",
+      "nandType": "TLC",
+      "enduranceTbw": 1200,
+      "heatsink": false,
+      "warrantyYears": 5,
+      "sources": [
+        {
+          "url": "https://semiconductor.samsung.com/consumer-storage/internal-ssd/990-pro/",
+          "publisher": "samsung",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "archiveUrl": "https://web.archive.org/web/20260108005538/https://semiconductor.samsung.com/consumer-storage/internal-ssd/990-pro/",
+          "title": "Samsung 990 PRO PCIe 4.0 SSD | Samsung Semiconductor Global",
+          "locator": "Specifications > MORE SPECS"
+        }
+      ],
+      "notes": [
+        {
+          "text": "semiconductor.samsung.com answered our fetcher with an \"Access Denied\" page on 2026-09-30, so the values come from the Internet Archive snapshot of 2026-01-08 (archived pages are allowed for specs)."
+        },
+        {
+          "field": "cache",
+          "text": "From \"CACHE MEMORY ... Samsung 2GB Low Power DDR4 SDRAM (2TB)\"."
+        },
+        {
+          "field": "nandType",
+          "text": "Samsung lists \"Samsung V-NAND 3-bit MLC\", i.e. three bits per cell (TLC)."
+        },
+        {
+          "field": "heatsink",
+          "text": "Samsung lists this model code at 80 x 22 x 2.3 mm, i.e. a bare drive."
+        },
+        {
+          "field": "enduranceTbw",
+          "text": "From \"MZ-V9P2T0BW (2TB) 5-year or 1200 TBW limited warranty\"."
+        }
+      ]
+    }
+  ]
+}

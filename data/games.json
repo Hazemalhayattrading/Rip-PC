@@ -1,0 +1,954 @@
+{
+  "schemaVersion": 1,
+  "listDate": "2026-09-30",
+  "method": "Steam titles: Steam Charts \"Last 30 Days\" average concurrent players and the Steam Web API current count, both read on 2026-09-30. Titles not on Steam: the newest figure from the publisher, or from news reporting the publisher or a tracker, that a reachable source states. Current Call of Duty and EA SPORTS FC checked against the Steam store API on 2026-09-30. A title with no public player count is replaced.",
+  "games": [
+    {
+      "id": "counter-strike-2",
+      "title": "Counter-Strike 2",
+      "franchiseSlot": null,
+      "steamAppId": 730,
+      "releaseDate": null,
+      "listStatus": "confirmed",
+      "replaces": null,
+      "inclusionReason": "Most-played game on Steam by 30-day average; esports CPU-bound benchmark.",
+      "playerCounts": [
+        {
+          "metric": "steam-period-average",
+          "value": 805311.49,
+          "asOf": "2026-09-30",
+          "period": "Last 30 Days",
+          "scope": "steam"
+        },
+        {
+          "metric": "steam-concurrent-now",
+          "value": 1125484,
+          "asOf": "2026-09-30",
+          "period": null,
+          "scope": "steam"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://store.steampowered.com/api/appdetails?appids=730&cc=US&l=english",
+          "publisher": "steam",
+          "retrievedAt": "2026-09-30",
+          "docType": "api-response",
+          "fields": [
+            "title",
+            "steamAppId",
+            "releaseDate"
+          ],
+          "title": "Steam store app details: Counter-Strike 2"
+        },
+        {
+          "url": "https://steamcharts.com/app/730",
+          "publisher": "steamcharts",
+          "retrievedAt": "2026-09-30",
+          "docType": "tracker-page",
+          "fields": [
+            "playerCounts.0"
+          ],
+          "title": "Counter-Strike 2 - Steam Charts",
+          "locator": "Last 30 Days, Avg. Players"
+        },
+        {
+          "url": "https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid=730",
+          "publisher": "steam",
+          "retrievedAt": "2026-09-30",
+          "docType": "api-response",
+          "fields": [
+            "playerCounts.1"
+          ],
+          "title": "Steam Web API GetNumberOfCurrentPlayers"
+        }
+      ],
+      "notes": [
+        {
+          "field": "releaseDate",
+          "text": "Steam lists app 730 with its original Counter-Strike: Global Offensive date (Aug 21, 2012); Counter-Strike 2 replaced it in the same app and no reachable source gave the CS2 date."
+        }
+      ]
+    },
+    {
+      "id": "valorant",
+      "title": "VALORANT",
+      "franchiseSlot": null,
+      "steamAppId": null,
+      "releaseDate": "2020-06-02",
+      "listStatus": "confirmed",
+      "replaces": null,
+      "inclusionReason": "One of the most-played competitive shooters; not on Steam, so it has no Steam Charts figure.",
+      "playerCounts": [
+        {
+          "metric": "monthly-active-users",
+          "value": 35000000,
+          "asOf": "2024-10-02",
+          "period": "a month",
+          "scope": "all-platforms"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://wiki.playvalorant.com/en-us/VALORANT",
+          "publisher": "riot-games",
+          "retrievedAt": "2026-09-30",
+          "docType": "support-article",
+          "fields": [
+            "title",
+            "releaseDate"
+          ],
+          "title": "VALORANT - VALORANT Wiki",
+          "locator": "Infobox \"released: June 2, 2020 (PC)\""
+        },
+        {
+          "url": "https://esports-news.co.uk/2024/10/02/valorant-player-count-unreal-fest/",
+          "publisher": "esports-news-uk",
+          "retrievedAt": "2026-09-30",
+          "docType": "news-article",
+          "fields": [
+            "playerCounts.0"
+          ],
+          "title": "Valorant player count: Riot announces it has 35m monthly players during October 2024's Unreal Fest Seattle"
+        }
+      ],
+      "notes": [
+        {
+          "field": "playerCounts",
+          "text": "Riot's Anna Donlon at Unreal Fest Seattle on 2024-10-02: \"played by over 35 million players a month\", PC and console. Riot publishes no live count; this is the newest Riot figure found, so it is stale."
+        }
+      ]
+    },
+    {
+      "id": "fortnite",
+      "title": "Fortnite",
+      "franchiseSlot": null,
+      "steamAppId": null,
+      "releaseDate": null,
+      "listStatus": "confirmed",
+      "replaces": null,
+      "inclusionReason": "One of the most-played games worldwide; not on Steam.",
+      "playerCounts": [
+        {
+          "metric": "peak-concurrent",
+          "value": 14300000,
+          "asOf": "2024-11-30",
+          "period": "Remix: The Finale event",
+          "scope": "all-platforms"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://www.kitguru.net/gaming/joao-silva/fortnite-remix-the-finale-in-game-concert-sets-new-all-time-concert-record-with-14m-concurrent-users/",
+          "publisher": "kitguru",
+          "retrievedAt": "2026-09-30",
+          "docType": "news-article",
+          "fields": [
+            "title",
+            "playerCounts.0"
+          ],
+          "title": "Fortnite \"Remix: The Finale\" in-game concert sets new all-time concert record with 14m concurrent users"
+        }
+      ],
+      "notes": [
+        {
+          "field": "playerCounts",
+          "text": "KitGuru (2024-12-02): \"over 14.3 million players simultaneously\" on 30 November 2024, read from the fortnite.gg tracker; Epic published no exact figure. Stale: no newer figure from a reachable source."
+        },
+        {
+          "field": "releaseDate",
+          "text": "Epic's own pages answered with a Cloudflare challenge, so no release date was taken; it stays empty rather than coming from memory."
+        }
+      ]
+    },
+    {
+      "id": "apex-legends",
+      "title": "Apex Legends",
+      "franchiseSlot": null,
+      "steamAppId": 1172470,
+      "releaseDate": "2020-11-04",
+      "listStatus": "confirmed",
+      "replaces": null,
+      "inclusionReason": "Top free-to-play battle royale on Steam by 30-day average.",
+      "playerCounts": [
+        {
+          "metric": "steam-period-average",
+          "value": 115396.64,
+          "asOf": "2026-09-30",
+          "period": "Last 30 Days",
+          "scope": "steam"
+        },
+        {
+          "metric": "steam-concurrent-now",
+          "value": 75717,
+          "asOf": "2026-09-30",
+          "period": null,
+          "scope": "steam"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://store.steampowered.com/api/appdetails?appids=1172470&cc=US&l=english",
+          "publisher": "steam",
+          "retrievedAt": "2026-09-30",
+          "docType": "api-response",
+          "fields": [
+            "title",
+            "steamAppId",
+            "releaseDate"
+          ],
+          "title": "Steam store app details: Apex Legends"
+        },
+        {
+          "url": "https://steamcharts.com/app/1172470",
+          "publisher": "steamcharts",
+          "retrievedAt": "2026-09-30",
+          "docType": "tracker-page",
+          "fields": [
+            "playerCounts.0"
+          ],
+          "title": "Apex Legends - Steam Charts",
+          "locator": "Last 30 Days, Avg. Players"
+        },
+        {
+          "url": "https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid=1172470",
+          "publisher": "steam",
+          "retrievedAt": "2026-09-30",
+          "docType": "api-response",
+          "fields": [
+            "playerCounts.1"
+          ],
+          "title": "Steam Web API GetNumberOfCurrentPlayers"
+        }
+      ],
+      "notes": [
+        {
+          "field": "title",
+          "text": "Title as Steam lists it, without trademark symbols."
+        },
+        {
+          "field": "releaseDate",
+          "text": "Steam release date; Steam is the only source read for it."
+        }
+      ]
+    },
+    {
+      "id": "call-of-duty-black-ops-7",
+      "title": "Call of Duty: Black Ops 7",
+      "franchiseSlot": "call-of-duty",
+      "steamAppId": 3606480,
+      "releaseDate": "2025-11-21",
+      "listStatus": "confirmed",
+      "replaces": null,
+      "inclusionReason": "Current Call of Duty on 2026-09-30: Steam lists Modern Warfare 4 for Oct 23, 2026, so Black Ops 7 is the newest released title.",
+      "playerCounts": [
+        {
+          "metric": "steam-period-average",
+          "value": 25605.43,
+          "asOf": "2026-09-30",
+          "period": "Last 30 Days",
+          "scope": "steam"
+        },
+        {
+          "metric": "steam-concurrent-now",
+          "value": 30769,
+          "asOf": "2026-09-30",
+          "period": null,
+          "scope": "steam"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://store.steampowered.com/api/appdetails?appids=3606480&cc=US&l=english",
+          "publisher": "steam",
+          "retrievedAt": "2026-09-30",
+          "docType": "api-response",
+          "fields": [
+            "title",
+            "steamAppId",
+            "releaseDate"
+          ],
+          "title": "Steam store app details: Call of Duty: Black Ops 7"
+        },
+        {
+          "url": "https://steamcharts.com/app/1938090",
+          "publisher": "steamcharts",
+          "retrievedAt": "2026-09-30",
+          "docType": "tracker-page",
+          "fields": [
+            "playerCounts.0"
+          ],
+          "title": "Call of Duty - Steam Charts",
+          "locator": "Last 30 Days, Avg. Players"
+        },
+        {
+          "url": "https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid=1938090",
+          "publisher": "steam",
+          "retrievedAt": "2026-09-30",
+          "docType": "api-response",
+          "fields": [
+            "playerCounts.1"
+          ],
+          "title": "Steam Web API GetNumberOfCurrentPlayers"
+        },
+        {
+          "url": "https://store.steampowered.com/api/appdetails?appids=4435490&cc=US&l=english",
+          "publisher": "steam",
+          "retrievedAt": "2026-09-30",
+          "docType": "api-response",
+          "fields": [
+            "title"
+          ],
+          "title": "Steam store app details: Call of Duty: Modern Warfare 4",
+          "locator": "release_date: coming_soon true, \"Oct 23, 2026\""
+        }
+      ],
+      "notes": [
+        {
+          "field": "playerCounts",
+          "text": "Steam counts Black Ops 7 play under the \"Call of Duty\" app (1938090), which also hosts Warzone and other recent titles; the Black Ops 7 app itself reports 0 players. The counts are for app 1938090."
+        },
+        {
+          "field": "releaseDate",
+          "text": "As Steam's store API lists it for app 3606480."
+        }
+      ]
+    },
+    {
+      "id": "cyberpunk-2077",
+      "title": "Cyberpunk 2077",
+      "franchiseSlot": null,
+      "steamAppId": 1091500,
+      "releaseDate": "2020-12-09",
+      "listStatus": "confirmed",
+      "replaces": null,
+      "inclusionReason": "Standard heavy ray-tracing and path-tracing benchmark in GPU reviews.",
+      "playerCounts": [
+        {
+          "metric": "steam-period-average",
+          "value": 30231.77,
+          "asOf": "2026-09-30",
+          "period": "Last 30 Days",
+          "scope": "steam"
+        },
+        {
+          "metric": "steam-concurrent-now",
+          "value": 26719,
+          "asOf": "2026-09-30",
+          "period": null,
+          "scope": "steam"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://store.steampowered.com/api/appdetails?appids=1091500&cc=US&l=english",
+          "publisher": "steam",
+          "retrievedAt": "2026-09-30",
+          "docType": "api-response",
+          "fields": [
+            "title",
+            "steamAppId",
+            "releaseDate"
+          ],
+          "title": "Steam store app details: Cyberpunk 2077"
+        },
+        {
+          "url": "https://steamcharts.com/app/1091500",
+          "publisher": "steamcharts",
+          "retrievedAt": "2026-09-30",
+          "docType": "tracker-page",
+          "fields": [
+            "playerCounts.0"
+          ],
+          "title": "Cyberpunk 2077 - Steam Charts",
+          "locator": "Last 30 Days, Avg. Players"
+        },
+        {
+          "url": "https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid=1091500",
+          "publisher": "steam",
+          "retrievedAt": "2026-09-30",
+          "docType": "api-response",
+          "fields": [
+            "playerCounts.1"
+          ],
+          "title": "Steam Web API GetNumberOfCurrentPlayers"
+        }
+      ]
+    },
+    {
+      "id": "baldurs-gate-3",
+      "title": "Baldur's Gate 3",
+      "franchiseSlot": null,
+      "steamAppId": 1086940,
+      "releaseDate": "2023-08-03",
+      "listStatus": "confirmed",
+      "replaces": null,
+      "inclusionReason": "Popular CPU-heavy RPG, common in CPU and GPU reviews.",
+      "playerCounts": [
+        {
+          "metric": "steam-period-average",
+          "value": 43029.14,
+          "asOf": "2026-09-30",
+          "period": "Last 30 Days",
+          "scope": "steam"
+        },
+        {
+          "metric": "steam-concurrent-now",
+          "value": 50262,
+          "asOf": "2026-09-30",
+          "period": null,
+          "scope": "steam"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://store.steampowered.com/api/appdetails?appids=1086940&cc=US&l=english",
+          "publisher": "steam",
+          "retrievedAt": "2026-09-30",
+          "docType": "api-response",
+          "fields": [
+            "title",
+            "steamAppId",
+            "releaseDate"
+          ],
+          "title": "Steam store app details: Baldur's Gate 3"
+        },
+        {
+          "url": "https://steamcharts.com/app/1086940",
+          "publisher": "steamcharts",
+          "retrievedAt": "2026-09-30",
+          "docType": "tracker-page",
+          "fields": [
+            "playerCounts.0"
+          ],
+          "title": "Baldur's Gate 3 - Steam Charts",
+          "locator": "Last 30 Days, Avg. Players"
+        },
+        {
+          "url": "https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid=1086940",
+          "publisher": "steam",
+          "retrievedAt": "2026-09-30",
+          "docType": "api-response",
+          "fields": [
+            "playerCounts.1"
+          ],
+          "title": "Steam Web API GetNumberOfCurrentPlayers"
+        }
+      ]
+    },
+    {
+      "id": "black-myth-wukong",
+      "title": "Black Myth: Wukong",
+      "franchiseSlot": null,
+      "steamAppId": 2358720,
+      "releaseDate": "2024-08-19",
+      "listStatus": "confirmed",
+      "replaces": null,
+      "inclusionReason": "Kept for benchmark value: a heavy Unreal Engine 5 title in current GPU reviews. Its Steam 30-day average is the lowest of the Steam titles on the list.",
+      "playerCounts": [
+        {
+          "metric": "steam-period-average",
+          "value": 13626.45,
+          "asOf": "2026-09-30",
+          "period": "Last 30 Days",
+          "scope": "steam"
+        },
+        {
+          "metric": "steam-concurrent-now",
+          "value": 5154,
+          "asOf": "2026-09-30",
+          "period": null,
+          "scope": "steam"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://store.steampowered.com/api/appdetails?appids=2358720&cc=US&l=english",
+          "publisher": "steam",
+          "retrievedAt": "2026-09-30",
+          "docType": "api-response",
+          "fields": [
+            "title",
+            "steamAppId",
+            "releaseDate"
+          ],
+          "title": "Steam store app details: Black Myth: Wukong"
+        },
+        {
+          "url": "https://steamcharts.com/app/2358720",
+          "publisher": "steamcharts",
+          "retrievedAt": "2026-09-30",
+          "docType": "tracker-page",
+          "fields": [
+            "playerCounts.0"
+          ],
+          "title": "Black Myth: Wukong - Steam Charts",
+          "locator": "Last 30 Days, Avg. Players"
+        },
+        {
+          "url": "https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid=2358720",
+          "publisher": "steam",
+          "retrievedAt": "2026-09-30",
+          "docType": "api-response",
+          "fields": [
+            "playerCounts.1"
+          ],
+          "title": "Steam Web API GetNumberOfCurrentPlayers"
+        }
+      ]
+    },
+    {
+      "id": "battlefield-6",
+      "title": "Battlefield 6",
+      "franchiseSlot": null,
+      "steamAppId": 2807960,
+      "releaseDate": "2025-10-10",
+      "listStatus": "replacement",
+      "replaces": "Alan Wake 2",
+      "inclusionReason": "Replaces Alan Wake 2, which has no public player count; large 2025 multiplayer release that reviews benchmark.",
+      "playerCounts": [
+        {
+          "metric": "steam-period-average",
+          "value": 30979.26,
+          "asOf": "2026-09-30",
+          "period": "Last 30 Days",
+          "scope": "steam"
+        },
+        {
+          "metric": "steam-concurrent-now",
+          "value": 32664,
+          "asOf": "2026-09-30",
+          "period": null,
+          "scope": "steam"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://store.steampowered.com/api/appdetails?appids=2807960&cc=US&l=english",
+          "publisher": "steam",
+          "retrievedAt": "2026-09-30",
+          "docType": "api-response",
+          "fields": [
+            "title",
+            "steamAppId",
+            "releaseDate"
+          ],
+          "title": "Steam store app details: Battlefield 6"
+        },
+        {
+          "url": "https://steamcharts.com/app/2807960",
+          "publisher": "steamcharts",
+          "retrievedAt": "2026-09-30",
+          "docType": "tracker-page",
+          "fields": [
+            "playerCounts.0"
+          ],
+          "title": "Battlefield 6 - Steam Charts",
+          "locator": "Last 30 Days, Avg. Players"
+        },
+        {
+          "url": "https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid=2807960",
+          "publisher": "steam",
+          "retrievedAt": "2026-09-30",
+          "docType": "api-response",
+          "fields": [
+            "playerCounts.1"
+          ],
+          "title": "Steam Web API GetNumberOfCurrentPlayers"
+        }
+      ],
+      "notes": [
+        {
+          "field": "title",
+          "text": "Title as Steam lists it, without trademark symbols."
+        }
+      ]
+    },
+    {
+      "id": "red-dead-redemption-2",
+      "title": "Red Dead Redemption 2",
+      "franchiseSlot": null,
+      "steamAppId": 1174180,
+      "releaseDate": "2019-12-05",
+      "listStatus": "confirmed",
+      "replaces": null,
+      "inclusionReason": "Long-running AAA benchmark title with a steady Steam audience.",
+      "playerCounts": [
+        {
+          "metric": "steam-period-average",
+          "value": 31524.88,
+          "asOf": "2026-09-30",
+          "period": "Last 30 Days",
+          "scope": "steam"
+        },
+        {
+          "metric": "steam-concurrent-now",
+          "value": 24654,
+          "asOf": "2026-09-30",
+          "period": null,
+          "scope": "steam"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://store.steampowered.com/api/appdetails?appids=1174180&cc=US&l=english",
+          "publisher": "steam",
+          "retrievedAt": "2026-09-30",
+          "docType": "api-response",
+          "fields": [
+            "title",
+            "steamAppId",
+            "releaseDate"
+          ],
+          "title": "Steam store app details: Red Dead Redemption 2"
+        },
+        {
+          "url": "https://steamcharts.com/app/1174180",
+          "publisher": "steamcharts",
+          "retrievedAt": "2026-09-30",
+          "docType": "tracker-page",
+          "fields": [
+            "playerCounts.0"
+          ],
+          "title": "Red Dead Redemption 2 - Steam Charts",
+          "locator": "Last 30 Days, Avg. Players"
+        },
+        {
+          "url": "https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid=1174180",
+          "publisher": "steam",
+          "retrievedAt": "2026-09-30",
+          "docType": "api-response",
+          "fields": [
+            "playerCounts.1"
+          ],
+          "title": "Steam Web API GetNumberOfCurrentPlayers"
+        }
+      ],
+      "notes": [
+        {
+          "field": "releaseDate",
+          "text": "Steam release date; Steam is the only source read for it."
+        }
+      ]
+    },
+    {
+      "id": "grand-theft-auto-v-enhanced",
+      "title": "Grand Theft Auto V Enhanced",
+      "franchiseSlot": null,
+      "steamAppId": 3240220,
+      "releaseDate": "2025-03-04",
+      "listStatus": "confirmed",
+      "replaces": null,
+      "inclusionReason": "GTA V stays one of the most-played games on Steam; the Enhanced edition is the version current reviews benchmark.",
+      "playerCounts": [
+        {
+          "metric": "steam-period-average",
+          "value": 51530.41,
+          "asOf": "2026-09-30",
+          "period": "Last 30 Days",
+          "scope": "steam"
+        },
+        {
+          "metric": "steam-concurrent-now",
+          "value": 38898,
+          "asOf": "2026-09-30",
+          "period": null,
+          "scope": "steam"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://store.steampowered.com/api/appdetails?appids=3240220&cc=US&l=english",
+          "publisher": "steam",
+          "retrievedAt": "2026-09-30",
+          "docType": "api-response",
+          "fields": [
+            "title",
+            "steamAppId",
+            "releaseDate"
+          ],
+          "title": "Steam store app details: Grand Theft Auto V Enhanced"
+        },
+        {
+          "url": "https://steamcharts.com/app/3240220",
+          "publisher": "steamcharts",
+          "retrievedAt": "2026-09-30",
+          "docType": "tracker-page",
+          "fields": [
+            "playerCounts.0"
+          ],
+          "title": "Grand Theft Auto V Enhanced - Steam Charts",
+          "locator": "Last 30 Days, Avg. Players"
+        },
+        {
+          "url": "https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid=3240220",
+          "publisher": "steam",
+          "retrievedAt": "2026-09-30",
+          "docType": "api-response",
+          "fields": [
+            "playerCounts.1"
+          ],
+          "title": "Steam Web API GetNumberOfCurrentPlayers"
+        }
+      ],
+      "notes": [
+        {
+          "field": "steamAppId",
+          "text": "Steam sells GTA V as two apps: Enhanced (3240220, listed) and Legacy (271590). Only the Enhanced app's counts are recorded."
+        }
+      ]
+    },
+    {
+      "id": "ea-sports-fc-27",
+      "title": "EA SPORTS FC 27",
+      "franchiseSlot": "ea-sports-fc",
+      "steamAppId": 4080220,
+      "releaseDate": "2026-09-24",
+      "listStatus": "confirmed",
+      "replaces": null,
+      "inclusionReason": "Current EA SPORTS FC on 2026-09-30: FC 27 released on Steam on Sep 24, 2026, replacing FC 26.",
+      "playerCounts": [
+        {
+          "metric": "steam-concurrent-now",
+          "value": 83817,
+          "asOf": "2026-09-30",
+          "period": null,
+          "scope": "steam"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://store.steampowered.com/api/appdetails?appids=4080220&cc=US&l=english",
+          "publisher": "steam",
+          "retrievedAt": "2026-09-30",
+          "docType": "api-response",
+          "fields": [
+            "title",
+            "steamAppId",
+            "releaseDate"
+          ],
+          "title": "Steam store app details: EA SPORTS FC 27"
+        },
+        {
+          "url": "https://store.steampowered.com/app/4080220/",
+          "publisher": "steam",
+          "retrievedAt": "2026-09-30",
+          "docType": "store-page",
+          "fields": [
+            "releaseDate"
+          ],
+          "title": "EA SPORTS FC 27 on Steam",
+          "locator": "\"Release Date: Sep 24, 2026\""
+        },
+        {
+          "url": "https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid=4080220",
+          "publisher": "steam",
+          "retrievedAt": "2026-09-30",
+          "docType": "api-response",
+          "fields": [
+            "playerCounts.0"
+          ],
+          "title": "Steam Web API GetNumberOfCurrentPlayers"
+        }
+      ],
+      "notes": [
+        {
+          "field": "playerCounts",
+          "text": "Six days after release Steam Charts does not track the app yet (404), so only the Steam Web API current count is recorded."
+        }
+      ]
+    },
+    {
+      "id": "marvel-rivals",
+      "title": "Marvel Rivals",
+      "franchiseSlot": null,
+      "steamAppId": 2767030,
+      "releaseDate": "2024-12-05",
+      "listStatus": "confirmed",
+      "replaces": null,
+      "inclusionReason": "Top new free-to-play shooter on Steam by 30-day average.",
+      "playerCounts": [
+        {
+          "metric": "steam-period-average",
+          "value": 67651.16,
+          "asOf": "2026-09-30",
+          "period": "Last 30 Days",
+          "scope": "steam"
+        },
+        {
+          "metric": "steam-concurrent-now",
+          "value": 63590,
+          "asOf": "2026-09-30",
+          "period": null,
+          "scope": "steam"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://store.steampowered.com/api/appdetails?appids=2767030&cc=US&l=english",
+          "publisher": "steam",
+          "retrievedAt": "2026-09-30",
+          "docType": "api-response",
+          "fields": [
+            "title",
+            "steamAppId",
+            "releaseDate"
+          ],
+          "title": "Steam store app details: Marvel Rivals"
+        },
+        {
+          "url": "https://steamcharts.com/app/2767030",
+          "publisher": "steamcharts",
+          "retrievedAt": "2026-09-30",
+          "docType": "tracker-page",
+          "fields": [
+            "playerCounts.0"
+          ],
+          "title": "Marvel Rivals - Steam Charts",
+          "locator": "Last 30 Days, Avg. Players"
+        },
+        {
+          "url": "https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid=2767030",
+          "publisher": "steam",
+          "retrievedAt": "2026-09-30",
+          "docType": "api-response",
+          "fields": [
+            "playerCounts.1"
+          ],
+          "title": "Steam Web API GetNumberOfCurrentPlayers"
+        }
+      ]
+    },
+    {
+      "id": "elden-ring",
+      "title": "ELDEN RING",
+      "franchiseSlot": null,
+      "steamAppId": 1245620,
+      "releaseDate": "2022-02-24",
+      "listStatus": "confirmed",
+      "replaces": null,
+      "inclusionReason": "Popular action RPG, frequent GPU benchmark.",
+      "playerCounts": [
+        {
+          "metric": "steam-period-average",
+          "value": 30914.76,
+          "asOf": "2026-09-30",
+          "period": "Last 30 Days",
+          "scope": "steam"
+        },
+        {
+          "metric": "steam-concurrent-now",
+          "value": 26152,
+          "asOf": "2026-09-30",
+          "period": null,
+          "scope": "steam"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://store.steampowered.com/api/appdetails?appids=1245620&cc=US&l=english",
+          "publisher": "steam",
+          "retrievedAt": "2026-09-30",
+          "docType": "api-response",
+          "fields": [
+            "title",
+            "steamAppId",
+            "releaseDate"
+          ],
+          "title": "Steam store app details: ELDEN RING"
+        },
+        {
+          "url": "https://steamcharts.com/app/1245620",
+          "publisher": "steamcharts",
+          "retrievedAt": "2026-09-30",
+          "docType": "tracker-page",
+          "fields": [
+            "playerCounts.0"
+          ],
+          "title": "ELDEN RING - Steam Charts",
+          "locator": "Last 30 Days, Avg. Players"
+        },
+        {
+          "url": "https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid=1245620",
+          "publisher": "steam",
+          "retrievedAt": "2026-09-30",
+          "docType": "api-response",
+          "fields": [
+            "playerCounts.1"
+          ],
+          "title": "Steam Web API GetNumberOfCurrentPlayers"
+        }
+      ],
+      "notes": [
+        {
+          "field": "title",
+          "text": "Steam lists it as \"ELDEN RING\"."
+        }
+      ]
+    },
+    {
+      "id": "minecraft",
+      "title": "Minecraft",
+      "franchiseSlot": null,
+      "steamAppId": null,
+      "releaseDate": null,
+      "listStatus": "confirmed",
+      "replaces": null,
+      "inclusionReason": "Among the most-played games worldwide; benchmarked as Java Edition with shaders, a GPU-heavy PC case.",
+      "playerCounts": [
+        {
+          "metric": "monthly-active-users",
+          "value": 141000000,
+          "asOf": "2021-08-31",
+          "period": "August 2021",
+          "scope": "all-platforms"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://www.windowscentral.com/minecraft-live-2021-numbers-update",
+          "publisher": "windows-central",
+          "retrievedAt": "2026-09-30",
+          "docType": "news-article",
+          "fields": [
+            "title",
+            "playerCounts.0"
+          ],
+          "title": "Minecraft boasts over 141 million monthly active users and other impressive numbers"
+        }
+      ],
+      "notes": [
+        {
+          "field": "playerCounts",
+          "text": "Mojang's Minecraft Live 2021 figure (over 141 million monthly active users in August 2021), reported by Windows Central on 2021-10-16. It covers all editions and is the newest Mojang figure found: very stale."
+        },
+        {
+          "field": "releaseDate",
+          "text": "minecraft.net did not connect from our fetcher, so no release date was taken."
+        }
+      ]
+    }
+  ],
+  "considered": [
+    {
+      "title": "Alan Wake 2",
+      "decision": "Replaced by Battlefield 6: sold only on the Epic Games Store, not on Steam, and no public player count exists, so it cannot carry a dated player-count source."
+    },
+    {
+      "title": "Call of Duty: Modern Warfare 4",
+      "decision": "Not yet released on the list date (Steam lists Oct 23, 2026); Black Ops 7 stays the current Call of Duty until it launches."
+    },
+    {
+      "title": "EA SPORTS FC 26",
+      "decision": "Superseded by EA SPORTS FC 27 (Steam release Sep 24, 2026)."
+    },
+    {
+      "title": "Grand Theft Auto V Legacy",
+      "decision": "Not listed separately: the GTA V entry is the Enhanced edition, which current reviews benchmark."
+    },
+    {
+      "title": "Monster Hunter Wilds",
+      "decision": "Considered as the Alan Wake 2 replacement; its Steam Charts 30-day average on 2026-09-30 was below Battlefield 6's."
+    }
+  ]
+}

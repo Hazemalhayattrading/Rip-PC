@@ -1,0 +1,866 @@
+{
+  "schemaVersion": 1,
+  "category": "cpu",
+  "items": [
+    {
+      "id": "amd-ryzen-7-9850x3d",
+      "category": "cpu",
+      "manufacturer": "amd",
+      "brand": "AMD",
+      "name": "AMD Ryzen 7 9850X3D",
+      "family": "ryzen-9000",
+      "codename": "Granite Ridge",
+      "socket": "AM5",
+      "cores": 8,
+      "threads": 16,
+      "hybrid": null,
+      "baseClockMhz": 4700,
+      "boostClockMhz": 5600,
+      "l2CacheMb": 8,
+      "l3CacheMb": 96,
+      "has3dVCache": true,
+      "power": { "scheme": "amd", "tdpW": 120, "pptW": null },
+      "memory": {
+        "types": ["DDR5"],
+        "speeds": [
+          { "type": "DDR5", "speedMtps": 5600, "config": "2x1R" },
+          { "type": "DDR5", "speedMtps": 5600, "config": "2x2R" },
+          { "type": "DDR5", "speedMtps": 3600, "config": "4x1R" },
+          { "type": "DDR5", "speedMtps": 3600, "config": "4x2R" }
+        ],
+        "asPublished": "2x1R DDR5-5600, 2x2R DDR5-5600, 4x1R DDR5-3600, 4x2R DDR5-3600",
+        "maxCapacityGb": 256,
+        "channels": 2
+      },
+      "igpu": { "model": "AMD Radeon Graphics" },
+      "pcie": { "maxGen": 5, "usableLanes": 24, "asPublished": "PCIe 5.0; Native PCIe Lanes (Total/Usable): 28 / 24" },
+      "launchDate": "2026-01-29",
+      "unlocked": true,
+      "boxCooler": null,
+      "sources": [
+        {
+          "url": "https://www.amd.com/en/products/processors/desktops/ryzen/9000-series/amd-ryzen-7-9850x3d.html",
+          "publisher": "amd",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "archiveUrl": "https://web.archive.org/web/20260924141624/https://www.amd.com/en/products/processors/desktops/ryzen/9000-series/amd-ryzen-7-9850x3d.html",
+          "fields": ["brand", "name", "family", "codename", "socket", "cores", "threads", "baseClockMhz", "boostClockMhz", "l2CacheMb", "l3CacheMb", "power", "memory", "igpu", "pcie", "launchDate", "unlocked", "boxCooler"],
+          "title": "AMD Ryzen 7 9850X3D Desktop Processor (specifications)"
+        },
+        {
+          "url": "https://ir.amd.com/news-events/press-releases/detail/1270/amd-expands-ai-leadership-across-client-graphics-and-software-with-new-ryzen-ryzen-ai-and-amd-rocm-announcements-at-ces-2026",
+          "publisher": "amd",
+          "retrievedAt": "2026-09-30",
+          "docType": "press-release",
+          "fields": ["has3dVCache"],
+          "title": "AMD CES 2026 press release: Ryzen 7 9850X3D with AMD 3D V-Cache technology"
+        }
+      ],
+      "notes": [{ "field": "power.pptW", "text": "AMD's product page lists the Default TDP only; the PPT limit is not published there." }]
+    },
+    {
+      "id": "amd-ryzen-7-9800x3d",
+      "category": "cpu",
+      "manufacturer": "amd",
+      "brand": "AMD",
+      "name": "AMD Ryzen 7 9800X3D",
+      "family": "ryzen-9000",
+      "codename": "Granite Ridge",
+      "socket": "AM5",
+      "cores": 8,
+      "threads": 16,
+      "hybrid": null,
+      "baseClockMhz": 4700,
+      "boostClockMhz": 5200,
+      "l2CacheMb": 8,
+      "l3CacheMb": 96,
+      "has3dVCache": true,
+      "power": { "scheme": "amd", "tdpW": 120, "pptW": null },
+      "memory": {
+        "types": ["DDR5"],
+        "speeds": [
+          { "type": "DDR5", "speedMtps": 5600, "config": "2x1R" },
+          { "type": "DDR5", "speedMtps": 5600, "config": "2x2R" },
+          { "type": "DDR5", "speedMtps": 3600, "config": "4x1R" },
+          { "type": "DDR5", "speedMtps": 3600, "config": "4x2R" }
+        ],
+        "asPublished": "2x1R DDR5-5600, 2x2R DDR5-5600, 4x1R DDR5-3600, 4x2R DDR5-3600",
+        "maxCapacityGb": 256,
+        "channels": 2
+      },
+      "igpu": { "model": "AMD Radeon Graphics" },
+      "pcie": { "maxGen": 5, "usableLanes": 24, "asPublished": "PCIe 5.0; Native PCIe Lanes (Total/Usable): 28 / 24" },
+      "launchDate": "2024-11-07",
+      "unlocked": true,
+      "boxCooler": null,
+      "sources": [
+        {
+          "url": "https://www.amd.com/en/products/processors/desktops/ryzen/9000-series/amd-ryzen-7-9800x3d.html",
+          "publisher": "amd",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "archiveUrl": "https://web.archive.org/web/20260924141621/https://www.amd.com/en/products/processors/desktops/ryzen/9000-series/amd-ryzen-7-9800x3d.html",
+          "title": "AMD Ryzen 7 9800X3D Desktop Processor (specifications; page cites 2nd gen AMD 3D V-Cache)"
+        }
+      ],
+      "notes": [{ "field": "power.pptW", "text": "AMD's product page lists the Default TDP only; the PPT limit is not published there." }]
+    },
+    {
+      "id": "amd-ryzen-9-9950x",
+      "category": "cpu",
+      "manufacturer": "amd",
+      "brand": "AMD",
+      "name": "AMD Ryzen 9 9950X",
+      "family": "ryzen-9000",
+      "codename": "Granite Ridge",
+      "socket": "AM5",
+      "cores": 16,
+      "threads": 32,
+      "hybrid": null,
+      "baseClockMhz": 4300,
+      "boostClockMhz": 5700,
+      "l2CacheMb": 16,
+      "l3CacheMb": 64,
+      "has3dVCache": false,
+      "power": { "scheme": "amd", "tdpW": 170, "pptW": null },
+      "memory": {
+        "types": ["DDR5"],
+        "speeds": [
+          { "type": "DDR5", "speedMtps": 5600, "config": "2x1R" },
+          { "type": "DDR5", "speedMtps": 5600, "config": "2x2R" },
+          { "type": "DDR5", "speedMtps": 3600, "config": "4x1R" },
+          { "type": "DDR5", "speedMtps": 3600, "config": "4x2R" }
+        ],
+        "asPublished": "2x1R DDR5-5600, 2x2R DDR5-5600, 4x1R DDR5-3600, 4x2R DDR5-3600",
+        "maxCapacityGb": 256,
+        "channels": 2
+      },
+      "igpu": { "model": "AMD Radeon Graphics" },
+      "pcie": { "maxGen": 5, "usableLanes": 24, "asPublished": "PCIe 5.0; Native PCIe Lanes (Total/Usable): 28 / 24" },
+      "launchDate": "2024-08-15",
+      "unlocked": true,
+      "boxCooler": null,
+      "sources": [
+        {
+          "url": "https://www.amd.com/en/products/processors/desktops/ryzen/9000-series/amd-ryzen-9-9950x.html",
+          "publisher": "amd",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "archiveUrl": "https://web.archive.org/web/20260923135450/https://www.amd.com/en/products/processors/desktops/ryzen/9000-series/amd-ryzen-9-9950x.html",
+          "title": "AMD Ryzen 9 9950X Desktop Processor (specifications)"
+        }
+      ],
+      "notes": [{ "field": "power.pptW", "text": "AMD's product page lists the Default TDP only; the PPT limit is not published there." }]
+    },
+    {
+      "id": "amd-ryzen-7-9700x",
+      "category": "cpu",
+      "manufacturer": "amd",
+      "brand": "AMD",
+      "name": "AMD Ryzen 7 9700X",
+      "family": "ryzen-9000",
+      "codename": "Granite Ridge",
+      "socket": "AM5",
+      "cores": 8,
+      "threads": 16,
+      "hybrid": null,
+      "baseClockMhz": 3800,
+      "boostClockMhz": 5500,
+      "l2CacheMb": 8,
+      "l3CacheMb": 32,
+      "has3dVCache": false,
+      "power": { "scheme": "amd", "tdpW": 65, "pptW": null },
+      "memory": {
+        "types": ["DDR5"],
+        "speeds": [
+          { "type": "DDR5", "speedMtps": 5600, "config": "2x1R" },
+          { "type": "DDR5", "speedMtps": 5600, "config": "2x2R" },
+          { "type": "DDR5", "speedMtps": 3600, "config": "4x1R" },
+          { "type": "DDR5", "speedMtps": 3600, "config": "4x2R" }
+        ],
+        "asPublished": "2x1R DDR5-5600, 2x2R DDR5-5600, 4x1R DDR5-3600, 4x2R DDR5-3600",
+        "maxCapacityGb": 256,
+        "channels": 2
+      },
+      "igpu": { "model": "AMD Radeon Graphics" },
+      "pcie": { "maxGen": 5, "usableLanes": 24, "asPublished": "PCIe 5.0; Native PCIe Lanes (Total/Usable): 28 / 24" },
+      "launchDate": "2024-08-08",
+      "unlocked": true,
+      "boxCooler": null,
+      "sources": [
+        {
+          "url": "https://www.amd.com/en/products/processors/desktops/ryzen/9000-series/amd-ryzen-7-9700x.html",
+          "publisher": "amd",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "archiveUrl": "https://web.archive.org/web/20260516141509/https://www.amd.com/en/products/processors/desktops/ryzen/9000-series/amd-ryzen-7-9700x.html",
+          "title": "AMD Ryzen 7 9700X Desktop Processor (specifications)"
+        }
+      ],
+      "notes": [{ "field": "power.pptW", "text": "AMD's product page lists the Default TDP only; the PPT limit is not published there." }]
+    },
+    {
+      "id": "amd-ryzen-5-9600x",
+      "category": "cpu",
+      "manufacturer": "amd",
+      "brand": "AMD",
+      "name": "AMD Ryzen 5 9600X",
+      "family": "ryzen-9000",
+      "codename": "Granite Ridge",
+      "socket": "AM5",
+      "cores": 6,
+      "threads": 12,
+      "hybrid": null,
+      "baseClockMhz": 3900,
+      "boostClockMhz": 5400,
+      "l2CacheMb": 6,
+      "l3CacheMb": 32,
+      "has3dVCache": false,
+      "power": { "scheme": "amd", "tdpW": 65, "pptW": null },
+      "memory": {
+        "types": ["DDR5"],
+        "speeds": [
+          { "type": "DDR5", "speedMtps": 5600, "config": "2x1R" },
+          { "type": "DDR5", "speedMtps": 5600, "config": "2x2R" },
+          { "type": "DDR5", "speedMtps": 3600, "config": "4x1R" },
+          { "type": "DDR5", "speedMtps": 3600, "config": "4x2R" }
+        ],
+        "asPublished": "2x1R DDR5-5600, 2x2R DDR5-5600, 4x1R DDR5-3600, 4x2R DDR5-3600",
+        "maxCapacityGb": 256,
+        "channels": 2
+      },
+      "igpu": { "model": "AMD Radeon Graphics" },
+      "pcie": { "maxGen": 5, "usableLanes": 24, "asPublished": "PCIe 5.0; Native PCIe Lanes (Total/Usable): 28 / 24" },
+      "launchDate": "2024-08-08",
+      "unlocked": true,
+      "boxCooler": null,
+      "sources": [
+        {
+          "url": "https://www.amd.com/en/products/processors/desktops/ryzen/9000-series/amd-ryzen-5-9600x.html",
+          "publisher": "amd",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "archiveUrl": "https://web.archive.org/web/20260710232650/https://www.amd.com/en/products/processors/desktops/ryzen/9000-series/amd-ryzen-5-9600x.html",
+          "title": "AMD Ryzen 5 9600X Desktop Processor (specifications)"
+        }
+      ],
+      "notes": [{ "field": "power.pptW", "text": "AMD's product page lists the Default TDP only; the PPT limit is not published there." }]
+    },
+    {
+      "id": "amd-ryzen-7-7800x3d",
+      "category": "cpu",
+      "manufacturer": "amd",
+      "brand": "AMD",
+      "name": "AMD Ryzen 7 7800X3D",
+      "family": "ryzen-7000",
+      "codename": "Raphael",
+      "socket": "AM5",
+      "cores": 8,
+      "threads": 16,
+      "hybrid": null,
+      "baseClockMhz": 4200,
+      "boostClockMhz": 5000,
+      "l2CacheMb": 8,
+      "l3CacheMb": 96,
+      "has3dVCache": true,
+      "power": { "scheme": "amd", "tdpW": 120, "pptW": null },
+      "memory": {
+        "types": ["DDR5"],
+        "speeds": [
+          { "type": "DDR5", "speedMtps": 5200, "config": "2x1R" },
+          { "type": "DDR5", "speedMtps": 5200, "config": "2x2R" },
+          { "type": "DDR5", "speedMtps": 3600, "config": "4x1R" },
+          { "type": "DDR5", "speedMtps": 3600, "config": "4x2R" }
+        ],
+        "asPublished": "2x1R DDR5-5200, 2x2R DDR5-5200, 4x1R DDR5-3600, 4x2R DDR5-3600",
+        "maxCapacityGb": 128,
+        "channels": 2
+      },
+      "igpu": { "model": "AMD Radeon Graphics" },
+      "pcie": { "maxGen": 5, "usableLanes": 24, "asPublished": "PCIe 5.0; Native PCIe Lanes (Total/Usable): 28 / 24" },
+      "launchDate": "2023-04-06",
+      "unlocked": null,
+      "boxCooler": null,
+      "sources": [
+        {
+          "url": "https://www.amd.com/en/products/processors/desktops/ryzen/7000-series/amd-ryzen-7-7800x3d.html",
+          "publisher": "amd",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "archiveUrl": "https://web.archive.org/web/20260823195611/https://www.amd.com/en/products/processors/desktops/ryzen/7000-series/amd-ryzen-7-7800x3d.html",
+          "title": "AMD Ryzen 7 7800X3D Desktop Processor (specifications; page cites AMD 3D V-Cache)"
+        }
+      ],
+      "notes": [
+        { "field": "power.pptW", "text": "AMD's product page lists the Default TDP only; the PPT limit is not published there." },
+        { "field": "unlocked", "text": "AMD's spec page for this SKU has no 'Unlocked for Overclocking' row; it lists Precision Boost Overdrive and Curve Optimizer only." }
+      ]
+    },
+    {
+      "id": "amd-ryzen-5-7600",
+      "category": "cpu",
+      "manufacturer": "amd",
+      "brand": "AMD",
+      "name": "AMD Ryzen 5 7600",
+      "family": "ryzen-7000",
+      "codename": "Raphael",
+      "socket": "AM5",
+      "cores": 6,
+      "threads": 12,
+      "hybrid": null,
+      "baseClockMhz": 3800,
+      "boostClockMhz": 5100,
+      "l2CacheMb": 6,
+      "l3CacheMb": 32,
+      "has3dVCache": false,
+      "power": { "scheme": "amd", "tdpW": 65, "pptW": null },
+      "memory": {
+        "types": ["DDR5"],
+        "speeds": [
+          { "type": "DDR5", "speedMtps": 5200, "config": "2x1R" },
+          { "type": "DDR5", "speedMtps": 5200, "config": "2x2R" },
+          { "type": "DDR5", "speedMtps": 3600, "config": "4x1R" },
+          { "type": "DDR5", "speedMtps": 3600, "config": "4x2R" }
+        ],
+        "asPublished": "2x1R DDR5-5200, 2x2R DDR5-5200, 4x1R DDR5-3600, 4x2R DDR5-3600",
+        "maxCapacityGb": 128,
+        "channels": 2
+      },
+      "igpu": { "model": "AMD Radeon Graphics" },
+      "pcie": { "maxGen": 5, "usableLanes": 24, "asPublished": "PCIe 5.0; Native PCIe Lanes (Total/Usable): 28 / 24" },
+      "launchDate": "2023-01-14",
+      "unlocked": true,
+      "boxCooler": "AMD Wraith Stealth",
+      "sources": [
+        {
+          "url": "https://www.amd.com/en/products/processors/desktops/ryzen/7000-series/amd-ryzen-5-7600.html",
+          "publisher": "amd",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "archiveUrl": "https://web.archive.org/web/20260621051510/https://www.amd.com/en/products/processors/desktops/ryzen/7000-series/amd-ryzen-5-7600.html",
+          "title": "AMD Ryzen 5 7600 Desktop Processor (specifications)"
+        }
+      ],
+      "notes": [{ "field": "power.pptW", "text": "AMD's product page lists the Default TDP only; the PPT limit is not published there." }]
+    },
+    {
+      "id": "amd-ryzen-7-5700x3d",
+      "category": "cpu",
+      "manufacturer": "amd",
+      "brand": "AMD",
+      "name": "AMD Ryzen 7 5700X3D",
+      "family": "ryzen-5000",
+      "codename": "Vermeer",
+      "socket": "AM4",
+      "cores": 8,
+      "threads": 16,
+      "hybrid": null,
+      "baseClockMhz": 3000,
+      "boostClockMhz": 4100,
+      "l2CacheMb": 4,
+      "l3CacheMb": 96,
+      "has3dVCache": true,
+      "power": { "scheme": "amd", "tdpW": 105, "pptW": null },
+      "memory": {
+        "types": ["DDR4"],
+        "speeds": [
+          { "type": "DDR4", "speedMtps": 3200, "config": "2x1R" },
+          { "type": "DDR4", "speedMtps": 3200, "config": "2x2R" },
+          { "type": "DDR4", "speedMtps": 2933, "config": "4x1R" },
+          { "type": "DDR4", "speedMtps": 2667, "config": "4x2R" }
+        ],
+        "asPublished": "2x1R DDR4-3200, 2x2R DDR4-3200, 4x1R DDR4-2933, 4x2R DDR4-2667",
+        "maxCapacityGb": 128,
+        "channels": 2
+      },
+      "igpu": null,
+      "pcie": { "maxGen": 4, "usableLanes": 20, "asPublished": "PCIe 4.0; Native PCIe Lanes (Total/Usable): 24 / 20" },
+      "launchDate": "2024-01-08",
+      "unlocked": null,
+      "boxCooler": null,
+      "sources": [
+        {
+          "url": "https://www.amd.com/en/product/14101",
+          "publisher": "amd",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "archiveUrl": "https://web.archive.org/web/20240509224645/https://www.amd.com/en/product/14101",
+          "fields": ["brand", "name", "family", "codename", "socket", "cores", "threads", "baseClockMhz", "boostClockMhz", "l2CacheMb", "l3CacheMb", "power", "memory", "igpu", "pcie", "launchDate", "unlocked", "boxCooler"],
+          "title": "AMD Ryzen 7 5700X3D full specifications (Integrated Graphics: No; Discrete Graphics Card Required)"
+        },
+        {
+          "url": "https://ir.amd.com/news-events/press-releases/detail/1177/amd-reveals-next-gen-desktop-processors-for-extreme-pc-gaming-and-creator-performance",
+          "publisher": "amd",
+          "retrievedAt": "2026-09-30",
+          "docType": "press-release",
+          "fields": ["has3dVCache"],
+          "title": "AMD press release, 2024-01-08: Ryzen 7 5700X3D leverages AMD 3D V-Cache technology"
+        }
+      ],
+      "notes": [
+        { "field": "power.pptW", "text": "AMD's product page lists the Default TDP only; the PPT limit is not published there." },
+        { "field": "unlocked", "text": "AMD's spec page for this SKU has no 'Unlocked for Overclocking' row." }
+      ]
+    },
+    {
+      "id": "amd-ryzen-5-5600",
+      "category": "cpu",
+      "manufacturer": "amd",
+      "brand": "AMD",
+      "name": "AMD Ryzen 5 5600",
+      "family": "ryzen-5000",
+      "codename": "Vermeer",
+      "socket": "AM4",
+      "cores": 6,
+      "threads": 12,
+      "hybrid": null,
+      "baseClockMhz": 3500,
+      "boostClockMhz": 4400,
+      "l2CacheMb": 3,
+      "l3CacheMb": 32,
+      "has3dVCache": false,
+      "power": { "scheme": "amd", "tdpW": 65, "pptW": null },
+      "memory": {
+        "types": ["DDR4"],
+        "speeds": [
+          { "type": "DDR4", "speedMtps": 3200, "config": "2x1R" },
+          { "type": "DDR4", "speedMtps": 3200, "config": "2x2R" },
+          { "type": "DDR4", "speedMtps": 2933, "config": "4x1R" },
+          { "type": "DDR4", "speedMtps": 2667, "config": "4x2R" }
+        ],
+        "asPublished": "Up to 3200MT/s; 2x1R DDR4-3200, 2x2R DDR4-3200, 4x1R DDR4-2933, 4x2R DDR4-2667",
+        "maxCapacityGb": 128,
+        "channels": 2
+      },
+      "igpu": null,
+      "pcie": { "maxGen": 4, "usableLanes": 20, "asPublished": "PCIe 4.0; Native PCIe Lanes (Total/Usable): 24 / 20" },
+      "launchDate": "2022-04-04",
+      "unlocked": true,
+      "boxCooler": "AMD Wraith Stealth",
+      "sources": [
+        {
+          "url": "https://www.amd.com/en/product/11831",
+          "publisher": "amd",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "archiveUrl": "https://web.archive.org/web/20240801171330/https://www.amd.com/en/product/11831",
+          "title": "AMD Ryzen 5 5600 full specifications (Integrated Graphics: No; Discrete Graphics Card Required)"
+        }
+      ],
+      "notes": [{ "field": "power.pptW", "text": "AMD's product page lists the Default TDP only; the PPT limit is not published there." }]
+    },
+    {
+      "id": "intel-core-ultra-9-285k",
+      "category": "cpu",
+      "manufacturer": "intel",
+      "brand": "Intel",
+      "name": "Intel Core Ultra 9 Processor 285K",
+      "family": "core-ultra-200s",
+      "codename": "Arrow Lake",
+      "socket": "LGA1851",
+      "cores": 24,
+      "threads": 24,
+      "hybrid": { "performanceCores": 8, "efficiencyCores": 16, "pCoreBaseClockMhz": 3700, "pCoreBoostClockMhz": 5500, "eCoreBaseClockMhz": 3200, "eCoreBoostClockMhz": 4600 },
+      "baseClockMhz": 3700,
+      "boostClockMhz": 5700,
+      "l2CacheMb": 40,
+      "l3CacheMb": 36,
+      "has3dVCache": false,
+      "power": { "scheme": "intel", "processorBasePowerW": 125, "maxTurboPowerW": 250 },
+      "memory": {
+        "types": ["DDR5"],
+        "speeds": [{ "type": "DDR5", "speedMtps": 6400, "config": null }],
+        "asPublished": "Up to DDR5 6400 MT/s",
+        "maxCapacityGb": 256,
+        "channels": 2
+      },
+      "igpu": { "model": "Intel Graphics" },
+      "pcie": { "maxGen": 5, "usableLanes": 24, "asPublished": "PCI Express Revision 5.0 and 4.0; Up to 1x16+2x4, 2x8+2x4, 1x8+4x4; Max # of PCI Express Lanes: 24" },
+      "launchDate": "2024-Q4",
+      "unlocked": true,
+      "boxCooler": null,
+      "sources": [
+        {
+          "url": "https://www.intel.com/content/www/us/en/products/sku/241060/intel-core-ultra-9-processor-285k-36m-cache-up-to-5-70-ghz/specifications.html",
+          "publisher": "intel",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "fields": ["brand", "name", "family", "codename", "socket", "cores", "threads", "hybrid", "baseClockMhz", "boostClockMhz", "l2CacheMb", "l3CacheMb", "has3dVCache", "power", "memory", "igpu", "pcie", "launchDate"],
+          "title": "Intel Core Ultra 9 Processor 285K - Product Specifications (ARK)"
+        },
+        {
+          "url": "https://www.intel.com/content/www/us/en/processors/processor-numbers.html",
+          "publisher": "intel",
+          "retrievedAt": "2026-09-30",
+          "docType": "support-article",
+          "fields": ["unlocked"],
+          "title": "Intel processor numbers: desktop suffix K = high performance, unlocked"
+        },
+        {
+          "url": "https://www.intel.com/content/www/us/en/support/articles/000005940/processors.html",
+          "publisher": "intel",
+          "retrievedAt": "2026-09-30",
+          "docType": "support-article",
+          "fields": ["boxCooler"],
+          "title": "Intel Core and Core Ultra Boxed Desktop Processors Shipped without Fan Heatsink (names 285K)"
+        }
+      ]
+    },
+    {
+      "id": "intel-core-ultra-7-270k-plus",
+      "category": "cpu",
+      "manufacturer": "intel",
+      "brand": "Intel",
+      "name": "Intel Core Ultra 7 processor 270K Plus",
+      "family": "core-ultra-200s",
+      "codename": "Arrow Lake",
+      "socket": "LGA1851",
+      "cores": 24,
+      "threads": 24,
+      "hybrid": { "performanceCores": 8, "efficiencyCores": 16, "pCoreBaseClockMhz": 3700, "pCoreBoostClockMhz": 5400, "eCoreBaseClockMhz": 3200, "eCoreBoostClockMhz": 4700 },
+      "baseClockMhz": 3700,
+      "boostClockMhz": 5500,
+      "l2CacheMb": 40,
+      "l3CacheMb": 36,
+      "has3dVCache": false,
+      "power": { "scheme": "intel", "processorBasePowerW": 125, "maxTurboPowerW": 250 },
+      "memory": {
+        "types": ["DDR5"],
+        "speeds": [{ "type": "DDR5", "speedMtps": 7200, "config": null }],
+        "asPublished": "Up To DDR5 7200 MT/s",
+        "maxCapacityGb": 256,
+        "channels": 2
+      },
+      "igpu": { "model": "Intel Graphics" },
+      "pcie": { "maxGen": 5, "usableLanes": 24, "asPublished": "PCI Express Revision 5.0 and 4.0; Up to 1x16+2x4, 2x8+2x4, 1x8+4x4; Max # of PCI Express Lanes: 24" },
+      "launchDate": "2026-Q1",
+      "unlocked": true,
+      "boxCooler": null,
+      "sources": [
+        {
+          "url": "https://www.intel.com/content/www/us/en/products/sku/245692/intel-core-ultra-7-processor-270k-plus-36m-cache-up-to-5-50-ghz/specifications.html",
+          "publisher": "intel",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "fields": ["brand", "name", "family", "codename", "socket", "cores", "threads", "hybrid", "baseClockMhz", "boostClockMhz", "l2CacheMb", "l3CacheMb", "has3dVCache", "power", "memory", "igpu", "pcie", "launchDate"],
+          "title": "Intel Core Ultra 7 processor 270K Plus - Product Specifications (ARK)"
+        },
+        {
+          "url": "https://www.intel.com/content/www/us/en/processors/processor-numbers.html",
+          "publisher": "intel",
+          "retrievedAt": "2026-09-30",
+          "docType": "support-article",
+          "fields": ["unlocked"],
+          "title": "Intel processor numbers: desktop suffix K = high performance, unlocked"
+        },
+        {
+          "url": "https://www.intel.com/content/www/us/en/support/articles/000005940/processors.html",
+          "publisher": "intel",
+          "retrievedAt": "2026-09-30",
+          "docType": "support-article",
+          "fields": ["boxCooler"],
+          "title": "Intel Core and Core Ultra Boxed Desktop Processors Shipped without Fan Heatsink (names 270K Plus)"
+        }
+      ]
+    },
+    {
+      "id": "intel-core-ultra-7-265k",
+      "category": "cpu",
+      "manufacturer": "intel",
+      "brand": "Intel",
+      "name": "Intel Core Ultra 7 Processor 265K",
+      "family": "core-ultra-200s",
+      "codename": "Arrow Lake",
+      "socket": "LGA1851",
+      "cores": 20,
+      "threads": 20,
+      "hybrid": { "performanceCores": 8, "efficiencyCores": 12, "pCoreBaseClockMhz": 3900, "pCoreBoostClockMhz": 5400, "eCoreBaseClockMhz": 3300, "eCoreBoostClockMhz": 4600 },
+      "baseClockMhz": 3900,
+      "boostClockMhz": 5500,
+      "l2CacheMb": 36,
+      "l3CacheMb": 30,
+      "has3dVCache": false,
+      "power": { "scheme": "intel", "processorBasePowerW": 125, "maxTurboPowerW": 250 },
+      "memory": {
+        "types": ["DDR5"],
+        "speeds": [{ "type": "DDR5", "speedMtps": 6400, "config": null }],
+        "asPublished": "Up to DDR5 6400 MT/s",
+        "maxCapacityGb": 256,
+        "channels": 2
+      },
+      "igpu": { "model": "Intel Graphics" },
+      "pcie": { "maxGen": 5, "usableLanes": 24, "asPublished": "PCI Express Revision 5.0 and 4.0; Up to 1x16+2x4, 2x8+2x4, 1x8+4x4; Max # of PCI Express Lanes: 24" },
+      "launchDate": "2024-Q4",
+      "unlocked": true,
+      "boxCooler": null,
+      "sources": [
+        {
+          "url": "https://www.intel.com/content/www/us/en/products/sku/241063/intel-core-ultra-7-processor-265k-30m-cache-up-to-5-50-ghz/specifications.html",
+          "publisher": "intel",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "fields": ["brand", "name", "family", "codename", "socket", "cores", "threads", "hybrid", "baseClockMhz", "boostClockMhz", "l2CacheMb", "l3CacheMb", "has3dVCache", "power", "memory", "igpu", "pcie", "launchDate"],
+          "title": "Intel Core Ultra 7 Processor 265K - Product Specifications (ARK)"
+        },
+        {
+          "url": "https://www.intel.com/content/www/us/en/processors/processor-numbers.html",
+          "publisher": "intel",
+          "retrievedAt": "2026-09-30",
+          "docType": "support-article",
+          "fields": ["unlocked"],
+          "title": "Intel processor numbers: desktop suffix K = high performance, unlocked"
+        },
+        {
+          "url": "https://www.intel.com/content/www/us/en/support/articles/000005940/processors.html",
+          "publisher": "intel",
+          "retrievedAt": "2026-09-30",
+          "docType": "support-article",
+          "fields": ["boxCooler"],
+          "title": "Intel Core and Core Ultra Boxed Desktop Processors Shipped without Fan Heatsink (K suffix)"
+        }
+      ]
+    },
+    {
+      "id": "intel-core-ultra-5-245k",
+      "category": "cpu",
+      "manufacturer": "intel",
+      "brand": "Intel",
+      "name": "Intel Core Ultra 5 Processor 245K",
+      "family": "core-ultra-200s",
+      "codename": "Arrow Lake",
+      "socket": "LGA1851",
+      "cores": 14,
+      "threads": 14,
+      "hybrid": { "performanceCores": 6, "efficiencyCores": 8, "pCoreBaseClockMhz": 4200, "pCoreBoostClockMhz": 5200, "eCoreBaseClockMhz": 3600, "eCoreBoostClockMhz": 4600 },
+      "baseClockMhz": 4200,
+      "boostClockMhz": 5200,
+      "l2CacheMb": 26,
+      "l3CacheMb": 24,
+      "has3dVCache": false,
+      "power": { "scheme": "intel", "processorBasePowerW": 125, "maxTurboPowerW": 159 },
+      "memory": {
+        "types": ["DDR5"],
+        "speeds": [{ "type": "DDR5", "speedMtps": 6400, "config": null }],
+        "asPublished": "Up to DDR5 6400 MT/s",
+        "maxCapacityGb": 256,
+        "channels": 2
+      },
+      "igpu": { "model": "Intel Graphics" },
+      "pcie": { "maxGen": 5, "usableLanes": 24, "asPublished": "PCI Express Revision 5.0 and 4.0; Up to 1x16+2x4, 2x8+2x4, 1x8+4x4; Max # of PCI Express Lanes: 24" },
+      "launchDate": "2024-Q4",
+      "unlocked": true,
+      "boxCooler": null,
+      "sources": [
+        {
+          "url": "https://www.intel.com/content/www/us/en/products/sku/241067/intel-core-ultra-5-processor-245k-24m-cache-up-to-5-20-ghz/specifications.html",
+          "publisher": "intel",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "fields": ["brand", "name", "family", "codename", "socket", "cores", "threads", "hybrid", "baseClockMhz", "boostClockMhz", "l2CacheMb", "l3CacheMb", "has3dVCache", "power", "memory", "igpu", "pcie", "launchDate"],
+          "title": "Intel Core Ultra 5 Processor 245K - Product Specifications (ARK)"
+        },
+        {
+          "url": "https://www.intel.com/content/www/us/en/processors/processor-numbers.html",
+          "publisher": "intel",
+          "retrievedAt": "2026-09-30",
+          "docType": "support-article",
+          "fields": ["unlocked"],
+          "title": "Intel processor numbers: desktop suffix K = high performance, unlocked"
+        },
+        {
+          "url": "https://www.intel.com/content/www/us/en/support/articles/000005940/processors.html",
+          "publisher": "intel",
+          "retrievedAt": "2026-09-30",
+          "docType": "support-article",
+          "fields": ["boxCooler"],
+          "title": "Intel Core and Core Ultra Boxed Desktop Processors Shipped without Fan Heatsink (names 245K)"
+        }
+      ]
+    },
+    {
+      "id": "intel-core-i7-14700k",
+      "category": "cpu",
+      "manufacturer": "intel",
+      "brand": "Intel",
+      "name": "Intel Core i7 processor 14700K",
+      "family": "core-14th-gen",
+      "codename": "Raptor Lake",
+      "socket": "LGA1700",
+      "cores": 20,
+      "threads": 28,
+      "hybrid": { "performanceCores": 8, "efficiencyCores": 12, "pCoreBaseClockMhz": 3400, "pCoreBoostClockMhz": 5500, "eCoreBaseClockMhz": 2500, "eCoreBoostClockMhz": 4300 },
+      "baseClockMhz": 3400,
+      "boostClockMhz": 5600,
+      "l2CacheMb": 28,
+      "l3CacheMb": 33,
+      "has3dVCache": false,
+      "power": { "scheme": "intel", "processorBasePowerW": 125, "maxTurboPowerW": 253 },
+      "memory": {
+        "types": ["DDR5", "DDR4"],
+        "speeds": [
+          { "type": "DDR5", "speedMtps": 5600, "config": null },
+          { "type": "DDR4", "speedMtps": 3200, "config": null }
+        ],
+        "asPublished": "Up to DDR5 5600 MT/s; Up to DDR4 3200 MT/s",
+        "maxCapacityGb": 192,
+        "channels": 2
+      },
+      "igpu": { "model": "Intel UHD Graphics 770" },
+      "pcie": { "maxGen": 5, "usableLanes": 20, "asPublished": "PCI Express Revision 5.0 and 4.0; Up to 1x16+4, 2x8+4; Max # of PCI Express Lanes: 20" },
+      "launchDate": "2023-Q4",
+      "unlocked": true,
+      "boxCooler": null,
+      "sources": [
+        {
+          "url": "https://www.intel.com/content/www/us/en/products/sku/236783/intel-core-i7-processor-14700k-33m-cache-up-to-5-60-ghz/specifications.html",
+          "publisher": "intel",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "fields": ["brand", "name", "family", "codename", "socket", "cores", "threads", "hybrid", "baseClockMhz", "boostClockMhz", "l2CacheMb", "l3CacheMb", "has3dVCache", "power", "memory", "igpu", "pcie", "launchDate"],
+          "title": "Intel Core i7 processor 14700K - Product Specifications (ARK)"
+        },
+        {
+          "url": "https://www.intel.com/content/www/us/en/processors/processor-numbers.html",
+          "publisher": "intel",
+          "retrievedAt": "2026-09-30",
+          "docType": "support-article",
+          "fields": ["unlocked"],
+          "title": "Intel processor numbers: desktop suffix K = high performance, unlocked"
+        },
+        {
+          "url": "https://www.intel.com/content/www/us/en/support/articles/000005940/processors.html",
+          "publisher": "intel",
+          "retrievedAt": "2026-09-30",
+          "docType": "support-article",
+          "fields": ["boxCooler"],
+          "title": "Intel Core and Core Ultra Boxed Desktop Processors Shipped without Fan Heatsink (names i7-14700K)"
+        }
+      ]
+    },
+    {
+      "id": "intel-core-i5-14600k",
+      "category": "cpu",
+      "manufacturer": "intel",
+      "brand": "Intel",
+      "name": "Intel Core i5 processor 14600K",
+      "family": "core-14th-gen",
+      "codename": "Raptor Lake",
+      "socket": "LGA1700",
+      "cores": 14,
+      "threads": 20,
+      "hybrid": { "performanceCores": 6, "efficiencyCores": 8, "pCoreBaseClockMhz": 3500, "pCoreBoostClockMhz": 5300, "eCoreBaseClockMhz": 2600, "eCoreBoostClockMhz": 4000 },
+      "baseClockMhz": 3500,
+      "boostClockMhz": 5300,
+      "l2CacheMb": 20,
+      "l3CacheMb": 24,
+      "has3dVCache": false,
+      "power": { "scheme": "intel", "processorBasePowerW": 125, "maxTurboPowerW": 181 },
+      "memory": {
+        "types": ["DDR5", "DDR4"],
+        "speeds": [
+          { "type": "DDR5", "speedMtps": 5600, "config": null },
+          { "type": "DDR4", "speedMtps": 3200, "config": null }
+        ],
+        "asPublished": "Up to DDR5 5600 MT/s; Up to DDR4 3200 MT/s",
+        "maxCapacityGb": 192,
+        "channels": 2
+      },
+      "igpu": { "model": "Intel UHD Graphics 770" },
+      "pcie": { "maxGen": 5, "usableLanes": 20, "asPublished": "PCI Express Revision 5.0 and 4.0; Up to 1x16+4, 2x8+4; Max # of PCI Express Lanes: 20" },
+      "launchDate": "2023-Q4",
+      "unlocked": true,
+      "boxCooler": null,
+      "sources": [
+        {
+          "url": "https://www.intel.com/content/www/us/en/products/sku/236799/intel-core-i5-processor-14600k-24m-cache-up-to-5-30-ghz/specifications.html",
+          "publisher": "intel",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "fields": ["brand", "name", "family", "codename", "socket", "cores", "threads", "hybrid", "baseClockMhz", "boostClockMhz", "l2CacheMb", "l3CacheMb", "has3dVCache", "power", "memory", "igpu", "pcie", "launchDate"],
+          "title": "Intel Core i5 processor 14600K - Product Specifications (ARK)"
+        },
+        {
+          "url": "https://www.intel.com/content/www/us/en/processors/processor-numbers.html",
+          "publisher": "intel",
+          "retrievedAt": "2026-09-30",
+          "docType": "support-article",
+          "fields": ["unlocked"],
+          "title": "Intel processor numbers: desktop suffix K = high performance, unlocked"
+        },
+        {
+          "url": "https://www.intel.com/content/www/us/en/support/articles/000005940/processors.html",
+          "publisher": "intel",
+          "retrievedAt": "2026-09-30",
+          "docType": "support-article",
+          "fields": ["boxCooler"],
+          "title": "Intel Core and Core Ultra Boxed Desktop Processors Shipped without Fan Heatsink (K suffix)"
+        }
+      ]
+    },
+    {
+      "id": "intel-core-i5-12400f",
+      "category": "cpu",
+      "manufacturer": "intel",
+      "brand": "Intel",
+      "name": "Intel Core i5-12400F Processor",
+      "family": "core-12th-gen",
+      "codename": "Alder Lake",
+      "socket": "LGA1700",
+      "cores": 6,
+      "threads": 12,
+      "hybrid": null,
+      "baseClockMhz": 2500,
+      "boostClockMhz": 4400,
+      "l2CacheMb": 7.5,
+      "l3CacheMb": 18,
+      "has3dVCache": false,
+      "power": { "scheme": "intel", "processorBasePowerW": 65, "maxTurboPowerW": 117 },
+      "memory": {
+        "types": ["DDR5", "DDR4"],
+        "speeds": [
+          { "type": "DDR5", "speedMtps": 4800, "config": null },
+          { "type": "DDR4", "speedMtps": 3200, "config": null }
+        ],
+        "asPublished": "Up to DDR5 4800 MT/s; Up to DDR4 3200 MT/s",
+        "maxCapacityGb": 128,
+        "channels": 2
+      },
+      "igpu": null,
+      "pcie": { "maxGen": 5, "usableLanes": 20, "asPublished": "PCI Express Revision 5.0 and 4.0; Up to 1x16+4, 2x8+4; Max # of PCI Express Lanes: 20" },
+      "launchDate": "2022-Q1",
+      "unlocked": false,
+      "boxCooler": "Intel Laminar RM1",
+      "sources": [
+        {
+          "url": "https://www.intel.com/content/www/us/en/products/sku/134587/intel-core-i512400f-processor-18m-cache-up-to-4-40-ghz/specifications.html",
+          "publisher": "intel",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "fields": ["brand", "name", "family", "codename", "socket", "cores", "threads", "hybrid", "baseClockMhz", "boostClockMhz", "l2CacheMb", "l3CacheMb", "has3dVCache", "power", "memory", "igpu", "pcie", "launchDate"],
+          "title": "Intel Core i5-12400F Processor - Product Specifications (ARK; 6 P-cores, 0 E-cores, no processor graphics)"
+        },
+        {
+          "url": "https://www.intel.com/content/www/us/en/processors/processor-numbers.html",
+          "publisher": "intel",
+          "retrievedAt": "2026-09-30",
+          "docType": "support-article",
+          "fields": ["unlocked"],
+          "title": "Intel processor numbers: desktop suffixes K = unlocked, F = requires discrete graphics"
+        },
+        {
+          "url": "https://www.intel.com/content/www/us/en/support/articles/000095154/processors.html",
+          "publisher": "intel",
+          "retrievedAt": "2026-09-30",
+          "docType": "support-article",
+          "fields": ["boxCooler"],
+          "title": "What items are shipped in the box: 12th Gen i5-12400F ships with the Intel Laminar RM1 Cooler"
+        }
+      ],
+      "notes": [
+        { "field": "unlocked", "text": "Intel's processor-number guide defines the desktop K suffix as unlocked; the i5-12400F has no K suffix." },
+        { "field": "igpu", "text": "F suffix: requires discrete graphics. ARK lists no processor graphics for this SKU." },
+        { "field": "hybrid", "text": "ARK lists 6 Performance-cores and 0 Efficient-cores, so the core layout is uniform." }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,411 @@
+{
+  "schemaVersion": 1,
+  "audits": [
+    {
+      "id": "2026-09-30-seed",
+      "seed": 20260930,
+      "rule": "One Python random.Random(20260930) generator for the whole draw. For each batch, in the order listed: sort the IDs ascending, take random.sample(ids, ceil(20% of the population)), then sort the drawn IDs. Script: data/tools/audit_sample.py.",
+      "drawnAt": "2026-09-30",
+      "evidence": [
+        "artifacts/audit/sample-2026-09-30.json",
+        "artifacts/audit/specs-pass1.txt",
+        "artifacts/audit/prices-pass1.txt",
+        "artifacts/audit/benchmarks-game-cb-2026-10-01.txt",
+        "artifacts/audit/benchmarks-games-2026-10-01.txt"
+      ],
+      "batches": [
+        {
+          "batch": "spec:cpu",
+          "population": 16,
+          "size": 4,
+          "ids": [
+            "amd-ryzen-7-9800x3d",
+            "intel-core-i5-14600k",
+            "intel-core-i7-14700k",
+            "intel-core-ultra-7-270k-plus"
+          ],
+          "auditedAt": "2026-09-30",
+          "method": "Every sourced value read against the saved maker page, manual, datasheet or archive copy under artifacts/specs/<category>/, each capture sha256-checked against the evidence manifest (log: specs-pass1.txt).",
+          "findings": [],
+          "followUp": null
+        },
+        {
+          "batch": "spec:motherboard",
+          "population": 7,
+          "size": 2,
+          "ids": [
+            "asus-rog-strix-b650e-i-gaming-wifi",
+            "asus-tuf-gaming-x870-plus-wifi"
+          ],
+          "auditedAt": "2026-09-30",
+          "method": "Every sourced value read against the saved maker page, manual, datasheet or archive copy under artifacts/specs/<category>/, each capture sha256-checked against the evidence manifest (log: specs-pass1.txt).",
+          "findings": [
+            {
+              "items": [
+                "asus-rog-strix-b650e-i-gaming-wifi"
+              ],
+              "field": "chipset",
+              "found": "Recorded as B650E. The ASUS spec page (\"CHIPSET AMD B650\") and manual (\"AMD B650 Chipset\") list B650.",
+              "fix": "chipset set to B650, with a note on the B650E in the board name.",
+              "fixedIn": "25f9cc5"
+            }
+          ],
+          "followUp": null
+        },
+        {
+          "batch": "spec:ram",
+          "population": 6,
+          "size": 2,
+          "ids": [
+            "gskill-trident-z5-ck-ddr5-8200-cl40-2x24gb",
+            "teamgroup-t-force-delta-rgb-ddr5-6000-cl30-2x16gb"
+          ],
+          "auditedAt": "2026-10-01",
+          "method": "Every sourced value read against the saved maker page, manual, datasheet or archive copy under artifacts/specs/<category>/, each capture sha256-checked against the evidence manifest (log: specs-pass1.txt). Two values the text search missed were read by hand on 2026-10-01: the Trident Z5 CK voltage (spec page, \"Tested Voltage (XMP) 1.40V\") and height (G.SKILL FAQ, \"Trident Z5 CK: 44mm (1.73in)\").",
+          "findings": [],
+          "followUp": null
+        },
+        {
+          "batch": "spec:gpu-chip",
+          "population": 11,
+          "size": 3,
+          "ids": [
+            "amd-radeon-rx-9060-xt-16gb",
+            "nvidia-geforce-rtx-5060-ti-16gb",
+            "nvidia-geforce-rtx-5090"
+          ],
+          "auditedAt": "2026-09-30",
+          "method": "Every sourced value read against the saved maker page, manual, datasheet or archive copy under artifacts/specs/<category>/, each capture sha256-checked against the evidence manifest (log: specs-pass1.txt).",
+          "findings": [],
+          "followUp": null
+        },
+        {
+          "batch": "spec:gpu-card",
+          "population": 10,
+          "size": 2,
+          "ids": [
+            "asus-dual-geforce-rtx-4060-8gb-oc",
+            "nvidia-geforce-rtx-5070-founders-edition"
+          ],
+          "auditedAt": "2026-09-30",
+          "method": "Every sourced value read against the saved maker page, manual, datasheet or archive copy under artifacts/specs/<category>/, each capture sha256-checked against the evidence manifest (log: specs-pass1.txt).",
+          "findings": [],
+          "followUp": null
+        },
+        {
+          "batch": "spec:storage",
+          "population": 5,
+          "size": 1,
+          "ids": [
+            "wd-black-sn850x-2tb"
+          ],
+          "auditedAt": "2026-09-30",
+          "method": "Every sourced value read against the saved maker page, manual, datasheet or archive copy under artifacts/specs/<category>/, each capture sha256-checked against the evidence manifest (log: specs-pass1.txt).",
+          "findings": [],
+          "followUp": null
+        },
+        {
+          "batch": "spec:psu",
+          "population": 5,
+          "size": 1,
+          "ids": [
+            "nzxt-c850-sfx-gold"
+          ],
+          "auditedAt": "2026-09-30",
+          "method": "Every sourced value read against the saved maker page, manual, datasheet or archive copy under artifacts/specs/<category>/, each capture sha256-checked against the evidence manifest (log: specs-pass1.txt).",
+          "findings": [],
+          "followUp": null
+        },
+        {
+          "batch": "spec:cooler",
+          "population": 5,
+          "size": 1,
+          "ids": [
+            "deepcool-an400"
+          ],
+          "auditedAt": "2026-09-30",
+          "method": "Every sourced value read against the saved maker page, manual, datasheet or archive copy under artifacts/specs/<category>/, each capture sha256-checked against the evidence manifest (log: specs-pass1.txt).",
+          "findings": [],
+          "followUp": null
+        },
+        {
+          "batch": "spec:case",
+          "population": 5,
+          "size": 1,
+          "ids": [
+            "deepcool-ch560"
+          ],
+          "auditedAt": "2026-09-30",
+          "method": "Every sourced value read against the saved maker page, manual, datasheet or archive copy under artifacts/specs/<category>/, each capture sha256-checked against the evidence manifest (log: specs-pass1.txt).",
+          "findings": [],
+          "followUp": null
+        },
+        {
+          "batch": "spec:case-fan",
+          "population": 3,
+          "size": 1,
+          "ids": [
+            "arctic-p12-pwm-pst-black"
+          ],
+          "auditedAt": "2026-10-01",
+          "method": "Every sourced value read against the saved maker page, manual, datasheet or archive copy under artifacts/specs/<category>/, each capture sha256-checked against the evidence manifest (log: specs-pass1.txt). The P12 static pressure, missed by the text search, was read by hand on 2026-10-01 (spec sheet, \"Static Pressure 2.20 mmH2O\").",
+          "findings": [],
+          "followUp": null
+        },
+        {
+          "batch": "price-observations:us",
+          "population": 51,
+          "size": 11,
+          "ids": [
+            "amd-ryzen-7-7800x3d|amazon-us",
+            "amd-ryzen-7-9700x|amazon-us",
+            "arctic-p12-pwm-pst-black|amazon-us",
+            "asus-tuf-gaming-geforce-rtx-5070-ti-16gb-oc|amazon-us",
+            "asus-tuf-gaming-z890-plus-wifi|amazon-us",
+            "fractal-pop-air-rgb-black-tg-clear-tint|amazon-us",
+            "fractal-pop-mini-air-rgb-black-tg-clear-tint|amazon-us",
+            "intel-core-i5-12400f|amazon-us",
+            "intel-core-ultra-5-245k|newegg",
+            "nzxt-c1200-gold-atx-3-1|amazon-us",
+            "sapphire-pulse-radeon-rx-9060-xt-oc-16gb|amazon-us"
+          ],
+          "auditedAt": "2026-09-30",
+          "method": "Each observation read against its saved live page under artifacts/prices/<market>/ (sha256-checked): the exact part, the buy-box amount as displayed, the seller and the stock state (log: prices-pass1.txt).",
+          "findings": [],
+          "followUp": null
+        },
+        {
+          "batch": "price-gaps:us",
+          "population": 11,
+          "size": 3,
+          "ids": [
+            "arctic-p14-pwm-pst-black",
+            "deepcool-ch560",
+            "wd-blue-sa510-2-5-inch-1tb"
+          ],
+          "auditedAt": "2026-09-30",
+          "method": "Each gap's retailer search and product pages re-read for the exact part, and its reason code checked against what the retailer showed (log: prices-pass1.txt).",
+          "findings": [
+            {
+              "items": [
+                "arctic-p14-pwm-pst-black"
+              ],
+              "field": null,
+              "found": "The gap said not listed. Newegg lists the exact fan (P14 PWM PST, black, single) under the ARCTIC brand.",
+              "fix": "Priced from that Newegg listing (USD 27.79) with a capture; the gap is removed.",
+              "fixedIn": "25f9cc5"
+            },
+            {
+              "items": [
+                "wd-blue-sa510-2-5-inch-1tb"
+              ],
+              "field": "reasonCode",
+              "found": "The gap said not-listed. Amazon US lists the current WDS100T5B0A as \"Currently unavailable\", with no price.",
+              "fix": "reasonCode set to unavailable; the reason names that listing.",
+              "fixedIn": "25f9cc5"
+            }
+          ],
+          "followUp": "Every US gap was re-checked. The Vulcan Z gap now names the other TeamGroup code Amazon lists, and gap codes now prefer a listed state (unavailable, no-price-shown) over not-listed."
+        },
+        {
+          "batch": "price-observations:sa",
+          "population": 43,
+          "size": 9,
+          "ids": [
+            "amd-ryzen-7-9850x3d|amazon-sa",
+            "arctic-p12-pwm-pst-black|amazon-sa",
+            "asus-dual-geforce-rtx-5060-8gb-oc|amazon-sa",
+            "asus-tuf-gaming-b650-plus-wifi|amazon-sa",
+            "intel-core-i7-14700k|amazon-sa",
+            "nvidia-geforce-rtx-5080-founders-edition|amazon-sa",
+            "nzxt-c850-gold-atx-3-1|amazon-sa",
+            "sapphire-pulse-radeon-rx-9060-xt-oc-16gb|amazon-sa",
+            "wd-black-sn7100-1tb|amazon-sa"
+          ],
+          "auditedAt": "2026-09-30",
+          "method": "Each observation read against its saved live page under artifacts/prices/<market>/ (sha256-checked): the exact part, the buy-box amount as displayed, the seller and the stock state (log: prices-pass1.txt).",
+          "findings": [
+            {
+              "items": [
+                "arctic-p12-pwm-pst-black|amazon-sa"
+              ],
+              "field": "amount",
+              "found": "The displayed SAR 82.75 includes estimated import charges (item SAR 56.96 plus SAR 25.79) on a global-store offer. The record did not say so.",
+              "fix": "A note on amount gives the import-charge split. The amount stays as displayed.",
+              "fixedIn": "25f9cc5"
+            },
+            {
+              "items": [
+                "nvidia-geforce-rtx-5080-founders-edition|amazon-sa"
+              ],
+              "field": "notes",
+              "found": "The note called the offer \"far above launch pricing\", which no source in the record supports.",
+              "fix": "The note keeps to what the page says: a third-party offer that usually ships in 10 to 11 days.",
+              "fixedIn": "25f9cc5"
+            }
+          ],
+          "followUp": "The 8 other global-store offers in SA got the same import-charge note, and the same unsupported wording was removed from the US observation of the RTX 5080 Founders Edition."
+        },
+        {
+          "batch": "price-gaps:sa",
+          "population": 19,
+          "size": 4,
+          "ids": [
+            "deepcool-pn850m",
+            "fractal-pop-mini-air-rgb-black-tg-clear-tint",
+            "nvidia-geforce-rtx-5070-founders-edition",
+            "wd-blue-sa510-2-5-inch-1tb"
+          ],
+          "auditedAt": "2026-09-30",
+          "method": "Each gap's retailer search and product pages re-read for the exact part, and its reason code checked against what the retailer showed (log: prices-pass1.txt).",
+          "findings": [
+            {
+              "items": [
+                "wd-blue-sa510-2-5-inch-1tb"
+              ],
+              "field": null,
+              "found": "The gap said Amazon.sa lists only the earlier WDS100T3B0A. An imported Amazon.sa offer of the current WDS100T5B0A was on sale.",
+              "fix": "Priced from that offer (SAR 1,103.78, import charges included) with a capture; the gap is removed.",
+              "fixedIn": "25f9cc5"
+            }
+          ],
+          "followUp": "Every SA gap was re-checked. The Core Ultra 9 285K is now priced, the TUF RTX 5070 Ti gap is now unavailable (the exact card is listed as \"Currently unavailable\"), and the Vulcan Z gap names the other TeamGroup code."
+        },
+        {
+          "batch": "benchmark:game",
+          "population": 116,
+          "size": 24,
+          "ids": [
+            "cb-2026-battlefield-6-1440p-raster-amd-radeon-rx-9070",
+            "cb-2026-battlefield-6-1440p-raster-nvidia-geforce-rtx-4060",
+            "cb-2026-battlefield-6-1440p-raster-nvidia-geforce-rtx-5060-ti-16gb",
+            "cb-2026-call-of-duty-black-ops-7-1440p-raster-amd-radeon-rx-9070-xt",
+            "cb-2026-call-of-duty-black-ops-7-1440p-raster-nvidia-geforce-rtx-5070-ti",
+            "cb-2026-call-of-duty-black-ops-7-1440p-raster-nvidia-geforce-rtx-5080",
+            "cb-2026-call-of-duty-black-ops-7-1440p-rt-nvidia-geforce-rtx-5070-ti",
+            "cb-2026-call-of-duty-black-ops-7-4k-raster-nvidia-geforce-rtx-5090",
+            "cb-2026-call-of-duty-black-ops-7-4k-rt-amd-radeon-rx-9070-xt",
+            "cb-2026-cyberpunk-2077-1440p-raster-amd-radeon-rx-9070-xt",
+            "cb-2026-cyberpunk-2077-1440p-rt-nvidia-geforce-rtx-5060-ti-16gb",
+            "cb-2026-cyberpunk-2077-1440p-rt-nvidia-geforce-rtx-5090",
+            "cb-2026-cyberpunk-2077-4k-raster-amd-radeon-rx-9070",
+            "cb-2026-cyberpunk-2077-4k-raster-nvidia-geforce-rtx-5090",
+            "tpu-9850x3d-baldurs-gate-3-1080p-amd-ryzen-7-9700x",
+            "tpu-9850x3d-baldurs-gate-3-1080p-amd-ryzen-7-9800x3d",
+            "tpu-9850x3d-baldurs-gate-3-1080p-amd-ryzen-7-9850x3d",
+            "tpu-9850x3d-battlefield-6-1080p-amd-ryzen-5-9600x",
+            "tpu-9850x3d-battlefield-6-1080p-amd-ryzen-7-9850x3d",
+            "tpu-9850x3d-battlefield-6-1080p-intel-core-i7-14700k",
+            "tpu-9850x3d-counter-strike-2-1080p-amd-ryzen-7-9850x3d",
+            "tpu-9850x3d-counter-strike-2-1080p-amd-ryzen-9-9950x",
+            "tpu-9850x3d-cyberpunk-2077-1080p-amd-ryzen-7-9800x3d",
+            "tpu-9850x3d-cyberpunk-2077-1080p-intel-core-ultra-7-265k"
+          ],
+          "auditedAt": "2026-10-01",
+          "method": "ComputerBase rows: avgFps and 1% low read against the chart data-value labels in the saved article HTML, and the test system against the article (14 sampled rows on 2026-09-30; all 80 rows again on 2026-10-01, log: benchmarks-game-cb-2026-10-01.txt). TechPowerUp rows: avgFps and 1% low read from the archived chart PNGs, the test system, preset and date from the archived Test Setup (log: benchmarks-games-2026-10-01.txt).",
+          "findings": [
+            {
+              "items": [
+                "tpu-9850x3d-baldurs-gate-3-1080p-amd-ryzen-7-9850x3d",
+                "tpu-9850x3d-battlefield-6-1080p-amd-ryzen-7-9850x3d",
+                "tpu-9850x3d-counter-strike-2-1080p-amd-ryzen-7-9850x3d"
+              ],
+              "field": "sources.1.locator",
+              "found": "The locator cites the bar as \"Ryzen 7 9850X3D (stock)\"; the chart reads \"Ryzen 7 9850X3D / Stock\".",
+              "fix": "The locator quotes the chart label exactly. No value changed.",
+              "fixedIn": "7451f52"
+            },
+            {
+              "items": [
+                "cb-2026-battlefield-6-1440p-raster-amd-radeon-rx-9070",
+                "cb-2026-battlefield-6-1440p-raster-nvidia-geforce-rtx-4060",
+                "cb-2026-battlefield-6-1440p-raster-nvidia-geforce-rtx-5060-ti-16gb",
+                "cb-2026-call-of-duty-black-ops-7-1440p-raster-amd-radeon-rx-9070-xt",
+                "cb-2026-call-of-duty-black-ops-7-1440p-raster-nvidia-geforce-rtx-5070-ti",
+                "cb-2026-call-of-duty-black-ops-7-1440p-raster-nvidia-geforce-rtx-5080",
+                "cb-2026-call-of-duty-black-ops-7-1440p-rt-nvidia-geforce-rtx-5070-ti",
+                "cb-2026-call-of-duty-black-ops-7-4k-raster-nvidia-geforce-rtx-5090",
+                "cb-2026-call-of-duty-black-ops-7-4k-rt-amd-radeon-rx-9070-xt",
+                "cb-2026-cyberpunk-2077-1440p-raster-amd-radeon-rx-9070-xt",
+                "cb-2026-cyberpunk-2077-1440p-rt-nvidia-geforce-rtx-5060-ti-16gb",
+                "cb-2026-cyberpunk-2077-1440p-rt-nvidia-geforce-rtx-5090",
+                "cb-2026-cyberpunk-2077-4k-raster-amd-radeon-rx-9070",
+                "cb-2026-cyberpunk-2077-4k-raster-nvidia-geforce-rtx-5090"
+              ],
+              "field": "sources.0.locator",
+              "found": "The locator rewrites the chart title (\"2560 x 1440\", a hyphen); the page reads \"2.560 × 1.440\" with an en dash, so a search of the page finds nothing.",
+              "fix": "The locator quotes the chart title exactly. No value changed.",
+              "fixedIn": "2cedf51"
+            }
+          ],
+          "followUp": "The same fixes went to the unsampled rows: the fourth 9850X3D locator (Cyberpunk 2077) and the other 66 ComputerBase locators. All 80 ComputerBase rows were re-read against the chart HTML; every value matches."
+        },
+        {
+          "batch": "benchmark:creator",
+          "population": 27,
+          "size": 6,
+          "ids": [
+            "blender-od-5-2-0-oneapi-intel-arc-b580",
+            "blender-od-5-2-0-optix-nvidia-geforce-rtx-5060",
+            "blender-od-5-2-0-optix-nvidia-geforce-rtx-5070",
+            "blender-od-5-2-0-optix-nvidia-geforce-rtx-5090",
+            "tpu-9800x3d-cinebench-2024-multi-core-amd-ryzen-7-9700x",
+            "tpu-9800x3d-cinebench-2024-single-core-amd-ryzen-7-7800x3d"
+          ],
+          "auditedAt": "2026-10-01",
+          "method": "Blender rows: median score and sample size read against the saved Open Data query JSON for the exact device name, and the unit against the About page. Cinebench rows: score read from the archived chart PNG, the test system and date from the archived Test Setup (log: benchmarks-games-2026-10-01.txt).",
+          "findings": [],
+          "followUp": null
+        },
+        {
+          "batch": "games",
+          "population": 15,
+          "size": 3,
+          "ids": [
+            "cyberpunk-2077",
+            "ea-sports-fc-27",
+            "red-dead-redemption-2"
+          ],
+          "auditedAt": "2026-10-01",
+          "method": "Title, Steam app ID and release date read against the saved Steam appdetails response; the current player count against the saved Steam Web API response; the 30-day average against the saved Steam Charts page (log: benchmarks-games-2026-10-01.txt).",
+          "findings": [],
+          "followUp": null
+        }
+      ],
+      "reviews": [
+        {
+          "by": "Director",
+          "at": "2026-10-01",
+          "scope": "Spot checks against the captures: CPU cores, threads, clocks, L3, power and PCIe lanes (all 16); GPU chip shaders, VRAM, bus, TBP and lanes; the B650 boards' M.2 layout and lane sharing; the RTX 5080 FE's dimensions, connector and PSU; prices for Owner's rule 1, archives, the batch window and marketplace flags; the Pop Air, Pop Mini Air and Terra cases against their structured fields and attribute notes.",
+          "findings": [
+            {
+              "items": [
+                "fractal-north-charcoal-black-tg-light"
+              ],
+              "field": "coolerClearance",
+              "found": "Recorded 145 mm with no condition. Fractal's note limits 145 mm to the Mesh version with its side fan bracket: \"145 mm with Fan Bracket (Mesh version only) / 170 mm without\". This TG Light SKU has no bracket.",
+              "fix": "coolerClearance set to 170 mm, unconditional, with a note quoting the maker. The DeepCool AK620 (160 mm) now fits.",
+              "fixedIn": "067eb7e"
+            }
+          ]
+        },
+        {
+          "by": "data-lead (sweep after the Director's review)",
+          "at": "2026-10-01",
+          "scope": "Every case's GPU, cooler, PSU and radiator limits against the page's structured fields and attribute notes (the four Fractal cases), and against the product page, the press release and manual pages 3, 8 and 10 (DeepCool CH560); coolers and GPU cards for values that depend on a variant or configuration.",
+          "findings": [
+            {
+              "items": [
+                "fractal-north-charcoal-black-tg-light"
+              ],
+              "field": "psu",
+              "found": "Recorded 255 mm with no condition. Fractal's note gives two limits, \"1 HDD tray: 255 mm max; 2 HDD tray: 155 mm max\", and the page does not say how many trays ship fitted.",
+              "fix": "PSU limits became per-configuration rows (psu.clearance, a schema change): 255 mm \"with 1 HDD tray\" and 155 mm \"with 2 HDD trays\", neither unconditional.",
+              "fixedIn": "bf7caad"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
