@@ -59,12 +59,16 @@ final hand-off commit; the hand-off message replaces it.
   > the one-line reply "Report sent to `<lead>`."
 - If an `Agent` call returns "ended without delivering a report", wait for the worker's message.
   If none comes, SendMessage the worker by the agentId in that result, which resumes it.
-- **Report file (design-lead's finding, 2026-10-01).** An `Agent` call blocks for the worker's
-  whole run, even with `run_in_background`. A worker's SendMessage may not reach you until your
-  turn ends.
-  - So every worker prompt also says: "Write your full report to
-    `<your worktree>/artifacts/reports/<task>.md` before you finish."
-  - Read that file as soon as the `Agent` call returns.
+- **Getting worker reports (tested 2026-10-01).**
+  - An `Agent` call blocks for the worker's whole run, even with `run_in_background`.
+  - A worker's SendMessage reaches you only when your turn ends.
+  - The harness refuses report files (.md) from subagents ("Subagents should return findings as
+    text"). Data files are allowed, such as `results.json` and logs.
+  So:
+  - workers send the report by SendMessage, and write their data to `artifacts/` in your worktree;
+  - read the data as soon as the `Agent` call returns;
+  - end your turn to receive the report message.
+  Never rely on the session scratchpad for evidence: it is wiped with the session.
 - Give each worker one well-scoped task, the exact files it may touch, and what evidence to return.
   Review every worker's output against the spec before it goes anywhere (BUILD_PROMPT §1).
 - The Context7 MCP is for library APIs. If it hits its quota, check the official docs and the
@@ -263,7 +267,7 @@ A `frontend-engineer` worker may do steps 1 and 5. You review every diff and run
 - You are independent. You verify; you don't fix other teams' code. Report defects to the owning
   lead with steps to reproduce, expected against actual, and a screenshot. Copy the Director on
   blockers.
-- **Note:** the Director fixed one line in your `tests/harness/spec-imports.test.ts` in `45c0bae`.
+- **Note:** the Director fixed one line in your `tests/harness/spec-imports.test.ts` in `0114261`.
   `path.relative()` gives backslashes on Windows, and that blocked everyone's verify.
 
 **Part 1, now:**

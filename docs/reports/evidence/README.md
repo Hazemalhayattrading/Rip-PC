@@ -68,9 +68,9 @@ file it can't find is the page left out by design (see `EXCLUDED.txt`).
   - restored to `C:\Projects\rig-lab-evidence\` and checksum-verified;
   - the manifests moved here, and `docs/reports/phase-0-wip/` was removed from the branch tip;
   - **purged from branch history, on Hazem's go-ahead.** The 11 binary files (9 `.tar.xz` parts
-    and 2 git bundles) were removed from every commit that descends from `63ab40f`, on all 5
-    branches (`git filter-branch --index-filter`, `--ancestry-path ^63ab40f^`). 87 commits got
-    new IDs; `purge-sha-map.txt` maps old to new. Older commits, `main` included, kept their IDs
+    and 2 git bundles) were removed from every commit from the one that added them onward, on all 5 branches
+    (`git filter-branch --index-filter`, limited with `--ancestry-path`). 87 commits got new IDs.
+    The old-to-new map is kept locally, at `C:\Projects\rig-lab-evidence\purge\purge-sha-map.txt`, because GitHub still serves pre-purge commits by ID until its garbage collection runs. Older commits, `main` included, kept their IDs
     and signatures. Every branch tip's content is byte-identical. The pushes used
     `--force-with-lease`.
   - **Verified:** a fresh `git clone --mirror` of GitHub holds 0 of the 11 blobs (a 12 MB pack;
