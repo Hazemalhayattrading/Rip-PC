@@ -25,7 +25,7 @@ Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
 |---|---|
 | Checkout | `C:\Projects\Rip-PC`, branch `claude/keen-lamport-0794zj` (integration) |
 | Worktrees | `C:\Projects\Rip-PC\.claude\worktrees\<lead>` (git-ignored) |
-| Restored evidence | `C:\Projects\rig-lab-evidence\` (6 archives; data-lead's 1,167 files match the SHA-256 manifest) |
+| Restored evidence | `C:\Projects\rig-lab-evidence\`: 6 extracted folders and `archives\`. Listed by SHA-256 in `docs/reports/evidence/` (2,243 files); `sha256sum -c` passes |
 | Toolchain | Node 24.21.0, npm 11.19.0 (the project asks for ^22.13.0; npm only warns); Playwright 1.56.1 Chromium installed |
 | Git, local repo config | `core.symlinks=true` and `core.autocrlf=false` (the system git config has `autocrlf=true`, which broke LF on older branches) |
 | Project skills | All 45 `.claude/skills/*` are real symlinks in every checkout and load (Developer Mode on since 2026-10-01) |
@@ -63,8 +63,10 @@ Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
    - update this file.
 2. Order: WP-D0 and WP-DS1, then WP-B1 Part 2, then QA Part 2, then `docs/qa/report-phase-0.md`.
 3. Write `docs/reports/phase-0.md` and report to Hazem **before Phase 1 starts**.
-4. Clean-up (handoff §7 step 10): delete `docs/reports/phase-0-wip/` once every branch is pushed.
-   Hazem decides the history question first (open items).
+4. **Evidence purge:** the plan is waiting for Hazem's go-ahead. Never rewrite history before he
+   approves.
+   - Done without a rewrite: `docs/reports/phase-0-wip/` was removed from the tip; the archives are
+     in `C:\Projects\rig-lab-evidence\archives\`; the manifests are in `docs/reports/evidence/`.
 
 ## Open items for Hazem
 

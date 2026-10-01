@@ -128,9 +128,10 @@ Known gaps: <honest list, or "none">
 - **Status file:** `data/WIP-STATUS.md`
 - **Owns:** `src/data/**`, `data/**`, the data rows in `CREDITS.md`.
 - **Evidence:** your `artifacts/` holds 1,167 files restored from the cloud container. All of them
-  match `docs/reports/phase-0-wip/evidence/data-lead-evidence-manifest.sha256.txt`, except the one
-  page left out by design (see `EXCLUDED.txt`). Price rows point at these paths and hashes, so
-  never rename or move a capture that a row cites.
+  match `docs/reports/evidence/data-lead-evidence-manifest.sha256.txt`, except the one page left out
+  by design (see `docs/reports/evidence/EXCLUDED.txt`). Price rows point at these paths and hashes,
+  so never rename or move a capture that a row cites. Captures never go into git; see
+  `docs/reports/evidence/README.md`.
 
 Steps:
 1. Merge `claude/keen-lamport-0794zj` into your branch and resolve any conflicts. Run
@@ -267,7 +268,9 @@ A `frontend-engineer` worker may do steps 1 and 5. You review every diff and run
    WP-Q1, have a fresh worker check them, not you.
 3. Build the rule-1 compliance check (Owner's rule 1, plan, top) for **100% of price and benchmark
    rows**. Read data-lead's branch read-only (`git show feat/data-foundations:…`), and the captures
-   in `C:\Projects\rig-lab-evidence\data-lead-artifacts\artifacts\` with their SHA-256 manifest.
+   in `C:\Projects\rig-lab-evidence\data-lead-artifacts\artifacts\` with their SHA-256 manifest,
+   `docs/reports/evidence/data-lead-evidence-manifest.sha256.txt`. The README in that folder
+   lists every evidence manifest.
 4. Plan the seeded 10% data audit, run by a fresh `data-auditor` worker. Run it for real once
    WP-D0 is merged.
 
