@@ -17,7 +17,7 @@ describe('the v1 category codes', () => {
       cpu: 'c',
       motherboard: 'm',
       ram: 'r',
-      gpu: 'g',
+      'gpu-card': 'g',
       storage: 's',
       psu: 'p',
       cooler: 'k',
@@ -48,7 +48,7 @@ describe('encode', () => {
   });
 
   it('writes categories in table order whatever the object key order', () => {
-    const build: RigBuild = { gpu: 'asus-tuf-rtx-5070-ti', cpu: 'amd-ryzen-7-9800x3d' };
+    const build: RigBuild = { 'gpu-card': 'asus-tuf-rtx-5070-ti', cpu: 'amd-ryzen-7-9800x3d' };
     expect(buildCodec.encode(build)).toBe('v1.c_amd-ryzen-7-9800x3d.g_asus-tuf-rtx-5070-ti');
   });
 
@@ -112,7 +112,7 @@ describe('round trip', () => {
   it('accepts entries in any order', () => {
     expect(buildCodec.decode('v1.g_card-a.c_chip-b')).toEqual({
       ok: true,
-      build: { cpu: 'chip-b', gpu: 'card-a' },
+      build: { cpu: 'chip-b', 'gpu-card': 'card-a' },
     });
   });
 

@@ -43,6 +43,9 @@ export default defineConfig([
     rules: {
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/consistent-type-imports': ['error', { fixStyle: 'inline-type-imports' }],
+      // With verbatimModuleSyntax, `import { type A } from 'x'` still runs 'x' at load time. That
+      // would slip three.js past the lazy-3D guard below, which allows type imports.
+      '@typescript-eslint/no-import-type-side-effects': 'error',
       '@typescript-eslint/switch-exhaustiveness-check': 'error',
       // Allows `const { [key]: _removed, ...rest } = obj`, the immutable way to drop a key.
       '@typescript-eslint/no-unused-vars': ['error', { ignoreRestSiblings: true }],

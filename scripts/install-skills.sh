@@ -26,5 +26,6 @@ echo "Plugins — run these two inside Claude Code (slash commands):"
 echo "  /plugin marketplace add nextlevelbuilder/ui-ux-pro-max-skill"
 echo "  /plugin install ui-ux-pro-max@ui-ux-pro-max-skill"
 echo
-echo "MCP servers (Playwright, Context7) are already declared in .mcp.json."
+echo "MCP servers: Playwright is declared in .mcp.json. Context7 is not, because it needs your own"
+echo "API key. Add it at user scope, as README.md explains under 'MCP servers for Claude Code'."
 ls .claude/skills 2>/dev/null
