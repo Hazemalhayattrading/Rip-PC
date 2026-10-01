@@ -1,6 +1,6 @@
 # Rig Lab test plan
 
-Owner: qa-lead · Version 3 · 2026-10-01 · Applies to every phase, from Phase 0 to release.
+Owner: qa-lead · Version 3.1 · 2026-10-01 · Applies to every phase, from Phase 0 to release.
 
 This is a working document. Every team follows it. It says how each quality bar in BUILD_PROMPT §8
 and each item of the definition of done in §9 is measured, where, how often, by whom, and what
@@ -96,8 +96,8 @@ scene measured 5.3 fps and then 8.5 fps ten minutes apart on 2026-09-30.
 | D6 | Switch SAR/USD | e2e: every price switches; each value equals the stored observation for that market and is never converted; a missing market shows the gap message with its date; "Price as of <date>" on every price | Playwright | A converted price is a Blocker | CI | Every PR from Phase 2 | e2e-tester / build-lead | Yes |
 | D7 | Leave with a shareable Buy Sheet | e2e: the share URL opened in a fresh context rebuilds the same build; URLs from every earlier codec version still decode (fixtures); print media emulation screenshot | Playwright | Pass | CI | Every PR from Phase 4 | e2e-tester / build-lead | Yes |
 | D8 | Every number on screen links to its source | Provenance check: every number rendered from data sits inside an element that carries its source ids (UI contract in §12.2). The data validator already rejects uncovered values | Playwright; data-lead's validator | 0 unsourced numbers | CI | Every PR from Phase 2 | e2e-tester / build-lead, data-lead | Yes |
-| D9 | QA report is green | `docs/qa/report-phase-N.md` with 0 open Blockers (Appendix A) | — | — | — | Each phase exit | qa-lead | The phase |
-| D10 | Director signs off | `docs/reports/release-v1.md` | — | — | — | Release | Director | — |
+| D9 | QA report is green | qa-lead writes `docs/qa/report-phase-N.md` from the template (Appendix A), with every measurement re-run on the integration commit it names | The report, and every tool behind its numbers | 0 open Blockers; every Major fixed or deferred in writing by the Director; the phase's exit criteria (§15) met | Every environment the report names | Each phase exit | qa-lead | The phase |
+| D10 | Director signs off | The Director reviews the last phase report and the release, then signs `docs/reports/release-v1.md` | `docs/reports/release-v1.md` | A green `docs/qa/report-phase-5.md` | — | Release | Director | — |
 
 ### 3.3 Data rules that QA enforces
 
@@ -148,19 +148,24 @@ scene measured 5.3 fps and then 8.5 fps ten minutes apart on 2026-09-30.
   - 768×1024, with touch;
   - 1440×900.
 - **Device scale factor** is 1.
-- **Themes** are dark (the default) and light. They are set with Playwright's `colorScheme`,
-  which emulates `prefers-color-scheme`. Once the app has a theme toggle, its stored override is
-  tested once per theme.
-- **As built (WP-Q1).**
-  - `playwright.config.ts` makes one project per width from `visual.viewports`: `e2e-390`,
-    `e2e-768`, `e2e-1440` (tests/e2e), `visual-390`, `visual-768`, `visual-1440` (tests/visual),
-    plus `perf` (tests/perf).
-  - The app has no theme yet: there are no design tokens until WP-DS1, and it sets no
-    `color-scheme`, so both emulated schemes render identically. Each width therefore runs once,
-    with the browser default. Dark and light projects are added with the tokens.
-  - The PR column below is enforced by each project's `grep`. At 768 only `@a11y` (and, from
-    Phase 2, `@keyboard`) runs. `E2E_FULL_MATRIX=1` runs everything at every width, for the
-    nightly job from Phase 2.
+- **Themes** are dark (the default) and light. The app ignores `prefers-color-scheme` on
+  purpose (`src/state/theme.ts`): every first visit is dark, and light is the visitor's stored
+  choice (`localStorage` `rig-lab-theme`), which the inline script in `index.html` restores
+  before the first paint. The theme is never part of a share link.
+- **As built (WP-Q2, 2026-10-01).**
+  - `playwright.config.ts` makes one e2e project per width and theme, from `visual.viewports`
+    and `visual.themes`: `e2e-390-dark`, `e2e-390-light`, … `e2e-1440-light` (tests/e2e). Then
+    `perf` (tests/perf), and `visual-390`, `visual-768`, `visual-1440` (tests/visual, one theme
+    until the baselines exist in Phase 2).
+  - A dark project starts with nothing stored. A light project starts with the stored choice,
+    through `storageState`, so the real restore script runs. The axe spec checks that each page
+    shows its project's theme (`data-theme`) before it runs, so a light run cannot silently test
+    dark.
+  - The PR column below is enforced by each project's `grep`. Dark at 768 runs only `@a11y` (and,
+    from Phase 2, `@keyboard`); light runs only `@a11y`. `E2E_FULL_MATRIX=1` runs everything in
+    every cell, for the nightly job from Phase 2.
+  - Cost, measured on the home PC with 2 workers: the three light projects add 54 axe tests and
+    about 19 s to `npm run verify`.
 
 | Suite | 390 dark | 390 light | 768 dark | 768 light | 1440 dark | 1440 light |
 |---|---|---|---|---|---|---|
@@ -187,10 +192,28 @@ scene measured 5.3 fps and then 8.5 fps ten minutes apart on 2026-09-30.
 | Bar | CI measures | CI cannot measure | Where the real gate is |
 |---|---|---|---|
 | Initial JS gzip | Exactly, from the build output | The server's own gzip: GitHub Pages served 0.0% to 0.7% above zlib level 6 in our check | CI (exact), with a 95% warning |
-| Lighthouse score, LCP, CLS, TBT | Lab values: simulated throttling on headless Chromium 1194 | Real devices, real networks, the field 75th percentile | CI lab. §8 names Lighthouse itself |
+| Lighthouse score, LCP, CLS, TBT | Lab values: simulated throttling on headless Chromium 1194 | Real devices, real networks, the field 75th percentile. Two known blind spots, below | CI lab. §8 names Lighthouse itself |
 | INP | TBT as a proxy now; scripted INP in the lab from Phase 2 | Real visitors' interactions. There is no field data (RUM) by design | CI lab, labelled a proxy |
 | 60 and 120 fps | A relative signal only. Headless Chromium caps `requestAnimationFrame` at 60 Hz, even with `--disable-frame-rate-limit`. SwiftShader renders on the CPU | Any absolute fps, or GPU behaviour | REF-LAPTOP and REF-DESKTOP, with the manual protocol |
 | CPU throttling x4 | Main-thread slowdown in the renderer process | The GPU, heat, and an iGPU's shared memory bandwidth | REF-LAPTOP |
+
+**Known blind spots of the LCP gates** (QA-P0-006, found in WP-Q2 on 2026-10-01; deferred in
+writing by the Director to Phase 2 entry, owner qa-lead):
+
+- **A low-priority LCP image.** Lighthouse 12.6.1's simulation leaves a Low-priority image
+  request out of LCP, and an image a script inserts starts at Low priority. On a test page with
+  a 720 KB script-inserted image, Lighthouse named the image as the LCP element yet reported LCP
+  equal to FCP (1350 ms, "Load Time 0") and passed. With `fetchPriority = 'high'` the same page
+  gave 4953 ms and failed. The web-vitals spec loads with no network throttling, so it cannot see
+  this either.
+- **Bandwidth contention.** build-lead measured the font preload during WP-B1 with Lighthouse's
+  applied (devtools) throttling: median LCP 2117 ms with the preload, 1775 ms without. The
+  simulated runs gave 1657 and 1654 ms. Simulation hides a request that competes for bandwidth
+  with the one that renders the LCP element.
+- Phase 0's landing page has no image, so neither changes a Phase 0 result. At Phase 2 entry,
+  once part images exist, QA proposes one of these and the Director decides, because each changes
+  what the gate measures: a network-throttled web-vitals run at 390 px, applied (devtools)
+  throttling for one Lighthouse run, or asserting `prioritize-lcp-image`.
 
 ### 6.2 Initial JS budget
 
@@ -288,7 +311,9 @@ chunk is requested, and applies the same 250,000 B gate.
   - The port is derived from the checkout's path, in 30000–39999, as `playwright.config.ts` does
     for its own preview in 20000–29999. Several worktrees on one machine can then run Lighthouse
     at once. A fixed 4173 made two teams' runs collide on the home PC (2026-10-01).
-    `LHCI_PORT` overrides it.
+    `LHCI_PORT` overrides it. A derived port can still meet another program: on the home PC,
+    Steam listens on 27036, inside Playwright's range. A checkout whose path hashed to it would
+    fail with "port in use" every time, so set `E2E_PORT` (build-lead's note, 2026-10-01).
 - **Assertions,** each at `error` level with `aggregationMethod: 'median'`:
   - `categories:performance` minScore 0.90;
   - `largest-contentful-paint` < 2500 ms;
@@ -1181,7 +1206,16 @@ rejections as page errors.
   - `http-error`: a same-origin response with status 400 or more;
   - `crash`: a page crash.
 - "Same-origin" means the origin of `use.baseURL`.
-- Console warnings are collected and attached, never failed.
+- Console warnings are collected and attached, never failed (§14 rates a warning Minor).
+- **Coverage window.** The fixture only sees what happens while a test runs, and a smoke test
+  ends well under a second after its page loads (WP-Q2 measured a median of 540 ms). An unhandled
+  rejection 1 s after start therefore passed all 112 smoke tests (negative control NC-F3,
+  QA-P0-005). So in the dark project at each width in `console.soakViewports` (1440), each
+  route's smoke test keeps watching for `console.soakMs` (1000 ms) after network idle. With that
+  soak the same rejection fails exactly those 17 tests, and with `soakMs` 0 it passes again
+  (2026-10-01). It adds about 10.5 s to `npm run verify` with 2 workers. Approved by the
+  Director, 2026-10-01. A problem later than about 1.5 s after navigation is still unseen by the
+  smoke run.
 - When the test ends, the fixture lets every open page hand over the events it has already sent,
   with a 2 s cap. It then classifies each problem, attaches `page-problems.json` (unexpected,
   allowed with the entry that allowed it, and warnings), and fails the test on anything
@@ -1309,7 +1343,8 @@ QA re-tests every fix on the integration branch before closing the defect.
 | 2026-09-30 | 1 | First version (WP-Q0). QA proposals pending the Director's approval: the visual `maxDiffPixelRatio` of 0.001, the viewport heights, `fps.maxRunSpreadPct` of 15%, the D1 pass rule (4 of 5 participants and the median under 5 minutes), the 95% bundle warning, and INP gated at x4 as well as x1 | — |
 | 2026-09-30 | 1.1 | The six WP-Q0 proposals approved, as written in v1: `visual.maxDiffPixelRatio` 0.001; viewport heights 390×844, 768×1024 and 1440×900; `fps.maxRunSpreadPct` 15%; the D1 rule (at least 4 of 5 testers finish unaided in under 5 minutes, and the median is under 5); the 95% bundle warning; INP gated at CPU x4 as well as x1, where x4 runs that spread by more than 15% are INCONCLUSIVE, not FAIL. Recorded in `budget.json` sources (`definitionOfDone.minFinishingUnaided`, `.maxMedianMinutes`, `webVitals.gates.inpMs.maxRunSpreadPct`) with no gate value changed | Approved by: Director, 2026-09-30 |
 | 2026-09-30 | 2 | WP-Q1 as built: §4, §5, §6.3 finding, §6.4, §10.1, §11, §12.1, §13.2 and Appendix B. Two method changes, with no threshold changed: web vitals also measures at 390 px (`webVitals.viewports`), and the gated CLS counts shifts that Chromium flags as recent input on loads with no input (§6.4) | pending the Director's WP-Q1 review |
-| 2026-10-01 | 3 | WP-Q2, found on the home PC (§6.3, §6.4, §6.5, §7.2, §7.5). Method changes, with no gate value changed: web vitals watches each load for at least `webVitals.minObserveMs` (5 s) of page time, so late LCP and late shifts can fail the gate (§6.4); a headless reference fps run is INVALID (§6.5); the Lighthouse preview port is derived per checkout (§6.3). New tools: `tests/audit/strata.mjs` (§7.2) and `tests/audit/rule1.mjs` (§7.5) | pending the Director's WP-Q2 review |
+| 2026-10-01 | 3 | WP-Q2, found on the home PC (§6.3, §6.4, §6.5, §7.2, §7.5). Method changes, with no gate value changed: web vitals watches each load for at least `webVitals.minObserveMs` (5 s) of page time, so late LCP and late shifts can fail the gate (§6.4, QA-P0-004); a headless reference fps run is INVALID (§6.5, QA-P0-003); the Lighthouse preview port is derived per checkout (§6.3). New tools: `tests/audit/strata.mjs` (§7.2) and `tests/audit/rule1.mjs` (§7.5) | Approved by: Director, 2026-10-01 (minObserveMs and the headless rule) |
+| 2026-10-01 | 3.1 | WP-Q2: a 1 s soak per route in the dark 1440 smoke project (`console.soakMs`, `console.soakViewports`), so a late error or rejection fails (§13.2, QA-P0-005). Dark and light e2e projects at every width, with axe in all six cells on PR as §5 always planned (§5). `budget.test.mjs` pins the median-of-3 run counts, the per-rule test minimums, `minObserveMs` and the soak. The LCP blind spots documented, and their fix deferred (§6.1, QA-P0-006) | Approved by: Director, 2026-10-01 (the soak; QA-P0-006 deferred to Phase 2 entry, owner qa-lead) |
 
 ---
 
@@ -1382,7 +1417,10 @@ and `.github/workflows/ci.yml`. Where the result differs from the text below:
 
 - The projects are named per width: `e2e-390`, `e2e-768`, `e2e-1440`, then `perf`, then
   `visual-390`, `visual-768`, `visual-1440`. `"e2e"` is therefore
-  `playwright test --project=e2e-*`, not `--project=chromium`.
+  `playwright test --project=e2e-*`, not `--project=chromium`. Since WP-Q2 the e2e projects are
+  per width and theme (`e2e-390-dark` … `e2e-1440-light`, §5); the pattern still matches.
+- The web-vitals step in `ci.yml` is named "Web vitals, LCP and CLS at 390 and 1440 px, CPU x1
+  and x4", not as in B.4 below, because WP-Q1 added the 390 px run (§6.4).
 - The `perf` project records no trace (§6.4), and mobile projects trace without DOM snapshots.
 - In the `budgets` job, every measuring step runs once the build has succeeded, even after an
   earlier step fails (`if: ${{ !cancelled() && steps.build.outcome == 'success' }}`). One run
