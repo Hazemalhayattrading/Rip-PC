@@ -408,7 +408,7 @@
         {
           "by": "qa-lead (seeded 10% audit)",
           "at": "2026-10-01",
-          "scope": "Seed rig-lab-audit:phase-0:98d2be5a843770b8b33b8b5147c77339c1b09e92: 43 of 355 records, 1,265 fields, read against the sources by three independent data-auditor workers; where a pattern repeated, QA swept the whole file. 1,189 fields matched and 70 were null as allowed; rule 1 passed for every price and benchmark row.",
+          "scope": "Seed rig-lab-audit:phase-0:98d2be5a843770b8b33b8b5147c77339c1b09e92: 43 of 355 records, 1,265 fields, read against the sources by three independent data-auditor workers; where a pattern repeated, QA swept the whole file. 1,189 fields matched, 67 were null as allowed and 9 were findings; rule 1 passed for every price and benchmark row.",
           "findings": [
             {
               "items": [
@@ -417,7 +417,7 @@
               ],
               "field": "sources",
               "found": "QA-P0-008 (Blocker): the CPU-support source pointed at the FAQ tab (helpdesk_knowledge), which has no CPU table. The biosSupport values matched ASUS's list.",
-              "fix": "Both now cite the CPU / Memory Support tab (helpdesk_qvl_cpu), the page the 2026-09-30 captures show; re-fetched 2026-10-01 with the CPU table present.",
+              "fix": "Both now cite the CPU / Memory Support tab (helpdesk_qvl_cpu), the page the 2026-09-30 captures show; re-fetched 2026-10-01 with the CPU table present. All 9 ASUS BIOS-related URLs were then re-checked live and against the captures; a test (src/data/maker-pages.test.ts, 17ba6b6) checks that each opens its own support tab.",
               "fixedIn": "25e0549"
             },
             {

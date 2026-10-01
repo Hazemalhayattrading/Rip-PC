@@ -175,7 +175,8 @@ One file per market, one batch per file:
   and every pick is reviewed against its capture before it becomes a record.
 - **Delivery location**: Amazon prices follow the delivery location. From Hazem's PC in Saudi Arabia,
   amazon.com shows SAR prices with delivery to Saudi Arabia (QA, 2026-10-01). Before a US batch, set a
-  US delivery location, and check that every US capture shows USD with US delivery.
+  US delivery location the normal way on the page (its own delivery-location control), never by
+  evasion. Then check that every US capture shows USD with US delivery.
 - **Gap**: every purchasable part without a price gets one gap record per market:
   `{ partId, market, reasonCode, reason, retailersTried, checkedAt }`. `reasonCode` is `not-listed`,
   `blocked` (a bot challenge, which we never work around), `no-price-shown` or `unavailable`. The UI
