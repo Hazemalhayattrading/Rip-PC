@@ -1,9 +1,19 @@
 # Design direction (WP-DS0)
 
-Owner: design-lead · Date: 2026-09-30 · Status: ready for review
+Owner: design-lead · Written 2026-09-30 · Updated 2026-10-01 (WP-DS1) · Status: decided
 
-**Decision needed:** Hazem picks one of A, B or C (Owner's rules for Phase 0, rule 2). The Director
-reviews first. The design lead's recommendation is at the end, and it is advice only.
+**Decision: Hazem picked C, Studio, on 2026-09-30** (Owner's rules for Phase 0, rule 2). The
+Director and the design lead had both recommended B, Folio (section 6); the pick is Hazem's.
+- Studio is built from here on. Its tokens are in [tokens.md](tokens.md); its 3D brief for
+  Phases 2 and 3 is [studio-3d-brief.md](studio-3d-brief.md); its expert table is
+  [specs-view.md](specs-view.md).
+- **A, Bench, and B, Folio, are kept below as history.** They are not built, and their mocks are
+  not maintained.
+- Studio's known risks are carried forward from the plan: the full-screen stage depends on 3D
+  quality, it has the highest laptop-GPU cost of the three, and it shows weakly until the 3D
+  exists. Section 4 and [studio-3d-brief.md](studio-3d-brief.md) say how each is handled.
+
+What follows is the document as Hazem reviewed it, with dated notes where WP-DS1 changed a fact.
 
 ![The three directions side by side](board/compare.jpg)
 
@@ -44,6 +54,10 @@ from the brief (BUILD_PROMPT §0, §4, §5.3, §6) and from the reference study.
 
 - **Tabular lining figures** in every numeric cell, readout and total
   (`font-variant-numeric: tabular-nums lining-nums`). Prose keeps the font's default figures.
+  - **Studio (2026-10-01): every figure is tabular, prose included,** as the picked mock already
+    set it. Mona Sans's tabular digits are a separate design, with a slashed zero and a footed
+    one. Proportional prose would put two kinds of zero in one row: the part name's and the
+    price's. See [tokens.md §2.4](tokens.md#24-type), rule 5.
 - **Check every typeface's tabular set.** Some fonts make punctuation tabular too, which puts gaps
   into "1 , 899" and into running text. Checked with fontTools:
   - **punctuation too:** Encode Sans, Instrument Sans, Newsreader, Onest, Public Sans and
@@ -481,6 +495,20 @@ has always been blue.
 More views: [768 dark](mocks/studio/768-dark.jpg), [390 light](mocks/studio/390-light.jpg),
 [390 full page](mocks/studio/390-dark-full.jpg).
 
+**Since the pick (WP-DS1, 2026-09-30 to 2026-10-01):**
+- **BIOS warnings.** The mock showed the Ryzen 7 9800X3D fitting an AM5 board with no BIOS check.
+  Zen 5 chips can need a newer BIOS than an early AM5 board ships with, so the 9800X3D and the
+  9950X3D now warn ("May need a BIOS update before first boot. Your board can update without a
+  CPU installed. Rule bios-min-version"). The stage callout names the warning. All six sizes were
+  re-shot (commit `9cd0985`); the screenshots above are the new ones.
+- **The rail shows 4 rows in the first view at 1440,** down from 5, because of the added reason
+  lines. [specs-view.md](specs-view.md) is the dense alternative.
+- **Tokens:** the values below are now [`src/styles/tokens.css`](../../src/styles/tokens.css),
+  under role names (`--wall` became `--stage`, `--panel` became `--surface`, `--cta` became
+  `--action`). [tokens.md](tokens.md) has the full table and the usage rules.
+- **The font** is self-hosted as Rig Lab Sans, the renamed Mona Sans subset, with a calibrated
+  fallback ([tokens.md §4](tokens.md#4-the-font-rig-lab-sans-its-fallback-swap-and-lcp)).
+
 ### Palette
 
 **The UI is neutral; the only colour is light:** the studio's key light and the build's own RGB
@@ -532,7 +560,8 @@ blur.
 - One variable file. We use width 100–125 and weight 300–600.
 - Expanded and light for the big numerals and the step title; normal width for everything else.
 - Its tabular set is digits only.
-- **Byte cost: 70.4 KB** for one Latin-subset WOFF2.
+- **Byte cost: 70.4 KB** for one Latin-subset WOFF2. The file shipped in WP-DS1,
+  `rig-lab-sans.woff2`, is 72,332 bytes (70.6 KiB).
 - **The reserved font name matters.** Under OFL 1.1 a subset is a modified version, so our
   self-hosted subset must be renamed internally (for example "Rig Lab Sans"). That is allowed,
   but it must not be called Mona.
@@ -607,8 +636,9 @@ blur.
   stills) for slow devices.
 - **The heaviest GPU load** (bloom, reflections, camera moves), against a 60 fps target on an Arc
   iGPU.
-- **The least dense.** The rail shows about 5 parts at 1440. Forty or more rows and spec
-  comparison need the compare view and a table mode.
+- **The least dense.** The rail shows about 5 parts at 1440 (4 since the BIOS warnings were
+  added). Forty or more rows and spec comparison need the compare view and a table mode: the
+  Specs view, [specs-view.md](specs-view.md).
 - **Text over a 3D scene.** Contrast is guaranteed by the tokens (worst case: text on the
   brightest key light, 5.11:1). The scene must never sit behind small text.
 - **It could read as a genre look** (car configurators, console store pages) if the lighting is
@@ -637,6 +667,10 @@ blur.
 
 This is advice. Hazem decides.
 
+> **History (2026-10-01).** Hazem picked C, Studio, on 2026-09-30. The recommendation below is kept
+> as it was written. Its point 4, on the 3D we can actually get, is now Studio's main risk, and
+> [studio-3d-brief.md](studio-3d-brief.md) answers it.
+
 **I recommend B, Folio,** with Bench's dense table as an optional "Specs" view for experts.
 
 1. **It does the product's core job best.** A visitor who knows nothing leaves ready to buy.
@@ -660,6 +694,16 @@ lowest-risk build: the smallest fonts and the cheapest 3D look.
 to strong parametric models and the iGPU budget before Phase 2.
 
 ## 7. Notes for WP-DS1 (tokens, once Hazem picks)
+
+> **Done in WP-DS1 (2026-10-01).** Every note below is settled in [tokens.md](tokens.md):
+> - the tokens and their `@theme` mapping, AA re-verified on the shipped file (29 pairs);
+> - the app.css entry and the font preload, for build-lead;
+> - **Preflight is on**, and `base.css` restores underlined links, headings, focus rings and
+>   placeholders;
+> - the Mona Sans subset is renamed Rig Lab Sans and is the only file preloaded.
+>
+> The 3D slot is Studio's full-screen stage (section 4) rather than the scaffold's `aspect-4/3` box.
+> The canvas fills a fixed, viewport-sized layer, so the page cannot shift when it streams in.
 
 - Tokens go in `src/styles/tokens.css` (design-lead), with the Tailwind v4 `@theme` mapping, and
   AA is re-verified with [`tools/contrast.mjs`](tools/contrast.mjs).
@@ -693,3 +737,17 @@ to strong parametric models and the iGPU budget before Phase 2.
   Sketchfab login the team may not use.
 - **Contrast covers every UI and text token.** The 3D placeholder drawings' fills are art, not
   text or controls, so they were not measured.
+
+Added after the pick (WP-DS1, 2026-10-01):
+- **The Bench and Folio mocks were not updated** after the pick; they are history.
+  - Bench's readout still says "BIOS Supported" for the Ryzen 7 9800X3D, while its Ryzen 5 9600X
+    warns.
+  - Folio shows no BIOS check at all.
+  - Only Studio carries the BIOS warning.
+- **The Studio mock loads Mona Sans from Google Fonts.** Production self-hosts Rig Lab Sans: the
+  same glyph designs, cut to Latin and to the axis range Rig Lab uses.
+- **The Studio mock has no 768 light screenshot.** WP-DS1's evidence shoots all six sizes and
+  themes into `artifacts/`.
+- **Studio's three carried risks are open until Phase 3:** the 3D quality, the iGPU cost, and the
+  look before the 3D exists. [studio-3d-brief.md](studio-3d-brief.md) sets the targets and the
+  fallbacks.
