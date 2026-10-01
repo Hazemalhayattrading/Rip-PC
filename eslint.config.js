@@ -63,6 +63,11 @@ export default defineConfig([
     languageOptions: {
       globals: globals.browser,
     },
+    rules: {
+      // Preflight removes list markers, and Safari then stops announcing a list as a list.
+      // role="list" gives that back, so on ul and ol it is not redundant (tokens.md §3).
+      'jsx-a11y/no-redundant-roles': ['error', { ul: ['list'], ol: ['list'] }],
+    },
   },
 
   // Architecture guard: three.js, React Three Fiber, drei and postprocessing stay in the lazy chunk.
