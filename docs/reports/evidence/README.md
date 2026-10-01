@@ -26,7 +26,7 @@ This folder lists every file by SHA-256, so anyone with the local copy can prove
 | `qa-q1-artifacts/artifacts/` | 113 | 11.9 MB | WP-Q1 Lighthouse, web vitals, axe and screenshots |
 | `build-lead-artifacts/artifacts/` | 9 | 0.4 MB | WP-B0 screenshots |
 | `session-scratchpad/` | 787 | 30.6 MB | the cloud Director session's scratchpad, 2026-09-30 |
-| `archives/` | 14 | 222.3 MB | the original archives committed on 2026-09-30: 10 `.tar.xz` parts and 2 git bundles, plus `SHA256SUMS.txt`, `EXCLUDED.txt` and data-lead's manifest |
+| `archives/` | 14 | 222.3 MB | the original archives committed on 2026-09-30: 9 `.tar.xz` parts and 2 git bundles, plus `SHA256SUMS.txt`, `EXCLUDED.txt` and data-lead's manifest |
 
 The leads' worktrees hold working copies of their team's `artifacts/` folder. The price rows cite
 paths such as `artifacts/prices/...`, relative to a data-lead worktree root.
@@ -36,8 +36,8 @@ paths such as `artifacts/prices/...`, relative to a data-lead worktree root.
 | File | Lists | Paths relative to |
 |---|---|---|
 | `files.sha256` | all 2,243 extracted files | `C:\Projects\rig-lab-evidence\` |
-| `archives.sha256` | the 10 archive parts and the 2 bundles (the original `SHA256SUMS.txt`) | `C:\Projects\rig-lab-evidence\archives\` |
-| `data-lead-evidence-manifest.sha256.txt` | data-lead's 1,101 cited evidence files | a data-lead worktree root |
+| `archives.sha256` | the 9 archive parts and the 2 bundles (the original `SHA256SUMS.txt`) | `C:\Projects\rig-lab-evidence\archives\` |
+| `data-lead-evidence-manifest.sha256.txt` | data-lead's 1,102 cited evidence files; 1,101 are kept, and 1 was excluded by design | a data-lead worktree root |
 | `EXCLUDED.txt` | what was deliberately not kept, and why | — |
 
 ## Verify
