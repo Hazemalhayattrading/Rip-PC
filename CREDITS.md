@@ -23,6 +23,11 @@ Every dataset, benchmark source and 3D model used by Rig Lab is listed here.
 | Retailers | Amazon.com and Newegg (US), Amazon.sa (SA) | Prices only, read from live product pages on 2026-09-30 | Page captures stay in the local `artifacts/` folder as audit evidence; they are never committed or republished. |
 | Games-list sources | Steam Charts, Riot Games, KitGuru, Esports News UK, Windows Central | Player counts for the games list | Dated figures, cited with links |
 
+## Fonts
+| Font | Author | Source | Licence | Use | Notes |
+|---|---|---|---|---|---|
+| Rig Lab Sans, a renamed subset of Mona Sans 2.000 | Copyright 2022 The Mona Sans Project Authors (https://github.com/github/mona-sans) | `MonaSans[wdth,wght].ttf` from https://github.com/google/fonts/tree/main/ofl/monasans, retrieved 2026-09-30, SHA-256 fd6e79634b5ae804a45aac7e2e3c2a325b41291fba59034f4732b0135b8475b3 | SIL Open Font License 1.1, with Reserved Font Name "Mona" | All UI text. Self-hosted as `src/styles/fonts/rig-lab-sans.woff2` | A Modified Version under the OFL: Latin subset plus ≤ ≥ ≈ −, width 100–125 %, weight 300–600. Renamed because "Mona" is a Reserved Font Name; not endorsed by the Mona Sans authors. Licence in `src/styles/fonts/OFL.txt`, changes in `src/styles/fonts/FONTLOG.txt` |
+
 ## 3D models
 | Model | Author | Source URL | Licence | Representative? |
 |---|---|---|---|---|

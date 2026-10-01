@@ -38,9 +38,9 @@ Brief: `docs/reports/phase-0-briefs.md`, section "data-lead". Acceptance criteri
    - The Python is **not run** here (no Python on this PC). The Node half is: the naming CLI, and
      both helpers against a local `data:` page with the repo's Playwright 1.56.1 Chromium.
    - No existing capture was renamed; every cited name still passes.
-5. Font CREDITS row (Rig Lab Sans, OFL): **waiting for design-lead.** A draft row, built from
-   design-lead's `src/styles/fonts/FONTLOG.txt` (origin/feat/design-tokens), was sent for them to
-   confirm on 2026-10-01. It goes in a new "## Fonts" section of `CREDITS.md`.
+5. Font CREDITS row (Rig Lab Sans, OFL): **done.** design-lead's text, word for word, in a new
+   "## Fonts" section of `CREDITS.md`, before "## 3D models". Its paths (`src/styles/fonts/...`) arrive
+   with WP-DS1.
 6. Canonical category ids to build-lead: **done**, sent 2026-10-01 by message. Only `gpu` changes, to
    `gpu-card` (code `g` kept). `gpu-chip` is not a build selection.
 7. Hand-off to the Director: not started.
