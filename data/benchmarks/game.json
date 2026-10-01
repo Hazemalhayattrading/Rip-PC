@@ -7333,7 +7333,7 @@
             "scene"
           ],
           "title": "Chart image (Average FPS)",
-          "locator": "bar \"Ryzen 7 9850X3D (stock)\""
+          "locator": "bar \"Ryzen 7 9850X3D / Stock\""
         },
         {
           "url": "https://tpucdn.com/review/amd-ryzen-7-9850x3d/images/min-cyberpunk-2077-1920-1080.png",
@@ -8323,7 +8323,7 @@
             "scene"
           ],
           "title": "Chart image (Average FPS)",
-          "locator": "bar \"Ryzen 7 9850X3D (stock)\""
+          "locator": "bar \"Ryzen 7 9850X3D / Stock\""
         },
         {
           "url": "https://tpucdn.com/review/amd-ryzen-7-9850x3d/images/min-counter-strike-2-1920-1080.png",
@@ -9313,7 +9313,7 @@
             "scene"
           ],
           "title": "Chart image (Average FPS)",
-          "locator": "bar \"Ryzen 7 9850X3D (stock)\""
+          "locator": "bar \"Ryzen 7 9850X3D / Stock\""
         },
         {
           "url": "https://tpucdn.com/review/amd-ryzen-7-9850x3d/images/min-baldurs-gate-3-1920-1080.png",
@@ -10303,7 +10303,7 @@
             "scene"
           ],
           "title": "Chart image (Average FPS)",
-          "locator": "bar \"Ryzen 7 9850X3D (stock)\""
+          "locator": "bar \"Ryzen 7 9850X3D / Stock\""
         },
         {
           "url": "https://tpucdn.com/review/amd-ryzen-7-9850x3d/images/min-battlefield-6-1920-1080.png",
