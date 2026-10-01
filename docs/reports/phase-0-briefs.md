@@ -59,6 +59,12 @@ final hand-off commit; the hand-off message replaces it.
   > the one-line reply "Report sent to `<lead>`."
 - If an `Agent` call returns "ended without delivering a report", wait for the worker's message.
   If none comes, SendMessage the worker by the agentId in that result, which resumes it.
+- **Report file (design-lead's finding, 2026-10-01).** An `Agent` call blocks for the worker's
+  whole run, even with `run_in_background`. A worker's SendMessage may not reach you until your
+  turn ends.
+  - So every worker prompt also says: "Write your full report to
+    `<your worktree>/artifacts/reports/<task>.md` before you finish."
+  - Read that file as soon as the `Agent` call returns.
 - Give each worker one well-scoped task, the exact files it may touch, and what evidence to return.
   Review every worker's output against the spec before it goes anywhere (BUILD_PROMPT §1).
 - The Context7 MCP is for library APIs. If it hits its quota, check the official docs and the
