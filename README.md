@@ -25,6 +25,24 @@ Until step 2 is done, the deploy workflow fails at `actions/configure-pages`. Ev
 - Playwright's Chromium, once: `npx playwright install chromium`. `@playwright/test` is pinned
   to 1.56.1, so this installs Chromium build 1194, the one CI uses.
 
+### MCP servers for Claude Code
+
+- **Playwright** is declared in [`.mcp.json`](.mcp.json). Claude Code loads it for everyone who
+  opens the project, after asking each person once. It drives the installed Google Chrome,
+  headless.
+- **Context7** (current library docs, [`CLAUDE.md`](CLAUDE.md) rule 6) is **not** in
+  `.mcp.json`, because it takes a personal API key and no key may enter the repo. Add it once,
+  at user scope, with your own key from the [Context7 dashboard](https://context7.com/dashboard):
+
+  ```sh
+  claude mcp add --scope user context7 -- npx -y @upstash/context7-mcp --api-key <your key>
+  ```
+
+  User scope keeps it in your own `~/.claude.json` (`%USERPROFILE%\.claude.json` on Windows),
+  outside the repo, and it then loads in every project. `claude mcp get context7` shows where
+  it is defined. Don't add a `context7` entry to `.mcp.json`, even one without a key: a
+  project-scope server overrides a user-scope one with the same name, so it would hide yours.
+
 ### On Windows
 
 Use Git for Windows and run the commands in Git Bash. The quality-gate hook in
