@@ -5,8 +5,8 @@ Date: 2026-10-01 · Author: Director · **Status: draft, waiting for QA's report
 
 Phase goal (BUILD_PROMPT §2): data schemas and seed data, a design direction with tokens, the
 scaffold with CI, Pages deploy, test harness and empty routes, and QA's test plan with budget checks
-in CI. No product UI yet. Commit IDs below are after the evidence purge;
-`docs/reports/evidence/purge-sha-map.txt` maps the older ones.
+in CI. No product UI yet. Commit IDs below are post-purge IDs. The old-to-new map is kept outside the public repo,
+because GitHub still serves pre-purge commits by ID until its garbage collection runs.
 
 ---
 
@@ -101,7 +101,7 @@ in CI. No product UI yet. Commit IDs below are after the evidence purge;
 - **Windows fixes.**
   - 365 and then 974 CRLF checkouts, left over from a `main` checkout made before `.gitattributes`
     existed. `core.autocrlf=false` is now set for this repo.
-  - A path-separator bug in one QA test (`45c0bae` → `0114261`).
+  - A path-separator bug in one QA test (`0114261`).
   - 45 project-skill symlinks restored, after Hazem turned on Developer Mode.
 - **Evidence purge** (Hazem's decision). The 222 MB of third-party page captures left the public
   repo and the history of all 5 branches: 11 binary files, 87 commits rewritten.
