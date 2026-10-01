@@ -11,6 +11,9 @@ blob-report/
 .lighthouseci/
 *.tsbuildinfo
 
+# The Playwright MCP server's snapshots and screenshots
+.playwright-mcp/
+
 # Team worktrees live inside the main checkout
 .claude/worktrees/
 
