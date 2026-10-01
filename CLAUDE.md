@@ -24,6 +24,10 @@ Read `BUILD_PROMPT.md` first. This file is the rules everyone follows, every ses
 11. **No rabbit holes.** If a task hits the same blocker after 2 real attempts (a blocked site, an environment
     difference, a failing tool), stop, record the blocker and what was tried in the hand-off, and move to the
     next task. The Director decides whether to spend more effort on it.
+12. **Assume the session can stop at any moment** because of a usage limit. Every agent commits and pushes
+    after each finished step. After every accepted task, the Director updates `docs/reports/progress.md` with
+    what is done, what is in progress, who was doing it, and the exact next step. On 'continue', read
+    `progress.md`, re-spawn needed teammates, and carry on without redoing finished work.
 
 ## File ownership
 | Path | Owner |
