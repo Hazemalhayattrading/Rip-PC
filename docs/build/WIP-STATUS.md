@@ -13,6 +13,12 @@ This file is deleted in the final hand-off commit.
    (`feat/data-foundations:src/data/schema/files.ts`). The state tests are updated.
    **data-lead confirmed** (2026-10-01): a build selects from `PRICED_CATEGORIES` (that list,
    in this order). `gpu-chip` is never a build selection, and no other id changes.
+   - Redone test first, as the Director asked (skill test-driven-development). RED: the
+     `d620f19` `categories.ts` with the new tests gives 6 failures for the expected reason, plus
+     3 `tsc` errors. For example, encode drops the card: `v1.c_amd-ryzen-7-9800x3d`, without
+     `g_…`. GREEN: the minimal rename makes 97/97 pass and `tsc` exit 0. The refactored file is
+     byte-identical to `cfa2376`. Logs: `artifacts/logs/wp-b1/tdd-categories-red.log` and
+     `tdd-categories-green.log`.
    - To do once WP-D0 is merged into the integration branch: a unit test that
      `PART_CATEGORIES` equals data-lead's `PRICED_CATEGORIES`, test first. A test-only import
      keeps classic `zod` out of the initial bundle. data-lead suggested it.
