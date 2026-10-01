@@ -29,7 +29,7 @@
       "gpuMaxHeightMm": null,
       "coolerClearance": [
         {
-          "maxHeightMm": 145,
+          "maxHeightMm": 170,
           "condition": null
         }
       ],
@@ -147,6 +147,10 @@
         {
           "field": "gpuClearance",
           "text": "From \"Choose a GPU up to 355 mm, or up to 300 mm with a 360 mm front radiator.\""
+        },
+        {
+          "field": "coolerClearance",
+          "text": "Fractal's structured value is 145 mm, but its note says \"145 mm with Fan Bracket (Mesh version only) / 170 mm without\". This TG Light SKU has no side fan bracket (\"The mesh version also ships with a fanhub and a fan bracket\"), so its limit is 170 mm."
         },
         {
           "field": "size",
