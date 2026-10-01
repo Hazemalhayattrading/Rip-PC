@@ -147,6 +147,15 @@ a compact, versioned format, for example `?b=v1.c_<cpu-id>.g_<gpu-card-id>`
 reload keep it, and a link that cannot be read opens an empty build with a notice instead of
 crashing. The one-letter category codes are part of the v1 format: never change or reuse one.
 
+**Design tokens and the theme.** [`src/app/app.css`](src/app/app.css) imports design-lead's
+tokens and base styles from `src/styles/`, with Tailwind's Preflight on. Only Rig Lab's own
+colours, type roles, radii and shadows exist; Tailwind's defaults are removed
+([`docs/design/tokens.md`](docs/design/tokens.md)). Unit tests are left out of Tailwind's class
+detection, so a utility named only in a test never ships. Rig Lab opens dark. The "Light theme"
+toggle stores the choice in `localStorage` (`rig-lab-theme`), and an inline script in
+`index.html` restores it before the first paint. The theme never follows the operating system,
+and it is never part of a share link.
+
 **3D loads only where it is used.** three.js, React Three Fiber, drei and postprocessing may be
 imported only under `src/three/`, and `src/three/` only through the `React.lazy` import in
 [`src/components/garage/GarageSlot.tsx`](src/components/garage/GarageSlot.tsx). ESLint
