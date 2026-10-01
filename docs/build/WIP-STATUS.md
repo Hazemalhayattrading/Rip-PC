@@ -50,6 +50,12 @@ mobile performance 1.0, LCP about 1,355 ms, CLS 0, TBT 0.
 - Asked design-lead (2026-10-01), no answer yet: how the light theme is switched (and how QA
   selects it in tests), and whether the Phase 0 placeholder pages get spacing once Preflight
   removes list bullets and paragraph margins.
+- Measuring in Part 2 (from qa-lead, 2026-10-01). On the integration branch, `perf:lhci` uses
+  the fixed port 4173, so worktrees collide; my baseline run blocked qa-lead's. Until qa-lead's
+  `258c76e` merges, run it as `LHCI_PORT=4181 npm run perf:lhci`. `perf:vitals` prints its
+  numbers only after that merge too. Until then, add `--reporter=list,json` with
+  `PLAYWRIGHT_JSON_OUTPUT_NAME=<file>` and read the `web-vitals.json` attachment, as the
+  baseline did.
 - Skills for Part 2 (Director, `e3a127a`): test-driven-development, verification-before-completion,
   systematic-debugging, core-web-vitals, performance, accessibility, and the React parts of
   vercel-react-best-practices. For worker diffs, use requesting-code-review and
