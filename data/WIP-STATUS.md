@@ -7,18 +7,26 @@ Brief: `docs/reports/phase-0-briefs.md`, section "data-lead". Acceptance criteri
    - Merged `claude/keen-lamport-0794zj` at d620f19 in fcacbc1. No conflicts.
    - `npm run verify` passes on Node 24.21.0: 345 unit tests in 19 files, 112 e2e smoke tests, 78 s.
      Log: `artifacts/verify/2026-10-01-step1-merge.log`.
-2. Finish the seeded 20% audit (seed 20260930): **next**.
-   - Left: the 10 TechPowerUp game rows, read against the chart PNGs in
-     `artifacts/benchmarks/tpu-9850x3d-img/`, then the 6 creator rows and the 3 games.
+2. Finish the seeded 20% audit (seed 20260930): **done**. Recorded in `data/audits.json`, checked by
+   `src/data/audits.test.ts`.
+   - 78 items in 17 batches, all checked. 8 findings, all fixed: 6 found on 2026-09-30 (25f9cc5) and 2
+     on 2026-10-01, both locators that paraphrased the page (7451f52, 2cedf51). No value was wrong in
+     the benchmark, creator or games samples.
+   - All 80 ComputerBase rows (not only the 14 sampled) were re-read against the chart HTML: 160 of 160
+     values match.
+   - Logs: `artifacts/audit/` (`benchmarks-game-cb-2026-10-01.txt`, `benchmarks-games-2026-10-01.txt`,
+     the two pass-1 logs, and the scripts that wrote them).
+   - The sampler is committed as `data/tools/audit_sample.py` (Python, not run here).
 3. README price rule: a listing filed under a reseller brand counts only if it names the maker's
-   part number. Not started.
+   part number. **Next.** Check the SA Core Ultra 9 285K row ("Mavark" listing) against it.
 4. Price runner: every attempt gets its own capture name. Commit the runner under `data/tools/`.
    Not started.
 5. Font CREDITS row (Rig Lab Sans, OFL): waiting for design-lead's text.
-6. Canonical category ids to build-lead: not started.
+6. Canonical category ids to build-lead: **done**, sent 2026-10-01 by message. Only `gpu` changes, to
+   `gpu-card` (code `g` kept). `gpu-chip` is not a build selection.
 7. Hand-off to the Director: not started.
 
-## Acceptance items (state on 2026-09-30, unchanged)
+## Acceptance items (state on 2026-09-30; the audit is now done, see step 2)
 - Zod schemas, validator, Vitest: **done**. `src/data/schema/`, `src/data/validate/`; 79 data tests pass.
 - Seed minimums: **done**. CPU 16/8, boards 7/6, RAM 6/5, GPU chips 11/8, GPU cards 10/8, storage 5/5, PSU 5/5, coolers 5/5, cases 5/5, fans 3/3.
 - Required seed cases: **done**, all 7, tested in `src/data/seed.test.ts`.
@@ -35,14 +43,11 @@ Brief: `docs/reports/phase-0-briefs.md`, section "data-lead". Acceptance criteri
   - Blender Open Data: 9 live rows.
 - Games list: **done**. 15 titles as of 2026-09-30, including Black Ops 7 and EA SPORTS FC 27.
 - `src/data/README.md` and the `CREDITS.md` data rows: **done**.
-- Seeded 20% audit (seed 20260930): **partial**.
-  - Specs: 18 of 18 records checked. One finding, fixed: the B650E-I chipset.
-  - Prices: 20 prices and 7 gaps checked. The findings, and the re-check of every gap they led to, are fixed in commit 25f9cc5.
-  - Game benchmarks: 14 of 24 checked. All 14 ComputerBase rows match the chart text and the test system.
-  - **Not started:** the 10 TechPowerUp game rows, the 6 creator rows and the 3 games.
+- Seeded 20% audit (seed 20260930): **done** on 2026-10-01; see step 2 and `data/audits.json`.
 
 ## Where I stopped
-Step 1 is done. Next: step 2, the TechPowerUp rows of the audit sample.
+Steps 1, 2 and 6 are done. Next: step 3, the README reseller rule, then a check of every price row
+whose listing is filed under a brand other than the maker's.
 
 ## Blockers (never worked around)
 - **Sites that refuse or challenge our fetcher:** Samsung, Kingston, Crucial, Noctua, Thermalright, Lian Li, TechPowerUp (403), Guru3D, tracker.gg and epicgames.com. Tried 1 to 2 times each (see `artifacts/specs/*/fetch-log.tsv`). Wayback copies were used where the rules allow them.

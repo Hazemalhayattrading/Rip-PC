@@ -15,3 +15,4 @@ export * from './game';
 export * from './benchmark-game';
 export * from './benchmark-creator';
 export * from './files';
+export * from './audit';

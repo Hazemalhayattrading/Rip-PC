@@ -14,10 +14,13 @@ source** (`url`, `publisher`, `retrievedAt`), and a missing value stays missing.
 | `data/benchmarks/game.json` | Game FPS anchors from published reviews. |
 | `data/benchmarks/creator.json` | Creator-app anchors (Cinebench 2024, Blender). |
 | `data/games.json` | The games list, with dated player counts. |
+| `data/audits.json` | The data lead's seeded audits: the sample per batch, what each item was read against, findings and fixes (see "Review"). Not catalogue data. |
+| `data/tools/` | Data scripts: the audit sampler (`audit_sample.py`). |
 | `src/data/schema/` | Strict Zod schemas, one per file type. `files.ts` holds `DATA_PATHS`, the single source of truth for the layout. |
 | `src/data/validate/` | The validator. `issues.ts` lists every rule ID (`RULES`). |
 | `src/data/dataset.test.ts` | Runs the validator over everything in `data/`. Any error fails CI. |
 | `src/data/seed.test.ts` | Seed minimums, plus the real parts behind each required compatibility case. |
+| `src/data/audits.test.ts` | Checks `data/audits.json`: sample sizes, and that every sampled item and finding points at real data. |
 
 Category IDs are the ones in `SPEC_CATEGORIES`. GPUs are two categories: `gpu-chip` (the GPU as the
 chip maker specifies it; not sold, never priced) and `gpu-card` (a card you can buy, pointing at its
@@ -57,6 +60,9 @@ A real one, from the TUF GAMING B650-PLUS WIFI:
 - `fields` lists the dot paths this source backs (`*` matches any array index). Leave it out and the
   source backs the whole record. Every non-null value must be backed by a source whose publisher kind
   may back that record type (rule `coverage`).
+- `locator` says where on the page the value is. Quote labels and titles exactly as the page shows
+  them (`bar "Ryzen 7 9850X3D / Stock"`, `Chart "Battlefield 6, 2.560 × 1.440, DLSS/FSR Native"`), so a
+  search of the page finds them.
 - Which kinds count: `manufacturer` for specs; `reviewer` and `benchmark-database` for benchmarks;
   `tracker`, `platform`, `game-publisher` and `news` for the games list. `retailer` backs prices only.
   A spec record needs at least one source from its own manufacturer.
@@ -196,3 +202,11 @@ SPORTS FC titles; each slot appears exactly once.
 Every batch gets a seeded random audit of 20% of its records against the saved captures before it goes
 to the Director. A batch is rejected for a number with no source, a spec that disagrees with the maker,
 a benchmark without its test conditions, or a price outside its batch window without a flag.
+
+- Draw the sample with `data/tools/audit_sample.py`: ceil(20%) of every batch, from one seeded
+  generator. Save it under `artifacts/audit/`.
+- Read every sampled item against its capture and keep a log of each check under `artifacts/audit/`.
+- Fix every finding. A finding in the sample means a re-check of the whole batch for the same fault.
+- Record the audit in `data/audits.json`: per batch, the sample, what it was read against, the findings
+  with the commit that fixed each, and any follow-up outside the sample. `src/data/audits.test.ts`
+  checks it.

@@ -86,10 +86,13 @@ export const DATA_PATHS = {
   },
   prices: { SA: 'data/prices/sa.json', US: 'data/prices/us.json' },
   benchmarks: { game: 'data/benchmarks/game.json', creator: 'data/benchmarks/creator.json' },
+  /** The data lead's seeded audits. Not catalogue data: `audits.test.ts` checks it, not the validator. */
+  audits: 'data/audits.json',
 } as const satisfies {
   publishers: string;
   games: string;
   specs: Record<SpecCategory, string>;
   prices: Record<Market, string>;
   benchmarks: { game: string; creator: string };
+  audits: string;
 };
