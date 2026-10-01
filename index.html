@@ -1,16 +1,27 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#131416" />
     <!-- The build rewrites the title and description per route from src/app/routes.ts. -->
     <title>Rig Lab</title>
     <meta
       name="description"
       content="Pick every part of a PC, see it assemble in 3D, and get sourced performance estimates before you buy."
     />
-    <!-- No icon until the design direction is chosen; this also stops a /favicon.ico request. -->
+    <!-- No icon until Phase 2 draws Rig Lab's icons; this also stops a /favicon.ico request. -->
     <link rel="icon" href="data:," />
+    <!-- Same key and colour as src/state/theme.ts; theme.test.ts runs this script. -->
+    <script>
+      // Rig Lab opens dark. A visitor's light choice is restored before the first paint.
+      try {
+        if (localStorage.getItem('rig-lab-theme') === 'light') {
+          document.documentElement.dataset.theme = 'light';
+          document.querySelector('meta[name="theme-color"]').content = '#f3f3f1';
+        }
+      } catch {}
+    </script>
   </head>
   <body>
     <div id="root"></div>
