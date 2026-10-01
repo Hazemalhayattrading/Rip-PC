@@ -1,0 +1,35 @@
+FONTLOG for Rig Lab Sans
+========================
+
+Rig Lab Sans is a Modified Version of Mona Sans, made for the Rig Lab PC builder. It is licensed
+under the SIL Open Font License, Version 1.1, like the original. The licence and the original
+copyright notice are in OFL.txt, and both are also kept inside the font (name IDs 0, 13 and 14).
+
+Why the name changed
+--------------------
+The OFL gives Mona Sans the Reserved Font Name "Mona". A subset is a Modified Version, and a
+Modified Version may not use a Reserved Font Name as its font name, so this subset is named
+Rig Lab Sans (PostScript name RigLabSans-Light). It is not endorsed by the Mona Sans authors.
+
+Source
+------
+Mona Sans 2.000, variable font MonaSans[wdth,wght].ttf, from the Google Fonts repository:
+https://raw.githubusercontent.com/google/fonts/main/ofl/monasans/MonaSans%5Bwdth,wght%5D.ttf
+Built by Google Fonts from https://github.com/github/mona-sans at commit
+0d07d5a501a2d8d4ea456fab73aad6b9fda2060a.
+Retrieved 2026-09-30. SHA-256 of the source file:
+fd6e79634b5ae804a45aac7e2e3c2a325b41291fba59034f4732b0135b8475b3
+
+Changes (2026-09-30, Rig Lab design lead)
+-----------------------------------------
+- Axes limited to width 100-125 % and weight 300-600. The default instance is now Light (300).
+- Glyphs limited to Latin (the Google Fonts "latin" range) plus U+2248, U+2264 and U+2265.
+- Layout features limited to kern, liga, calt, ccmp, locl, mark, mkmk, tnum, pnum, lnum, case,
+  frac, numr, dnom and sups. The stylistic sets ss01-ss08 were removed.
+- Family and PostScript names changed to Rig Lab Sans and RigLabSans; a description (name ID 10)
+  and a build note in the version string (name ID 5) were added.
+- Saved as WOFF2: rig-lab-sans.woff2, 72,332 bytes, SHA-256
+  fc6deaf030ce5f418071a118798e96b2727adf558cc59809567a9d498694f95d. head.modified is pinned to
+  2026-09-30, so the build is byte-for-byte reproducible.
+
+The build is reproducible with docs/design/tools/build-font.py (fontTools 4.66.1).
