@@ -297,7 +297,7 @@ export function fixtureData(): FixtureData {
         radiatorSupport: [{ position: 'front', sizesMm: [240, 360], maxThicknessMm: null }],
         fanMounts: [{ position: 'front', sizeMm: 120, count: 3 }],
         includedFans: [],
-        psu: { formFactors: ['ATX'], maxLengthMm: 200 },
+        psu: { formFactors: ['ATX'], clearance: [{ maxLengthMm: 200, condition: null }] },
         driveBays: { bays35: 2, bays25: 2 },
         expansionSlots: 7,
         frontIo: {

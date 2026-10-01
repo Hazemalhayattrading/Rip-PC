@@ -100,7 +100,16 @@
         "formFactors": [
           "ATX"
         ],
-        "maxLengthMm": 255
+        "clearance": [
+          {
+            "maxLengthMm": 255,
+            "condition": "with 1 HDD tray"
+          },
+          {
+            "maxLengthMm": 155,
+            "condition": "with 2 HDD trays"
+          }
+        ]
       },
       "driveBays": {
         "bays35": 2,
@@ -151,6 +160,10 @@
         {
           "field": "coolerClearance",
           "text": "Fractal's structured value is 145 mm, but its note says \"145 mm with Fan Bracket (Mesh version only) / 170 mm without\". This TG Light SKU has no side fan bracket (\"The mesh version also ships with a fanhub and a fan bracket\"), so its limit is 170 mm."
+        },
+        {
+          "field": "psu.clearance",
+          "text": "From Fractal's note \"1 HDD tray: 255 mm max; 2 HDD tray: 155 mm max\". The page does not say how many trays are fitted as shipped, so neither limit is recorded as unconditional."
         },
         {
           "field": "size",
@@ -280,7 +293,12 @@
         "formFactors": [
           "ATX"
         ],
-        "maxLengthMm": 170
+        "clearance": [
+          {
+            "maxLengthMm": 170,
+            "condition": null
+          }
+        ]
       },
       "driveBays": {
         "bays35": 3,
@@ -440,7 +458,12 @@
         "formFactors": [
           "ATX"
         ],
-        "maxLengthMm": 150
+        "clearance": [
+          {
+            "maxLengthMm": 150,
+            "condition": null
+          }
+        ]
       },
       "driveBays": {
         "bays35": 2,
@@ -624,7 +647,12 @@
           "SFX",
           "SFX-L"
         ],
-        "maxLengthMm": 130
+        "clearance": [
+          {
+            "maxLengthMm": 130,
+            "condition": null
+          }
+        ]
       },
       "driveBays": {
         "bays35": 0,
@@ -853,7 +881,12 @@
         "formFactors": [
           "ATX"
         ],
-        "maxLengthMm": 170
+        "clearance": [
+          {
+            "maxLengthMm": 170,
+            "condition": null
+          }
+        ]
       },
       "driveBays": {
         "bays35": 2,

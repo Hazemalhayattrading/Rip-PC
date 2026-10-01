@@ -213,6 +213,14 @@ describe('sanity', () => {
     expectRule(run(layout(50)), 'sanity');
     expectClean(run(layout(33)));
   });
+  it('a case gives PSU length limits in range, with at most one unconditional row', () => {
+    const psu = (rows: { maxLengthMm: number; condition: string | null }[]) => (d: FixtureData) => {
+      first(d.specs.case).psu.clearance = rows;
+    };
+    expectClean(run(psu([{ maxLengthMm: 255, condition: 'with 1 HDD tray' }, { maxLengthMm: 155, condition: 'with 2 HDD trays' }])));
+    expectRule(run(psu([{ maxLengthMm: 200, condition: null }, { maxLengthMm: 160, condition: null }])), 'sanity');
+    expectRule(run(psu([{ maxLengthMm: 40, condition: null }])), 'sanity');
+  });
 });
 
 describe("prices (Owner's rule 1)", () => {

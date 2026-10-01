@@ -21,6 +21,8 @@ export const RadiatorSize = z.union([
  */
 export const GpuClearance = z.strictObject({ maxLengthMm: PosNum, condition: z.string().min(1).nullable() });
 export const CoolerClearance = z.strictObject({ maxHeightMm: PosNum, condition: z.string().min(1).nullable() });
+/** A PSU length limit and the configuration it applies under (e.g. "with 2 HDD trays"). */
+export const PsuClearance = z.strictObject({ maxLengthMm: PosNum, condition: z.string().min(1).nullable() });
 
 /**
  * One published position of a movable motherboard plate ("spine"). Each position trades CPU cooler
@@ -75,7 +77,12 @@ export const Case = z.strictObject({
   ),
   psu: z.strictObject({
     formFactors: z.array(PsuFormFactor).min(1),
-    maxLengthMm: PosNum.nullable(),
+    /**
+     * PSU length limits, one row per published configuration. At most one row is unconditional: a
+     * maker that only gives per-configuration limits (e.g. per HDD tray fitted) gets no unconditional
+     * row. `null` plus a note when the maker publishes no limit.
+     */
+    clearance: z.array(PsuClearance).min(1).nullable(),
   }),
   driveBays: z.strictObject({
     /** Bays or mounts that take a 3.5-inch drive (many also take 2.5-inch). */

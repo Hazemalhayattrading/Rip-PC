@@ -35,7 +35,7 @@ function nullMeansNone(record: SpecRecord): string[] {
     case 'cooler':
       return record.manufacturer === 'noctua' ? [] : ['nsprRating'];
     case 'case':
-      return ['gpuClearance.*.condition', 'coolerClearance.*.condition', 'includedFans.*.model', 'gpuMaxHeightMm'];
+      return ['gpuClearance.*.condition', 'coolerClearance.*.condition', 'psu.clearance.*.condition', 'includedFans.*.model', 'gpuMaxHeightMm'];
     case 'gpu-chip':
     case 'storage':
     case 'case-fan':
@@ -279,6 +279,9 @@ function checkSanity(sink: IssueSink, file: string, r: SpecRecord): void {
       if (r.coolerClearance.filter((c) => c.condition === null).length !== 1) bad('exactly one unconditional cooler clearance row', 'coolerClearance');
       for (const c of r.gpuClearance) if (c.maxLengthMm < 100 || c.maxLengthMm > 600) bad('GPU clearance out of range', 'gpuClearance');
       for (const c of r.coolerClearance) if (c.maxHeightMm < 20 || c.maxHeightMm > 250) bad('cooler clearance out of range', 'coolerClearance');
+      const psuRows = r.psu.clearance ?? [];
+      if (psuRows.filter((c) => c.condition === null).length > 1) bad('at most one unconditional PSU length row', 'psu.clearance');
+      for (const c of psuRows) if (c.maxLengthMm < 90 || c.maxLengthMm > 400) bad('PSU length limit out of range', 'psu.clearance');
       const positions = r.layoutPositions ?? [];
       if (new Set(positions.map((p) => p.position)).size !== positions.length) bad('layout positions must be unique', 'layoutPositions');
       for (const p of positions) {

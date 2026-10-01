@@ -100,7 +100,7 @@ For some fields the schema documents `null` as "none", so no note is needed (rul
 | gpu-card | `ocModeBoostClockMhz`, `powerConnectors.*.standard` on 8-pin and 6-pin plugs |
 | psu | `connectors.pcie16pinStandard` when there is no 16-pin cable |
 | cooler | `nsprRating` (except Noctua, which publishes it) |
-| case | `gpuClearance.*.condition` and `coolerClearance.*.condition` (the unconditional limit), `includedFans.*.model`, `gpuMaxHeightMm` (no published height limit) |
+| case | `gpuClearance.*.condition`, `coolerClearance.*.condition` and `psu.clearance.*.condition` (the unconditional limit), `includedFans.*.model`, `gpuMaxHeightMm` (no published height limit) |
 
 ### Fields worth knowing
 
@@ -110,9 +110,14 @@ For some fields the schema documents `null` as "none", so no note is needed (rul
 - **Lane sharing**: `laneSharing` rules say "when slot X holds a device (any, NVMe or SATA), these slots
   are disabled or reduced to N lanes", with the manual page and the manual's words. Slot IDs are local
   to the board (`m2-1`, `pcie-1`, `sata-5`).
-- **Case clearance**: `gpuClearance` and `coolerClearance` have one row per condition the maker
-  publishes; `condition: null` is the default limit (for example the Fractal North: 355 mm, or 300 mm
-  "with a 360 mm front radiator").
+- **Case clearance**: `gpuClearance`, `coolerClearance` and `psu.clearance` have one row per condition
+  the maker publishes; `condition: null` is the default limit (for example the Fractal North: 355 mm, or
+  300 mm "with a 360 mm front radiator"). GPU and cooler limits have exactly one default row. A PSU limit
+  may have none, when the maker only gives per-configuration limits (the North: 255 mm "with 1 HDD
+  tray", 155 mm "with 2 HDD trays").
+- **Variants and configurations**: makers often share one value across a product family and qualify
+  it in a note ("145 mm with Fan Bracket (Mesh version only) / 170 mm without"). Record the value for
+  this record's exact SKU, with any configuration as a condition, and quote the maker's note.
 - **Case `layoutPositions`**: only for cases with a movable motherboard plate (the Fractal Terra's
   spine). Each position gives a cooler height limit and a GPU thickness limit, plus an optional tighter
   thickness limit for tall GPUs (`tallGpuLimit`). A build fits when one position fits both parts. When
@@ -221,6 +226,8 @@ a benchmark without its test conditions, or a price outside its batch window wit
 - Draw the sample with `data/tools/audit_sample.py`: ceil(20%) of every batch, from one seeded
   generator. Save it under `artifacts/audit/`.
 - Read every sampled item against its capture and keep a log of each check under `artifacts/audit/`.
+- When a page gives conditional values (variant or configuration), record this SKU's value and the
+  condition.
 - Fix every finding. A finding in the sample means a re-check of the whole batch for the same fault.
 - Record the audit in `data/audits.json`: per batch, the sample, what it was read against, the findings
   with the commit that fixed each, and any follow-up outside the sample. `src/data/audits.test.ts`

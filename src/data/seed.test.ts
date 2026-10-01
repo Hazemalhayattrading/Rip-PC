@@ -111,7 +111,7 @@ describe('seed compatibility cases', () => {
         psus.some(
           (p) =>
             c.psu.formFactors.includes(p.formFactor) &&
-            (c.psu.maxLengthMm === null || p.lengthMm <= c.psu.maxLengthMm),
+            (c.psu.clearance === null || c.psu.clearance.some((l) => p.lengthMm <= l.maxLengthMm)),
         ),
     );
     expect(cases.map((c) => c.id)).not.toEqual([]);
