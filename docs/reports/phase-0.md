@@ -158,7 +158,12 @@ because GitHub still serves pre-purge commits by ID until its garbage collection
   - the North's RAM clearance under a top radiator;
   - a re-price batch before launch;
   - the reseller rule in the validator.
-- **Design:** WP-DS2, 46 backlog items (accessibility, motion, the Specs view, copy, 3D brief).
+- **Design:** WP-DS2, 49 backlog items (accessibility, motion, the Specs view, copy, 3D brief).
+- **Data and engine schema (deferred in writing on 2026-10-01):**
+  - the Fractal North's drive-tray configurations as a structured model, like the Terra's spine. Until then, the engine must not treat the case PSU rows as guarantees;
+  - a radiator width field;
+  - a structured CPU power profile in the benchmark test conditions;
+  - the case size-class redesign: a zod-free `deriveCaseSize` module with `exteriorVolumeLiters`, frozen class ids (they become share-link filter ids), and boundary tests at 20 L and 70 L, missing dimensions, E-ATX and ITX-only, with today's 5 cases pinned.
 - **QA:** QA-P0-006, an LCP check with applied throttling, at Phase 2 entry.
 
 ## 6. Next
