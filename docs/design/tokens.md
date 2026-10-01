@@ -33,6 +33,7 @@ this document has a bug.
 @import 'tailwindcss/preflight.css' layer(base);
 @import '../styles/base.css' layer(base);
 @import 'tailwindcss/utilities.css' layer(utilities) source('..');
+@source not '../**/*.test.{ts,tsx}';
 ```
 
 - **`tokens.css` takes no layer.** Tailwind 4.3.3 refuses it inside one: `@custom-variant` and
@@ -44,6 +45,10 @@ this document has a bug.
     declared before they can be removed.
   - `base.css` comes after Preflight, in the same layer, because it restores what Preflight resets.
 - **Keep `source('..')`** from the scaffold, so class detection stays inside `src/`.
+- **Leave the tests out of class detection** with `@source not` (build-lead added it in WP-B1).
+  - `tokens.test.ts` names about 70 utilities, and without the line Tailwind ships them all.
+  - With it, the app's CSS fell from 17,307 to 9,254 bytes (4,667 to 3,316 gzip).
+  - The `type-*` roles now ship only once a component uses them.
 - **Replace the scaffold's comment.** It says Preflight is left out. Preflight is now on, and
   section 3 explains how `base.css` restores links, headings, focus rings and placeholders.
 - The scaffold uses three utilities today (`aspect-4/3 w-full max-w-3xl`, in
@@ -119,8 +124,12 @@ a camera move. CSS transitions use the utilities in section 2.6 and switch off b
 ### 1.5 After wiring, prove it
 
 - `npm run verify`, `npm run perf:bundle`, `npm run perf:vitals`, and screenshots of `/` and
-  `/build/cpu` at 390, 768 and 1440 in both themes. JS does not change. For scale, the token
-  specimen's whole stylesheet is 14,560 bytes before gzip.
+  `/build/cpu` at 390, 768 and 1440 in both themes.
+- **Measured by build-lead after wiring** (WP-B1 Part 2, 2026-10-01):
+  - initial JS +506 bytes gzip (77,415 to 77,921): the toggle 272 B, the inline theme script 234 B;
+  - CSS 1,578 to 3,317 bytes gzip;
+  - HTML +338 bytes gzip;
+  - the 3D chunk unchanged.
 - Then `node docs/design/tools/tokens-check.mjs` re-runs the design side's pipeline check (section 6).
 
 ---
@@ -469,6 +478,30 @@ One run per row, on 2026-10-01. The layout-shift values were the same in every r
   With a calibrated fallback, `swap` costs almost nothing and always ends in Rig Lab Sans. On a
   repeat visit the font usually comes from the cache before the first paint, so there is no swap.
 
+**In the app** (build-lead, WP-B1 Part 2, 2026-10-01):
+- **The swap.** The font was held back 1.5 s on `/` and `/build/cpu`, at 390 and 1440.
+  - LCP lands at 132–140 ms, painted in the fallback.
+  - The swap shifts nothing: CLS 0.0000.
+  - Normally the font request starts 4–8 ms in, alongside the CSS, and text paints directly in
+    Rig Lab Sans.
+- **The preload has a measured LCP cost.** The app's `h1` is rendered by React, so first paint
+  waits for the 78 KB of JS, and the 72.7 KB font shares that bandwidth. Lighthouse mobile,
+  applied (devtools) throttling, 3 runs each:
+
+  | Variant | LCP | Performance | Swap |
+  |---|---|---|---|
+  | Preload (this spec) | 2,117 ms | 0.97 | None visible |
+  | No preload | 1,775 ms | 0.99 | About 1 s after first paint, CLS 0 |
+  | Preload with `fetchpriority="low"` | 2,142 ms | — | No help |
+
+  - QA's simulated-throttling gate does not tell them apart (1,657 against 1,654 ms).
+  - Every variant is inside the 2.5 s budget.
+- **Decision (Director, 2026-10-01): Phase 0 keeps the preload.** It is within budget, and it
+  avoids a visible swap.
+  - Phase 2 renders the shell text into the static route HTML, so LCP stops waiting for JS.
+  - Then it measures preload against no preload again, under applied throttling
+    ([backlog.md](backlog.md), item 22).
+
 ### 4.3 The fallback face
 
 `Rig Lab Sans Fallback` is a local Arial: `local('Arial')`, `local('ArialMT')`, or Liberation Sans,
@@ -582,8 +615,9 @@ Screenshots and reports go to `artifacts/screenshots/phase-0/WP-DS1/tokens/` and
   - It is not shipped, because nobody has checked that Android Chrome resolves `local('Roboto')`.
     To check on a real Android phone in Phase 5.
   - The cost is bounded: plain Arial's swap measured 0.004 of CLS on the specimen.
-- **The swap was measured on the token specimen,** not on the app. Once build-lead has wired the
-  tokens, `npm run perf:vitals` measures the real pages.
+- **The font preload costs LCP under applied throttling** (2,117 against 1,775 ms without it,
+  section 4.2). Phase 0 keeps it, by the Director's decision; Phase 2 prerenders the shell text
+  and measures again (backlog item 22). The app's swap itself is now measured: CLS 0.0000.
 - **Calibration covers Arial on Windows.** macOS and iOS also ship Arial, and Liberation Sans was
   drawn to Arial's widths, so they should behave the same. None of them was measured here.
 - **The compare checkbox's hit area** (18 px in the mock) must grow to 24 px in Phase 2 (2.5).
