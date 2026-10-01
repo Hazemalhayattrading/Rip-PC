@@ -28,8 +28,16 @@ Brief: `docs/reports/phase-0-briefs.md`, section "data-lead". Acceptance criteri
      Wayback copy was used, as the owner's rules allow for specs.
    - The rule is checked by review, not by the validator: CPU records carry no part numbers, and
      observations don't record the listing brand.
-4. Price runner: every attempt gets its own capture name. Commit the runner under `data/tools/`.
-   **Next.**
+4. Price runner: every attempt gets its own capture name. **Done.**
+   - `data/tools/capture-name.mjs` (Node, unit-tested in `src/data/capture-name.test.ts`): the first
+     attempt of a day keeps `<partId>--<retailer>--<date>`; later ones get `--2`, `--3`. Search pages
+     are dated and numbered the same way. The midnight-UTC rename also takes a free name.
+   - Both runners are committed under `data/tools/`: `prices_run.py` (Amazon) and `prices_newegg.py`,
+     with their helpers `pw-price.cjs` and `pw-fetch.cjs`. Paths are relative now, and NODE_PATH is gone.
+   - The price schema and validator accept the `--<n>` suffix (n ≥ 2); a validator test covers it.
+   - The Python is **not run** here (no Python on this PC). The Node half is: the naming CLI, and
+     both helpers against a local `data:` page with the repo's Playwright 1.56.1 Chromium.
+   - No existing capture was renamed; every cited name still passes.
 5. Font CREDITS row (Rig Lab Sans, OFL): waiting for design-lead's text.
 6. Canonical category ids to build-lead: **done**, sent 2026-10-01 by message. Only `gpu` changes, to
    `gpu-card` (code `g` kept). `gpu-chip` is not a build selection.
@@ -55,8 +63,8 @@ Brief: `docs/reports/phase-0-briefs.md`, section "data-lead". Acceptance criteri
 - Seeded 20% audit (seed 20260930): **done** on 2026-10-01; see step 2 and `data/audits.json`.
 
 ## Where I stopped
-Steps 1, 2, 3 and 6 are done. Next: step 4, the price runner's capture names
-(`artifacts/scratch/prices_run.py`), time-boxed.
+Steps 1, 2, 3, 4 and 6 are done. Next: step 5, the font CREDITS row, once design-lead sends it;
+meanwhile, prepare the step 7 hand-off numbers.
 
 ## Blockers (never worked around)
 - **Sites that refuse or challenge our fetcher:** Samsung, Kingston, Crucial, Noctua, Thermalright, Lian Li, TechPowerUp (403), Guru3D, tracker.gg and epicgames.com. Tried 1 to 2 times each (see `artifacts/specs/*/fetch-log.tsv`). Wayback copies were used where the rules allow them.

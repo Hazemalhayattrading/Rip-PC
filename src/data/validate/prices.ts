@@ -91,9 +91,11 @@ export function checkPrices(sink: IssueSink, dataset: Dataset, registry: Registr
         sink.error('price-window', file, `retrievedAt ${o.retrievedAt} is outside the batch window ${windowStart}..${windowEnd}`, rid, `${at}.retrievedAt`);
       }
       if (o.retrievedAt > today) sink.error('date-future', file, `retrievedAt ${o.retrievedAt} is after today (${today})`, rid, `${at}.retrievedAt`);
-      const expected = `artifacts/prices/${market}/${o.partId}--${o.retailer}--${o.retrievedAt}.`;
-      if (!o.capture.startsWith(expected)) {
-        sink.error('price-capture', file, `capture must be named ${expected}<html|png>`, rid, `${at}.capture`);
+      // A later attempt on the same day carries an attempt number, --2 and up (data/tools/capture-name.mjs).
+      const expected = `artifacts/prices/${market}/${o.partId}--${o.retailer}--${o.retrievedAt}`;
+      const suffix = o.capture.startsWith(expected) ? o.capture.slice(expected.length) : null;
+      if (suffix === null || !/^(?:--(?:[2-9]|[1-9]\d+))?\.(?:html|png)$/.test(suffix)) {
+        sink.error('price-capture', file, `capture must be named ${expected}[--<n>].<html|png>`, rid, `${at}.capture`);
       }
       const key = `${o.partId}|${o.retailer}`;
       if (seen.has(key)) sink.error('price-duplicate', file, `two observations for "${o.partId}" at "${o.retailer}"`, rid, at);

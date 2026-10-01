@@ -251,6 +251,15 @@ describe("prices (Owner's rule 1)", () => {
     expectRule(run((d) => { usObs(d).capture = 'artifacts/tmp/page.html'; }), 'price-capture');
     expectRule(run((d) => { usObs(d).captureSha256 = 'not-a-hash'; }), 'price-capture');
   });
+  it('price-capture: a later attempt on the same day is numbered --2 and up', () => {
+    const attempt = (n: string) => (d: FixtureData) => {
+      usObs(d).capture = usObs(d).capture.replace(/\.html$/, `--${n}.html`);
+    };
+    expectNoRule(run(attempt('2')), 'price-capture');
+    expectNoRule(run(attempt('12')), 'price-capture');
+    expectRule(run(attempt('1')), 'price-capture');
+    expectRule(run(attempt('x')), 'price-capture');
+  });
   it('price-duplicate: one observation per part and retailer', () => {
     expectRule(run((d) => { d.prices.US.observations.push({ ...usObs(d) }); }), 'price-duplicate');
   });

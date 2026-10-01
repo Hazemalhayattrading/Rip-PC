@@ -26,12 +26,15 @@ export const PriceObservation = z.strictObject({
   retrievedAt: IsoDate,
   /**
    * The saved live page (HTML or screenshot), relative to the repo root. Fixed convention:
-   * `artifacts/prices/<market>/<partId>--<retailer>--<retrievedAt>.<html|png>`. The validator
-   * enforces the name; `artifacts/` is git-ignored, so the file itself lives in the worktree.
+   * `artifacts/prices/<market>/<partId>--<retailer>--<retrievedAt>[--<n>].<html|png>`, where `--<n>`
+   * (2 and up) numbers a later attempt on the same day. The validator enforces the name; `artifacts/`
+   * is git-ignored, so the file itself lives in the worktree.
    */
-  capture: z.string().regex(/^artifacts\/prices\/(?:SA|US)\/[a-z0-9-]+--[a-z0-9-]+--\d{4}-\d{2}-\d{2}\.(?:html|png)$/, {
-    error: 'must be artifacts/prices/<market>/<partId>--<retailer>--<YYYY-MM-DD>.<html|png>',
-  }),
+  capture: z
+    .string()
+    .regex(/^artifacts\/prices\/(?:SA|US)\/[a-z0-9-]+--[a-z0-9-]+--\d{4}-\d{2}-\d{2}(?:--(?:[2-9]|[1-9]\d+))?\.(?:html|png)$/, {
+      error: 'must be artifacts/prices/<market>/<partId>--<retailer>--<YYYY-MM-DD>[--<n>].<html|png>',
+    }),
   /** SHA-256 of the capture file, so an audit can prove it is the file that was read. */
   captureSha256: z.string().regex(/^[0-9a-f]{64}$/, { error: 'must be a lower-case hex SHA-256' }),
   notes: Notes,

@@ -15,7 +15,7 @@ source** (`url`, `publisher`, `retrievedAt`), and a missing value stays missing.
 | `data/benchmarks/creator.json` | Creator-app anchors (Cinebench 2024, Blender). |
 | `data/games.json` | The games list, with dated player counts. |
 | `data/audits.json` | The data lead's seeded audits: the sample per batch, what each item was read against, findings and fixes (see "Review"). Not catalogue data. |
-| `data/tools/` | Data scripts: the audit sampler (`audit_sample.py`). |
+| `data/tools/` | Data scripts: the audit sampler (`audit_sample.py`), the price runners (`prices_run.py` for Amazon US and SA, `prices_newegg.py`), their Playwright capture helpers (`pw-price.cjs`, `pw-fetch.cjs`) and `capture-name.mjs`. |
 | `src/data/schema/` | Strict Zod schemas, one per file type. `files.ts` holds `DATA_PATHS`, the single source of truth for the layout. |
 | `src/data/validate/` | The validator. `issues.ts` lists every rule ID (`RULES`). |
 | `src/data/dataset.test.ts` | Runs the validator over everything in `data/`. Any error fails CI. |
@@ -147,7 +147,16 @@ One file per market, one batch per file:
   from another.
 - **Capture**: the saved page is `artifacts/prices/<SA|US>/<partId>--<retailer>--<retrievedAt>.<html|png>`
   (we save both; the record names the `.html`), and `captureSha256` is the SHA-256 of that file.
-  `artifacts/` is git-ignored: captures are audit evidence kept in the worktree, never committed.
+  A later attempt on the same day gets its own name, `...--<retrievedAt>--2`, `--3` and so on, so no
+  capture is ever overwritten, including the ones rejected in review. Never rename or move a capture a
+  record cites. `artifacts/` is git-ignored: captures are audit evidence kept in the worktree, never
+  committed.
+- **Runners**: `python3 data/tools/prices_run.py <US|SA> [partId ...]` (Amazon) and
+  `python3 data/tools/prices_newegg.py partId ...` (Newegg US) search, pick the exact listing and
+  capture it with headless Chromium, one request at a time. Every capture name comes from
+  `data/tools/capture-name.mjs`. They need Python 3, Node, `npm ci` and
+  `npx playwright install chromium`. They append what they did to `artifacts/prices/results-*.jsonl`,
+  and every pick is reviewed against its capture before it becomes a record.
 - **Gap**: every purchasable part without a price gets one gap record per market:
   `{ partId, market, reasonCode, reason, retailersTried, checkedAt }`. `reasonCode` is `not-listed`,
   `blocked` (a bot challenge, which we never work around), `no-price-shown` or `unavailable`. The UI
