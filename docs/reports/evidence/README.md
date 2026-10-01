@@ -20,7 +20,7 @@ This folder lists every file by SHA-256, so anyone with the local copy can prove
 
 | Folder | Files | Size | What |
 |---|---:|---:|---|
-| `data-lead-artifacts/artifacts/` | 1,167 | 560.4 MB | price captures (SA, US) and run logs, spec captures, benchmark pages and chart images, games-list captures, audit samples, data-lead's scratch scripts |
+| `data-lead-artifacts/artifacts/` | 1,167 + 21 | 560.4 MB + new | price captures (SA, US) and run logs, spec captures, benchmark pages and chart images, games-list captures, audit samples, data-lead's scratch scripts |
 | `design-lead-artifacts/artifacts/` | 118 | 41.3 MB | WP-DS0 and WP-DS1 screenshots, the pinned font cache, WP-DS1 scripts and logs |
 | `qa-q0-artifacts/artifacts/` | 49 | 4.7 MB | WP-Q0 Lighthouse and bundle reports |
 | `qa-q1-artifacts/artifacts/` | 113 | 11.9 MB | WP-Q1 Lighthouse, web vitals, axe and screenshots |
@@ -38,6 +38,7 @@ paths such as `artifacts/prices/...`, relative to a data-lead worktree root.
 | `files.sha256` | all 2,243 extracted files | `C:\Projects\rig-lab-evidence\` |
 | `archives.sha256` | the 9 archive parts and the 2 bundles (the original `SHA256SUMS.txt`) | `C:\Projects\rig-lab-evidence\archives\` |
 | `data-lead-evidence-manifest.sha256.txt` | data-lead's 1,102 cited evidence files; 1,101 are kept, and 1 was excluded by design | a data-lead worktree root |
+| `data-lead-evidence-2026-10-01.sha256` | the 21 files data-lead added on 2026-10-01: audit logs, the case sweep, CH560 manual renders, audit scripts and verify logs | a data-lead worktree root, or `C:\Projects\rig-lab-evidence\data-lead-artifacts\` |
 | `EXCLUDED.txt` | what was deliberately not kept, and why | — |
 
 ## Verify
