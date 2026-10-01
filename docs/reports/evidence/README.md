@@ -67,5 +67,18 @@ file it can't find is the page left out by design (see `EXCLUDED.txt`).
 - 2026-10-01:
   - restored to `C:\Projects\rig-lab-evidence\` and checksum-verified;
   - the manifests moved here, and `docs/reports/phase-0-wip/` was removed from the branch tip;
-  - the purge from branch history is planned. It needs Hazem's go-ahead before anything is
-    rewritten.
+  - **purged from branch history, on Hazem's go-ahead.** The 11 binary files (9 `.tar.xz` parts
+    and 2 git bundles) were removed from every commit that descends from `63ab40f`, on all 5
+    branches (`git filter-branch --index-filter`, `--ancestry-path ^63ab40f^`). 87 commits got
+    new IDs; `purge-sha-map.txt` maps old to new. Older commits, `main` included, kept their IDs
+    and signatures. Every branch tip's content is byte-identical. The pushes used
+    `--force-with-lease`.
+  - **Verified:** a fresh `git clone --mirror` of GitHub holds 0 of the 11 blobs (a 12 MB pack;
+    it was 236 MB). qa-lead verifies independently in `docs/qa/report-phase-0.md`.
+  - **Kept locally:** a backup of every ref, taken before the purge, is
+    `C:\Projects\rig-lab-evidence\backup\rip-pc-all-refs-before-purge-2026-10-01.bundle`
+    (234 MB, with a `.sha256` beside it).
+  - **Not in our control:** GitHub can still serve orphaned commits by direct ID until its own
+    garbage collection runs. Removing them for good needs a GitHub Support request from the repo
+    owner. Copies made before the purge can't be recalled: GitHub counted 126 clones from 55
+    sources in the 14 days before.
