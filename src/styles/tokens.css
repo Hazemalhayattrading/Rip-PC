@@ -90,9 +90,8 @@
   /* The scene's default RGB light. The build's chosen RGB colour replaces it in 3D. */
   --scene-light: #d4e5ff;
 
-  /* Behind an expanded sheet or the Specs panel; selected text. */
+  /* Behind an expanded sheet or the Specs panel. Selected text is --stage on --ink (base.css). */
   --scrim: rgba(0, 0, 0, 0.6);
-  --selection: rgba(244, 244, 243, 0.22);
 
   /* One elevation for chrome floating over the stage, one for sheets over everything. */
   --elevation-float: 0 24px 64px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
@@ -113,7 +112,8 @@
 
   --ink: #111214;
   --ink-2: #45484d;
-  --ink-3: #62666c;
+  /* Darker than the picked mock's #62666c (4.08:1 at the floor's near edge, QA DS0-01): 4.61:1. */
+  --ink-3: #5a5e64;
 
   --ok: #1c7a45;
   --warn: #8a5900;
@@ -126,7 +126,6 @@
   --scene-light: #6f9ee0;
 
   --scrim: rgba(17, 18, 20, 0.32);
-  --selection: rgba(17, 18, 20, 0.16);
 
   --elevation-float: 0 16px 48px rgba(20, 20, 28, 0.12), 0 1px 3px rgba(20, 20, 28, 0.08);
   --elevation-overlay: 0 24px 72px rgba(20, 20, 28, 0.18), 0 2px 6px rgba(20, 20, 28, 0.1);

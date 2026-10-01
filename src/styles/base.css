@@ -104,8 +104,14 @@ a:hover {
   opacity: 1;
 }
 
+/*
+ * Selection is solid: --stage text on --ink, 16.75:1 dark and 16.87:1 light on every surface.
+ * A tint keeps each text tier's own colour and fell to 3.06:1 (ink-3 on a raised row); forcing
+ * --ink onto a tint fails on --action surfaces, which are --ink-coloured (1:1).
+ */
 ::selection {
-  background: var(--selection);
+  background: var(--ink);
+  color: var(--stage);
 }
 
 button:not(:disabled),
