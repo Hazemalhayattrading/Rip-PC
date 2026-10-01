@@ -6,63 +6,65 @@ This file is deleted in the final hand-off commit.
 
 **Updated:** 2026-10-01, build-lead. Evidence (git-ignored): `artifacts/logs/wp-b1/`.
 
-## Done (Part 1)
+## Done
 
+**Part 1, accepted by the Director on 2026-10-01** (to be merged with the follow-up below):
 1. **Category ids** (`cfa2376`). `gpu` became `gpu-card`; every one-letter code is unchanged.
-   The build categories are data-lead's `SPEC_CATEGORIES` without `gpu-chip`
-   (`feat/data-foundations:src/data/schema/files.ts`). The state tests are updated.
-   **data-lead confirmed** (2026-10-01): a build selects from `PRICED_CATEGORIES` (that list,
-   in this order). `gpu-chip` is never a build selection, and no other id changes.
-   - Redone test first, as the Director asked (skill test-driven-development). RED: the
-     `d620f19` `categories.ts` with the new tests gives 6 failures for the expected reason, plus
-     3 `tsc` errors. For example, encode drops the card: `v1.c_amd-ryzen-7-9800x3d`, without
-     `g_…`. GREEN: the minimal rename makes 97/97 pass and `tsc` exit 0. The refactored file is
-     byte-identical to `cfa2376`. Logs: `artifacts/logs/wp-b1/tdd-categories-red.log` and
-     `tdd-categories-green.log`.
-   - To do once WP-D0 is merged into the integration branch: a unit test that
-     `PART_CATEGORIES` equals data-lead's `PRICED_CATEGORIES`, test first. A test-only import
-     keeps classic `zod` out of the initial bundle. data-lead suggested it.
-2. **README** (`d29c053`): the `perf:*` and `audit:sample` scripts; Windows set-up (Node 22,
-   symlinks with Developer Mode, LF, no Docker for visual baselines, Lighthouse with the
-   installed Chrome); the cloud-container notes marked as history. Every claim was checked on
-   this PC.
-3. **ESLint** (`8957a10`): the spec-import rule is skipped, because it would only repeat
-   `tests/harness/spec-imports.test.ts`. Added `@typescript-eslint/no-import-type-side-effects`
-   instead: a reverted probe showed that one inline type import from `src/three` put three.js on
-   every page (initial JS 77.40 to 320.49 KB gzip), and the old config passed it.
-   Evidence: `artifacts/logs/wp-b1/eslint-type-side-effects-probe.txt`.
+   data-lead confirmed it: a build selects from `PRICED_CATEGORIES`, `gpu-chip` is never a
+   selection, and no other id changes. Test-first evidence: `tdd-categories-red.log` (6
+   failures, 3 `tsc` errors) and `tdd-categories-green.log` (97/97). The rewritten file is
+   byte-identical to `cfa2376`.
+2. **README** (`d29c053`): the `perf:*` and `audit:sample` scripts, the Windows set-up, and the
+   cloud-container notes marked as history.
+3. **ESLint** (`8957a10`): `@typescript-eslint/no-import-type-side-effects`. The spec-import rule
+   was skipped, because it would only repeat `tests/harness/spec-imports.test.ts`.
 
-Verify on the Part 1 tree: 266 unit tests and 112 e2e pass, in 47 s
-(`artifacts/logs/wp-b1/verify-part1.log`).
-
-Baselines on `d620f19`, for the Part 2 comparison: initial JS 77.40 KB gzip on every page,
-initial CSS 0.31 KB; web vitals on `/` LCP 44 ms (x1) and 168-196 ms (x4), CLS 0; Lighthouse
-mobile performance 1.0, LCP about 1,355 ms, CLS 0, TBT 0.
+**Part 1 follow-up** (the Director, at RESUME):
+- Merged the integration branch: `8a8a645` (Context7 out of `.mcp.json`), `4467930`, `8edb6a1`.
+- README "MCP servers for Claude Code": Playwright is in `.mcp.json`; each person adds Context7
+  at user scope with their own key; a project-scope entry would hide it. Both points were
+  checked in the Claude Code and Context7 docs.
+- `scripts/install-skills.sh`: the echo no longer says `.mcp.json` declares Context7.
+- `.gitignore`: `.playwright-mcp/` (design-lead's tip). git and Prettier both skip it (tested).
 
 ## Waiting
 
 - **Part 2** (wire the tokens) waits for the Director to say WP-DS1 is accepted and merged.
-  design-lead's wiring, read from `feat/design-tokens` (its `tokens-check.mjs` harness):
-  `tokens.css` imported with no layer, after `tailwindcss/theme.css`; Preflight and `base.css`
-  in the base layer; `<link rel="preload" href="/src/styles/fonts/rig-lab-sans.woff2"
-  as="font" type="font/woff2" crossorigin>`; `<html data-theme="dark">`. To confirm against
-  `docs/design/tokens.md` when it lands.
-- Asked design-lead (2026-10-01), no answer yet: how the light theme is switched (and how QA
-  selects it in tests), and whether the Phase 0 placeholder pages get spacing once Preflight
-  removes list bullets and paragraph margins.
-- Measuring in Part 2 (from qa-lead, 2026-10-01). On the integration branch, `perf:lhci` uses
-  the fixed port 4173, so worktrees collide; my baseline run blocked qa-lead's. Until qa-lead's
-  `258c76e` merges, run it as `LHCI_PORT=4181 npm run perf:lhci`. `perf:vitals` prints its
-  numbers only after that merge too. Until then, add `--reporter=list,json` with
-  `PLAYWRIGHT_JSON_OUTPUT_NAME=<file>` and read the `web-vitals.json` attachment, as the
-  baseline did.
-- Skills for Part 2 (Director, `e3a127a`): test-driven-development, verification-before-completion,
-  systematic-debugging, core-web-vitals, performance, accessibility, and the React parts of
-  vercel-react-best-practices. For worker diffs, use requesting-code-review and
-  receiving-code-review.
+  - design-lead's wiring notes arrived: `docs/design/tokens.md` §1 on `feat/design-tokens` @
+    `0f4b8eb`. The app.css order; in `index.html`, `data-theme="dark"`, `theme-color` `#131416`,
+    the font preload and the inline theme script; a "Light theme" toggle with `aria-pressed`;
+    `localStorage` key `rig-lab-theme`; never `prefers-color-scheme`.
+  - My defaults, sent to design-lead with no reply yet:
+    - a text-only toggle at the end of `<header>` until Phase 2's top bar;
+    - no invented spacing on the placeholder pages;
+    - `role="list"` on the three real lists;
+    - the JS delta measured, not assumed to be zero.
+- **Plan for Part 2, test first:**
+  - `src/state/theme.ts` with `currentTheme` and `applyTheme`, and tests that:
+    - pin `theme-color` to `--stage` in `tokens.css`;
+    - run the inline snippet from `index.html` in `node:vm`, with fake storage (light, none,
+      junk, throws).
+  - The wiring.
+  - A before/after built-output check: preload = CSS font URL, one font request,
+    `data-theme` on every page.
+  - Measure:
+    - verify, perf:bundle, perf:vitals;
+    - Lighthouse with `LHCI_PORT=4181` until qa-lead's `258c76e` merges;
+    - 12 screenshots: `/` and `/build/cpu` at 390, 768 and 1440, dark and light.
+  - Ask qa-lead for a permanent smoke check that the preload is used: their fixture catches
+    console errors and failed requests, not warnings.
+- After WP-D0 merges: a test, written first, that `PART_CATEGORIES` equals `PRICED_CATEGORIES`
+  (a test-only import).
+
+## Notes for later phases
+
+- **Games in the share URL** (data-lead, 2026-10-01). If the URL ever stores games (v1
+  doesn't), store `franchiseSlot` (`call-of-duty`, `ea-sports-fc`) for the yearly titles, not
+  their id. The id changes with each release, so old links would break.
+- **The 3D scene** must re-read `--stage`, `--stage-floor`, `--stage-floor-deep` and
+  `--scene-light` whenever the theme changes (tokens.md §1.3). That's Phase 3.
 
 ## Next step
 
-Part 1 is reported to the Director (2026-10-01). Wait for WP-DS1 to be accepted and merged.
-Then merge the integration branch, add the `PRICED_CATEGORIES` test if WP-D0 is in, and plan
-Part 2 from `docs/design/tokens.md`.
+Run verify on the merged follow-up, push, and report the head to the Director. Then wait for
+WP-DS1.
