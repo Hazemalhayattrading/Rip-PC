@@ -212,6 +212,24 @@ describe('tokens stay consistent', () => {
     expect(new Set(steps)).toEqual(new Set(['48rem', '68.75rem']));
   });
 
+  it("gives the fallback face Rig Lab Sans's line box at any size-adjust", () => {
+    // Overrides are scaled by size-adjust, so each must be Rig Lab Sans's metric divided by it:
+    // ascent 1090 and descent 320 at 1000 units per em, no line gap (hhea, typo and win agree).
+    // docs/design/tools/calibrate-fallback.mjs derives all four values from the font files.
+    const start = tokensCss.indexOf("font-family: 'Rig Lab Sans Fallback';");
+    expect(start).toBeGreaterThan(-1);
+    const fallback = tokensCss.slice(start, tokensCss.indexOf('}', start));
+    const percent = (name: string) => {
+      const value = new RegExp(`${name}: ([\\d.]+)%;`).exec(fallback)?.[1];
+      if (value === undefined) throw new Error(`the fallback face has no ${name}`);
+      return Number(value);
+    };
+    const scale = percent('size-adjust') / 100;
+    expect(percent('ascent-override') * scale).toBeCloseTo(109, 1);
+    expect(percent('descent-override') * scale).toBeCloseTo(32, 1);
+    expect(percent('line-gap-override')).toBe(0);
+  });
+
   it('matches motion.ts to the motion custom properties', () => {
     const motion = customProperties(block(tokensCss, ':root'));
     for (const [name, ms] of Object.entries(durationMs)) {

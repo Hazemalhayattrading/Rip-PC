@@ -38,16 +38,17 @@
 
 /*
  * The fallback while Rig Lab Sans loads: a local Arial (or Liberation Sans, which has Arial's widths),
- * scaled so a line of Rig Lab's own text is as wide as in Rig Lab Sans (width 100, weight 400), with
- * Rig Lab Sans's line box. Calibrated in Chromium on the Studio mock's 1,689 characters of text by
- * docs/design/tools/tokens-check.mjs: Rig Lab Sans renders 2.03 % wider than Arial.
+ * scaled so Rig Lab's own text is as wide as in Rig Lab Sans at width 100, weight 400 (the text that
+ * wraps), with Rig Lab Sans's line box: ascent 1.09 em, descent 0.32 em, no line gap, each divided
+ * by size-adjust. Calibrated from the font files with HarfBuzz on the Studio mock's 1,689 characters
+ * by docs/design/tools/calibrate-fallback.mjs: Rig Lab Sans sets 3.14 % wider than Arial.
  */
 @font-face {
   font-family: 'Rig Lab Sans Fallback';
   src: local('Arial'), local('ArialMT'), local('Liberation Sans'), local('LiberationSans-Regular');
-  size-adjust: 102.03%;
-  ascent-override: 106.83%;
-  descent-override: 31.36%;
+  size-adjust: 103.14%;
+  ascent-override: 105.68%;
+  descent-override: 31.03%;
   line-gap-override: 0%;
 }
 

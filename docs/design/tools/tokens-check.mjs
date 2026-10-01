@@ -79,7 +79,7 @@ writeFileSync(
       ${roles.map(([cls, text]) => `<div class="grid gap-1 border-t border-line pt-3 md:grid-cols-[9rem_minmax(0,1fr)] md:items-baseline"><dt class="type-caption text-ink-3">${cls}</dt><dd class="${cls}" data-role="${cls}">${text}</dd></div>`).join('\n      ')}
     </dl>
     <p class="type-body text-ink-2">Every number is set in tabular figures: <span class="type-name">SAR 9,412</span>, <span class="type-name">SAR 1,111</span>. Links in text stay underlined: <a href="#sources">Sources</a>.</p>
-    <p class="type-body"><span class="whitespace-nowrap" data-measure="line">AMD Ryzen 7 9800X3D, 8 cores, 5.2 GHz, 120 W. Draws up to 230 W under all-core load, so your 120 mm air cooler will run loud in long renders. Fits your build.</span></p>
+    <p class="type-body overflow-hidden"><span class="whitespace-nowrap" data-measure="line">AMD Ryzen 7 9800X3D, 8 cores, 5.2 GHz, 120 W. Draws up to 230 W under all-core load, so your 120 mm air cooler will run loud in long renders. Fits your build.</span></p>
     <p class="type-body" aria-hidden="true" style="overflow: hidden; height: 0"><span class="whitespace-nowrap" data-measure="corpus"></span></p>
     <p class="type-body w-70 text-ink-2" data-measure="narrow">AMD Ryzen 7 9800X3D, 8 cores, 5.2 GHz, 120 W. Draws up to 230 W under all-core load, so your 120 mm air cooler will run loud in long renders. Fits your build.</p>
   </section>
@@ -93,7 +93,7 @@ writeFileSync(
       <div class="flex justify-between gap-3"><span class="type-name">AMD Ryzen 7 9800X3D</span><span class="type-name">SAR 1,899</span></div>
       <div class="type-small text-ink-3">8 cores, 5.2 GHz, 120 W</div>
       <div class="flex items-center gap-1.5 type-small text-warn">${icon.warn}Fits, with a warning</div>
-      <div class="type-small text-ink-2">May need a BIOS update before first boot. Your board can update without a CPU installed. <span class="text-ink-3">Rule bios-min-version</span></div>
+      <div class="type-small text-ink-2">May need a BIOS update before first boot. Your board can update without a CPU installed. <span class="whitespace-nowrap text-ink-3">Rule bios-min-version</span></div>
     </div>
     <div class="grid gap-1 rounded-row p-3">
       <div class="flex justify-between gap-3"><span class="type-name">AMD Ryzen 7 7800X3D</span><span class="type-name">SAR 1,549</span></div>
@@ -102,7 +102,7 @@ writeFileSync(
     <div class="grid gap-1 rounded-row p-3">
       <div class="flex justify-between gap-3"><span class="type-name text-ink-2">Intel Core Ultra 7 265K</span><span class="type-name text-ink-3">SAR 1,199</span></div>
       <div class="flex items-center gap-1.5 type-small text-block">${icon.block}Incompatible</div>
-      <div class="type-small text-ink-2">Needs an LGA1851 board. Your board is AM5. <span class="text-ink-3">Rule socket-match</span></div>
+      <div class="type-small text-ink-2">Needs an LGA1851 board. Your board is AM5. <span class="whitespace-nowrap text-ink-3">Rule socket-match</span></div>
     </div>
     <div class="flex items-center justify-between gap-3 border-t border-line pt-3">
       <span class="type-figure">9,412 <span class="type-unit text-ink-3">SAR</span></span>
@@ -192,18 +192,29 @@ const measure = (tab) =>
   tab.evaluate(() => {
     const box = (el) => { const r = el.getBoundingClientRect(); return { w: +r.width.toFixed(2), h: +r.height.toFixed(2) }; };
     const text = (sel) => { const el = document.querySelector(sel); const r = document.createRange(); r.selectNodeContents(el); return +r.getBoundingClientRect().width.toFixed(2); };
+    // Where the first baseline sits below the top of the role's box: an empty inline-block's bottom
+    // edge is on the baseline. Equal values mean the ascent and descent overrides hold the text still.
+    const baseline = (el) => {
+      const probe = document.createElement('span');
+      probe.style.cssText = 'display:inline-block;width:0;height:0;vertical-align:baseline';
+      el.prepend(probe);
+      const y = probe.getBoundingClientRect().bottom - el.getBoundingClientRect().top;
+      probe.remove();
+      return +y.toFixed(2);
+    };
     return {
       line: box(document.querySelector('[data-measure="line"]')).w,
       corpus: box(document.querySelector('[data-measure="corpus"]')).w,
       narrow: box(document.querySelector('[data-measure="narrow"]')).h,
       roles: Object.fromEntries([...document.querySelectorAll('[data-role]')].map((el) => [el.dataset.role, box(el)])),
+      baselines: Object.fromEntries([...document.querySelectorAll('[data-role]')].map((el) => [el.dataset.role, baseline(el)])),
       displayWidth: text('[data-role="type-display"]'),
       fontsLoaded: [...document.fonts].filter((f) => f.status === 'loaded').map((f) => `${f.family} ${f.weight} ${f.stretch}`),
       overflow: document.documentElement.scrollWidth - innerWidth,
     };
   });
 
-for (const [width, theme] of [[1440, 'dark'], [1440, 'light'], [390, 'dark']]) {
+for (const [width, theme] of [390, 768, 1440].flatMap((w) => [[w, 'dark'], [w, 'light']])) {
   const { context, tab } = await open(width, theme);
   await tab.keyboard.press('Tab'); // focus the first button, to show the focus ring
   await tab.screenshot({ path: join(OUT, `specimen-${width}-${theme}.png`), fullPage: true });
@@ -228,19 +239,34 @@ for (const [width, theme] of [[1440, 'dark'], [1440, 'light'], [390, 'dark']]) {
 const webFont = report['render-1440-dark'];
 const fallback = await (async () => { const { context, tab } = await open(1440, 'dark', { blockFont: true }); const m = await measure(tab); await context.close(); return m; })();
 const arial = await (async () => { const { context, tab } = await open(1440, 'dark', { blockFont: true, plainArial: true }); const m = await measure(tab); await context.close(); return m; })();
-const pct = (a, b) => +(((a - b) / b) * 100).toFixed(1);
+const pct = (a, b) => +(((a - b) / b) * 100).toFixed(2);
 // size-adjust makes the fallback as wide as the web font; the overrides keep the web font's line box.
+// 109 and 32: Rig Lab Sans's ascent and descent in % of the em (hhea, typo and win agree; MVAR does
+// not vary them). docs/design/tools/calibrate-fallback.mjs gets the same values from the font files.
 const ratio = webFont.corpus / arial.corpus;
 const declared = (name) => Number(readFileSync(join(REPO, 'src/styles/tokens.css'), 'utf8').match(new RegExp(`${name}: ([\\d.]+)%`))[1]);
+// Headless Linux Chromium lays out with whole-pixel advances, so a few per cent of size-adjust change
+// nothing there. Windows (DirectWrite) and macOS use fractional advances, and the browser can check.
+const fractionalAdvances = [webFont.corpus, fallback.corpus, arial.corpus].some((w) => !Number.isInteger(w));
 report.calibration = {
   corpus: `${corpus.length} characters of the Studio mock, set in type-body (width 100, weight 400)`,
+  browser: `Chromium ${browser.version()} on ${process.platform}`,
+  fractionalAdvances,
   webFontWidth: webFont.corpus,
+  fallbackWidth: fallback.corpus,
   plainArialWidth: arial.corpus,
   recommended: { sizeAdjust: +(ratio * 100).toFixed(2), ascentOverride: +(109 / ratio).toFixed(2), descentOverride: +(32 / ratio).toFixed(2), lineGapOverride: 0 },
   declared: { sizeAdjust: declared('size-adjust'), ascentOverride: declared('ascent-override'), descentOverride: declared('descent-override') },
   fallbackVsWebFontPct: pct(fallback.corpus, webFont.corpus),
+  plainArialVsWebFontPct: pct(arial.corpus, webFont.corpus),
 };
-report.calibration.ok = Math.abs(report.calibration.fallbackVsWebFontPct) <= 0.5;
+report.calibration.ok = fractionalAdvances
+  ? Math.abs(report.calibration.fallbackVsWebFontPct) <= 0.5
+  : 'not measurable here (whole-pixel advances); use calibrate-fallback.mjs';
+report.baselines = {
+  note: 'First baseline below the top of each role box, in px at 1440. The fallback should match the web font.',
+  ...Object.fromEntries(Object.keys(webFont.baselines).map((k) => [k, { webFont: webFont.baselines[k], fallback: fallback.baselines[k], plainArial: arial.baselines[k] }])),
+};
 report.swap = {
   note: 'type-body at 1440 px: one unwrapped line (width) and the same text in a 280 px column (height). Positive = wider or taller than with the web font.',
   fallbackFacesLoaded: fallback.fontsLoaded,
