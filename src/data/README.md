@@ -126,8 +126,13 @@ For some fields the schema documents `null` as "none", so no note is needed (rul
   this record's exact SKU, with any configuration as a condition, and quote the maker's note.
 - **Case `layoutPositions`**: only for cases with a movable motherboard plate (the Fractal Terra's
   spine). Each position gives a cooler height limit and a GPU thickness limit, plus an optional tighter
-  thickness limit for tall GPUs (`tallGpuLimit`). A build fits when one position fits both parts. When
-  present it supersedes the single cooler and GPU-thickness limits.
+  thickness limit for tall GPUs (`tallGpuLimit`) and the thickest radiator plus fan that fits
+  (`radiatorFanMaxThicknessMm`). A build fits when one position fits all its parts. When present it
+  supersedes the single cooler and GPU-thickness limits.
+- **Case `radiatorSupport`**: one entry per position and size group, with `maxThicknessMm` as the
+  maker's manual or page states it. When the limit differs by size at one position (the North's front:
+  55 mm for 120/240/360, 35 mm for 140/280), use one entry per group. Read the manual's radiator page,
+  not only the product page. Radiator width limits have no field yet; quote them in a note.
 - **GPU power**: `powerConnectors[].type` is `16-pin`, `8-pin` or `6-pin`. For 16-pin, `standard` is
   `12V-2x6` or `12VHPWR` only when the maker names it; otherwise `null` with a note.
 - **Storage `cache`**: `dram`, `hmb` (DRAM-less, uses host memory), `dram-less` (host memory use not

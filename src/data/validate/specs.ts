@@ -291,6 +291,8 @@ function checkSanity(sink: IssueSink, file: string, r: SpecRecord): void {
       for (const p of positions) {
         if (p.coolerMaxHeightMm < 20 || p.coolerMaxHeightMm > 250) bad('layout cooler clearance out of range', 'layoutPositions');
         if (p.gpuMaxThicknessMm < 10 || p.gpuMaxThicknessMm > 120) bad('layout GPU thickness out of range', 'layoutPositions');
+        const stack = p.radiatorFanMaxThicknessMm;
+        if (stack !== null && (stack < 20 || stack > 150)) bad('layout radiator-plus-fan limit out of range', 'layoutPositions');
         if (p.tallGpuLimit !== null && p.tallGpuLimit.maxThicknessMm > p.gpuMaxThicknessMm) {
           bad('a tall-GPU thickness limit must not be looser than the normal one', 'layoutPositions');
         }

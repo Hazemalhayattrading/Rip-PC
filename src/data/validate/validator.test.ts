@@ -214,11 +214,21 @@ describe('sanity', () => {
   it('a case layout position keeps its tall-GPU limit no looser than the normal one', () => {
     const layout = (tallLimit: number) => (d: FixtureData) => {
       first(d.specs.case).layoutPositions = [
-        { position: '1', coolerMaxHeightMm: 77, gpuMaxThicknessMm: 43, tallGpuLimit: { aboveGpuHeightMm: 131, maxThicknessMm: tallLimit } },
+        { position: '1', coolerMaxHeightMm: 77, gpuMaxThicknessMm: 43, tallGpuLimit: { aboveGpuHeightMm: 131, maxThicknessMm: tallLimit }, radiatorFanMaxThicknessMm: 49 },
       ];
     };
     expectRule(run(layout(50)), 'sanity');
     expectClean(run(layout(33)));
+  });
+  it('a case layout position keeps its radiator-plus-fan limit in range', () => {
+    const layout = (stackMm: number) => (d: FixtureData) => {
+      first(d.specs.case).layoutPositions = [
+        { position: '1', coolerMaxHeightMm: 77, gpuMaxThicknessMm: 43, tallGpuLimit: { aboveGpuHeightMm: 131, maxThicknessMm: 33 }, radiatorFanMaxThicknessMm: stackMm },
+      ];
+    };
+    expectRule(run(layout(5)), 'sanity');
+    expectRule(run(layout(200)), 'sanity');
+    expectClean(run(layout(49)));
   });
   it('a case size follows its largest supported board, and is full-tower only in the maker\'s words', () => {
     type Size = 'full-tower' | 'mid-tower' | 'mini-tower' | 'small-form-factor';

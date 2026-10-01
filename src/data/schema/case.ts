@@ -34,6 +34,11 @@ export const LayoutPosition = z.strictObject({
   gpuMaxThicknessMm: PosNum,
   /** A tighter thickness limit for GPUs taller than `aboveGpuHeightMm`, when the maker publishes one. */
   tallGpuLimit: z.strictObject({ aboveGpuHeightMm: PosNum, maxThicknessMm: PosNum }).nullable(),
+  /**
+   * The thickest radiator plus its fan that fits at this position, as the maker gives it (the
+   * Fractal Terra: 49 to 79 mm). `null` plus a note when the maker gives none.
+   */
+  radiatorFanMaxThicknessMm: PosNum.nullable(),
 });
 export type LayoutPosition = z.infer<typeof LayoutPosition>;
 
