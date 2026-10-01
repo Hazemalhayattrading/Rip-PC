@@ -1,6 +1,24 @@
-# WP-D0 status: stopped 2026-09-30 ~21:45 UTC (not reviewed)
+# WP-D0 status: in progress, 2026-10-01 (not reviewed)
 
-## Acceptance items
+Brief: `docs/reports/phase-0-briefs.md`, section "data-lead". Acceptance criteria: plan §5 WP-D0.
+
+## Brief steps
+1. Merge the integration branch, verify, commit, push: **done**.
+   - Merged `claude/keen-lamport-0794zj` at d620f19 in fcacbc1. No conflicts.
+   - `npm run verify` passes on Node 24.21.0: 345 unit tests in 19 files, 112 e2e smoke tests, 78 s.
+     Log: `artifacts/verify/2026-10-01-step1-merge.log`.
+2. Finish the seeded 20% audit (seed 20260930): **next**.
+   - Left: the 10 TechPowerUp game rows, read against the chart PNGs in
+     `artifacts/benchmarks/tpu-9850x3d-img/`, then the 6 creator rows and the 3 games.
+3. README price rule: a listing filed under a reseller brand counts only if it names the maker's
+   part number. Not started.
+4. Price runner: every attempt gets its own capture name. Commit the runner under `data/tools/`.
+   Not started.
+5. Font CREDITS row (Rig Lab Sans, OFL): waiting for design-lead's text.
+6. Canonical category ids to build-lead: not started.
+7. Hand-off to the Director: not started.
+
+## Acceptance items (state on 2026-09-30, unchanged)
 - Zod schemas, validator, Vitest: **done**. `src/data/schema/`, `src/data/validate/`; 79 data tests pass.
 - Seed minimums: **done**. CPU 16/8, boards 7/6, RAM 6/5, GPU chips 11/8, GPU cards 10/8, storage 5/5, PSU 5/5, coolers 5/5, cases 5/5, fans 3/3.
 - Required seed cases: **done**, all 7, tested in `src/data/seed.test.ts`.
@@ -24,24 +42,11 @@
   - **Not started:** the 10 TechPowerUp game rows, the 6 creator rows and the 3 games.
 
 ## Where I stopped
-I was auditing the benchmark sample. The ComputerBase rows are done. Next: the TechPowerUp rows, read against the chart PNGs in `artifacts/benchmarks/tpu-9850x3d-img/`.
+Step 1 is done. Next: step 2, the TechPowerUp rows of the audit sample.
 
 ## Blockers (never worked around)
 - **Sites that refuse or challenge our fetcher:** Samsung, Kingston, Crucial, Noctua, Thermalright, Lian Li, TechPowerUp (403), Guru3D, tracker.gg and epicgames.com. Tried 1 to 2 times each (see `artifacts/specs/*/fetch-log.tsv`). Wayback copies were used where the rules allow them.
 - **noon.com** (a second SA retailer): the proxy answered "upstream request failed". Tried once.
 - **Best Buy**: the page timed out after 60 s. Tried once.
-- **Overwritten captures:** some rejected price captures were overwritten by a later capture with the same name. The run logs and `results-*.jsonl` keep those decisions. I re-captured the P14 and SA510 rejects under `artifacts/prices/rejected/`.
-- **No Agent tool:** I had no way to spawn workers, so I did the worker tasks myself.
-
-## Next steps
-1. Finish the audit: the 10 TechPowerUp game rows, the 6 creator rows and the 3 games.
-2. README price rules: a listing filed under a reseller brand counts only if it names the maker's part number.
-3. Price runner: give every attempt its own capture name, so rejected captures survive.
-4. Hand off to the Director in the plan §6 format. Include the category-id mismatch: `src/state/categories.ts` uses `gpu`, the data uses `gpu-chip` and `gpu-card`. That fix goes to build-lead.
-
-## Verify
-`npm run verify` passes. Run on 2026-09-30:
-- typecheck and lint: pass.
-- Unit tests: 233 passed across 11 files.
-- Build: pass.
-- e2e smoke: 29 passed.
+- **Overwritten captures:** some rejected price captures were overwritten by a later capture with the same name. The run logs and `results-*.jsonl` keep those decisions. I re-captured the P14 and SA510 rejects under `artifacts/prices/rejected/`. Step 4 stops this happening again.
+- The cloud session had no Agent tool. On this PC, workers spawn without a `name` and send their reports to `data-lead` by SendMessage.
