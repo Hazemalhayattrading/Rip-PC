@@ -39,6 +39,7 @@ paths such as `artifacts/prices/...`, relative to a data-lead worktree root.
 | `archives.sha256` | the 9 archive parts and the 2 bundles (the original `SHA256SUMS.txt`) | `C:\Projects\rig-lab-evidence\archives\` |
 | `data-lead-evidence-manifest.sha256.txt` | data-lead's 1,102 cited evidence files; 1,101 are kept, and 1 was excluded by design | a data-lead worktree root |
 | `data-lead-evidence-2026-10-01.sha256` | the 21 files data-lead added on 2026-10-01: audit logs, the case sweep, CH560 manual renders, audit scripts and verify logs | a data-lead worktree root, or `C:\Projects\rig-lab-evidence\data-lead-artifacts\` |
+| `data-lead-evidence-2026-10-01-qa-fixes.sha256` | the 23 files from data-lead's fixes for QA-P0-008 to 012: case user-guide renders and texts, the radiator-limits log, verify logs | a data-lead worktree root, or `C:\Projects\rig-lab-evidence\data-lead-artifacts\` |
 | `EXCLUDED.txt` | what was deliberately not kept, and why | — |
 
 ## Verify
