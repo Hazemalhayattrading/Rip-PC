@@ -143,6 +143,14 @@ Tailwind's defaults are removed, so only Rig Lab's values exist:
 Tailwind's 4 px spacing step (`p-4` = 16 px), container widths (`max-w-3xl`), aspect ratios and
 layout utilities stay.
 
+**The tokens reproduce the picked look.** `tools/studio-parity.mjs` renders the Studio mock on its
+own inline values and on the shipped `tokens.css` with Rig Lab Sans, at 390, 768 and 1440 in both
+themes. The results:
+- every pixel outside text is identical;
+- no text box moves or re-wraps (0 of 73 to 91 per size);
+- text drifts by at most 0.19 px. The differing glyph-edge pixels (0.7–1.0 %) come from the
+  subset's advances, which differ from the full Mona Sans by at most 4 font units per glyph.
+
 ### 2.1 Colour
 
 | Token | Utility | Dark | Light | Use |
@@ -411,10 +419,12 @@ Two Preflight rules that components must allow for:
 
 | Width | Fallback | First paint | LCP | Font arrives | Layout shift from the swap |
 |---|---|---|---|---|---|
-| 390 | calibrated (shipped) | 120 ms | 120 ms, in the fallback | 1,518 ms | **0.0008** |
-| 390 | plain Arial | 128 ms | 128 ms, in the fallback | 1,519 ms | 0.0043 |
-| 1440 | calibrated (shipped) | 124 ms | 124 ms, in the fallback | 1,518 ms | **0.0008** |
-| 1440 | plain Arial | 124 ms | 124 ms, in the fallback | 1,522 ms | 0.0040 |
+| 390 | calibrated (shipped) | 120 ms | 120 ms, in the fallback | 1,510 ms | **0.0008** |
+| 390 | plain Arial | 128 ms | 128 ms, in the fallback | 1,514 ms | 0.0043 |
+| 1440 | calibrated (shipped) | 124 ms | 124 ms, in the fallback | 1,513 ms | **0.0008** |
+| 1440 | plain Arial | 120 ms | 120 ms, in the fallback | 1,512 ms | 0.0040 |
+
+One run per row, on 2026-10-01. The layout-shift values were the same in every run made that day.
 
 - **LCP never waits for the font.** The largest text is recorded at first paint, in the fallback,
   and the swap creates no new LCP entry.
@@ -530,8 +540,9 @@ node docs/design/tools/tokens-check.mjs                     # browser check, on 
 | `docs/design/tools/contrast.mjs` | `node docs/design/tools/contrast.mjs [--check]` | WCAG 2.1 AA for every pair in section 2.2, dark and light, from `tokens.css` itself |
 | `docs/design/tools/tokens-check.mjs` | `node docs/design/tools/tokens-check.mjs` | The real Vite and Tailwind build under `/Rip-PC/`: hashed font, preload rewritten to the same file, no default palette. Six specimen screenshots (390, 768 and 1440, dark and light), both variable axes, the fallback's width and baselines, and the slow-font LCP and CLS |
 | `docs/design/tools/calibrate-fallback.mjs` | section 4.4 | The fallback descriptors from the font files |
+| `docs/design/tools/studio-parity.mjs` | `node docs/design/tools/studio-parity.mjs` | The Studio mock as picked (`3fe5978`), as it is now, and on the shipped tokens, at 390, 768 and 1440 in both themes, compared pixel by pixel and box by box (section 2) |
 
-Screenshots and reports go to `artifacts/screenshots/phase-0/WP-DS1/tokens/` (git-ignored).
+Screenshots and reports go to `artifacts/screenshots/phase-0/WP-DS1/tokens/` and `…/parity/` (git-ignored).
 
 ## 7. Known gaps
 
