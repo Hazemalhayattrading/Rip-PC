@@ -65,7 +65,8 @@ Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
 
 | Task | Who | Branch / worktree | State | Exact next step |
 |---|---|---|---|---|
-| WP-Q2 Independent verification | qa-lead | `feat/qa-phase0-verification` / `.claude/worktrees/qa-lead` | **Part 1 done** (`e909885`): WP-B0 passes 11/11; QA tooling fixed for Windows (QA-P0-002/003/004); rule 1 passes on 100% of the merged WP-D0 rows (97 prices, 27 gaps, 143 benchmarks); 10% sample drawn (43 of 355, seed `rig-lab-audit:phase-0:98d2be5…`). Director approved minObserveMs 5 s, headless fps INVALID, and the QA-P0-005 soak | run the 10% audit with 2 fresh data-auditors; then axe dark/light after WP-B1 Part 2; then `docs/qa/report-phase-0.md`, including an independent check of the purge |
+| WP-Q2 Independent verification | qa-lead | `feat/qa-phase0-verification` / `.claude/worktrees/qa-lead` | Part 1 done. **10% audit done:** 43 of 355 records, 1,265 fields; 1,189 MATCH, 67 NULL OK, 9 findings. **2 Blockers** (QA-P0-008: wrong ASUS CPU-support URLs on 2 boards; QA-P0-009: case size class derived, not sourced), 3 Majors (010: radiator thickness limits unrecorded; 011: Core 200S Boost profile missing on 8 TPU rows; 012: 2 SA import-fee notes missing). Rule 1 still 100% pass | after RESUME: verify the purge independently, re-check DS0-01, axe dark/light, the warnings gate with build-lead's allowlist, then re-verify data-lead's fixes and write `docs/qa/report-phase-0.md` |
+| QA data fixes (QA-P0-008 to 012) | data-lead | `feat/data-qa-fixes` (new) / `.claude/worktrees/data-lead` | Assigned by the Director. Blockers first | fix all 5, record them in `data/audits.json`, verify, hand off; Director merges, QA re-verifies |
 
 ## Next steps (Director)
 
