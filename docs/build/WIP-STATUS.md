@@ -11,8 +11,11 @@ This file is deleted in the final hand-off commit.
 1. **Category ids** (`cfa2376`). `gpu` became `gpu-card`; every one-letter code is unchanged.
    The build categories are data-lead's `SPEC_CATEGORIES` without `gpu-chip`
    (`feat/data-foundations:src/data/schema/files.ts`). The state tests are updated.
-   **Waiting for data-lead's confirmation** (asked by message). If data-lead names other ids,
-   change them in a new commit.
+   **data-lead confirmed** (2026-10-01): a build selects from `PRICED_CATEGORIES` (that list,
+   in this order). `gpu-chip` is never a build selection, and no other id changes.
+   - To do once WP-D0 is merged into the integration branch: a unit test that
+     `PART_CATEGORIES` equals data-lead's `PRICED_CATEGORIES`, test first. A test-only import
+     keeps classic `zod` out of the initial bundle. data-lead suggested it.
 2. **README** (`d29c053`): the `perf:*` and `audit:sample` scripts; Windows set-up (Node 22,
    symlinks with Developer Mode, LF, no Docker for visual baselines, Lighthouse with the
    installed Chrome); the cloud-container notes marked as history. Every claim was checked on
@@ -38,10 +41,16 @@ mobile performance 1.0, LCP about 1,355 ms, CLS 0, TBT 0.
   in the base layer; `<link rel="preload" href="/src/styles/fonts/rig-lab-sans.woff2"
   as="font" type="font/woff2" crossorigin>`; `<html data-theme="dark">`. To confirm against
   `docs/design/tokens.md` when it lands.
-- Questions for design-lead when the notes arrive: how the light theme is switched (and how QA
+- Asked design-lead (2026-10-01), no answer yet: how the light theme is switched (and how QA
   selects it in tests), and whether the Phase 0 placeholder pages get spacing once Preflight
   removes list bullets and paragraph margins.
+- Skills for Part 2 (Director, `e3a127a`): test-driven-development, verification-before-completion,
+  systematic-debugging, core-web-vitals, performance, accessibility, and the React parts of
+  vercel-react-best-practices. For worker diffs, use requesting-code-review and
+  receiving-code-review.
 
 ## Next step
 
-Report Part 1 to the Director. Then wait for WP-DS1, and plan Part 2 from design-lead's notes.
+Part 1 is reported to the Director (2026-10-01). Wait for WP-DS1 to be accepted and merged.
+Then merge the integration branch, add the `PRICED_CATEGORIES` test if WP-D0 is in, and plan
+Part 2 from `docs/design/tokens.md`.
