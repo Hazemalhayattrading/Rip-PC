@@ -11,11 +11,11 @@ describe('build store', () => {
   it('selects one part per category, replacing earlier picks', () => {
     const store = createBuildStore();
     store.getState().select('cpu', 'amd-ryzen-7-9800x3d');
-    store.getState().select('gpu', 'asus-tuf-rtx-5070-ti');
+    store.getState().select('gpu-card', 'asus-tuf-rtx-5070-ti');
     store.getState().select('cpu', 'intel-core-ultra-7-265k');
     expect(store.getState().selections).toEqual({
       cpu: 'intel-core-ultra-7-265k',
-      gpu: 'asus-tuf-rtx-5070-ti',
+      'gpu-card': 'asus-tuf-rtx-5070-ti',
     });
     expect(Object.isFrozen(store.getState().selections)).toBe(true);
   });
@@ -51,7 +51,7 @@ describe('build store', () => {
   it('loads a build from a link parameter', () => {
     const store = createBuildStore();
     store.getState().loadEncoded('v1.c_chip-a.g_card-b');
-    expect(store.getState().selections).toEqual({ cpu: 'chip-a', gpu: 'card-b' });
+    expect(store.getState().selections).toEqual({ cpu: 'chip-a', 'gpu-card': 'card-b' });
     expect(store.getState().decodeError).toBeNull();
   });
 

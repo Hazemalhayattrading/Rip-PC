@@ -3,11 +3,13 @@
 Each image is downscaled with Lanczos (captured at 2x or 3x, so text stays sharp), cropped to the
 same viewport per size, and given a caption strip. Limits: <= 1600 px wide, <= 300 KB, JPEG.
 
-    python3 docs/design/tools/publish-mocks.py
+    python3 docs/design/tools/publish-mocks.py            # all three mocks
+    python3 docs/design/tools/publish-mocks.py studio     # one mock
 """
 import io
 import json
 import os
+import sys
 from PIL import Image, ImageDraw, ImageFont
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
@@ -63,8 +65,12 @@ def save(img, path):
     return buf.tell(), q, img.size
 
 
-manifest = []
-for slug, name in NAMES.items():
+SLUGS = sys.argv[1:] or list(NAMES)
+MANIFEST = os.path.join(SRC, 'publish-manifest.json')
+# Keep the entries of mocks this run does not touch.
+manifest = [m for m in (json.load(open(MANIFEST)) if os.path.exists(MANIFEST) else []) if m['file'].split('/')[3] not in SLUGS]
+for slug in SLUGS:
+    name = NAMES[slug]
     for shot, (tw, label) in SHOTS.items():
         src = os.path.join(SRC, slug, shot + '.png')
         if not os.path.exists(src):
@@ -78,4 +84,4 @@ for slug, name in NAMES.items():
         size, q, dims = save(im, out)
         manifest.append({'file': os.path.relpath(out, ROOT), 'bytes': size, 'quality': q, 'size': dims})
         print(f'{slug:6} {shot:14} {dims[0]}x{dims[1]}  {size // 1024:4} KB  q{q}')
-json.dump(manifest, open(os.path.join(SRC, 'publish-manifest.json'), 'w'), indent=1)
+json.dump(manifest, open(MANIFEST, 'w'), indent=1)
