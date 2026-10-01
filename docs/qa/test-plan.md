@@ -622,8 +622,15 @@ a message.
   - games.
 
   A record without an `id`, such as a price row, is identified as
-  `<partId>--<retailer>--<retrievedAt>`, the same key as its capture file name. The WP-Q2 manifest
-  builder derives these keys and passes them with `--manifest`.
+  `<partId>--<retailer>--<retrievedAt>`, the same key as its capture file name. A gap record is
+  `gap--<partId>`.
+- **Manifest builder:** `node tests/audit/strata.mjs --data-dir data --out <strata.json>`, then
+  `sample.mjs --manifest <strata.json>`. Each stratum is named by its file's path under `data/`
+  (`parts/cpu`, `benchmarks/game`, `prices/sa`, `games`, …), and the name is part of the rank.
+  - `publishers.json` is the source registry, not a record set, so it is not sampled. Titles in
+    `games.json` → `considered` are not on the list, so they are not sampled either.
+  - Any other data file is refused, so a new file cannot drop out of the audit unnoticed.
+  - Dry run on data-lead's `2cedf51` (2026-10-01): 355 records in 15 strata, 43 sampled.
 - **Sample size.** A sampled record has **every** field checked, so 10% of records is about 10% of
   all numbers (BUILD_PROMPT §2 Phase 1).
 - **Proof of population.** The report states the seed and each stratum's population size and
