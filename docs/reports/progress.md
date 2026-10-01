@@ -2,7 +2,11 @@
 
 Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
 
-**Last update:** 2026-10-01, Director. Phase 0 is open; nothing is merged to `main`.
+**Last update:** 2026-10-01, about 20:20 UTC, Director. **The session is stopped for the day: Hazem
+shut the PC down.**
+- All teammates were stopped at a safe point. Every branch is committed and pushed: 4 worktrees
+  clean, and the integration branch and all 10 local branches equal to origin.
+- Phase 0 is open. It waits only for QA's report. Nothing is merged to `main`.
 
 > **Commit IDs** in this file are post-purge IDs. The old-to-new map is kept outside the public repo,
 > at `C:\Projects\rig-lab-evidence\purge\purge-sha-map.txt`, because GitHub still serves pre-purge commits by ID until its garbage collection runs.
@@ -12,13 +16,17 @@ Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
 1. Read `CLAUDE.md`, `BUILD_PROMPT.md`, this file and `docs/reports/phase-0-briefs.md`.
 2. Run `git worktree list` and `git branch -vv`. Each lead's latest state is its `WIP-STATUS.md`,
    on its branch, in its worktree (table below).
-3. Re-spawn every lead marked *in progress*:
-   - use the `Agent` tool with `name` and `subagent_type` both set to the lead's name, and model
-     `opus`;
-   - the prompt: "You are <lead>, a teammate in the Rig Lab agent team. Read
+3. Re-spawn only the leads marked *in progress* in the table below. On 2026-10-01 that is **only
+   qa-lead**: data, design and build are closed for Phase 0.
+   - Use the `Agent` tool with `name` and `subagent_type` both set to the lead's name, and model
+     `opus`.
+   - The prompt: "You are <lead>, a teammate in the Rig Lab agent team. Read
      `C:\Projects\Rip-PC\docs\reports\phase-0-briefs.md`, sections 'All leads' and '<lead>', then
-     your `WIP-STATUS.md`. Carry on from the exact next step it names. Don't redo finished steps.
-     Report to `team-lead`."
+     the '<lead>' row of 'In progress' in `C:\Projects\Rip-PC\docs\reports\progress.md`. That row
+     overrides your `WIP-STATUS.md`, which may be stale. Carry on from the exact next step it
+     names. Don't redo finished steps. Report to `team-lead`."
+   - The worktrees, their `node_modules` and their git-ignored `artifacts/` survive a restart, so
+     no set-up is needed. Check `git -C <worktree> status` first.
 4. Leads reach the Director at `team-lead`. Worker hand-backs reach the Director by mistake (a
    harness bug, see the briefs). Ignore them and wait for the lead's hand-off.
 
@@ -66,17 +74,29 @@ Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
 
 | Task | Who | Branch / worktree | State | Exact next step |
 |---|---|---|---|---|
-| WP-Q2 Independent verification | qa-lead | `feat/qa-phase0-verification` / `.claude/worktrees/qa-lead` | Part 1 done. **10% audit done:** 43 of 355 records, 1,265 fields; 1,189 MATCH, 67 NULL OK, 9 findings. **2 Blockers** (QA-P0-008: wrong ASUS CPU-support URLs on 2 boards; QA-P0-009: case size class derived, not sourced), 3 Majors (010: radiator thickness limits unrecorded; 011: Core 200S Boost profile missing on 8 TPU rows; 012: 2 SA import-fee notes missing). Rule 1 still 100% pass | after RESUME: verify the purge independently, re-check DS0-01, axe dark/light, the warnings gate with build-lead's allowlist, then re-verify data-lead's fixes and write `docs/qa/report-phase-0.md` |
+| WP-Q2 Independent verification | qa-lead | `feat/qa-phase0-verification` @ `0c2c709` (pushed, not merged) / `.claude/worktrees/qa-lead` | **Stopped mid-step at shutdown.** Its two re-verification workers were stopped; see the next step. **Done:** Part 1 (WP-B0 11/11, QA tooling on Windows, rule 1 at 100%); the seeded 10% audit (43 records, 1,265 fields; 9 findings: QA-P0-008 to 012, all fixed by data-lead in `1ade3f3` and `cb188d4`); an independent check of the purge on origin (0 of 11 blobs); axe in dark and light at every width, plus a 1 s soak per route (QA-P0-005, `5136864`); test plan v3.1 with the Director's approvals and the LCP blind spots (`0c2c709`). Its `docs/qa/WIP-STATUS.md` is **stale**; this row overrides it | **Exact next step:** (1) merge `claude/keen-lamport-0794zj` into your branch. (2) Re-run the two stopped re-verifications with fresh workers: "WP-D0's nine criteria" on the merged data, which includes re-verifying the fixes for QA-P0-008 to 012; and "WP-DS1, WP-B1 wiring and the DS0 fixes", including DS0-01 at 4.61:1. Partial results from the stopped run are in `artifacts/qa/phase-0/wp-d0/` and `wp-ds1/`; reuse what is complete. (3) Finish the QA-P0-001 re-check (`artifacts/qa/phase-0/qa-p0-001-retest/`). (4) The warnings gate: the smoke fails on app warnings, using build-lead's allowlist (Chromium's software-WebGL fallback notice, NVIDIA's "GPU stall due to ReadPixels"). (5) QA's own Minors: the LHCI_PORT test re-run, the 4 unpinned budget values, and the test-plan gaps in §13 and B.4. (6) Persist the audit evidence: copy `C:\Projects\rig-lab-evidence\session-2026-10-01-scratchpad\audit-phase-0\` and `purge-verify\` into `artifacts/qa/phase-0/audit/`, and write a sha256 list of every evidence file the report cites. (7) Write `docs/qa/report-phase-0.md`: cite purged-blob IDs as 8-character prefixes only, and never publish pre-purge commit IDs. Delete `WIP-STATUS.md`, verify, push, and hand off in the §6 format |
+| Phase 0, data | data-lead | `feat/data-qa-fixes-2` @ `c9d4183` (merged) | **Closed.** Everything merged; worktree clean | Nothing until QA's report. If QA reports a data defect, fix it on a new branch from the integration branch. Phase 1 data items are in `docs/reports/phase-0.md` §5 |
+| Phase 0, design | design-lead | `feat/design-ds0-docs` @ `65c9209` (merged) | **Closed.** Everything merged; worktree clean | Nothing until QA's report. Phase 1: WP-DS2 from `docs/design/backlog.md` (49 items), only after Hazem reads the Phase 0 report |
+| Phase 0, build | build-lead | `feat/build-tokens-wiring` @ `ab2c9aa` (merged) | **Closed.** Everything merged; worktree clean | Nothing until QA's report. Phase 1: the engine, only after Hazem reads the Phase 0 report. The Phase 1 requirements recorded so far are in `docs/reports/phase-0.md` §5 |
 
 ## Next steps (Director)
 
-1. Review each hand-off. On acceptance:
-   - `git merge --no-ff <branch>` into `claude/keen-lamport-0794zj`, then verify and push;
-   - tell the dependent leads;
-   - update this file.
-2. Order: WP-D0 and WP-DS1, then WP-B1 Part 2, then QA Part 2, then `docs/qa/report-phase-0.md`.
-3. Write `docs/reports/phase-0.md` and report to Hazem **before Phase 1 starts**.
-4. **Evidence purge** (see the section below).
+On "continue":
+1. **Re-spawn qa-lead only** (see "How to continue"). Wait for its hand-off of
+   `docs/qa/report-phase-0.md`.
+2. **Review QA's hand-off.** Then:
+   - merge `feat/qa-phase0-verification` with `--no-ff`, verify and push;
+   - route any defect to its owning lead, re-spawning that lead.
+3. **Finalise `docs/reports/phase-0.md`**: replace the "pending in QA's report" items, and set its
+   status to final if there are no blockers.
+4. **Purge stage 3**, once every lead is idle: run
+   `C:\Projects\rig-lab-evidence\purge\purge-3-cleanup.sh` (reflog expire and `gc --prune=now`).
+   Never run it while any lead may be committing.
+5. **Tidy branches:**
+   - delete merged feature branches, local and on origin;
+   - keep `feat/data-qa-fixes`, which holds 2fa3e32 for Phase 1.
+6. **Report to Hazem.** Ask him to fix the `main` ruleset's check name, then open the PR from
+   `claude/keen-lamport-0794zj` to `main`. Phase 1 starts only after he has read the report.
 
 ## Evidence purge (approved by Hazem, 2026-10-01: purge now, the 2 bundles included). **Done**; stage 3, the local gc, is still to run
 
