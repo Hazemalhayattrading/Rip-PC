@@ -157,6 +157,12 @@ One file per market, one batch per file:
 - **How we pick the listing**: the exact part (part number, colour, capacity, pack size), sold new. A
   different colour, revision or pack is rejected and becomes a gap with the reason. Regional variants
   of the same unit (a UK-plug PSU, an international CPU box) are accepted with a note.
+- **Reseller brands**: a listing filed under a brand other than the maker's (a reseller's own label,
+  such as "Mavark" on an Intel CPU) counts only if it names the maker's part number as the maker
+  publishes it. For a CPU that is the boxed ordering code on the maker's site (`BX80768285K`). Without
+  it, the listing is rejected, and the part gets a gap if no other listing qualifies. Say in a note
+  which brand the listing is filed under and where the part number comes from. The maker's own brands
+  count as the maker (WD_BLACK and WD Blue are Sandisk's, T-FORCE is TeamGroup's).
 
 ## Benchmarks
 

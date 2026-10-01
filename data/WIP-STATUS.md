@@ -18,9 +18,18 @@ Brief: `docs/reports/phase-0-briefs.md`, section "data-lead". Acceptance criteri
      the two pass-1 logs, and the scripts that wrote them).
    - The sampler is committed as `data/tools/audit_sample.py` (Python, not run here).
 3. README price rule: a listing filed under a reseller brand counts only if it names the maker's
-   part number. **Next.** Check the SA Core Ultra 9 285K row ("Mavark" listing) against it.
+   part number. **Done.** In `src/data/README.md`, "How we pick the listing".
+   - All 97 observations checked against their captures (`artifacts/audit/listing-brands-2026-10-01.txt`):
+     96 are filed under the maker's own brand. 1 is under a reseller brand: SA Core Ultra 9 285K,
+     "Mavark". It names BX80768285K, which Intel lists as the boxed ordering code (Wayback copy of
+     Intel's Ordering & Compliance page, 2026-06-08, now under `artifacts/specs/cpu/`), so it counts.
+     Its note now says so.
+   - intel.com answered curl with 403 (Akamai "Access Denied"). Not retried with another client; the
+     Wayback copy was used, as the owner's rules allow for specs.
+   - The rule is checked by review, not by the validator: CPU records carry no part numbers, and
+     observations don't record the listing brand.
 4. Price runner: every attempt gets its own capture name. Commit the runner under `data/tools/`.
-   Not started.
+   **Next.**
 5. Font CREDITS row (Rig Lab Sans, OFL): waiting for design-lead's text.
 6. Canonical category ids to build-lead: **done**, sent 2026-10-01 by message. Only `gpu` changes, to
    `gpu-card` (code `g` kept). `gpu-chip` is not a build selection.
@@ -46,8 +55,8 @@ Brief: `docs/reports/phase-0-briefs.md`, section "data-lead". Acceptance criteri
 - Seeded 20% audit (seed 20260930): **done** on 2026-10-01; see step 2 and `data/audits.json`.
 
 ## Where I stopped
-Steps 1, 2 and 6 are done. Next: step 3, the README reseller rule, then a check of every price row
-whose listing is filed under a brand other than the maker's.
+Steps 1, 2, 3 and 6 are done. Next: step 4, the price runner's capture names
+(`artifacts/scratch/prices_run.py`), time-boxed.
 
 ## Blockers (never worked around)
 - **Sites that refuse or challenge our fetcher:** Samsung, Kingston, Crucial, Noctua, Thermalright, Lian Li, TechPowerUp (403), Guru3D, tracker.gg and epicgames.com. Tried 1 to 2 times each (see `artifacts/specs/*/fetch-log.tsv`). Wayback copies were used where the rules allow them.
