@@ -50,7 +50,7 @@ describe('connectBuildToUrl', () => {
     const store = createBuildStore();
     const url = fakeUrl('?b=v1.c_chip-a.g_card-b');
     connectBuildToUrl(store, url);
-    expect(store.getState().selections).toEqual({ cpu: 'chip-a', gpu: 'card-b' });
+    expect(store.getState().selections).toEqual({ cpu: 'chip-a', 'gpu-card': 'card-b' });
     expect(url.writes).toEqual([]);
   });
 
@@ -112,10 +112,10 @@ describe('connectBuildToUrl', () => {
     const store = createBuildStore();
     const url = fakeUrl('?b=v1.c_chip-a');
     const sync = connectBuildToUrl(store, url);
-    store.getState().select('gpu', 'card-b');
+    store.getState().select('gpu-card', 'card-b');
     url.current = '?b=v1.c_chip-a';
     sync.reconcile();
-    expect(store.getState().selections).toEqual({ cpu: 'chip-a', gpu: 'card-b' });
+    expect(store.getState().selections).toEqual({ cpu: 'chip-a', 'gpu-card': 'card-b' });
     expect(url.current).toBe('?b=v1.c_chip-a.g_card-b');
   });
 
