@@ -114,26 +114,48 @@ interface Attached {
 
 const sortedUnique = <T extends string>(values: readonly T[]): T[] => [...new Set(values)].sort();
 
+/** Terminal colour codes in Playwright's error messages. */
+const COLOUR_CODES = new RegExp(`${String.fromCharCode(27)}\\[[0-9;]*m`, 'g');
+
+/** A self-test's own errors, without terminal colours: the "why" behind a wrong outcome. */
+function errorText(errors: readonly ReportError[]): string {
+  return errors
+    .map((error) =>
+      (error.message ?? '').replaceAll(COLOUR_CODES, '').split('\n').slice(0, 12).join('\n'),
+    )
+    .join('\n---\n');
+}
+
+interface Found extends Outcome {
+  readonly byFixture: boolean;
+}
+
 /** Every test in the report: its title (describe blocks joined by " › "), outcome and cause. */
-function outcomes(report: Report): Map<string, Outcome & { readonly byFixture: boolean }> {
-  const found = new Map<string, Outcome & { readonly byFixture: boolean }>();
+function outcomes(report: Report): {
+  found: Map<string, Found>;
+  why: Map<string, string>;
+} {
+  const found = new Map<string, Found>();
+  const why = new Map<string, string>();
   const walk = (suite: ReportSuite, trail: readonly string[]): void => {
     for (const spec of suite.specs) {
       for (const test of spec.tests) {
         const result = test.results.at(-1);
         if (result === undefined) continue;
+        const title = [...trail, spec.title].join(' › ');
         const body = result.attachments.find((a) => a.name === 'page-problems.json')?.body;
         const attached =
           body === undefined
             ? undefined
             : (JSON.parse(Buffer.from(body, 'base64').toString('utf8')) as Attached);
-        found.set([...trail, spec.title].join(' › '), {
+        found.set(title, {
           status: result.status === 'passed' ? 'passed' : 'failed',
           unexpected: sortedUnique((attached?.unexpected ?? []).map((problem) => problem.kind)),
           allowed: sortedUnique((attached?.allowed ?? []).map((entry) => entry.allowedBy)),
           warnings: attached?.warnings.length ?? 0,
           byFixture: result.errors.some((error) => error.message?.includes(FIXTURE_FAILURE)),
         });
+        why.set(title, `status ${result.status}\n${errorText(result.errors)}`);
       }
     }
     for (const child of suite.suites ?? []) walk(child, [...trail, child.title]);
@@ -141,7 +163,7 @@ function outcomes(report: Report): Map<string, Outcome & { readonly byFixture: b
   // Each top-level suite is a file. Its title is not part of a test's name, so the trail starts
   // empty and only describe blocks are added to it.
   for (const file of report.suites) walk(file, []);
-  return found;
+  return { found, why };
 }
 
 describe('the shared console fixture, end to end', () => {
@@ -163,18 +185,21 @@ describe('the shared console fixture, end to end', () => {
         );
         const report = JSON.parse(readFileSync(reportFile, 'utf8')) as Report;
         expect(report.errors, run.stderr).toEqual([]);
+
+        // Case by case first: a wrong outcome is reported with the self-test's own errors.
+        const { found, why } = outcomes(report);
+        expect([...found.keys()].sort()).toEqual(Object.keys(EXPECTED).sort());
+        for (const [title, expected] of Object.entries(EXPECTED)) {
+          expect(
+            found.get(title),
+            `${title}\nWhat the self-test reported:\n${why.get(title) ?? 'nothing'}`,
+          ).toEqual({ ...expected, byFixture: expected.status === 'failed' });
+        }
         expect(
           run.status,
           'every self-test ended as marked: test.fail() where the fixture must fail it',
         ).toBe(0);
         expect(report.stats).toMatchObject({ unexpected: 0, flaky: 0 });
-
-        const found = outcomes(report);
-        expect([...found.keys()].sort()).toEqual(Object.keys(EXPECTED).sort());
-        for (const [title, expected] of Object.entries(EXPECTED)) {
-          const actual = found.get(title);
-          expect(actual, title).toEqual({ ...expected, byFixture: expected.status === 'failed' });
-        }
       } finally {
         rmSync(folder, { recursive: true, force: true });
       }

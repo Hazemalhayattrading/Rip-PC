@@ -69,7 +69,7 @@ describe('Playwright specs run under the shared console fixture', () => {
   const files = specFiles();
 
   it('finds the specs', () => {
-    const names = files.map((file) => path.relative(TESTS, file));
+    const names = files.map((file) => path.relative(TESTS, file).split(path.sep).join('/'));
     expect(names).toEqual(
       expect.arrayContaining([
         'e2e/a11y.spec.ts',
