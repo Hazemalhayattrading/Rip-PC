@@ -11,9 +11,9 @@ origin after every step.
 | 3 | `docs/design/tokens.md`, then wiring notes to build-lead | **Done** 2026-10-01: `docs/design/tokens.md`. New test: `tokens.css` fails inside a layer (95 tests). `tokens-check.mjs` now builds under `/Rip-PC/` and measures a 1.5 s late font: LCP at first paint, swap CLS 0.0008 (plain Arial 0.0043). Wiring notes sent to build-lead after this commit |
 | 4 | `direction.md`: record the pick, keep A and B as history, known gaps | **Done** 2026-10-01: pick recorded at the top, §1.1 amended (Studio: tabular prose), §4 "Since the pick" notes, §6 and §7 marked as history, 4 known gaps added. It links to `studio-3d-brief.md` and `specs-view.md`, which steps 5 and 6 create |
 | 5 | `docs/design/studio-3d-brief.md` (paid-asset options: a `3d-artist` worker) | **Done** 2026-10-01: stage rules, the Phase 2 clearance model, camera, light and materials, the iGPU limits, licences, and options A, B and C for Hazem. Every licence quote checked against the worker's captures; the UFO3D and 3DOcean prices re-read live by design-lead |
-| 6 | Specs dense view section | **Next**: `docs/design/specs-view.md` |
+| 6 | Specs dense view section | **Done** 2026-10-01: `docs/design/specs-view.md` (layout per breakpoint, columns per step from the WP-D0 fields, row states, sorting, sources, a keyboard grid, motion, tokens, density) |
 | 7 | CREDITS row text for the font to data-lead | **Done** 2026-10-01: sent by message (a new "Fonts" section) |
-| 8 | Re-run verify, `contrast.mjs --check`, `tokens-check.mjs`; hand off | Not started |
+| 8 | Re-run verify, `contrast.mjs --check`, `tokens-check.mjs`; hand off | **Next** |
 
 Already done before 2026-10-01 (commits `9cd0985`, `d59bd40`): `src/styles/tokens.css` with the
 `@theme` mapping, `base.css`, `motion.ts`, `tokens.test.ts` (93 tests), the Rig Lab Sans woff2 with
