@@ -103,6 +103,10 @@ Don't use these in Phase 0. They clash with how this project runs:
 - Messages are short and factual. The first line says what the message is about.
 - You have no `ListAgents` and no shared task list. The Director keeps the task list in
   `docs/reports/progress.md`.
+- **Messages reach you only between your turns** (tested 2026-10-01). While you work through
+  steps in one turn, or wait on workers (`Agent` calls block), nothing new arrives.
+  - So read every message batch in full when your turn ends, the oldest first.
+  - A pause request from the Director overrides anything else in the batch.
 
 ### Hand-off to the Director (plan §6 format), by SendMessage to `team-lead`
 ```
