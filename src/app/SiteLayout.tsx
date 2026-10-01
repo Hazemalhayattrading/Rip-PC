@@ -1,4 +1,5 @@
 import { useEffect, useRef, type ReactNode } from 'react';
+import { ThemeToggle } from '../components/theme/ThemeToggle';
 import { AppLink } from './AppLink';
 import { useBuild } from './build-hooks';
 import { pathOf, type Route, type RouteMatch } from './routes';
@@ -31,8 +32,8 @@ export interface SiteLayoutProps {
 }
 
 /**
- * The frame around every page: skip link, site navigation, one `<main>` and a footer.
- * Semantic HTML only; the visual design arrives with the chosen direction.
+ * The frame around every page: skip link, site navigation, the theme toggle, one `<main>` and a
+ * footer. Semantic HTML on the tokens' base styles only; Studio's frame arrives in Phase 2.
  */
 export function SiteLayout({ match, location, children }: SiteLayoutProps) {
   const decodeError = useBuild((state) => state.decodeError);
@@ -52,7 +53,7 @@ export function SiteLayout({ match, location, children }: SiteLayoutProps) {
       <a href="#main">Skip to main content</a>
       <header>
         <nav aria-label="Site">
-          <ul>
+          <ul role="list">
             {SITE_LINKS.map((link) => (
               <li key={link.label}>
                 <AppLink to={pathOf(link.route)} aria-current={currentness(link.route, match)}>
@@ -62,6 +63,7 @@ export function SiteLayout({ match, location, children }: SiteLayoutProps) {
             ))}
           </ul>
         </nav>
+        <ThemeToggle />
       </header>
       <main id="main" ref={main} tabIndex={-1}>
         {decodeError === null ? null : (
