@@ -12,6 +12,14 @@
     />
     <!-- No icon until Phase 2 draws Rig Lab's icons; this also stops a /favicon.ico request. -->
     <link rel="icon" href="data:," />
+    <!-- Vite rewrites this to the hashed file the CSS uses. Without crossorigin it loads twice. -->
+    <link
+      rel="preload"
+      href="/src/styles/fonts/rig-lab-sans.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
     <!-- Same key and colour as src/state/theme.ts; theme.test.ts runs this script. -->
     <script>
       // Rig Lab opens dark. A visitor's light choice is restored before the first paint.
