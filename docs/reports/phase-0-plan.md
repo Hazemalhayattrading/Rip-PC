@@ -23,6 +23,13 @@ These override anything below that says otherwise.
      keeps the review's original `url` and adds the `archiveUrl`.
 2. **Hazem picks the design direction.** The Director reviews the three directions, then shows them
    to Hazem with screenshots and a recommendation. Hazem makes the final pick.
+   - **Decided 2026-09-30: Hazem picked C, Studio.** The Director had recommended B (Folio); the
+     pick is Hazem's.
+   - Studio's known risks are carried from here on:
+     - The full-screen stage depends on 3D quality. There are no faithful free models of
+       current-generation parts, and paid models need Hazem's licence approval.
+     - It carries the highest laptop-GPU cost of the three.
+     - It shows weakly until the 3D exists.
 
 ## Agent teams: tested 2026-09-30, not available
 

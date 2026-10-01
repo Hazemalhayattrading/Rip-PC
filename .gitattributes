@@ -1,0 +1,27 @@
+# Keep LF line endings on every platform. Prettier checks for LF (its default), and Git for
+# Windows would otherwise check text files out with CRLF, which fails `npm run lint` (and so
+# `npm run verify`) on a fresh Windows clone.
+* text=auto eol=lf
+
+# Binary files: never convert.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.gif binary
+*.ico binary
+*.woff2 binary
+*.woff binary
+*.ttf binary
+*.otf binary
+*.glb binary
+*.ktx2 binary
+*.hdr binary
+*.exr binary
+*.pdf binary
+*.zip binary
+*.gz binary
+*.tgz binary
+*.xz binary
+*.part-* binary
+*.bundle binary

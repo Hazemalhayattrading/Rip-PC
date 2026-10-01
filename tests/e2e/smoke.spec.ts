@@ -1,32 +1,15 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { expect, test, type Page } from '@playwright/test';
+import type { Page } from '@playwright/test';
 import { KNOWN_ROUTES, BASE_PATH, metaOf, pathOf } from '../../src/app/routes.ts';
 import { GARAGE_TEXT } from '../../src/components/garage/garage-text.ts';
+import { expect, test } from './fixtures.ts';
+
+// Every test here also runs under the shared fixture (./fixtures.ts), which fails it on any
+// console error, page error, unhandled rejection, failed same-origin request or crash.
 
 // ---------------------------------------------------------------------------------------------
 // Helpers
-
-interface PageProblem {
-  readonly kind: 'console.error' | 'pageerror';
-  readonly text: string;
-  /** Where a console message came from; empty for page errors. */
-  readonly url: string;
-}
-
-/** Collects console errors and uncaught page errors from the moment it is called. */
-function collectProblems(page: Page): PageProblem[] {
-  const problems: PageProblem[] = [];
-  page.on('console', (message) => {
-    if (message.type() === 'error') {
-      problems.push({ kind: 'console.error', text: message.text(), url: message.location().url });
-    }
-  });
-  page.on('pageerror', (error) => {
-    problems.push({ kind: 'pageerror', text: error.message, url: '' });
-  });
-  return problems;
-}
 
 /** Records the path of every request the page makes. */
 function collectRequests(page: Page): string[] {
@@ -37,18 +20,22 @@ function collectRequests(page: Page): string[] {
   return paths;
 }
 
-/**
- * Chromium always logs this console error when the document itself comes back 404. On a 404
- * page that is the status we asked for, not an app error, so it is the one message allowed,
- * and only for the document's own URL. A 404 for any other URL still fails the test.
- */
-function isOwnDocument404(problem: PageProblem, documentUrl: string): boolean {
-  return (
-    problem.kind === 'console.error' &&
-    problem.url === documentUrl &&
-    problem.text ===
-      'Failed to load resource: the server responded with a status of 404 (Not Found)'
-  );
+/** Records every http(s) request the page makes, as a URL. */
+function collectHttpRequests(page: Page): URL[] {
+  const urls: URL[] = [];
+  page.on('request', (request) => {
+    const url = new URL(request.url());
+    if (url.protocol === 'http:' || url.protocol === 'https:') urls.push(url);
+  });
+  return urls;
+}
+
+/** Requests that did not go to this site under the Pages base path, e.g. a build with the wrong base. */
+function outsideTheSite(requests: readonly URL[], pageUrl: string): string[] {
+  const origin = new URL(pageUrl).origin;
+  return requests
+    .filter((url) => url.origin !== origin || !url.pathname.startsWith(BASE_PATH))
+    .map((url) => url.href);
 }
 
 /** Route paths are relative to the base; drop the leading slash so baseURL's /Rip-PC/ is kept. */
@@ -103,7 +90,7 @@ test.describe('every known route loads directly', { tag: '@smoke' }, () => {
     const meta = metaOf(route);
 
     test(`${path} answers 200 with its own page`, async ({ page }) => {
-      const problems = collectProblems(page);
+      const requests = collectHttpRequests(page);
       const response = await page.goto(relative(path));
 
       expect(response?.status()).toBe(200);
@@ -114,21 +101,28 @@ test.describe('every known route loads directly', { tag: '@smoke' }, () => {
       await expect(page.getByRole('main')).toHaveCount(1);
       await expect(heading(page)).toHaveText(meta.heading);
       await expect(page).toHaveTitle(meta.title);
+      // English only (CLAUDE.md rule 10), declared for assistive technology.
+      await expect(page.locator('html')).toHaveAttribute('lang', 'en');
       if (route.name === 'build') {
         // Wait for the 3D preview, so errors it logs while starting are caught too.
         await expect(
           page.getByRole('region', { name: GARAGE_TEXT.region }).locator('canvas'),
         ).toBeVisible();
       }
-      expect(problems).toEqual([]);
+      // Every file comes from this site under /Rip-PC/, as GitHub Pages will serve it.
+      expect(outsideTheSite(requests, page.url())).toEqual([]);
     });
   }
 });
 
 test.describe('unknown paths', { tag: '@smoke' }, () => {
+  // These tests ask for pages that do not exist, so the 404 answer for the page itself is
+  // expected. Any other failed request still fails them (tests/e2e/problems.ts).
+  test.use({ expectNotFoundDocument: true });
+
   for (const path of ['/no-such-page', '/build/no-such-step', '/build']) {
     test(`${path} answers 404 with the app's 404 view`, async ({ page }) => {
-      const problems = collectProblems(page);
+      const requests = collectHttpRequests(page);
       const response = await page.goto(relative(path));
       const meta = metaOf({ name: 'not-found' });
 
@@ -136,7 +130,8 @@ test.describe('unknown paths', { tag: '@smoke' }, () => {
       await expect(page.getByRole('main')).toHaveCount(1);
       await expect(heading(page)).toHaveText(meta.heading);
       await expect(page).toHaveTitle(meta.title);
-      expect(problems.filter((problem) => !isOwnDocument404(problem, page.url()))).toEqual([]);
+      await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+      expect(outsideTheSite(requests, page.url())).toEqual([]);
     });
   }
 
@@ -161,20 +156,17 @@ test.describe('the 3D preview', { tag: '@smoke' }, () => {
   });
 
   test('is never requested by the landing page', async ({ page }) => {
-    const problems = collectProblems(page);
     const requests = collectRequests(page);
     await page.goto('');
     await expect(heading(page)).toHaveText('Rig Lab');
     await page.waitForLoadState('networkidle');
     expect(requests.length).toBeGreaterThan(1);
     expect(requests.filter(isGarageRequest)).toEqual([]);
-    expect(problems).toEqual([]);
   });
 
   test('loads on a build step and draws into a canvas without shifting the page', async ({
     page,
   }) => {
-    const problems = collectProblems(page);
     const requests = collectRequests(page);
     await page.goto('build/cpu');
     const region = page.getByRole('region', { name: GARAGE_TEXT.region });
@@ -182,17 +174,19 @@ test.describe('the 3D preview', { tag: '@smoke' }, () => {
     expect(requests.some(isGarageRequest)).toBe(true);
 
     // Cumulative layout shift since navigation: the region reserves its box, so it must be 0.
+    // Every shift counts, even one flagged as following input: this test gives no input, and
+    // under mobile emulation (390 px) Chromium 1194 flags real shifts on this page as recent
+    // input anyway, which would hide them (measured 2026-09-30, test plan §6.4).
     const layoutShift = await page.evaluate(
       () =>
         new Promise<number>((resolveShift) => {
           interface LayoutShift extends PerformanceEntry {
             readonly value: number;
-            readonly hadRecentInput: boolean;
           }
           let total = 0;
           new PerformanceObserver((list) => {
             for (const entry of list.getEntries() as LayoutShift[]) {
-              if (!entry.hadRecentInput) total += entry.value;
+              total += entry.value;
             }
           }).observe({ type: 'layout-shift', buffered: true });
           setTimeout(() => {
@@ -201,7 +195,6 @@ test.describe('the 3D preview', { tag: '@smoke' }, () => {
         }),
     );
     expect(layoutShift).toBe(0);
-    expect(problems).toEqual([]);
   });
 
   test('without WebGL 2 shows a message and never downloads the chunk', async ({ page }) => {
@@ -214,14 +207,12 @@ test.describe('the 3D preview', { tag: '@smoke' }, () => {
         },
       });
     });
-    const problems = collectProblems(page);
     const requests = collectRequests(page);
     await page.goto('build/cpu');
     const region = page.getByRole('region', { name: GARAGE_TEXT.region });
     await expect(region).toHaveText(GARAGE_TEXT.noWebGL);
     await page.waitForLoadState('networkidle');
     expect(requests.filter(isGarageRequest)).toEqual([]);
-    expect(problems).toEqual([]);
   });
 });
 
@@ -232,7 +223,6 @@ test.describe('the build in the URL', { tag: '@smoke' }, () => {
     url.pathname === `${BASE_PATH}${path}` && url.searchParams.get('b') === build;
 
   test('survives in-app navigation, Back and reload', async ({ page }) => {
-    const problems = collectProblems(page);
     await page.goto(`build/cpu?b=${build}`);
     await expect(heading(page)).toHaveText('Step 3 of 12: CPU');
 
@@ -257,7 +247,6 @@ test.describe('the build in the URL', { tag: '@smoke' }, () => {
     await expect(page).toHaveURL(at('build/motherboard'));
     await expect(heading(page)).toHaveText('Step 4 of 12: Motherboard');
     await expect(page.getByRole('status')).toHaveCount(0);
-    expect(problems).toEqual([]);
   });
 
   for (const [label, value] of [
@@ -266,7 +255,6 @@ test.describe('the build in the URL', { tag: '@smoke' }, () => {
     ['an unknown category', 'v1.z_test-part'],
   ] as const) {
     test(`drops ${label}, says so, and keeps working`, async ({ page }) => {
-      const problems = collectProblems(page);
       const response = await page.goto(`build/cpu?b=${value}`);
       expect(response?.status()).toBe(200);
       await expect(heading(page)).toHaveText('Step 3 of 12: CPU');
@@ -278,7 +266,6 @@ test.describe('the build in the URL', { tag: '@smoke' }, () => {
         'href',
         `${BASE_PATH}build/motherboard`,
       );
-      expect(problems).toEqual([]);
     });
   }
 });

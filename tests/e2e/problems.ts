@@ -1,0 +1,188 @@
+/**
+ * The rules behind the shared Playwright fixture (tests/e2e/fixtures.ts): what counts as a problem,
+ * and the only problems a test may have. Pure data and functions, so the rules are unit-tested
+ * without a browser (tests/harness/problems.test.ts), and the fixture itself is tested end to end
+ * by tests/harness/guard.test.ts.
+ *
+ * BUILD_PROMPT.md §8: "Zero console errors. Zero unhandled promise rejections."
+ * tests/perf/budget.json `console`: every count is 0. docs/qa/test-plan.md §13. Owner: qa-lead.
+ */
+
+export type ProblemKind =
+  'console.error' | 'pageerror' | 'unhandledrejection' | 'requestfailed' | 'http-error' | 'crash';
+
+export interface Problem {
+  readonly kind: ProblemKind;
+  /** The console text, error message, rejection reason, network error or HTTP status line. */
+  readonly text: string;
+  /** Where it came from: the console message's source, or the request URL. Empty when unknown. */
+  readonly url: string;
+  /** The page it happened on, at that moment. Empty when there was no page. */
+  readonly documentUrl: string;
+  /** For requests: what was requested (document, script, image, fetch, ...). */
+  readonly resourceType?: string;
+  /** For requests: true when this is the navigation of a page's main frame, the page itself. */
+  readonly mainFrameDocument?: boolean;
+  /** For 'http-error': the status code. */
+  readonly status?: number;
+}
+
+/** What a test says about itself, through fixture options (tests/e2e/fixtures.ts). */
+export interface Declarations {
+  /** The test asks for a page that does not exist, so that page answers 404 on purpose. */
+  readonly expectNotFoundDocument: boolean;
+}
+
+/** One test's declarations and every problem it produced: what an allow-list entry may look at. */
+export interface GuardRun extends Declarations {
+  readonly problems: readonly Problem[];
+}
+
+export interface AllowedProblem {
+  /** Stable id, shown in the report next to every problem it allowed. */
+  readonly id: string;
+  readonly matches: (problem: Problem, run: GuardRun) => boolean;
+  /** Why this is not a bug. Required. */
+  readonly reason: string;
+  /** The team that owns the exception: one of TEAMS. */
+  readonly owner: string;
+  /**
+   * 'permanent', the last day it applies (an ISO date, YYYY-MM-DD, compared in UTC), or an https
+   * link to the issue whose fix removes it. An expired date stops the whole run.
+   */
+  readonly until: string;
+}
+
+/** The teams that may own an exception (CLAUDE.md, "Who's who"). */
+export const TEAMS = ['data-lead', 'build-lead', 'design-lead', 'qa-lead'] as const;
+
+/** What Chromium 1194 logs when a resource, the page itself included, answers 404 (test plan §13.1). */
+export const CHROMIUM_404_CONSOLE_TEXT =
+  'Failed to load resource: the server responded with a status of 404 (Not Found)';
+
+/** A page that answered 404: the main-frame document, not a resource inside it. */
+export function isNotFoundPage(problem: Problem): boolean {
+  return (
+    problem.kind === 'http-error' && problem.status === 404 && problem.mainFrameDocument === true
+  );
+}
+
+/**
+ * The allow-list. Every entry needs a reason, an owning team and an end, and is reviewed at each
+ * phase exit (test plan §13.2). Keep it short: an entry here hides a problem in every test.
+ */
+export const ALLOWED: readonly AllowedProblem[] = [
+  {
+    id: 'not-found-page-status',
+    matches: (problem, run) => run.expectNotFoundDocument && isNotFoundPage(problem),
+    reason:
+      'The test asks for a page that does not exist, so a 404 answer for the page itself is the result under test. A 404 for any other resource, or any other 4xx or 5xx, still fails.',
+    owner: 'qa-lead',
+    until: 'permanent',
+  },
+  {
+    id: 'not-found-page-console',
+    matches: (problem, run) =>
+      run.expectNotFoundDocument &&
+      problem.kind === 'console.error' &&
+      problem.text === CHROMIUM_404_CONSOLE_TEXT &&
+      run.problems.some((other) => isNotFoundPage(other) && other.url === problem.url),
+    reason:
+      "Chromium logs a page that answers 404 as a failed resource. It is the same 404 the test asked for, so it is allowed only for that page's own URL (moved from build-lead's isOwnDocument404 in the smoke spec).",
+    owner: 'qa-lead',
+    until: 'permanent',
+  },
+];
+
+/** The verdict on one test's problems. */
+export interface Verdict {
+  readonly unexpected: readonly Problem[];
+  readonly allowed: readonly { readonly problem: Problem; readonly allowedBy: string }[];
+}
+
+export function classify(
+  problems: readonly Problem[],
+  declarations: Declarations,
+  allowList: readonly AllowedProblem[] = ALLOWED,
+): Verdict {
+  const run: GuardRun = { ...declarations, problems };
+  const unexpected: Problem[] = [];
+  const allowed: { problem: Problem; allowedBy: string }[] = [];
+  for (const problem of problems) {
+    const entry = allowList.find((candidate) => candidate.matches(problem, run));
+    if (entry === undefined) unexpected.push(problem);
+    else allowed.push({ problem, allowedBy: entry.id });
+  }
+  return { unexpected, allowed };
+}
+
+/** The UTC calendar date of an instant, as YYYY-MM-DD. */
+export function utcDate(instant: Date): string {
+  return instant.toISOString().slice(0, 10);
+}
+
+function isIsoDate(value: string): boolean {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const date = new Date(`${value}T00:00:00Z`);
+  return !Number.isNaN(date.getTime()) && utcDate(date) === value;
+}
+
+/** Every reason an allow-list is invalid on `today` (YYYY-MM-DD, UTC); empty when it is valid. */
+export function allowListErrors(entries: readonly AllowedProblem[], today: string): string[] {
+  const errors: string[] = [];
+  const ids = new Set<string>();
+  entries.forEach((entry, index) => {
+    const label = entry.id.trim() === '' ? `entry ${String(index + 1)}` : `"${entry.id}"`;
+    if (entry.id.trim() === '') errors.push(`${label}: id is empty`);
+    else if (ids.has(entry.id)) errors.push(`${label}: the id is used twice`);
+    ids.add(entry.id);
+    if (entry.reason.trim() === '') {
+      errors.push(`${label}: reason is empty; say why this is not a bug`);
+    }
+    if (!(TEAMS as readonly string[]).includes(entry.owner)) {
+      errors.push(`${label}: owner "${entry.owner}" is not a team (${TEAMS.join(', ')})`);
+    }
+    const until = entry.until.trim();
+    if (until === 'permanent' || /^https:\/\/\S+$/.test(until)) return;
+    if (!isIsoDate(until)) {
+      errors.push(
+        `${label}: until "${entry.until}" must be 'permanent', a date (YYYY-MM-DD) or an https link to the issue`,
+      );
+    } else if (until < today) {
+      errors.push(
+        `${label}: expired after ${until}; fix the cause and remove the entry, or renew it with the Director's approval`,
+      );
+    }
+  });
+  return errors;
+}
+
+/** Throws when the allow-list is invalid, so the run stops before any test starts. */
+export function assertValidAllowList(entries: readonly AllowedProblem[], today: string): void {
+  const errors = allowListErrors(entries, today);
+  if (errors.length > 0) {
+    throw new Error(
+      `The console-error allow-list in tests/e2e/problems.ts is invalid:\n- ${errors.join('\n- ')}`,
+    );
+  }
+}
+
+/** Same scheme, host and port. A URL that does not parse, such as data: or blob:, never is. */
+export function isSameOrigin(url: string, origin: string): boolean {
+  try {
+    const parsed = new URL(url);
+    return (
+      (parsed.protocol === 'http:' || parsed.protocol === 'https:') && parsed.origin === origin
+    );
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * A failed request is a problem unless the page itself gave up on it: net::ERR_ABORTED means it
+ * navigated away, or the test closed it, while the request was in flight.
+ */
+export function isReportableFailure(errorText: string): boolean {
+  return errorText !== 'net::ERR_ABORTED';
+}
