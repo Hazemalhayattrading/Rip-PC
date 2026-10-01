@@ -1,7 +1,13 @@
 import { readFileSync } from 'node:fs';
 import { createContext, runInContext } from 'node:vm';
 import { describe, expect, it } from 'vitest';
-import { THEME_COLOR, THEME_STORAGE_KEY, applyTheme, currentTheme, type ThemeTarget } from './theme';
+import {
+  THEME_COLOR,
+  THEME_STORAGE_KEY,
+  applyTheme,
+  currentTheme,
+  type ThemeTarget,
+} from './theme';
 
 const indexHtml = readFileSync(new URL('../../index.html', import.meta.url), 'utf8');
 const tokensCss = readFileSync(new URL('../styles/tokens.css', import.meta.url), 'utf8');
