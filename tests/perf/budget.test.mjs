@@ -124,4 +124,33 @@ describe('budget.json matches BUILD_PROMPT.md §8', () => {
     expect(buildPrompt).toMatch(/within ±5%/);
     expect(budget.models.goldenTolerancePct).toBe(5);
   });
+
+  it('every compatibility rule has at least one positive and one negative test', () => {
+    expect(section8).toMatch(/Every compatibility rule has a passing positive and negative test/);
+    expect(budget.compatibility).toMatchObject({
+      minPositiveTestsPerRule: 1,
+      minNegativeTestsPerRule: 1,
+    });
+  });
+});
+
+// Method values the Director approved (docs/qa/test-plan.md §16). They are not §8 numbers, but a
+// silent change would weaken a gate: one Lighthouse run is not a median, and a shorter watch
+// misses late problems (WP-Q2 findings V6, QA-P0-004 and QA-P0-005).
+describe('budget.json keeps the approved method values', () => {
+  it('a median of 3 runs for Lighthouse and for web vitals (test plan §6.6)', () => {
+    expect(budget.lighthouse).toMatchObject({ numberOfRuns: 3, aggregationMethod: 'median' });
+    expect(budget.webVitals).toMatchObject({ runs: 3, aggregation: 'median' });
+  });
+
+  it('web vitals watch each load for at least 5 s of page time (QA-P0-004)', () => {
+    expect(budget.webVitals.minObserveMs).toBe(5000);
+    expect(budget.webVitals.minObserveMs).toBeGreaterThan(budget.webVitals.gates.lcpMs.value);
+  });
+
+  it('the smoke watches every route for 1 s more at 1440 px (QA-P0-005)', () => {
+    expect(budget.console).toMatchObject({ soakMs: 1000, soakViewports: ['1440'] });
+    const widths = budget.visual.viewports.map((v) => v.name);
+    for (const name of budget.console.soakViewports) expect(widths).toContain(name);
+  });
 });

@@ -131,6 +131,9 @@
     "maxPageErrors": 0,
     "maxUnhandledRejections": 0,
     "maxFailedSameOriginRequests": 0,
+    "soakMs": 1000,
+    "soakViewports": ["1440"],
+    "soakSource": "QA-P0-005, approved by the Director 2026-10-01: in the dark e2e project at these widths, each route's smoke test watches the page for this long after network idle, so a console error or unhandled rejection that comes about 1 to 1.5 s after navigation still fails. Without it, a rejection 1 s after start passed all 112 smoke tests (WP-Q2 negative control NC-F3).",
     "source": "BUILD_PROMPT.md §8: 'Zero console errors. Zero unhandled promise rejections.' A failed same-origin request also logs a console error in Chromium (measured 2026-09-30)."
   },
   "accessibility": {

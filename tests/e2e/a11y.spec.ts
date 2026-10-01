@@ -2,11 +2,11 @@
  * Accessibility: axe-core's WCAG 2.1 AA rules on every route and on the 404 page
  * (BUILD_PROMPT.md §8 "WCAG 2.1 AA for all non-3D UI", docs/qa/test-plan.md §10.1).
  *
- * - Runs in every e2e project, so at every width in budget.json (390, 768 and 1440 px).
+ * - Runs in every e2e project, so at every width in budget.json (390, 768 and 1440 px), in both
+ *   themes (`visual.themes`): dark, the first-visit default, and light, the stored choice.
+ *   Each page must show its project's theme first, so a light run can never silently test dark.
  * - Tags and the violation budget come from budget.json `accessibility`: a violation of any impact
  *   fails. axe's "needs review" results never fail; they are listed per page for a manual decision.
- * - One theme today: the app has no design tokens yet, so the browser default is what visitors
- *   get. Dark and light projects arrive with the tokens (WP-DS1).
  * - Build steps are checked with the 3D preview started, as a visitor sees them.
  *
  * Owner: qa-lead.
@@ -15,6 +15,7 @@ import AxeBuilder from '@axe-core/playwright';
 import type { Page, TestInfo } from '@playwright/test';
 import { KNOWN_ROUTES, metaOf, pathOf, type RouteMatch } from '../../src/app/routes.ts';
 import { GARAGE_TEXT } from '../../src/components/garage/garage-text.ts';
+import { projectMeta } from '../lib/project-meta.ts';
 import { loadQaBudget } from '../lib/qa-budget.ts';
 import { expect, test } from './fixtures.ts';
 
@@ -40,6 +41,7 @@ async function checkPage(
   const response = await page.goto(path.slice(1));
   expect(response?.status()).toBe(match.name === 'not-found' ? 404 : 200);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(metaOf(match).heading);
+  await expect(page.locator('html')).toHaveAttribute('data-theme', projectMeta(testInfo).theme);
   if (match.name === 'build') {
     await expect(
       page.getByRole('region', { name: GARAGE_TEXT.region }).locator('canvas'),
