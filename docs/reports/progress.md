@@ -47,7 +47,7 @@ Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
 | 2026-10-01 | Project skills restored: 45 real symlinks in all 5 checkouts. The skills load, and the leads were told which to use (briefs, "Skills") | Director | `git status` clean; the Skill tool lists all 45 |
 | 2026-10-01 | Evidence moved off the branch tip. Archives copied byte-exact to `C:\Projects\rig-lab-evidence\archives\`; checksum manifests in `docs/reports/evidence/` | Director | `4467930`; both `sha256sum -c` checks pass |
 | 2026-10-01 | Context7 check: no API key in any tracked or untracked repo file, nor in history. The keyless Context7 entry was dropped from `.mcp.json` so Hazem's user-level server (with his key) applies | Director | `8a8a645`; `claude mcp get context7` shows "Scope: User config" |
-| 2026-10-01 | **WP-B1 Part 1 accepted:** `gpu` → `gpu-card` (URL code `g` kept, test-first); README Windows and perf sections; ESLint `no-import-type-side-effects` | build-lead | `feat/build-tokens-wiring` @ `b78a62d`; `artifacts/logs/wp-b1/verify-part1.log` (266 unit, 112 e2e); the probe shows 77.40 → 320.49 KB gzip without the rule. Merges together with its README Context7 follow-up |
+| 2026-10-01 | **WP-B1 Part 1 accepted:** `gpu` → `gpu-card` (URL code `g` kept, test-first); README Windows and perf sections; ESLint `no-import-type-side-effects` | build-lead | **Merged as `c7a099b`**, with the README Context7 follow-up (`77d20f9`). verify on the merged branch: 266 unit, 112 e2e. The probe shows 77.40 → 320.49 KB gzip without the rule |
 
 ## In progress
 
@@ -55,7 +55,7 @@ Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
 |---|---|---|---|---|
 | WP-D0 Data foundations | data-lead | `feat/data-foundations` / `.claude/worktrees/data-lead` | Steps 1–4 and 6 done (`d416303`); 20% audit finished, 8 findings fixed | npm ci, add the font row (received from design-lead), fresh verify, hand-off. After the purge, update the two commit IDs cited in `data/audits.json` |
 | WP-DS1 Tokens for Studio | design-lead | `feat/design-tokens` / `.claude/worktrees/design-lead` | Merged integration; `tokens.md` written (`0f4b8eb`); now on `direction.md` | its `docs/design/WIP-STATUS.md` |
-| WP-B1 Tokens wiring and follow-ups | build-lead | `feat/build-tokens-wiring` / `.claude/worktrees/build-lead` | Part 1 accepted; Part 2 waits for WP-DS1 | merge integration, README note on Context7 (per-user config), fix the `install-skills.sh` echo, verify, report |
+| WP-B1 Tokens wiring and follow-ups | build-lead | `feat/build-tokens-wiring` / `.claude/worktrees/build-lead` | Part 1 merged (`c7a099b`); idle | Part 2 starts when WP-DS1 is merged |
 | WP-Q2 Independent verification | qa-lead | `feat/qa-phase0-verification` / `.claude/worktrees/qa-lead` | Part 1 running: Windows tooling fixed (`258c76e`); 3 workers (data-auditor, e2e-tester, visual-tester) running since 16:55 UTC | its `docs/qa/WIP-STATUS.md` |
 | **Evidence purge** (approved by Hazem 2026-10-01) | Director | the 5 branches above | Waiting for all four leads to be idle at once | see "Evidence purge" below |
 
