@@ -64,6 +64,39 @@ final hand-off commit; the hand-off message replaces it.
 - The Context7 MCP is for library APIs. If it hits its quota, check the official docs and the
   installed package sources.
 
+### Skills (project skills, loaded since 2026-10-01)
+The 45 skills in `.claude/skills/` are real symlinks now (Developer Mode is on), and they load.
+- Load one with the Skill tool when your task matches it. If a skill isn't in your Skill tool
+  list, read `C:\Projects\Rip-PC\.claude\skills\<name>\SKILL.md` directly.
+- Name the skills a worker should use in its prompt.
+- **CLAUDE.md, this brief and the plan always win** over a skill's own instructions: file
+  ownership, git rules, the hand-off format and the evidence rules.
+
+Use per team:
+- **data-lead:** verification-before-completion, systematic-debugging, test-driven-development
+  (for validator changes).
+- **design-lead:** frontend-design, ui-ux-pro-max, web-design-guidelines, accessibility (contrast),
+  core-web-vitals (font fallback, CLS and LCP), motion-framer (motion tokens).
+  - For the 3D brief: react-three-fiber, threejs-webgl, r3f-materials, r3f-lighting, r3f-loaders,
+    r3f-textures, blender-web-pipeline.
+- **build-lead:** vercel-react-best-practices (only the React parts; this isn't a Next.js app),
+  test-driven-development, systematic-debugging, verification-before-completion, core-web-vitals,
+  performance, accessibility. For worker diffs: requesting-code-review and receiving-code-review.
+- **qa-lead:** webapp-testing, web-quality-audit, accessibility, core-web-vitals, performance,
+  verification-before-completion, systematic-debugging.
+- **Everyone:** dispatching-parallel-agents, within the worker rules above.
+
+Don't use these in Phase 0. They clash with how this project runs:
+- **using-git-worktrees:** you already have a worktree.
+- **finishing-a-development-branch:** only the Director merges. You hand off instead.
+- **brainstorming, writing-plans, executing-plans, subagent-driven-development, using-superpowers:**
+  the plan and this brief are your spec, and these skills expect a human partner in the loop. If
+  you think the spec is wrong, message the Director.
+- **animated-component-libraries, lightweight-3d-effects and gsap-scrolltrigger:** they bring
+  stock looks and extra weight, against the Studio direction and the bundle budget. Only with the
+  Director's OK.
+- **diagnosing-superpowers and seo:** not needed now.
+
 ### Messages
 - Reach the Director at `team-lead`. Reach another lead by its name: `data-lead`, `build-lead`,
   `design-lead` or `qa-lead`.
@@ -95,9 +128,10 @@ Known gaps: <honest list, or "none">
 - **Status file:** `data/WIP-STATUS.md`
 - **Owns:** `src/data/**`, `data/**`, the data rows in `CREDITS.md`.
 - **Evidence:** your `artifacts/` holds 1,167 files restored from the cloud container. All of them
-  match `docs/reports/phase-0-wip/evidence/data-lead-evidence-manifest.sha256.txt`, except the one
-  page left out by design (see `EXCLUDED.txt`). Price rows point at these paths and hashes, so
-  never rename or move a capture that a row cites.
+  match `docs/reports/evidence/data-lead-evidence-manifest.sha256.txt`, except the one page left out
+  by design (see `docs/reports/evidence/EXCLUDED.txt`). Price rows point at these paths and hashes,
+  so never rename or move a capture that a row cites. Captures never go into git; see
+  `docs/reports/evidence/README.md`.
 
 Steps:
 1. Merge `claude/keen-lamport-0794zj` into your branch and resolve any conflicts. Run
@@ -234,7 +268,9 @@ A `frontend-engineer` worker may do steps 1 and 5. You review every diff and run
    WP-Q1, have a fresh worker check them, not you.
 3. Build the rule-1 compliance check (Owner's rule 1, plan, top) for **100% of price and benchmark
    rows**. Read data-lead's branch read-only (`git show feat/data-foundations:…`), and the captures
-   in `C:\Projects\rig-lab-evidence\data-lead-artifacts\artifacts\` with their SHA-256 manifest.
+   in `C:\Projects\rig-lab-evidence\data-lead-artifacts\artifacts\` with their SHA-256 manifest,
+   `docs/reports/evidence/data-lead-evidence-manifest.sha256.txt`. The README in that folder
+   lists every evidence manifest.
 4. Plan the seeded 10% data audit, run by a fresh `data-auditor` worker. Run it for real once
    WP-D0 is merged.
 
