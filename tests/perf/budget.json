@@ -70,6 +70,8 @@
     "aggregation": "median",
     "cpuThrottleRates": [1, 4],
     "settleMs": 1500,
+    "minObserveMs": 5000,
+    "minObserveSource": "WP-Q2, 2026-10-01: the page is hidden no earlier than this much page time after navigation start. With only load, network idle and settleMs, a fast page was hidden about 2 s in, so an LCP element at 2.7 s and a layout shift at 3 s went unseen and passed (negative controls NC-V2b and NC-V3). 5000 ms covers the 2500 ms LCP gate twice over and a whole 5 s CLS session window. A method change; no gate value changed.",
     "library": "web-vitals attribution IIFE build (dist/web-vitals.attribution.iife.js)",
     "gates": {
       "lcpMs": { "value": 2500, "op": "<", "source": "BUILD_PROMPT.md §8: 'LCP < 2.5 s'" },

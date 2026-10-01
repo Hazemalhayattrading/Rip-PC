@@ -1,6 +1,6 @@
 # Rig Lab test plan
 
-Owner: qa-lead · Version 2 · 2026-09-30 · Applies to every phase, from Phase 0 to release.
+Owner: qa-lead · Version 3 · 2026-10-01 · Applies to every phase, from Phase 0 to release.
 
 This is a working document. Every team follows it. It says how each quality bar in BUILD_PROMPT §8
 and each item of the definition of done in §9 is measured, where, how often, by whom, and what
@@ -365,9 +365,20 @@ production preview (Appendix B); the dev server is refused.
   WP-Q1 added 390 after the Lighthouse finding in §6.3.
 - CPU throttling uses the DevTools Protocol `Emulation.setCPUThrottlingRate`, at each rate in
   `webVitals.cpuThrottleRates` (x1, x4).
-- After `load`, network idle and `webVitals.settleMs` (1.5 s), the page is set to hidden. That is
-  when web-vitals reports final values, as when a visitor leaves. Without it, a page with no
-  layout shift reports no CLS at all.
+- After `load`, network idle and `webVitals.settleMs` (1.5 s), and never before
+  `webVitals.minObserveMs` (5 s) of page time, the page is set to hidden. That is when
+  web-vitals reports final values, as when a visitor leaves. Without it, a page with no layout
+  shift reports no CLS at all. Each sample records when it was hidden (`hiddenAtMs`).
+- **Why the 5 s floor** (WP-Q2, 2026-10-01). Without it a fast page was hidden about 2 s after
+  navigation start, so the LCP gate could not fail for anything that painted later:
+  - NC-V2b, an LCP element added at 2.7 s, measured LCP 48 ms and passed. With the floor:
+    2740–2944 ms, fail.
+  - NC-V3, a 300 px banner at 3 s, measured CLS 0 and passed. With the floor: 0.2608 at 390 px
+    and 0.1393 at 1440 px, fail.
+  - CPU x4 also delays the page's timers: a 1.5 s timer fired at about 2.04 s, right when the
+    page was hidden, so even NC-V2a (LCP at 1.5 s) was missed at x4.
+  - 5 s covers the 2.5 s LCP gate twice over and a whole CLS session window. Later content is
+    still unseen: a lab run has to stop somewhere. It costs about 35 s per `perf:vitals` run.
 - **CLS counts every shift.** The gated CLS is the larger of two values:
   - web-vitals' own CLS;
   - CLS over every raw layout-shift entry, grouped into the same session windows (a 1 s gap or
@@ -1298,6 +1309,7 @@ QA re-tests every fix on the integration branch before closing the defect.
 | 2026-09-30 | 1 | First version (WP-Q0). QA proposals pending the Director's approval: the visual `maxDiffPixelRatio` of 0.001, the viewport heights, `fps.maxRunSpreadPct` of 15%, the D1 pass rule (4 of 5 participants and the median under 5 minutes), the 95% bundle warning, and INP gated at x4 as well as x1 | — |
 | 2026-09-30 | 1.1 | The six WP-Q0 proposals approved, as written in v1: `visual.maxDiffPixelRatio` 0.001; viewport heights 390×844, 768×1024 and 1440×900; `fps.maxRunSpreadPct` 15%; the D1 rule (at least 4 of 5 testers finish unaided in under 5 minutes, and the median is under 5); the 95% bundle warning; INP gated at CPU x4 as well as x1, where x4 runs that spread by more than 15% are INCONCLUSIVE, not FAIL. Recorded in `budget.json` sources (`definitionOfDone.minFinishingUnaided`, `.maxMedianMinutes`, `webVitals.gates.inpMs.maxRunSpreadPct`) with no gate value changed | Approved by: Director, 2026-09-30 |
 | 2026-09-30 | 2 | WP-Q1 as built: §4, §5, §6.3 finding, §6.4, §10.1, §11, §12.1, §13.2 and Appendix B. Two method changes, with no threshold changed: web vitals also measures at 390 px (`webVitals.viewports`), and the gated CLS counts shifts that Chromium flags as recent input on loads with no input (§6.4) | pending the Director's WP-Q1 review |
+| 2026-10-01 | 3 | WP-Q2, found on the home PC (§6.3, §6.4, §6.5, §7.2, §7.5). Method changes, with no gate value changed: web vitals watches each load for at least `webVitals.minObserveMs` (5 s) of page time, so late LCP and late shifts can fail the gate (§6.4); a headless reference fps run is INVALID (§6.5); the Lighthouse preview port is derived per checkout (§6.3). New tools: `tests/audit/strata.mjs` (§7.2) and `tests/audit/rule1.mjs` (§7.5) | pending the Director's WP-Q2 review |
 
 ---
 
