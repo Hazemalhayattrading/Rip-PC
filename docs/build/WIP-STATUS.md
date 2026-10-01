@@ -74,9 +74,37 @@ This file is deleted in the final hand-off commit.
 - **The 3D scene** must re-read `--stage`, `--stage-floor`, `--stage-floor-deep` and
   `--scene-light` whenever the theme changes (tokens.md §1.3). That's Phase 3.
 
+## Part 2 (started 2026-10-01, after WP-DS1 merged as `21ac5fb`)
+
+Done and pushed:
+- `e67b855`, `b0ce76b`: `src/state/theme.ts`, `theme.test.ts` and `index.html` (dark default,
+  `theme-color`, the inline restore). Test first: 20 of 23 failed against a stub, then all passed.
+- `5a6a55b`: `app.css` wiring and the font preload. Unit tests are left out of Tailwind's class
+  detection: CSS 17,307 to 9,254 B raw.
+- `9c1c4c6`: the "Light theme" toggle (`min-h-6`), and `role="list"` with the jsx-a11y exception.
+- `0bee054`: README paragraph.
+- Merged the integration tip `7c2afa2` (WP-D0, design's selection and `--ink-3` changes) as
+  `4e2db5e`.
+- The `PART_CATEGORIES` membership test against `PRICED_CATEGORIES` (`src/state/categories.test.ts`).
+  A mutation (`gpu-card` back to `gpu`) fails it at runtime and in `tsc`.
+
+Evidence so far (`artifacts/logs/wp-b1/`), measured on `0bee054`, before the WP-D0 merge:
+- verify: 384 unit and 112 e2e.
+- Built pages: all pass.
+- Toggle: 18/18.
+- JS: +505 B gzip.
+- Web vitals: pass.
+- Lighthouse:
+  - simulated: LCP 1,354 to 1,657 ms;
+  - applied throttling: preload 2,117 ms, no preload 1,775 ms, `fetchpriority=low` 2,142 ms.
+- 12 screenshots.
+
 ## Next step
 
-Idle until the Director says WP-DS1 is merged. A pause request for the history purge may come
-first: then confirm "paused: <branch> @ <sha>, clean, pushed" and change nothing until RESUME.
-design-lead decides the toggle and spacing defaults. When Part 2 starts, merge the integration
-branch first.
+Re-run the full suite on the final head:
+- verify, then the built-pages check;
+- bundle, vitals, Lighthouse with `LHCI_PORT=4181`;
+- 12 screenshots, then the toggle check.
+
+Then delete this file in the hand-off commit, push, and hand off to `team-lead` (copy
+qa-lead and design-lead on their items).
