@@ -10,6 +10,7 @@
       "name": "North Charcoal Black TG Light",
       "partNumber": "FD-C-NOR1C-02",
       "size": "mid-tower",
+      "makerSizeClass": "Regular",
       "supportedBoards": [
         "ATX",
         "Micro-ATX",
@@ -154,6 +155,10 @@
       ],
       "notes": [
         {
+          "field": "makerSizeClass",
+          "text": "From Fractal's page data \"cases_size\":\"Regular\", the size its case listing filters by."
+        },
+        {
           "field": "gpuClearance",
           "text": "From \"Choose a GPU up to 355 mm, or up to 300 mm with a 360 mm front radiator.\""
         },
@@ -164,10 +169,6 @@
         {
           "field": "psu.clearance",
           "text": "From Fractal's note \"1 HDD tray: 255 mm max; 2 HDD tray: 155 mm max\". The page does not say how many trays are fitted as shipped, so neither limit is recorded as unconditional."
-        },
-        {
-          "field": "size",
-          "text": "The product page gives no size class; recorded from the supported boards and volume. (ATX, 42 L)"
         },
         {
           "field": "gpuMaxThicknessMm",
@@ -203,6 +204,7 @@
       "name": "Pop Air RGB Black TG Clear Tint",
       "partNumber": "FD-C-POR1A-06",
       "size": "mid-tower",
+      "makerSizeClass": "Regular",
       "supportedBoards": [
         "ATX",
         "Micro-ATX",
@@ -337,8 +339,8 @@
       ],
       "notes": [
         {
-          "field": "size",
-          "text": "The product page gives no size class; recorded from the supported boards and volume. (ATX, 44 L)"
+          "field": "makerSizeClass",
+          "text": "From Fractal's page data \"cases_size\":\"Regular\", the size its case listing filters by."
         },
         {
           "field": "gpuMaxThicknessMm",
@@ -370,6 +372,7 @@
       "name": "Pop Mini Air RGB Black TG Clear Tint",
       "partNumber": "FD-C-POR1M-06",
       "size": "mini-tower",
+      "makerSizeClass": "Small",
       "supportedBoards": [
         "Micro-ATX",
         "Mini-ITX"
@@ -502,8 +505,8 @@
       ],
       "notes": [
         {
-          "field": "size",
-          "text": "The product page gives no size class; recorded from the supported boards and volume. (Micro ATX, 36.5 L)"
+          "field": "makerSizeClass",
+          "text": "From Fractal's page data \"cases_size\":\"Small\", the size its case listing filters by."
         },
         {
           "field": "gpuMaxThicknessMm",
@@ -539,6 +542,7 @@
       "name": "Terra Graphite",
       "partNumber": "FD-C-TER1N-01",
       "size": "small-form-factor",
+      "makerSizeClass": "Small",
       "supportedBoards": [
         "Mini-ITX"
       ],
@@ -695,7 +699,7 @@
             "brand",
             "name",
             "partNumber",
-            "size",
+            "makerSizeClass",
             "supportedBoards",
             "gpuClearance.0",
             "gpuMaxThicknessMm",
@@ -737,6 +741,10 @@
           "text": "The product page lists 48 mm, which is spine setting 7; see layoutPositions for the other settings."
         },
         {
+          "field": "makerSizeClass",
+          "text": "From Fractal's page data \"cases_size\":\"Small\", the size its case listing filters by."
+        },
+        {
           "field": "gpuClearance",
           "text": "From \"Maximum GPU length: 322 mm (200 mm if installing a 120 mm radiator)\"."
         },
@@ -774,6 +782,7 @@
       "name": "CH560",
       "partNumber": "R-CH560-BKAPE4-G-1",
       "size": "mid-tower",
+      "makerSizeClass": "mid-tower",
       "supportedBoards": [
         "E-ATX",
         "ATX",
@@ -930,6 +939,10 @@
         }
       ],
       "notes": [
+        {
+          "field": "makerSizeClass",
+          "text": "From \"The CH560 is a newly designed mid-tower case\" on the product page."
+        },
         {
           "field": "frontIo",
           "text": "DeepCool lists \"USB3.0×1, Audio×1, TYPE-C×1\" and gives no speed for the Type-C port; USB 3.0 is recorded as 5 Gbps."

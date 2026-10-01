@@ -115,6 +115,12 @@ For some fields the schema documents `null` as "none", so no note is needed (rul
   300 mm "with a 360 mm front radiator"). GPU and cooler limits have exactly one default row. A PSU limit
   may have none, when the maker only gives per-configuration limits (the North: 255 mm "with 1 HDD
   tray", 155 mm "with 2 HDD trays").
+- **Case size**: `size` is derived, not sourced, so it needs no source. It goes by the largest
+  supported board: ATX or E-ATX is `mid-tower` (`full-tower` only when the maker's own class says
+  full tower), Micro-ATX is `mini-tower`, and Mini-ITX only is `small-form-factor` (`deriveCaseSize`
+  in `schema/case.ts`, checked by the validator). `makerSizeClass` keeps the maker's own words,
+  sourced like any value (Fractal "Regular" or "Small", DeepCool "mid-tower"); they don't map one to
+  one onto `size`.
 - **Variants and configurations**: makers often share one value across a product family and qualify
   it in a note ("145 mm with Fan Bracket (Mesh version only) / 170 mm without"). Record the value for
   this record's exact SKU, with any configuration as a condition, and quote the maker's note.
