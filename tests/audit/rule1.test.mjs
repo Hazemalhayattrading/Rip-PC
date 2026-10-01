@@ -697,7 +697,27 @@ describe('evidence: R1-P3, R1-P3b, R1-P4, R1-P6a', () => {
       m.captures[wrong] = m.captures[US_CAPTURE];
     });
     expect(f).toEqual([expect.objectContaining({ row: US_KEY, field: 'capture', value: wrong })]);
-    expect(f[0].why).toContain('artifacts/prices/US/cpu-a--shop-us--2026-09-30.<html|png>');
+    expect(f[0].why).toContain('artifacts/prices/US/cpu-a--shop-us--2026-09-30[--<n>].<html|png>');
+  });
+
+  it("R1-P3 passes a later attempt's capture, named with --2 (data/tools/capture-name.mjs)", () => {
+    const later = 'artifacts/prices/US/cpu-a--shop-us--2026-09-30--2.html';
+    const r = build((m) => {
+      us(m).observations[0].capture = later;
+      m.captures[later] = m.captures[US_CAPTURE];
+    }).run();
+    expect(check(r, 'R1-P3')).toMatchObject({ failed: 0 });
+  });
+
+  it('R1-P3 fails an attempt suffix the naming rule never makes (--1, --02)', () => {
+    for (const suffix of ['--1', '--02']) {
+      const wrong = `artifacts/prices/US/cpu-a--shop-us--2026-09-30${suffix}.html`;
+      const f = failing('R1-P3', (m) => {
+        us(m).observations[0].capture = wrong;
+        m.captures[wrong] = m.captures[US_CAPTURE];
+      });
+      expect(f).toEqual([expect.objectContaining({ row: US_KEY, field: 'capture', value: wrong })]);
+    }
   });
 
   it('R1-P3 fails a capture that is missing under the evidence root', () => {

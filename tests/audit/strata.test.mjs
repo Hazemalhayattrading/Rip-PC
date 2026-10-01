@@ -74,9 +74,12 @@ describe('strataFromDataRoot', () => {
     ]);
   });
 
-  it('leaves out the source registry and the games considered but not listed', () => {
-    const strata = strataFromDataRoot(dataRoot());
+  it("leaves out the source registry, data-lead's audit records and the games not listed", () => {
+    const strata = strataFromDataRoot(
+      dataRoot({ 'audits.json': { schemaVersion: 1, audits: [{ id: '2026-09-30-seed' }] } }),
+    );
     expect(strata).not.toHaveProperty('publishers');
+    expect(strata).not.toHaveProperty('audits');
     expect(strata.games).toHaveLength(1);
   });
 

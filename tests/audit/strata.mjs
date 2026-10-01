@@ -8,8 +8,9 @@
  *   prices/sa, prices/us   each observation as <partId>--<retailer>--<retrievedAt> (its capture's
  *                          own name) and each gap record as gap--<partId>
  *   games                  games[].id (titles in "considered" are not on the list, so not sampled)
- * publishers.json is the source registry, not a record set, so it is not a stratum. Any other
- * .json file is refused, so a new data file cannot silently drop out of the audit.
+ * Not strata: publishers.json, the source registry, and audits.json, data-lead's own audit records.
+ * Neither holds values shown to visitors. Any other .json file is refused, so a new data file
+ * cannot silently drop out of the audit.
  *
  * Usage:
  *   node tests/audit/strata.mjs --data-dir data --out strata.json
@@ -30,7 +31,7 @@ import { parseArgs } from 'node:util';
 
 export class StrataError extends Error {}
 
-const NOT_SAMPLED = new Set(['publishers']);
+const NOT_SAMPLED = new Set(['publishers', 'audits']);
 
 /** Every .json file under `dir`, as forward-slash paths relative to it, sorted. */
 function jsonFiles(dir, prefix = '') {

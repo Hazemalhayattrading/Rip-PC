@@ -710,7 +710,7 @@ check passes, 1 on any failure, 2 on bad input. It reads raw JSON with zero depe
 data-lead's schemas, so it checks the data independently.
 
 - On the home PC the captures are in `C:\Projects\rig-lab-evidence\data-lead-artifacts\`, and
-  the manifest is `docs/reports/phase-0-wip/evidence/data-lead-evidence-manifest.sha256.txt`.
+  the manifest is `docs/reports/evidence/data-lead-evidence-manifest.sha256.txt`.
 - Beyond the rows below it adds: R1-P3b (an HTML capture names the url's product id), R1-P6a
   (the amount appears in an HTML capture: an aid for R1-P6, never a pass of it, since a product
   page shows many prices), R1-P7 (real part, unique key, positive amount), gap checks R1-G1 to
@@ -727,7 +727,7 @@ retrievedAt, capture, captureSha256}`):
 |---|---|
 | R1-P1 | `url` is a retailer product page, and the retailer is in the source registry as a retailer. Never web.archive.org, archive.today or archive.ph, a search engine cache or snippet, a price tracker, or an aggregator |
 | R1-P2 | No `archiveUrl` on a price row |
-| R1-P3 | `capture` = `artifacts/prices/<SA\|US>/<partId>--<retailer>--<retrievedAt>.<html\|png>`, matching the row's own market, partId, retailer and retrievedAt. The file exists under the evidence root (git-ignored `artifacts/`; on the home PC, `C:\Projects\rig-lab-evidence\data-lead-artifacts\artifacts\prices\`). Its SHA-256 equals `captureSha256` |
+| R1-P3 | `capture` = `artifacts/prices/<SA\|US>/<partId>--<retailer>--<retrievedAt>[--<n>].<html\|png>`, matching the row's own market, partId, retailer and retrievedAt; `--<n>` (n ≥ 2) marks a later attempt that day (data-lead's `data/tools/capture-name.mjs`). The file exists under the evidence root (git-ignored `artifacts/`; on the home PC, `C:\Projects\rig-lab-evidence\data-lead-artifacts\artifacts\prices\`). Its SHA-256 equals `captureSha256` |
 | R1-P4 | `retrievedAt` is the UTC date of that live fetch, falls in the batch window, and matches independent evidence rather than just the file name (which is built from `retrievedAt`). The evidence is the capture file's modification time (UTC date), and, for saved HTML, any fetch timestamp the capture records |
 | R1-P5 | `currency` matches `market` (SA with SAR, US with USD) |
 | R1-P6 | For the 10% sample: the captured page shows the recorded amount, stock state and seller type. A saved HTML capture is searched for the amount; a screenshot is read by eye |

@@ -21,8 +21,9 @@
  *          selling in the row's market; not an archive, cache, search engine, price tracker,
  *          aggregator or forum (DENIED_HOSTS); a product page, not a search or listing page.
  *   R1-P2  the raw price row has no archiveUrl, no sources, no other archive-like key.
- *   R1-P3  capture = artifacts/prices/<market>/<partId>--<retailer>--<retrievedAt>.<html|png>; the file
- *          exists; its SHA-256 = captureSha256 = the manifest entry (a path missing from it fails).
+ *   R1-P3  capture = artifacts/prices/<market>/<partId>--<retailer>--<retrievedAt>[--<n>].<html|png>
+ *          (n >= 2 for a later attempt that day); the file exists; its SHA-256 = captureSha256 = the
+ *          manifest entry (a path missing from it fails).
  *   R1-P3b HTML captures: the url's product id (ASIN, Newegg item, else last path segment) appears in
  *          the page and its canonical link. Not found is a manual check, never a failure.
  *   R1-P4  retrievedAt: a real date, not after --today, inside the file's batch window, equal to the
@@ -792,19 +793,26 @@ export function checkPricePartAndAmount(row, parts) {
 
 const isPositiveAmount = (a) => typeof a === 'number' && Number.isFinite(a) && a > 0;
 
+/**
+ * What may follow a capture's base name: a later attempt on the same day gets --2, --3 and so on,
+ * so it never overwrites an earlier one (data-lead's data/tools/capture-name.mjs and price schema).
+ */
+const CAPTURE_TAIL = /^(?:--(?:[2-9]|[1-9]\d+))?\.(?:html|png)$/;
+
 /** R1-P3: the capture is named from the row, exists, and its SHA-256 matches the row and manifest. */
 export function checkCapture(row, capture, manifest) {
   const base = `artifacts/prices/${row.market}/${row.partId}--${row.retailer}--${row.retrievedAt}`;
+  const expected = `${base}[--<n>].<html|png>`;
   if (typeof row.capture !== 'string' || row.capture === '') {
-    return [problem('capture', row.capture, `no capture; expected ${base}.<html|png>`)];
+    return [problem('capture', row.capture, `no capture; expected ${expected}`)];
   }
   const out = [];
-  if (row.capture !== `${base}.html` && row.capture !== `${base}.png`) {
+  if (!row.capture.startsWith(base) || !CAPTURE_TAIL.test(row.capture.slice(base.length))) {
     out.push(
       problem(
         'capture',
         row.capture,
-        `expected ${base}.<html|png>, built from the row's market, partId, retailer and retrievedAt`,
+        `expected ${expected}, built from the row's market, partId, retailer and retrievedAt`,
       ),
     );
   }
