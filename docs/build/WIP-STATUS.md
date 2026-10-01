@@ -35,11 +35,20 @@ This file is deleted in the final hand-off commit.
     `0f4b8eb`. The app.css order; in `index.html`, `data-theme="dark"`, `theme-color` `#131416`,
     the font preload and the inline theme script; a "Light theme" toggle with `aria-pressed`;
     `localStorage` key `rig-lab-theme`; never `prefers-color-scheme`.
-  - My defaults, sent to design-lead with no reply yet:
-    - a text-only toggle at the end of `<header>` until Phase 2's top bar;
-    - no invented spacing on the placeholder pages;
-    - `role="list"` on the three real lists;
-    - the JS delta measured, not assumed to be zero.
+  - **design-lead confirmed** (2026-10-01):
+    - the light theme is a visible toggle, and the inline head script restores the stored
+      choice before the first paint;
+    - the toggle is a text-only `<button type="button" aria-pressed>` named "Light theme", at
+      the end of `<header>`. It moves to the round top-bar button in Phase 2;
+    - **no URL parameter**: the theme is never part of a share link;
+    - QA loads light by setting `localStorage` `rig-lab-theme` = `light` before navigating
+      (`addInitScript` or `storageState`). Tell qa-lead at the Part 2 hand-off; don't wake
+      the leads before the purge;
+    - no invented spacing on the placeholder pages (tokens.md §5);
+    - `role="list"` on the three real lists, with the jsx-a11y `no-redundant-roles` exception
+      for that pair;
+    - the JS delta is measured against 77.40 KB. design-lead fixes tokens.md §1.5 after the
+      purge.
 - **Plan for Part 2, test first:**
   - `src/state/theme.ts` with `currentTheme` and `applyTheme`, and tests that:
     - pin `theme-color` to `--stage` in `tokens.css`;
