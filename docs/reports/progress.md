@@ -27,7 +27,9 @@ Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
 | Worktrees | `C:\Projects\Rip-PC\.claude\worktrees\<lead>` (git-ignored) |
 | Restored evidence | `C:\Projects\rig-lab-evidence\` (6 archives; data-lead's 1,167 files match the SHA-256 manifest) |
 | Toolchain | Node 24.21.0, npm 11.19.0 (the project asks for ^22.13.0; npm only warns); Playwright 1.56.1 Chromium installed |
-| Missing | Python, Docker, Windows Developer Mode (so `.claude/skills/*` symlinks are text stubs) |
+| Git, local repo config | `core.symlinks=true` and `core.autocrlf=false` (the system git config has `autocrlf=true`, which broke LF on older branches) |
+| Project skills | All 45 `.claude/skills/*` are real symlinks in every checkout and load (Developer Mode on since 2026-10-01) |
+| Missing | Python, Docker |
 | Agent teams | **Work.** Tested 2026-10-01, details in "Decisions" below |
 
 ## Done
@@ -41,6 +43,8 @@ Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
 | 2026-10-01 | 365 files re-checked out with LF. They came from a `main` checkout made before `.gitattributes` existed, and Prettier failed on them | Director | `git ls-files --eol` shows 0 `w/crlf` |
 | 2026-10-01 | Windows fix: spec paths compared with `/` in `tests/harness/spec-imports.test.ts` | Director (a one-liner that blocked everyone) | `45c0bae`; local verify 266 unit and 112 e2e pass, 45 s |
 | 2026-10-01 | Agent teams tested: a teammate spawns, and it can spawn an unnamed worker | Director, data-lead | `ListAgents` shows "Teammates"; team `session-a9ce993b` |
+| 2026-10-01 | The four leads spawned as teammates, with the briefs | Director | `ListAgents`: Teammates (4) |
+| 2026-10-01 | Project skills restored: 45 real symlinks in all 5 checkouts. The skills load, and the leads were told which to use (briefs, "Skills") | Director | `git status` clean; the Skill tool lists all 45 |
 
 ## In progress
 
@@ -66,11 +70,10 @@ Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
 
 - Branch protection on `main`: make `npm run verify` and `Performance budgets` required checks.
   The API reports "Branch not protected". GitHub Pages already deploys from GitHub Actions.
-- The 222 MB of third-party page captures in the public repo's history
-  (`docs/reports/phase-0-wip/evidence/`). Keep them, or move them to private storage and purge the
-  history, before anything merges to `main`.
-- Windows Developer Mode. It lets `git config core.symlinks true` restore the 45
-  `.claude/skills/*` symlinks, so project skills load.
+- **Decided 2026-10-01:** the 222 MB of third-party page captures leave the public repo. They are
+  kept in `C:\Projects\rig-lab-evidence`, listed by checksum in a manifest in the repo, and purged
+  from branch history before anything merges to `main`. The Director shows Hazem the purge plan
+  before any history rewrite.
 - Optional: Node 22 (per `.nvmrc`), Python and Docker. Docker is needed for visual baselines
   (Phase 2).
 
