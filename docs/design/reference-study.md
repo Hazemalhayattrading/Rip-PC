@@ -175,6 +175,14 @@ the test conditions, "native, no frame generation" stated, and a link to the met
 | NZXT BLD custom builder | No longer offered on nzxt.com (the site has prebuilt Player PCs, Flex rental and a DIY parts shop) | The Player Three prebuilt configurator |
 | frame.work, live | HTTP 408 to headless Chromium | Wayback snapshot of 2026-05-14 |
 
+**Tesla: not studied, waived in writing by the Director on 2026-10-01** (QA finding DS0-11). The
+two Wayback snapshots tried on 2026-09-30 both render an empty page, and Porsche covers the
+car-configurator lesson:
+- https://web.archive.org/web/20260306214633if_/https://www.tesla.com/model3/design (snapshot of
+  2026-03-06)
+- https://web.archive.org/web/20260607114516if_/https://www.tesla.com/model3/design (snapshot of
+  2026-06-07)
+
 ## Patterns every direction must keep
 
 These come straight from the study:
