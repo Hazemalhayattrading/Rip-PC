@@ -281,11 +281,14 @@ chunk is requested, and applies the same 250,000 B gate.
   - Both are built by `tests/perf/lhci-config.cjs` from `budget.json` → `lighthouse`, and
     `tests/perf/lhci-config.test.mjs` pins that.
 - **Collection.**
-  - It starts `npm run preview -- --host 127.0.0.1 --port 4173 --strictPort`, which is the
+  - It starts `npm run preview -- --host 127.0.0.1 --port <port> --strictPort`, which is the
     production build under `/Rip-PC/`. build-lead's preview answers like GitHub Pages: a real file
     per route, and 404 for the rest.
-  - It audits `http://127.0.0.1:4173/Rip-PC/` 3 times per preset.
-  - `LHCI_PORT` overrides the port locally.
+  - It audits `http://127.0.0.1:<port>/Rip-PC/` 3 times per preset.
+  - The port is derived from the checkout's path, in 30000–39999, as `playwright.config.ts` does
+    for its own preview in 20000–29999. Several worktrees on one machine can then run Lighthouse
+    at once. A fixed 4173 made two teams' runs collide on the home PC (2026-10-01).
+    `LHCI_PORT` overrides it.
 - **Assertions,** each at `error` level with `aggregationMethod: 'median'`:
   - `categories:performance` minScore 0.90;
   - `largest-contentful-paint` < 2500 ms;
@@ -296,7 +299,9 @@ chunk is requested, and applies the same 250,000 B gate.
   "<" is strict, while LHCI's `maxNumericValue` is inclusive, so the ceiling sits a relative 1e-9
   below the number (2499.9999975 ms for LCP).
 - **Chrome.**
-  - Locally: `CHROME_PATH=/opt/pw-browsers/chromium`.
+  - In the cloud container: `CHROME_PATH=/opt/pw-browsers/chromium`.
+  - On the home PC, with no `CHROME_PATH`: LHCI finds installed Google Chrome (151 on
+    2026-10-01). Set `CHROME_PATH` to Playwright's Chromium to match CI.
   - In CI: `CHROME_PATH` is set to `require('@playwright/test').chromium.executablePath()` after
     `npx playwright install --with-deps chromium`, so CI and the container use the same Chromium
     1194, not the runner's Chrome 153.
@@ -451,10 +456,11 @@ When the URL has `perf=1`, the garage exposes `window.__RIG_LAB_PERF__`:
   deadline. A 16.7 ms threshold would count ordinary vsync jitter; a unit test proves that.
 - Idle calibration first, then 1 warm-up pass, then 3 measured passes, reporting the median.
 
-**Verdicts** (`verdictFor` in `tests/perf/fps-probe.mjs`; `tests/perf/fps.test.mjs` has 16 tests
+**Verdicts** (`verdictFor` in `tests/perf/fps-probe.mjs`; `tests/perf/fps.test.mjs` has 17 tests
 covering it, the meter's statistics and the file naming):
 
 - **INVALID** in reference mode when:
+  - the browser is headless, whatever its renderer: headless frames never reach a screen;
   - the WebGL renderer is software (SwiftShader, llvmpipe, Microsoft Basic Render); or
   - it is not the target's `expectRenderer`. That is "Arc" for the laptop, which catches a hybrid
     laptop running on its discrete GPU.
@@ -475,6 +481,10 @@ Exit codes: 0 PASS or PROXY · 1 FAIL · 2 INVALID, INCONCLUSIVE or error.
 - Headless `requestAnimationFrame` stays at 60 Hz with or without `--disable-gpu-vsync
   --disable-frame-rate-limit`, in both headless modes. So the uncap flags are for headed
   reference runs only.
+- **That holds on SwiftShader only.** On the home PC (2026-10-01; Windows 11, RTX 5080), headless
+  Chrome 151 with the uncap flags rendered on the GPU and gave 6967 fps on the fixture scene, and
+  the probe called it a PASS of the 120 fps target. The renderer check cannot catch that, so a
+  headless reference run is now always INVALID (`fps.test.mjs` pins it).
 - With the uncap flags on SwiftShader, rAF ran ahead of the GPU queue: one scene gave 379, then
   3.8, then 2.2 fps. CI mode drops the flags, and the spread rule catches this kind of run
   anywhere.

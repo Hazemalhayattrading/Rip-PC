@@ -315,10 +315,16 @@ test('web vitals: LCP and CLS within budget on every route, at every CPU throttl
         clsPass,
         samples,
       });
+      const summary = `LCP ${lcpText} (${lcpPass ? 'pass' : 'FAIL'}, ${lcpGate}); CLS ${clsText} (${clsPass ? 'pass' : 'FAIL'}, ${clsGate})`;
       testInfo.annotations.push({
         type: `web-vitals ${route.name} ${viewport.name} px CPU x${String(cpuRate)}`,
-        description: `LCP ${lcpText} (${lcpPass ? 'pass' : 'FAIL'}, ${lcpGate}); CLS ${clsText} (${clsPass ? 'pass' : 'FAIL'}, ${clsGate})`,
+        description: summary,
       });
+      // Annotations show only in the HTML and JSON reports, so a local `npm run perf:vitals` prints
+      // each result as well.
+      console.log(
+        `web vitals ${where}: ${summary}; LCP samples ${samples.map((s) => String(Math.round(s.lcpMs))).join('/')} ms`,
+      );
       const flagged = samples.reduce((sum, s) => sum + s.inputFlaggedShifts, 0);
       if (flagged > 0) {
         testInfo.annotations.push({

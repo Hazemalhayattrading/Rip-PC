@@ -13,7 +13,7 @@
  *     node tests/perf/fps-probe.mjs --mode ci --url "http://127.0.0.1:4173/Rip-PC/build/looks?b=...&perf=1" [--cpu-throttle 4]
  *
  * Verdicts: PASS · FAIL · INCONCLUSIVE (frame rate capped below the target, so a miss can't be proven)
- *           INVALID (software rendering or the wrong GPU in reference mode) · PROXY (ci mode, never a §8 pass)
+ *           INVALID (headless, software rendering or the wrong GPU in reference mode) · PROXY (ci mode, never a §8 pass)
  * Exit codes: 0 PASS or PROXY · 1 FAIL (or a blocking CI regression) · 2 INVALID, INCONCLUSIVE or error
  */
 import { mkdirSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
@@ -44,6 +44,7 @@ export function verdictFor({
   medianAvgFps,
   calibrationFps,
   targetFps,
+  headless = false,
   runAvgFps = [],
   maxRunSpreadPct = 15,
   baselineAvgFps = null,
@@ -52,6 +53,15 @@ export function verdictFor({
 }) {
   const reasons = [];
   if (mode === 'reference') {
+    // Headless frames never reach a screen. On a machine with a real GPU, headless Chrome 151 with
+    // the uncap flags gave 6967 fps on the fixture scene (home PC, 2026-10-01), so the renderer
+    // check below cannot catch it on its own.
+    if (headless) {
+      reasons.push(
+        'headless browser: frames never reach a screen, so this is not a reference measurement; run headed',
+      );
+      return { verdict: 'INVALID', reasons };
+    }
     if (!renderer || SOFTWARE_RENDERER.test(renderer)) {
       reasons.push(
         `WebGL renderer is "${renderer ?? 'unknown'}": hardware acceleration is off, so this is not a reference measurement`,
@@ -128,7 +138,7 @@ const USAGE = `Usage: node tests/perf/fps-probe.mjs --url <garage url with perf=
   --out <file>              JSON output (default: docs/qa/perf-runs/<YYYY-MM-DDTHHMMZ>-<target>-<device>.json
                             in reference mode, artifacts/perf/fps-<YYYY-MM-DDTHHMMZ>-cpu<n>x.json in ci mode)
   --ready-timeout <ms>      how long to wait for the scene contract (default 120000)
-  --headless                force headless in reference mode (only to test the guard; gives INVALID)`;
+  --headless                force headless in reference mode (only to test the guard; always INVALID)`;
 
 async function probe(args) {
   const fps = loadFpsBudget();
@@ -214,6 +224,7 @@ async function probe(args) {
       medianAvgFps: measured.median.avgFps,
       calibrationFps: measured.calibrationFps,
       targetFps: target.avgFpsMin,
+      headless,
       runAvgFps: measured.runs.map((r) => r.avgFps),
       maxRunSpreadPct: fps.maxRunSpreadPct,
       baselineAvgFps: baseline?.median?.avgFps ?? null,

@@ -146,6 +146,25 @@ describe('fps-probe verdicts', () => {
     }
   });
 
+  it('reference: INVALID when headless, even on a hardware GPU (frames never reach a screen)', () => {
+    // Measured on the home PC, 2026-10-01: headless Chrome 151 on an RTX 5080 with the uncap flags
+    // gave 6967 fps on the fixture scene, which a renderer check alone would have passed.
+    const v = verdictFor({
+      ...base,
+      renderer:
+        'ANGLE (NVIDIA, NVIDIA GeForce RTX 5080 (0x00002C02) Direct3D11 vs_5_0 ps_5_0, D3D11)',
+      expectRenderer: undefined,
+      targetFps: 120,
+      mode: 'reference',
+      headless: true,
+      medianAvgFps: 6967.38,
+      calibrationFps: 57.62,
+      runAvgFps: [6967.38, 6683.74, 6984.11],
+    });
+    expect(v.verdict).toBe('INVALID');
+    expect(v.reasons.join(' ')).toMatch(/headless/);
+  });
+
   it('reference: INVALID on the wrong GPU (a hybrid laptop running on its discrete GPU)', () => {
     const v = verdictFor({
       ...base,
