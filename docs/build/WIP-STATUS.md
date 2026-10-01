@@ -8,7 +8,8 @@ This file is deleted in the final hand-off commit.
 
 ## Done
 
-**Part 1, accepted by the Director on 2026-10-01** (to be merged with the follow-up below):
+**Part 1 and its follow-up are merged** into the integration branch as `c7a099b` (Director,
+2026-10-01; verify there 266 unit, 112 e2e):
 1. **Category ids** (`cfa2376`). `gpu` became `gpu-card`; every one-letter code is unchanged.
    data-lead confirmed it: a build selects from `PRICED_CATEGORIES`, `gpu-chip` is never a
    selection, and no other id changes. Test-first evidence: `tdd-categories-red.log` (6
@@ -66,5 +67,7 @@ This file is deleted in the final hand-off commit.
 
 ## Next step
 
-Run verify on the merged follow-up, push, and report the head to the Director. Then wait for
-WP-DS1.
+Idle until the Director says WP-DS1 is merged. A pause request for the history purge may come
+first: then confirm "paused: <branch> @ <sha>, clean, pushed" and change nothing until RESUME.
+design-lead decides the toggle and spacing defaults. When Part 2 starts, merge the integration
+branch first.
