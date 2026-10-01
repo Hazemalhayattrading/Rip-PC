@@ -38,7 +38,9 @@ Brief: `docs/reports/phase-0-briefs.md`, section "data-lead". Acceptance criteri
    - The Python is **not run** here (no Python on this PC). The Node half is: the naming CLI, and
      both helpers against a local `data:` page with the repo's Playwright 1.56.1 Chromium.
    - No existing capture was renamed; every cited name still passes.
-5. Font CREDITS row (Rig Lab Sans, OFL): waiting for design-lead's text.
+5. Font CREDITS row (Rig Lab Sans, OFL): **waiting for design-lead.** A draft row, built from
+   design-lead's `src/styles/fonts/FONTLOG.txt` (origin/feat/design-tokens), was sent for them to
+   confirm on 2026-10-01. It goes in a new "## Fonts" section of `CREDITS.md`.
 6. Canonical category ids to build-lead: **done**, sent 2026-10-01 by message. Only `gpu` changes, to
    `gpu-card` (code `g` kept). `gpu-chip` is not a build selection.
 7. Hand-off to the Director: not started.
@@ -63,8 +65,15 @@ Brief: `docs/reports/phase-0-briefs.md`, section "data-lead". Acceptance criteri
 - Seeded 20% audit (seed 20260930): **done** on 2026-10-01; see step 2 and `data/audits.json`.
 
 ## Where I stopped
-Steps 1, 2, 3, 4 and 6 are done. Next: step 5, the font CREDITS row, once design-lead sends it;
-meanwhile, prepare the step 7 hand-off numbers.
+Steps 1, 2, 3, 4 and 6 are done. The integration branch was merged again at 8a8a645 (8e6f3b3).
+Next: add design-lead's font row (step 5), then the step 7 hand-off:
+- run `npm run verify` and log it under `artifacts/verify/`;
+- write `artifacts/evidence-manifest-2026-10-01.sha256` for today's new evidence (audit logs and
+  scripts, the Intel ordering capture and its two logs, the verify logs);
+- delete this file in the hand-off commit, push, and send the plan §6 hand-off to `team-lead`.
+The restored evidence was re-checked on 2026-10-01: all 1,101 files on disk match
+`artifacts/evidence-manifest.sha256` (identical to `docs/reports/evidence/`); the one missing file
+is the Fractal Terra support page, left out by design (EXCLUDED.txt).
 
 ## Blockers (never worked around)
 - **Sites that refuse or challenge our fetcher:** Samsung, Kingston, Crucial, Noctua, Thermalright, Lian Li, TechPowerUp (403), Guru3D, tracker.gg and epicgames.com. Tried 1 to 2 times each (see `artifacts/specs/*/fetch-log.tsv`). Wayback copies were used where the rules allow them.
