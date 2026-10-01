@@ -51,6 +51,10 @@ Columns:
 - **Realism** is 1 to 5, judged from the thumbnail.
 - **Fit** says how well the model covers what our catalogue needs.
 - **Representative?** says whether it must carry the "representative model" label if used.
+- **Author** gives the display name, then the Sketchfab handle and profile link that CC BY
+  credit needs. They come from the Sketchfab Data API v3 (`/v3/models/{uid}`), read 2026-10-01
+  (QA finding DS0-13). That day all 39 models were still "CC Attribution". The Poly Haven row's
+  author and URL come from `api.polyhaven.com/info/circuit_board`.
 
 Every Sketchfab row's licence is **CC BY 4.0** ("CC Attribution" on Sketchfab), and each is
 downloadable once logged in. The Poly Haven row is CC0.
@@ -63,86 +67,86 @@ drawing, or the form-factor standard, before use.
 
 | Model | Author | Faces / verts | Tex | GLB | Realism | Dimensional fidelity | Representative? | Fit |
 |---|---|---|---|---|---|---|---|---|
-| [Corsair 4000D Airflow (Free)](https://sketchfab.com/3d-models/34df3ba96cf94e71accdb5779c4b8694) | Kirigami | 98,464 / 43,267 | 1 × 1K | 4.3 MB | 3: clean mesh front | Claims the 4000D. Unverified; compare with Corsair's drawing | Only if it is not the 4000D | Good if the 4000D is in the catalogue. Decimate to about 60k |
-| [Corsair 4000D PC case](https://sketchfab.com/3d-models/bc15e007d6634579bc0e8ffdf238e665) | SzaBa | 7,686 / 4,145 | 9 × 2K | 19.6 MB | 3: low poly, detail baked in | Claims the 4000D. Unverified | As above | Excellent budget; textures need KTX2 |
-| [Fractal Design Meshify C](https://sketchfab.com/3d-models/a46526af2ac84fa098edc3f01c012450) | MUSHROOM_BUILDS | 224,234 / 146,292 | none | 12.3 MB | 3: untextured, stylised | Claims the Meshify C (older model). Unverified | Yes for any other case | Over budget ×4 |
-| [Computer Case (Based off of NZXT 510B)](https://sketchfab.com/3d-models/d2279335aac944da90d05b33c606e178) | Up1x | 211,714 / 111,899 | none | 12.5 MB | 2.5 | "Based off", so not faithful | Yes | Weak |
-| [Ncase M1](https://sketchfab.com/3d-models/bf11cc4a694a40238a2f95d4db92b590) | Vivien Deroche | 286,366 / 212,678 | 1 × 512 | 17.3 MB | 3.5 | Claims the Ncase M1 (Mini-ITX). Unverified | Yes for other ITX cases | Over budget ×5 |
-| [Basic PC case](https://sketchfab.com/3d-models/2869fb18575d49128a3115d42d5d3826) | Sousinho | 26,832 / 13,670 | 7 × 4K | 51.1 MB | 3: RGB fans, glass | Generic | Yes | Good mesh, textures far too heavy |
+| [Corsair 4000D Airflow (Free)](https://sketchfab.com/3d-models/34df3ba96cf94e71accdb5779c4b8694) | Kirigami ([@kirigami318](https://sketchfab.com/kirigami318)) | 98,464 / 43,267 | 1 × 1K | 4.3 MB | 3: clean mesh front | Claims the 4000D. Unverified; compare with Corsair's drawing | Only if it is not the 4000D | Good if the 4000D is in the catalogue. Decimate to about 60k |
+| [Corsair 4000D PC case](https://sketchfab.com/3d-models/bc15e007d6634579bc0e8ffdf238e665) | SzaBa ([@SzaBa](https://sketchfab.com/SzaBa)) | 7,686 / 4,145 | 9 × 2K | 19.6 MB | 3: low poly, detail baked in | Claims the 4000D. Unverified | As above | Excellent budget; textures need KTX2 |
+| [Fractal Design Meshify C](https://sketchfab.com/3d-models/a46526af2ac84fa098edc3f01c012450) | MUSHROOM_BUILDS ([@MUSHROOM_BUILDS](https://sketchfab.com/MUSHROOM_BUILDS)) | 224,234 / 146,292 | none | 12.3 MB | 3: untextured, stylised | Claims the Meshify C (older model). Unverified | Yes for any other case | Over budget ×4 |
+| [Computer Case (Based off of NZXT 510B)](https://sketchfab.com/3d-models/d2279335aac944da90d05b33c606e178) | Up1x ([@alexlh2003](https://sketchfab.com/alexlh2003)) | 211,714 / 111,899 | none | 12.5 MB | 2.5 | "Based off", so not faithful | Yes | Weak |
+| [Ncase M1](https://sketchfab.com/3d-models/bf11cc4a694a40238a2f95d4db92b590) | Vivien Deroche ([@blue-odym](https://sketchfab.com/blue-odym)) | 286,366 / 212,678 | 1 × 512 | 17.3 MB | 3.5 | Claims the Ncase M1 (Mini-ITX). Unverified | Yes for other ITX cases | Over budget ×5 |
+| [Basic PC case](https://sketchfab.com/3d-models/2869fb18575d49128a3115d42d5d3826) | Sousinho ([@sousinho](https://sketchfab.com/sousinho)) | 26,832 / 13,670 | 7 × 4K | 51.1 MB | 3: RGB fans, glass | Generic | Yes | Good mesh, textures far too heavy |
 
 ### ATX motherboard
 
 | Model | Author | Faces / verts | Tex | GLB | Realism | Dimensional fidelity | Representative? | Fit |
 |---|---|---|---|---|---|---|---|---|
-| [X570 Prime motherboard [HQ PBR]](https://sketchfab.com/3d-models/25b3659935774b1e9d73d8954be065d8) | Igor.Jop | 34,975 / 17,845 | 10 × 2K | 10.2 MB | 4: best of the set | Claims an ASUS Prime X570 (AM4). Check the outline against the ATX standard | Yes for AM5 and LGA1851 boards | Best candidate for a representative board |
-| [B550 AORUS ELITE V2 model](https://sketchfab.com/3d-models/59f6b9b39f5d401b8beee8ff0c28e88e) | exitmonad | 36,034 / 17,085 | 15 × 1K | 4.4 MB | 3.5 | Claims the Gigabyte B550 Aorus Elite V2. Unverified | Yes | Good budget |
-| [ARDOR GAMING B550M-HDVAR](https://sketchfab.com/3d-models/4c0a2a3008d9402ab9bfd05b2f0cd093) | BlenderFace | 20,866 / 11,025 | 3 × 1K | 2.5 MB | 3 | mATX. Check against the microATX standard | Yes | mATX representative |
-| [Asus Z170-P Motherboard](https://sketchfab.com/3d-models/b998596cfc4945a0bc7b016005c39321) | Lassi Kaukonen | 312,196 / 155,906 | 3 × 8K | 92.1 MB | 4.5: photoreal | 2015 board, wrong socket for our catalogue | Yes | Reference quality only; far over budget |
-| [Asus Strix B550-F Gaming, realistic](https://sketchfab.com/3d-models/3eba5f45bed74fbeb2647de38047000f) | MUSHROOM_BUILDS | 818,255 / 428,036 | 26 × 8K | 111.7 MB | 4 | Claims the B550-F | Yes | Unusable at this size |
-| Circuit Board (Poly Haven `circuit_board`) | Benny Weimer | 14,430 polys | CC0 textures | n/a | 3.5 | Generic PCB, not ATX | Yes | CC0 detail prop only |
+| [X570 Prime motherboard [HQ PBR]](https://sketchfab.com/3d-models/25b3659935774b1e9d73d8954be065d8) | Igor.Jop ([@Igor.Jop](https://sketchfab.com/Igor.Jop)) | 34,975 / 17,845 | 10 × 2K | 10.2 MB | 4: best of the set | Claims an ASUS Prime X570 (AM4). Check the outline against the ATX standard | Yes for AM5 and LGA1851 boards | Best candidate for a representative board |
+| [B550 AORUS ELITE V2 model](https://sketchfab.com/3d-models/59f6b9b39f5d401b8beee8ff0c28e88e) | exitmonad ([@exitmonad](https://sketchfab.com/exitmonad)) | 36,034 / 17,085 | 15 × 1K | 4.4 MB | 3.5 | Claims the Gigabyte B550 Aorus Elite V2. Unverified | Yes | Good budget |
+| [ARDOR GAMING B550M-HDVAR](https://sketchfab.com/3d-models/4c0a2a3008d9402ab9bfd05b2f0cd093) | BlenderFace ([@BlenderFace1](https://sketchfab.com/BlenderFace1)) | 20,866 / 11,025 | 3 × 1K | 2.5 MB | 3 | mATX. Check against the microATX standard | Yes | mATX representative |
+| [Asus Z170-P Motherboard](https://sketchfab.com/3d-models/b998596cfc4945a0bc7b016005c39321) | Lassi Kaukonen ([@thesidekick](https://sketchfab.com/thesidekick)) | 312,196 / 155,906 | 3 × 8K | 92.1 MB | 4.5: photoreal | 2015 board, wrong socket for our catalogue | Yes | Reference quality only; far over budget |
+| [Asus Strix B550-F Gaming, realistic](https://sketchfab.com/3d-models/3eba5f45bed74fbeb2647de38047000f) | MUSHROOM_BUILDS ([@MUSHROOM_BUILDS](https://sketchfab.com/MUSHROOM_BUILDS)) | 818,255 / 428,036 | 26 × 8K | 111.7 MB | 4 | Claims the B550-F | Yes | Unusable at this size |
+| [Circuit Board](https://polyhaven.com/a/circuit_board) (Poly Haven `circuit_board`) | Benny Weimer | 14,430 polys | CC0 textures | n/a | 3.5 | Generic PCB, not ATX | Yes | CC0 detail prop only |
 
 ### Graphics card
 
 | Model | Author | Faces / verts | Tex | GLB | Realism | Dimensional fidelity | Representative? | Fit |
 |---|---|---|---|---|---|---|---|---|
-| [GeForce RTX 3080 Graphics Card](https://sketchfab.com/3d-models/8b947ee1bf7a4e3d8ffa1c24893ac160) | _surovic_ | 105,536 / 53,290 | 4 × 4K | 12.0 MB | 4 | Founders Edition design (NVIDIA trade dress). Unverified | Yes: the FE look must not stand for partner cards | Over budget ×2.5 |
-| [MSI GeForce RTX 3080 Gaming X Trio](https://sketchfab.com/3d-models/e5356746dcec48f9868164bb9674ab9a) | M E U | 64,760 / 34,179 | 8 × 2K | 4.8 MB | 4 | Claims the Gaming X Trio. Unverified | Yes: MSI branding | Good triple-fan shape for "long card" |
-| [Asus ROG GeForce RTX 4090 v2.0](https://sketchfab.com/3d-models/6f527569f14b4efc94c7072842bd41ac) | MajdyModels | 163,798 / 84,754 | 3 × 2K | 9.4 MB | 3.5 | Claims the ROG Strix 4090. Unverified | Yes: ROG branding | Over budget ×4 |
-| [Nvidia GeForce RTX 3070, updated](https://sketchfab.com/3d-models/29da4e10eb6c427cb72f3ebdf822f89e) | DatSketch | 53,969 / 28,015 | 1 × 512 | 3.0 MB | 3.5 | FE design | Yes | Dual-fan short card shape |
-| [MSI RTX 3080 Graphics card](https://sketchfab.com/3d-models/e5c384afae914d548a591f722e1878fc) | Kaif.3D | 21,917 / 12,311 | 12 × 2K | 24.1 MB | 3 | Unverified | Yes | Good mesh budget, textures heavy |
+| [GeForce RTX 3080 Graphics Card](https://sketchfab.com/3d-models/8b947ee1bf7a4e3d8ffa1c24893ac160) | _surovic_ ([@samuelsurovic](https://sketchfab.com/samuelsurovic)) | 105,536 / 53,290 | 4 × 4K | 12.0 MB | 4 | Founders Edition design (NVIDIA trade dress). Unverified | Yes: the FE look must not stand for partner cards | Over budget ×2.5 |
+| [MSI GeForce RTX 3080 Gaming X Trio](https://sketchfab.com/3d-models/e5356746dcec48f9868164bb9674ab9a) | M E U ([@meu9MM98](https://sketchfab.com/meu9MM98)) | 64,760 / 34,179 | 8 × 2K | 4.8 MB | 4 | Claims the Gaming X Trio. Unverified | Yes: MSI branding | Good triple-fan shape for "long card" |
+| [Asus ROG GeForce RTX 4090 v2.0](https://sketchfab.com/3d-models/6f527569f14b4efc94c7072842bd41ac) | MajdyModels ([@MG990](https://sketchfab.com/MG990)) | 163,798 / 84,754 | 3 × 2K | 9.4 MB | 3.5 | Claims the ROG Strix 4090. Unverified | Yes: ROG branding | Over budget ×4 |
+| [Nvidia GeForce RTX 3070, updated](https://sketchfab.com/3d-models/29da4e10eb6c427cb72f3ebdf822f89e) | DatSketch ([@DatSketch](https://sketchfab.com/DatSketch)) | 53,969 / 28,015 | 1 × 512 | 3.0 MB | 3.5 | FE design | Yes | Dual-fan short card shape |
+| [MSI RTX 3080 Graphics card](https://sketchfab.com/3d-models/e5c384afae914d548a591f722e1878fc) | Kaif.3D ([@kaif.3d](https://sketchfab.com/kaif.3d)) | 21,917 / 12,311 | 12 × 2K | 24.1 MB | 3 | Unverified | Yes | Good mesh budget, textures heavy |
 
 ### RAM stick
 
 | Model | Author | Faces / verts | Tex | GLB | Realism | Dimensional fidelity | Representative? | Fit |
 |---|---|---|---|---|---|---|---|---|
-| [Random Access Memory, RAM Stick, PC](https://sketchfab.com/3d-models/ab2b1c25c31b44c1a757911734bdf942) | Diego G. | 3,699 / 1,908 | 2 × 2K | 1.8 MB | 3: bare green PCB | Generic DIMM. Check length against the JEDEC outline | Yes | Good base for a bare low-profile stick |
-| [g_skill trident z neo](https://sketchfab.com/3d-models/59a8b153475444da99dcd86e7d878e63) | BlenderFace | 1,104 / 680 | 2 × 1K | 0.2 MB | 3 | Claims the Trident Z Neo. Unverified | Yes: G.Skill branding | Excellent budget |
-| [RAM Corsair Vengeance LPX](https://sketchfab.com/3d-models/ee11e1926e514075a70642ecb5dc5c2d) | supahot | 5,428 / 3,059 | 6 × 2K | 1.5 MB | 3 | Claims the LPX (low profile). Unverified | Yes | Low-profile shape |
-| [Crucial BALLISTIX 8GB DDR4 3600](https://sketchfab.com/3d-models/1fce4935471e46cab6ee57ba140c87f9) | BlackCube | 5,374 / 3,992 | 8 × 4K | 15.6 MB | 3.5 | Discontinued product | Yes | Textures far too heavy |
-| [Corsair DOMINATOR RGB RAM](https://sketchfab.com/3d-models/8995a60d2dcc46b3be14c35c1c016c0a) | MajdyModels | 97,070 / 48,668 | 2 × 1K | 4.7 MB | 3.5 | Claims the Dominator (tall, RGB) | Yes | Over budget ×30 per stick |
+| [Random Access Memory, RAM Stick, PC](https://sketchfab.com/3d-models/ab2b1c25c31b44c1a757911734bdf942) | Diego G. ([@empty_mirror](https://sketchfab.com/empty_mirror)) | 3,699 / 1,908 | 2 × 2K | 1.8 MB | 3: bare green PCB | Generic DIMM. Check length against the JEDEC outline | Yes | Good base for a bare low-profile stick |
+| [g_skill trident z neo](https://sketchfab.com/3d-models/59a8b153475444da99dcd86e7d878e63) | BlenderFace ([@BlenderFace1](https://sketchfab.com/BlenderFace1)) | 1,104 / 680 | 2 × 1K | 0.2 MB | 3 | Claims the Trident Z Neo. Unverified | Yes: G.Skill branding | Excellent budget |
+| [RAM Corsair Vengeance LPX](https://sketchfab.com/3d-models/ee11e1926e514075a70642ecb5dc5c2d) | supahot ([@supahot](https://sketchfab.com/supahot)) | 5,428 / 3,059 | 6 × 2K | 1.5 MB | 3 | Claims the LPX (low profile). Unverified | Yes | Low-profile shape |
+| [Crucial BALLISTIX 8GB DDR4 3600](https://sketchfab.com/3d-models/1fce4935471e46cab6ee57ba140c87f9) | BlackCube ([@blackcube4](https://sketchfab.com/blackcube4)) | 5,374 / 3,992 | 8 × 4K | 15.6 MB | 3.5 | Discontinued product | Yes | Textures far too heavy |
+| [Corsair DOMINATOR RGB RAM](https://sketchfab.com/3d-models/8995a60d2dcc46b3be14c35c1c016c0a) | MajdyModels ([@MG990](https://sketchfab.com/MG990)) | 97,070 / 48,668 | 2 × 1K | 4.7 MB | 3.5 | Claims the Dominator (tall, RGB) | Yes | Over budget ×30 per stick |
 
 ### Air cooler
 
 | Model | Author | Faces / verts | Tex | GLB | Realism | Dimensional fidelity | Representative? | Fit |
 |---|---|---|---|---|---|---|---|---|
-| [Cooler Master CPU Cooler](https://sketchfab.com/3d-models/e54651982f524644a2144b52a6b36e89) | BlenderFace | 93,460 / 46,574 | 1 × 2K | 5.5 MB | 3.5 | Tower with heatpipes, model unnamed | Yes | Decimate to about 30k |
-| [HYPER 212 SPECTRUM](https://sketchfab.com/3d-models/83ee9f97dd5646bfbbba60fd68563f96) | BlenderFace | 34,954 / 17,424 | 15 × 1K | 5.7 MB | 3.5 | Claims the Hyper 212 Spectrum. Unverified | Yes | Good budget |
-| [CPU Cooler](https://sketchfab.com/3d-models/672a0a74a98c452a862016bee99f3579) | Fochdog | 6,504 / 3,354 | 6 × 1K | 4.6 MB | 3 | Generic | Yes | Cheap generic tower |
-| [Noctua NH-D15 CPU cooler](https://sketchfab.com/3d-models/23e225925e174a9f929d995cd9bd22e2) | SzaBa | 10,676 / 5,624 | none | 0.6 MB | 2: blocky | Claims the NH-D15. Unverified | Yes | Too crude for a photoreal look |
-| [NH-P1 Passive CPU Cooler](https://sketchfab.com/3d-models/b287b18c8c0b4c7eb5fc707af72a6de8) | anachro19 | 15,858 / 8,012 | none | 0.7 MB | 3 | Claims the NH-P1 | Yes | Niche |
+| [Cooler Master CPU Cooler](https://sketchfab.com/3d-models/e54651982f524644a2144b52a6b36e89) | BlenderFace ([@BlenderFace1](https://sketchfab.com/BlenderFace1)) | 93,460 / 46,574 | 1 × 2K | 5.5 MB | 3.5 | Tower with heatpipes, model unnamed | Yes | Decimate to about 30k |
+| [HYPER 212 SPECTRUM](https://sketchfab.com/3d-models/83ee9f97dd5646bfbbba60fd68563f96) | BlenderFace ([@BlenderFace1](https://sketchfab.com/BlenderFace1)) | 34,954 / 17,424 | 15 × 1K | 5.7 MB | 3.5 | Claims the Hyper 212 Spectrum. Unverified | Yes | Good budget |
+| [CPU Cooler](https://sketchfab.com/3d-models/672a0a74a98c452a862016bee99f3579) | Fochdog ([@bazyaev08](https://sketchfab.com/bazyaev08)) | 6,504 / 3,354 | 6 × 1K | 4.6 MB | 3 | Generic | Yes | Cheap generic tower |
+| [Noctua NH-D15 CPU cooler](https://sketchfab.com/3d-models/23e225925e174a9f929d995cd9bd22e2) | SzaBa ([@SzaBa](https://sketchfab.com/SzaBa)) | 10,676 / 5,624 | none | 0.6 MB | 2: blocky | Claims the NH-D15. Unverified | Yes | Too crude for a photoreal look |
+| [NH-P1 Passive CPU Cooler](https://sketchfab.com/3d-models/b287b18c8c0b4c7eb5fc707af72a6de8) | anachro19 ([@anachro19](https://sketchfab.com/anachro19)) | 15,858 / 8,012 | none | 0.7 MB | 3 | Claims the NH-P1 | Yes | Niche |
 
 ### AIO liquid cooler
 
 | Model | Author | Faces / verts | Tex | GLB | Realism | Dimensional fidelity | Representative? | Fit |
 |---|---|---|---|---|---|---|---|---|
-| [Corsair H150i Elite CPU Liquid Cooler](https://sketchfab.com/3d-models/faa8f55407404fd2870e35ab6a8f03bb) | MajdyModels | 499,484 / 343,873 | 1 × 1K | 19.7 MB | 4 | Claims a 360 mm H150i Elite. Unverified | Yes | Over budget ×16. Radiator and fans should be parametric |
-| [Liquid CPU Cooling](https://sketchfab.com/3d-models/7a0014c1141a4c25bc69912075526ee5) | Denzerru | 107,910 / 54,755 | 1 × 256 | 7.7 MB | 2.5 | Generic | Yes | Weak |
+| [Corsair H150i Elite CPU Liquid Cooler](https://sketchfab.com/3d-models/faa8f55407404fd2870e35ab6a8f03bb) | MajdyModels ([@MG990](https://sketchfab.com/MG990)) | 499,484 / 343,873 | 1 × 1K | 19.7 MB | 4 | Claims a 360 mm H150i Elite. Unverified | Yes | Over budget ×16. Radiator and fans should be parametric |
+| [Liquid CPU Cooling](https://sketchfab.com/3d-models/7a0014c1141a4c25bc69912075526ee5) | Denzerru ([@Denzerru](https://sketchfab.com/Denzerru)) | 107,910 / 54,755 | 1 × 256 | 7.7 MB | 2.5 | Generic | Yes | Weak |
 
 ### Case fan
 
 | Model | Author | Faces / verts | Tex | GLB | Realism | Dimensional fidelity | Representative? | Fit |
 |---|---|---|---|---|---|---|---|---|
-| [Computer cooler, pc fan](https://sketchfab.com/3d-models/50adf2b7b06f42588825ab7f31f7ca87) | Neutrino | 14,948 / 7,451 | 2 × 4K | 7.6 MB | 3.5 | Generic 120 mm fan (standard size, easy to verify) | Yes | Best generic fan. Downsize textures to 1K |
-| [computer fan](https://sketchfab.com/3d-models/5360bd331c5848eeb9338b4f894e78e5) | Temoor | 61,940 / 30,582 | none | 4.4 MB | 3.5 | Generic | Yes | Decimate to about 4k |
-| [Simple computer fan](https://sketchfab.com/3d-models/87e0b81409ca4a5cbf5ab194c73ba33a) | Javkal | 3,082 / 1,565 | 2 × 8K | 26.2 MB | 3 | Generic | Yes | Mesh budget ideal, textures absurd |
-| [Lian Li UNI FAN SL120 RGB BLACK](https://sketchfab.com/3d-models/5abd0d8e89ea4241b7216f4b6d5a2ca4) | DIEKO | 4,648 / 2,686 | none | 0.3 MB | 3 | Claims the SL120 | Yes | Good budget, RGB ring shape |
-| [RGB Cooling fan animated](https://sketchfab.com/3d-models/c2ae5f971caa45288f830e843ca9544e) | AJ Fatz | 91,016 / 51,500 | none | 4.6 MB | 3 | Generic, animated | Yes | Over budget |
-| [Noctua fan](https://sketchfab.com/3d-models/61d0bfab147743138ab9b79d4316bc21) | BlackCube | 5,632 / 2,833 | 5 × 4K | 20.9 MB | 3.5 | Noctua colours are trade dress | Only as that fan | Heavy textures |
+| [Computer cooler, pc fan](https://sketchfab.com/3d-models/50adf2b7b06f42588825ab7f31f7ca87) | Neutrino ([@itrek47](https://sketchfab.com/itrek47)) | 14,948 / 7,451 | 2 × 4K | 7.6 MB | 3.5 | Generic 120 mm fan (standard size, easy to verify) | Yes | Best generic fan. Downsize textures to 1K |
+| [computer fan](https://sketchfab.com/3d-models/5360bd331c5848eeb9338b4f894e78e5) | Temoor ([@Temooor](https://sketchfab.com/Temooor)) | 61,940 / 30,582 | none | 4.4 MB | 3.5 | Generic | Yes | Decimate to about 4k |
+| [Simple computer fan](https://sketchfab.com/3d-models/87e0b81409ca4a5cbf5ab194c73ba33a) | Javkal ([@Javkal](https://sketchfab.com/Javkal)) | 3,082 / 1,565 | 2 × 8K | 26.2 MB | 3 | Generic | Yes | Mesh budget ideal, textures absurd |
+| [Lian Li UNI FAN SL120 RGB BLACK](https://sketchfab.com/3d-models/5abd0d8e89ea4241b7216f4b6d5a2ca4) | DIEKO ([@DIEKO](https://sketchfab.com/DIEKO)) | 4,648 / 2,686 | none | 0.3 MB | 3 | Claims the SL120 | Yes | Good budget, RGB ring shape |
+| [RGB Cooling fan animated](https://sketchfab.com/3d-models/c2ae5f971caa45288f830e843ca9544e) | AJ Fatz ([@ManLikeAJ](https://sketchfab.com/ManLikeAJ)) | 91,016 / 51,500 | none | 4.6 MB | 3 | Generic, animated | Yes | Over budget |
+| [Noctua fan](https://sketchfab.com/3d-models/61d0bfab147743138ab9b79d4316bc21) | BlackCube ([@blackcube4](https://sketchfab.com/blackcube4)) | 5,632 / 2,833 | 5 × 4K | 20.9 MB | 3.5 | Noctua colours are trade dress | Only as that fan | Heavy textures |
 
 ### Power supply
 
 | Model | Author | Faces / verts | Tex | GLB | Realism | Dimensional fidelity | Representative? | Fit |
 |---|---|---|---|---|---|---|---|---|
-| [Power Supply, Basic](https://sketchfab.com/3d-models/02db33d66a784c82a6202a3ec6850498) | Up1x | 25,016 / 11,095 | none | 1.4 MB | 2.5 | Generic ATX box | Yes | Hidden under a shroud in most cases |
-| [PSU Power Supply Unit](https://sketchfab.com/3d-models/69ccd1be3a77497cb2acc9e39e7c52b3) | Groovex | 12,488 / 7,895 | none | 0.7 MB | 2.5 | Generic, modular sockets | Yes | Fine for the "open side" view |
-| [Power supply Aerocool KCAS 500W ATX](https://sketchfab.com/3d-models/bfb1f77fffb0410f9ee0d0be6fb5fc88) | nofurion | 35,694 / 12,866 | 3 × 4K | 25.5 MB | 3 | Older product with a large logo | Yes | Poor fit |
+| [Power Supply, Basic](https://sketchfab.com/3d-models/02db33d66a784c82a6202a3ec6850498) | Up1x ([@alexlh2003](https://sketchfab.com/alexlh2003)) | 25,016 / 11,095 | none | 1.4 MB | 2.5 | Generic ATX box | Yes | Hidden under a shroud in most cases |
+| [PSU Power Supply Unit](https://sketchfab.com/3d-models/69ccd1be3a77497cb2acc9e39e7c52b3) | Groovex ([@dhafintaufiqi21](https://sketchfab.com/dhafintaufiqi21)) | 12,488 / 7,895 | none | 0.7 MB | 2.5 | Generic, modular sockets | Yes | Fine for the "open side" view |
+| [Power supply Aerocool KCAS 500W ATX](https://sketchfab.com/3d-models/bfb1f77fffb0410f9ee0d0be6fb5fc88) | nofurion ([@nofurion](https://sketchfab.com/nofurion)) | 35,694 / 12,866 | 3 × 4K | 25.5 MB | 3 | Older product with a large logo | Yes | Poor fit |
 
 ### M.2 SSD (bonus, needed for the storage step)
 
 | Model | Author | Faces / verts | Tex | GLB | Realism | Dimensional fidelity | Representative? | Fit |
 |---|---|---|---|---|---|---|---|---|
-| [Storage (SSD, HDD, M.2)](https://sketchfab.com/3d-models/bdd5fd67a7674359ab8648204b5c0575) | Vivien Deroche | 110,561 / 55,602 | 7 × 1K | 7.0 MB | 3.5 | Generic 2280 stick, so size is easy to verify | Yes | Split the M.2 out and decimate |
-| [M.2 NVME SSD Samsung 990 Pro 1TB](https://sketchfab.com/3d-models/41b7bfda7eab40f8b13330913fd66fc2) | lime.ball.animations | 2,052 / 1,506 | 4 × 1K | 1.9 MB | 3 | Claims the 990 Pro | Only as that drive | Excellent budget |
+| [Storage (SSD, HDD, M.2)](https://sketchfab.com/3d-models/bdd5fd67a7674359ab8648204b5c0575) | Vivien Deroche ([@blue-odym](https://sketchfab.com/blue-odym)) | 110,561 / 55,602 | 7 × 1K | 7.0 MB | 3.5 | Generic 2280 stick, so size is easy to verify | Yes | Split the M.2 out and decimate |
+| [M.2 NVME SSD Samsung 990 Pro 1TB](https://sketchfab.com/3d-models/41b7bfda7eab40f8b13330913fd66fc2) | lime.ball.animations ([@lime.ball.animations.official](https://sketchfab.com/lime.ball.animations.official)) | 2,052 / 1,506 | 4 × 1K | 1.9 MB | 3 | Claims the 990 Pro | Only as that drive | Excellent budget |
 
 ## CC0 materials and lighting (safe to use as they are)
 
