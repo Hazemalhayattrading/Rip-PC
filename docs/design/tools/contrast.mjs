@@ -1,6 +1,6 @@
-// WCAG 2.1 contrast check for the three WP-DS0 mocks, measured on the tokens each mock actually uses.
-// Reads the :root[data-theme="dark"] and :root[data-theme="light"] custom properties from
-// docs/design/mocks/<slug>/index.html, then checks every declared foreground/background pair.
+// WCAG 2.1 contrast check, measured on the tokens actually shipped: src/styles/tokens.css (WP-DS1,
+// direction C, Studio) and the three WP-DS0 mocks (docs/design/mocks/<slug>/index.html).
+// Reads each file's dark and light custom-property blocks, then checks every declared foreground/background pair.
 //
 //   node docs/design/tools/contrast.mjs            -> markdown tables on stdout
 //   node docs/design/tools/contrast.mjs --check    -> exit 1 if any pair fails its threshold
@@ -12,14 +12,28 @@ import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const mocks = join(here, '..', 'mocks');
+const SOURCES = {
+  tokens: join(here, '..', '..', '..', 'src', 'styles', 'tokens.css'),
+  bench: join(mocks, 'bench', 'index.html'),
+  folio: join(mocks, 'folio', 'index.html'),
+  studio: join(mocks, 'studio', 'index.html'),
+};
 
-function tokens(html, theme) {
-  const re = theme === 'dark' ? /:root, :root\[data-theme="dark"\] \{([\s\S]*?)\n\}/ : /:root\[data-theme="light"\] \{([\s\S]*?)\n\}/;
-  const m = html.match(re);
-  if (!m) throw new Error('no ' + theme + ' token block');
-  const out = {};
-  for (const t of m[1].matchAll(/--([a-z0-9-]+):\s*([^;]+);/g)) out[t[1]] = t[2].trim();
-  return out;
+// The block whose selectors are only :root and [data-theme="<theme>"] (either quote style), for example
+// `:root, :root[data-theme="dark"]` in a mock or `:root,\n[data-theme='dark']` in tokens.css.
+function tokens(text, theme) {
+  // A mock is HTML: read its <style> element only. Then drop comments, which may contain commas.
+  const style = text.includes('<style') ? text.match(/<style[^>]*>([\s\S]*?)<\/style>/)[1] : text;
+  const css = style.replace(/\/\*[\s\S]*?\*\//g, '');
+  for (const m of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+    const selectors = m[1].split(',').map((x) => x.trim()).filter(Boolean);
+    const plain = selectors.every((x) => /^(:root)?(\[data-theme=["'](dark|light)["']\])?$/.test(x));
+    if (!plain || !selectors.some((x) => x.includes(`[data-theme="${theme}"]`) || x.includes(`[data-theme='${theme}']`))) continue;
+    const out = {};
+    for (const t of m[2].matchAll(/--([a-z0-9-]+):\s*([^;]+);/g)) out[t[1]] = t[2].trim();
+    return out;
+  }
+  throw new Error('no ' + theme + ' token block');
 }
 function rgba(v) {
   v = v.trim();
@@ -38,6 +52,26 @@ const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p);
 
 // kind: text (4.5), large (3), ui (3). bg may be "token" or "token+overlay" (overlay composited on token).
 const PAIRS = {
+  // The shipped tokens (direction C, Studio). Superset of the Studio mock's pairs: every state on both
+  // surfaces (the selected row can warn), text in the key light and over the floor, focus everywhere.
+  tokens: [
+    ['ink', 'surface', 'text', 'primary text on panels'], ['ink-2', 'surface', 'text', 'secondary text'], ['ink-3', 'surface', 'text', 'meta, units, captions'],
+    ['ink', 'surface-raised', 'text', 'text on a selected or hovered row'], ['ink-2', 'surface-raised', 'text', 'secondary on a selected row'], ['ink-3', 'surface-raised', 'text', 'meta on a selected row'],
+    ['ink', 'stage', 'text', 'step heading on the stage'], ['ink-2', 'stage', 'text', 'hint on the stage'], ['ink-3', 'stage', 'text', 'step label on the stage'],
+    ['ink', 'stage+stage-key', 'text', 'heading where the key light is brightest'], ['ink-2', 'stage+stage-key', 'text', 'hint where the key light is brightest'], ['ink-3', 'stage+stage-key', 'text', 'label where the key light is brightest'],
+    ['ink-2', 'stage-floor', 'text', 'text over the floor'], ['ink-3', 'stage-floor', 'text', 'labels over the floor'],
+    // The floor is a gradient down to stage-floor-deep, and the key light reaches it: measure both ends.
+    ['ink-2', 'stage-floor-deep', 'text', "text at the floor's near edge"], ['ink-3', 'stage-floor-deep', 'text', "labels at the floor's near edge"],
+    ['ink-2', 'stage-floor+stage-key', 'text', 'text on the floor in the key light (full strength, worst case)'], ['ink-3', 'stage-floor+stage-key', 'text', 'labels on the floor in the key light (full strength, worst case)'],
+    ['ok', 'surface', 'text', 'Fits'], ['warn', 'surface', 'text', 'Warning'], ['block', 'surface', 'text', 'Incompatible'],
+    ['ok', 'surface-raised', 'text', 'Fits on a selected row'], ['warn', 'surface-raised', 'text', 'Warning on a selected row'], ['block', 'surface-raised', 'text', 'Incompatible on a hovered row'],
+    ['action-ink', 'action', 'text', 'primary button, pressed pill'],
+    ['ink-3', 'surface', 'ui', 'control borders: checkbox, input, pressed chip'], ['ink-3', 'surface-raised', 'ui', 'control borders on a raised row'],
+    ['focus', 'surface', 'ui', 'focus ring on panels'], ['focus', 'surface-raised', 'ui', 'focus ring on a raised row'], ['focus', 'stage', 'ui', 'focus ring on the stage'], ['focus', 'stage+stage-key', 'ui', 'focus ring in the key light'],
+    ['ink', 'surface-raised', 'ui', 'selected-row bar'], ['action', 'surface', 'ui', 'primary button against its panel'],
+    // Selection is solid (base.css), so this one pair holds on every surface, --action included.
+    ['stage', 'ink', 'text', 'selected text: --stage on the --ink selection, any surface'],
+  ],
   bench: [
     ['ink', 'panel', 'text', 'primary text'], ['ink-2', 'panel', 'text', 'secondary text'], ['ink-3', 'panel', 'text', 'labels, units, meta'],
     ['ink', 'panel-raised', 'text', 'text on selected row'], ['ink-2', 'panel-raised', 'text', 'secondary on selected row'], ['ink-3', 'panel-raised', 'text', 'meta on selected row'],
@@ -73,7 +107,7 @@ const check = process.argv.includes('--check');
 let failures = 0;
 const lines = [];
 for (const [slug, pairs] of Object.entries(PAIRS)) {
-  const html = readFileSync(join(mocks, slug, 'index.html'), 'utf8');
+  const html = readFileSync(SOURCES[slug], 'utf8');
   const t = { dark: tokens(html, 'dark'), light: tokens(html, 'light') };
   lines.push(`\n#### ${slug}: contrast (WCAG 2.1)\n`);
   lines.push('| Foreground | Background | Use | Kind | Dark | Light |');

@@ -1,0 +1,968 @@
+{
+  "schemaVersion": 1,
+  "category": "case",
+  "items": [
+    {
+      "id": "fractal-north-charcoal-black-tg-light",
+      "category": "case",
+      "manufacturer": "fractal",
+      "brand": "Fractal Design",
+      "name": "North Charcoal Black TG Light",
+      "partNumber": "FD-C-NOR1C-02",
+      "size": "mid-tower",
+      "supportedBoards": [
+        "ATX",
+        "Micro-ATX",
+        "Mini-ITX"
+      ],
+      "gpuClearance": [
+        {
+          "maxLengthMm": 355,
+          "condition": null
+        },
+        {
+          "maxLengthMm": 300,
+          "condition": "with a 360 mm front radiator"
+        }
+      ],
+      "gpuMaxThicknessMm": null,
+      "gpuMaxHeightMm": null,
+      "coolerClearance": [
+        {
+          "maxHeightMm": 170,
+          "condition": null
+        }
+      ],
+      "radiatorSupport": [
+        {
+          "position": "front",
+          "sizesMm": [
+            120,
+            140,
+            240,
+            280,
+            360
+          ],
+          "maxThicknessMm": null
+        },
+        {
+          "position": "top",
+          "sizesMm": [
+            120,
+            240
+          ],
+          "maxThicknessMm": null
+        },
+        {
+          "position": "rear",
+          "sizesMm": [
+            120
+          ],
+          "maxThicknessMm": null
+        }
+      ],
+      "fanMounts": [
+        {
+          "position": "front",
+          "sizeMm": 120,
+          "count": 3
+        },
+        {
+          "position": "front",
+          "sizeMm": 140,
+          "count": 2
+        },
+        {
+          "position": "top",
+          "sizeMm": 120,
+          "count": 2
+        },
+        {
+          "position": "top",
+          "sizeMm": 140,
+          "count": 2
+        },
+        {
+          "position": "rear",
+          "sizeMm": 120,
+          "count": 1
+        }
+      ],
+      "includedFans": [
+        {
+          "position": "front",
+          "sizeMm": 140,
+          "count": 2,
+          "model": "Aspect 14 PWM"
+        }
+      ],
+      "psu": {
+        "formFactors": [
+          "ATX"
+        ],
+        "clearance": [
+          {
+            "maxLengthMm": 255,
+            "condition": "with 1 HDD tray"
+          },
+          {
+            "maxLengthMm": 155,
+            "condition": "with 2 HDD trays"
+          }
+        ]
+      },
+      "driveBays": {
+        "bays35": 2,
+        "bays25": 2
+      },
+      "expansionSlots": 7,
+      "frontIo": {
+        "usbC": [
+          {
+            "label": "USB 3.2 Gen 2x2 Type-C",
+            "speedGbps": 20,
+            "count": 1
+          }
+        ],
+        "usbA": [
+          {
+            "speedGbps": 5,
+            "count": 2
+          }
+        ],
+        "audioJack": true
+      },
+      "verticalGpuMount": null,
+      "sidePanel": "Tempered glass",
+      "colors": [
+        "Charcoal Black"
+      ],
+      "dimensionsMm": {
+        "height": 469,
+        "width": 215,
+        "depth": 447
+      },
+      "sources": [
+        {
+          "url": "https://www.fractal-design.com/products/cases/north-series/north/north-charcoal-black-tg-light/",
+          "publisher": "fractal",
+          "retrievedAt": "2026-09-30",
+          "docType": "product-page",
+          "title": "North Charcoal Black TG Light | Fractal Design",
+          "locator": "Specifications; \"Gaming ready\" feature text"
+        }
+      ],
+      "notes": [
+        {
+          "field": "gpuClearance",
+          "text": "From \"Choose a GPU up to 355 mm, or up to 300 mm with a 360 mm front radiator.\""
+        },
+        {
+          "field": "coolerClearance",
+          "text": "Fractal's structured value is 145 mm, but its note says \"145 mm with Fan Bracket (Mesh version only) / 170 mm without\". This TG Light SKU has no side fan bracket (\"The mesh version also ships with a fanhub and a fan bracket\"), so its limit is 170 mm."
+        },
+        {
+          "field": "psu.clearance",
+          "text": "From Fractal's note \"1 HDD tray: 255 mm max; 2 HDD tray: 155 mm max\". The page does not say how many trays are fitted as shipped, so neither limit is recorded as unconditional."
+        },
+        {
+          "field": "size",
+          "text": "The product page gives no size class; recorded from the supported boards and volume. (ATX, 42 L)"
+        },
+        {
+          "field": "gpuMaxThicknessMm",
+          "text": "No GPU thickness limit is published."
+        },
+        {
+          "field": "radiatorSupport",
+          "text": "Radiator thickness limits are not published."
+        },
+        {
+          "field": "verticalGpuMount",
+          "text": "The product page says nothing about vertical GPU mounting."
+        },
+        {
+          "field": "fanMounts",
+          "text": "Front \"3x 120 or 2x 140 mm\", top \"2x 120/140 mm\", rear \"1x 120 mm\"; the TG version lists no side fan mounts."
+        },
+        {
+          "field": "dimensionsMm",
+          "text": "From \"Product dimensions (L × W × H) 447 x 215 x 469 mm\"."
+        },
+        {
+          "field": "frontIo",
+          "text": "From \"2x USB Type-A 5Gbps, 1x USB Type-C 20Gbps, 1x Audio Jack\" and \"one USB 3.2 Gen 2×2 Type-C\"."
+        }
+      ]
+    },
+    {
+      "id": "fractal-pop-air-rgb-black-tg-clear-tint",
+      "category": "case",
+      "manufacturer": "fractal",
+      "brand": "Fractal Design",
+      "name": "Pop Air RGB Black TG Clear Tint",
+      "partNumber": "FD-C-POR1A-06",
+      "size": "mid-tower",
+      "supportedBoards": [
+        "ATX",
+        "Micro-ATX",
+        "Mini-ITX"
+      ],
+      "gpuClearance": [
+        {
+          "maxLengthMm": 405,
+          "condition": null
+        }
+      ],
+      "gpuMaxThicknessMm": null,
+      "gpuMaxHeightMm": null,
+      "coolerClearance": [
+        {
+          "maxHeightMm": 170,
+          "condition": null
+        }
+      ],
+      "radiatorSupport": [
+        {
+          "position": "front",
+          "sizesMm": [
+            120,
+            240,
+            280
+          ],
+          "maxThicknessMm": null
+        },
+        {
+          "position": "top",
+          "sizesMm": [
+            120,
+            240
+          ],
+          "maxThicknessMm": null
+        },
+        {
+          "position": "rear",
+          "sizesMm": [
+            120
+          ],
+          "maxThicknessMm": null
+        }
+      ],
+      "fanMounts": [
+        {
+          "position": "front",
+          "sizeMm": 120,
+          "count": 2
+        },
+        {
+          "position": "front",
+          "sizeMm": 140,
+          "count": 2
+        },
+        {
+          "position": "top",
+          "sizeMm": 120,
+          "count": 2
+        },
+        {
+          "position": "top",
+          "sizeMm": 140,
+          "count": 2
+        },
+        {
+          "position": "rear",
+          "sizeMm": 120,
+          "count": 1
+        }
+      ],
+      "includedFans": [
+        {
+          "position": "front",
+          "sizeMm": 120,
+          "count": 2,
+          "model": "Aspect 12"
+        },
+        {
+          "position": "rear",
+          "sizeMm": 120,
+          "count": 1,
+          "model": "Aspect 12"
+        }
+      ],
+      "psu": {
+        "formFactors": [
+          "ATX"
+        ],
+        "clearance": [
+          {
+            "maxLengthMm": 170,
+            "condition": null
+          }
+        ]
+      },
+      "driveBays": {
+        "bays35": 3,
+        "bays25": 2
+      },
+      "expansionSlots": 7,
+      "frontIo": {
+        "usbC": [],
+        "usbA": [
+          {
+            "speedGbps": 5,
+            "count": 2
+          }
+        ],
+        "audioJack": true
+      },
+      "verticalGpuMount": null,
+      "sidePanel": "Tempered glass",
+      "colors": [
+        "Black"
+      ],
+      "dimensionsMm": {
+        "height": 454,
+        "width": 215,
+        "depth": 473.5
+      },
+      "sources": [
+        {
+          "url": "https://www.fractal-design.com/products/cases/pop-series/pop-air/pop-air-rgb-black-tg-clear-tint/",
+          "publisher": "fractal",
+          "retrievedAt": "2026-09-30",
+          "docType": "product-page",
+          "title": "Pop Air RGB Black TG Clear Tint | Fractal Design",
+          "locator": "Specifications"
+        }
+      ],
+      "notes": [
+        {
+          "field": "size",
+          "text": "The product page gives no size class; recorded from the supported boards and volume. (ATX, 44 L)"
+        },
+        {
+          "field": "gpuMaxThicknessMm",
+          "text": "No GPU thickness limit is published."
+        },
+        {
+          "field": "radiatorSupport",
+          "text": "Radiator thickness limits are not published."
+        },
+        {
+          "field": "verticalGpuMount",
+          "text": "The product page says nothing about vertical GPU mounting."
+        },
+        {
+          "field": "frontIo",
+          "text": "No USB-C port as sold: the I/O panel is \"USB-C ready\" with an optional USB-C cable sold separately."
+        },
+        {
+          "field": "driveBays",
+          "text": "Three combined 3.5\"/2.5\" mounts and two dedicated 2.5\" mounts; the two 5.25\" bays are not counted."
+        }
+      ]
+    },
+    {
+      "id": "fractal-pop-mini-air-rgb-black-tg-clear-tint",
+      "category": "case",
+      "manufacturer": "fractal",
+      "brand": "Fractal Design",
+      "name": "Pop Mini Air RGB Black TG Clear Tint",
+      "partNumber": "FD-C-POR1M-06",
+      "size": "mini-tower",
+      "supportedBoards": [
+        "Micro-ATX",
+        "Mini-ITX"
+      ],
+      "gpuClearance": [
+        {
+          "maxLengthMm": 365,
+          "condition": null
+        }
+      ],
+      "gpuMaxThicknessMm": null,
+      "gpuMaxHeightMm": null,
+      "coolerClearance": [
+        {
+          "maxHeightMm": 170,
+          "condition": null
+        }
+      ],
+      "radiatorSupport": [
+        {
+          "position": "front",
+          "sizesMm": [
+            120,
+            240
+          ],
+          "maxThicknessMm": null
+        },
+        {
+          "position": "top",
+          "sizesMm": [
+            120,
+            240
+          ],
+          "maxThicknessMm": null
+        },
+        {
+          "position": "rear",
+          "sizesMm": [
+            120
+          ],
+          "maxThicknessMm": null
+        }
+      ],
+      "fanMounts": [
+        {
+          "position": "front",
+          "sizeMm": 120,
+          "count": 2
+        },
+        {
+          "position": "front",
+          "sizeMm": 140,
+          "count": 1
+        },
+        {
+          "position": "top",
+          "sizeMm": 120,
+          "count": 2
+        },
+        {
+          "position": "top",
+          "sizeMm": 140,
+          "count": 1
+        },
+        {
+          "position": "rear",
+          "sizeMm": 120,
+          "count": 1
+        }
+      ],
+      "includedFans": [
+        {
+          "position": "front",
+          "sizeMm": 120,
+          "count": 2,
+          "model": "Aspect 12"
+        },
+        {
+          "position": "rear",
+          "sizeMm": 120,
+          "count": 1,
+          "model": "Aspect 12"
+        }
+      ],
+      "psu": {
+        "formFactors": [
+          "ATX"
+        ],
+        "clearance": [
+          {
+            "maxLengthMm": 150,
+            "condition": null
+          }
+        ]
+      },
+      "driveBays": {
+        "bays35": 2,
+        "bays25": 2
+      },
+      "expansionSlots": 4,
+      "frontIo": {
+        "usbC": [],
+        "usbA": [
+          {
+            "speedGbps": 5,
+            "count": 2
+          }
+        ],
+        "audioJack": true
+      },
+      "verticalGpuMount": null,
+      "sidePanel": "Tempered glass",
+      "colors": [
+        "Black"
+      ],
+      "dimensionsMm": {
+        "height": 393,
+        "width": 215,
+        "depth": 432
+      },
+      "sources": [
+        {
+          "url": "https://www.fractal-design.com/products/cases/pop-series/pop-mini-air/pop-mini-air-rgb-black-tg-clear-tint/",
+          "publisher": "fractal",
+          "retrievedAt": "2026-09-30",
+          "docType": "product-page",
+          "title": "Pop Mini Air RGB Black TG Clear Tint | Fractal Design",
+          "locator": "Specifications"
+        }
+      ],
+      "notes": [
+        {
+          "field": "size",
+          "text": "The product page gives no size class; recorded from the supported boards and volume. (Micro ATX, 36.5 L)"
+        },
+        {
+          "field": "gpuMaxThicknessMm",
+          "text": "No GPU thickness limit is published."
+        },
+        {
+          "field": "radiatorSupport",
+          "text": "Radiator thickness limits are not published."
+        },
+        {
+          "field": "verticalGpuMount",
+          "text": "The product page says nothing about vertical GPU mounting."
+        },
+        {
+          "field": "frontIo",
+          "text": "No USB-C port as sold: the I/O panel \"welcomes the optional, easily installed USB-C module available separately\"."
+        },
+        {
+          "field": "psu",
+          "text": "PSU max length 150 mm: longer ATX units (for example 160 mm) do not fit."
+        },
+        {
+          "field": "driveBays",
+          "text": "Two combined 3.5\"/2.5\" mounts and two dedicated 2.5\" mounts; the two 5.25\" bays are not counted."
+        }
+      ]
+    },
+    {
+      "id": "fractal-terra-graphite",
+      "category": "case",
+      "manufacturer": "fractal",
+      "brand": "Fractal Design",
+      "name": "Terra Graphite",
+      "partNumber": "FD-C-TER1N-01",
+      "size": "small-form-factor",
+      "supportedBoards": [
+        "Mini-ITX"
+      ],
+      "gpuClearance": [
+        {
+          "maxLengthMm": 322,
+          "condition": null
+        },
+        {
+          "maxLengthMm": 200,
+          "condition": "with a 120 mm radiator installed"
+        }
+      ],
+      "gpuMaxThicknessMm": 72,
+      "gpuMaxHeightMm": 145,
+      "coolerClearance": [
+        {
+          "maxHeightMm": 48,
+          "condition": null
+        }
+      ],
+      "layoutPositions": [
+        {
+          "position": "1",
+          "coolerMaxHeightMm": 77,
+          "gpuMaxThicknessMm": 43,
+          "tallGpuLimit": {
+            "aboveGpuHeightMm": 131,
+            "maxThicknessMm": 33
+          }
+        },
+        {
+          "position": "2",
+          "coolerMaxHeightMm": 72,
+          "gpuMaxThicknessMm": 48,
+          "tallGpuLimit": {
+            "aboveGpuHeightMm": 131,
+            "maxThicknessMm": 38
+          }
+        },
+        {
+          "position": "3",
+          "coolerMaxHeightMm": 67,
+          "gpuMaxThicknessMm": 53,
+          "tallGpuLimit": {
+            "aboveGpuHeightMm": 131,
+            "maxThicknessMm": 43
+          }
+        },
+        {
+          "position": "4",
+          "coolerMaxHeightMm": 62,
+          "gpuMaxThicknessMm": 58,
+          "tallGpuLimit": {
+            "aboveGpuHeightMm": 131,
+            "maxThicknessMm": 48
+          }
+        },
+        {
+          "position": "5",
+          "coolerMaxHeightMm": 57,
+          "gpuMaxThicknessMm": 63,
+          "tallGpuLimit": {
+            "aboveGpuHeightMm": 131,
+            "maxThicknessMm": 53
+          }
+        },
+        {
+          "position": "6",
+          "coolerMaxHeightMm": 53,
+          "gpuMaxThicknessMm": 67,
+          "tallGpuLimit": {
+            "aboveGpuHeightMm": 131,
+            "maxThicknessMm": 57
+          }
+        },
+        {
+          "position": "7",
+          "coolerMaxHeightMm": 48,
+          "gpuMaxThicknessMm": 72,
+          "tallGpuLimit": {
+            "aboveGpuHeightMm": 131,
+            "maxThicknessMm": 62
+          }
+        }
+      ],
+      "radiatorSupport": [
+        {
+          "position": "side",
+          "sizesMm": [
+            120
+          ],
+          "maxThicknessMm": null
+        }
+      ],
+      "fanMounts": [
+        {
+          "position": "bottom",
+          "sizeMm": 120,
+          "count": 1
+        }
+      ],
+      "includedFans": [],
+      "psu": {
+        "formFactors": [
+          "SFX",
+          "SFX-L"
+        ],
+        "clearance": [
+          {
+            "maxLengthMm": 130,
+            "condition": null
+          }
+        ]
+      },
+      "driveBays": {
+        "bays35": 0,
+        "bays25": 2
+      },
+      "expansionSlots": 2,
+      "frontIo": {
+        "usbC": [
+          {
+            "label": "USB Type-C 20Gbps",
+            "speedGbps": 20,
+            "count": 1
+          }
+        ],
+        "usbA": [
+          {
+            "speedGbps": 5,
+            "count": 1
+          }
+        ],
+        "audioJack": false
+      },
+      "verticalGpuMount": null,
+      "sidePanel": "Aluminium",
+      "colors": [
+        "Graphite"
+      ],
+      "dimensionsMm": {
+        "height": 218,
+        "width": 153,
+        "depth": 343
+      },
+      "sources": [
+        {
+          "url": "https://www.fractal-design.com/products/cases/terra/terra/terra-graphite/",
+          "publisher": "fractal",
+          "retrievedAt": "2026-09-30",
+          "docType": "product-page",
+          "fields": [
+            "brand",
+            "name",
+            "partNumber",
+            "size",
+            "supportedBoards",
+            "gpuClearance.0",
+            "gpuMaxThicknessMm",
+            "gpuMaxHeightMm",
+            "coolerClearance",
+            "radiatorSupport",
+            "fanMounts",
+            "includedFans",
+            "psu",
+            "driveBays",
+            "expansionSlots",
+            "frontIo",
+            "sidePanel",
+            "colors",
+            "dimensionsMm"
+          ],
+          "title": "Terra Graphite | Fractal Design",
+          "locator": "Specifications"
+        },
+        {
+          "url": "https://support.fractal-design.com/support/solutions/articles/4000194849-terra-cpu-cooler-gpu-support",
+          "publisher": "fractal",
+          "retrievedAt": "2026-09-30",
+          "docType": "support-article",
+          "fields": [
+            "gpuClearance",
+            "layoutPositions"
+          ],
+          "title": "Terra CPU cooler/GPU support : Fractal Design Support"
+        }
+      ],
+      "notes": [
+        {
+          "field": "layoutPositions",
+          "text": "Fractal's support article: the spine has 7 settings; setting 1 gives the tallest CPU cooler (77 mm) and setting 7 the thickest GPU (72 mm, or 62 mm for a GPU taller than 131 mm)."
+        },
+        {
+          "field": "coolerClearance",
+          "text": "The product page lists 48 mm, which is spine setting 7; see layoutPositions for the other settings."
+        },
+        {
+          "field": "gpuClearance",
+          "text": "From \"Maximum GPU length: 322 mm (200 mm if installing a 120 mm radiator)\"."
+        },
+        {
+          "field": "gpuMaxHeightMm",
+          "text": "Fractal calls it \"GPU max width 145 mm\"."
+        },
+        {
+          "field": "psu",
+          "text": "SFX and SFX-L only, up to 130 mm: an ATX PSU does not fit."
+        },
+        {
+          "field": "verticalGpuMount",
+          "text": "The GPU sits on the far side of the spine; the product page says nothing about vertical mounting."
+        },
+        {
+          "field": "includedFans",
+          "text": "No fans are listed as included."
+        },
+        {
+          "field": "frontIo",
+          "text": "From \"1x USB Type-A 5Gbps, 1x USB Type-C 20Gbps, 1x Power Button\"; no audio jack is listed."
+        },
+        {
+          "field": "radiatorSupport",
+          "text": "Radiator thickness limits are not published."
+        }
+      ]
+    },
+    {
+      "id": "deepcool-ch560",
+      "category": "case",
+      "manufacturer": "deepcool",
+      "brand": "DeepCool",
+      "name": "CH560",
+      "partNumber": "R-CH560-BKAPE4-G-1",
+      "size": "mid-tower",
+      "supportedBoards": [
+        "E-ATX",
+        "ATX",
+        "Micro-ATX",
+        "Mini-ITX"
+      ],
+      "gpuClearance": [
+        {
+          "maxLengthMm": 380,
+          "condition": null
+        }
+      ],
+      "gpuMaxThicknessMm": null,
+      "gpuMaxHeightMm": null,
+      "coolerClearance": [
+        {
+          "maxHeightMm": 175,
+          "condition": null
+        }
+      ],
+      "radiatorSupport": [
+        {
+          "position": "front",
+          "sizesMm": [
+            120,
+            140,
+            240,
+            280,
+            360
+          ],
+          "maxThicknessMm": null
+        },
+        {
+          "position": "top",
+          "sizesMm": [
+            120,
+            140,
+            240,
+            280,
+            360
+          ],
+          "maxThicknessMm": null
+        },
+        {
+          "position": "rear",
+          "sizesMm": [
+            120,
+            140
+          ],
+          "maxThicknessMm": null
+        }
+      ],
+      "fanMounts": [
+        {
+          "position": "front",
+          "sizeMm": 120,
+          "count": 3
+        },
+        {
+          "position": "front",
+          "sizeMm": 140,
+          "count": 3
+        },
+        {
+          "position": "top",
+          "sizeMm": 120,
+          "count": 3
+        },
+        {
+          "position": "top",
+          "sizeMm": 140,
+          "count": 2
+        },
+        {
+          "position": "rear",
+          "sizeMm": 120,
+          "count": 1
+        },
+        {
+          "position": "rear",
+          "sizeMm": 140,
+          "count": 1
+        },
+        {
+          "position": "psu-shroud",
+          "sizeMm": 120,
+          "count": 2
+        }
+      ],
+      "includedFans": [
+        {
+          "position": "front",
+          "sizeMm": 140,
+          "count": 3,
+          "model": null
+        },
+        {
+          "position": "rear",
+          "sizeMm": 120,
+          "count": 1,
+          "model": null
+        }
+      ],
+      "psu": {
+        "formFactors": [
+          "ATX"
+        ],
+        "clearance": [
+          {
+            "maxLengthMm": 170,
+            "condition": null
+          }
+        ]
+      },
+      "driveBays": {
+        "bays35": 2,
+        "bays25": 3
+      },
+      "expansionSlots": 7,
+      "frontIo": {
+        "usbC": [
+          {
+            "label": "TYPE-C",
+            "speedGbps": null,
+            "count": 1
+          }
+        ],
+        "usbA": [
+          {
+            "speedGbps": 5,
+            "count": 1
+          }
+        ],
+        "audioJack": true
+      },
+      "verticalGpuMount": null,
+      "sidePanel": "Tempered glass and mesh hybrid",
+      "colors": [
+        "Black"
+      ],
+      "dimensionsMm": {
+        "height": 471,
+        "width": 230,
+        "depth": 458
+      },
+      "sources": [
+        {
+          "url": "https://www.deepcool.com/products/Cases/CH560-New-Generation-of-Airflow-Case/2023/17101.shtml",
+          "publisher": "deepcool",
+          "retrievedAt": "2026-09-30",
+          "docType": "product-page",
+          "title": "CH560 - DeepCool",
+          "locator": "Technical Spec"
+        }
+      ],
+      "notes": [
+        {
+          "field": "frontIo",
+          "text": "DeepCool lists \"USB3.0×1, Audio×1, TYPE-C×1\" and gives no speed for the Type-C port; USB 3.0 is recorded as 5 Gbps."
+        },
+        {
+          "field": "gpuMaxThicknessMm",
+          "text": "No GPU thickness limit is published."
+        },
+        {
+          "field": "radiatorSupport",
+          "text": "Radiator thickness limits are not published."
+        },
+        {
+          "field": "verticalGpuMount",
+          "text": "The product page says nothing about vertical GPU mounting."
+        },
+        {
+          "field": "fanMounts",
+          "text": "Rear: \"Only supports up to 120mm fan at the rear when using a 360mm radiator on top.\""
+        },
+        {
+          "field": "driveBays",
+          "text": "From \"2.5\" Drive Bays 2+1\"."
+        },
+        {
+          "field": "includedFans",
+          "text": "Pre-installed \"Front: 3×140mm ARGB, Rear: 1×120mm ARGB\"; DeepCool does not name the fan model."
+        },
+        {
+          "field": "dimensionsMm",
+          "text": "From \"Product Dimensions 458×230×471mm (L×W×H)\"."
+        }
+      ]
+    }
+  ]
+}

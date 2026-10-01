@@ -1,0 +1,176 @@
+{
+  "schemaVersion": 1,
+  "category": "case-fan",
+  "items": [
+    {
+      "id": "arctic-p12-pwm-pst-black",
+      "category": "case-fan",
+      "manufacturer": "arctic",
+      "brand": "ARCTIC",
+      "name": "P12 PWM PST (Black)",
+      "partNumber": "ACFAN00120A",
+      "sizeMm": 120,
+      "thicknessMm": 25,
+      "maxRpm": 1800,
+      "minRpm": 200,
+      "airflowCfm": 56.3,
+      "staticPressureMmH2O": 2.2,
+      "noise": {
+        "value": 0.3,
+        "unit": "sone"
+      },
+      "connector": "4-pin PWM",
+      "lighting": "none",
+      "packSize": 1,
+      "bearing": "Fluid Dynamic Bearing",
+      "sources": [
+        {
+          "url": "https://www.arctic.de/en/P12-PWM-PST/ACFAN00120A",
+          "publisher": "arctic",
+          "retrievedAt": "2026-09-30",
+          "docType": "product-page",
+          "fields": [
+            "brand",
+            "name",
+            "partNumber"
+          ],
+          "title": "P12 PWM PST | 120 mm PWM Fan with Cable Splitter | ACFAN00120A"
+        },
+        {
+          "url": "https://www.arctic.de/media/42/84/78/1693306001/Spec_Sheet_P12_PWM_PST_EN.pdf",
+          "publisher": "arctic",
+          "retrievedAt": "2026-09-30",
+          "docType": "datasheet",
+          "title": "ARCTIC P12 PWM PST specification sheet",
+          "locator": "Fan Specifications; Shipping Information \"Single Fan – Black: SKU ACFAN00120A\""
+        }
+      ],
+      "notes": [
+        {
+          "field": "minRpm",
+          "text": "ARCTIC gives \"200–1800 rpm, 0 rpm below 5 % PWM\"; 200 rpm is the lowest running speed."
+        },
+        {
+          "field": "noise",
+          "text": "ARCTIC publishes noise as \"0.3 Sone\" and no dB(A) figure; it is kept in sone."
+        },
+        {
+          "field": "connector",
+          "text": "A 4-pin connector plus a 4-pin socket for daisy-chaining (PST)."
+        }
+      ]
+    },
+    {
+      "id": "arctic-p14-pwm-pst-black",
+      "category": "case-fan",
+      "manufacturer": "arctic",
+      "brand": "ARCTIC",
+      "name": "P14 PWM PST (Black)",
+      "partNumber": "ACFAN00125A",
+      "sizeMm": 140,
+      "thicknessMm": 27,
+      "maxRpm": 1700,
+      "minRpm": 200,
+      "airflowCfm": 72.8,
+      "staticPressureMmH2O": 2.4,
+      "noise": {
+        "value": 0.3,
+        "unit": "sone"
+      },
+      "connector": "4-pin PWM",
+      "lighting": "none",
+      "packSize": 1,
+      "bearing": "Fluid Dynamic Bearing",
+      "sources": [
+        {
+          "url": "https://www.arctic.de/en/P14-PWM-PST/ACFAN00125A",
+          "publisher": "arctic",
+          "retrievedAt": "2026-09-30",
+          "docType": "product-page",
+          "fields": [
+            "brand",
+            "name",
+            "partNumber"
+          ],
+          "title": "P14 PWM PST | 140 mm PWM Fan with Cable Splitter | ARCTIC"
+        },
+        {
+          "url": "https://www.arctic.de/media/1d/98/04/1693306037/Spec_Sheet_P14_PWM_PST_EN.pdf",
+          "publisher": "arctic",
+          "retrievedAt": "2026-09-30",
+          "docType": "datasheet",
+          "title": "ARCTIC P14 PWM PST specification sheet",
+          "locator": "Fan Specifications; Shipping Information \"Single Fan – Black: SKU ACFAN00125A\""
+        }
+      ],
+      "notes": [
+        {
+          "field": "minRpm",
+          "text": "ARCTIC gives \"200–1700 rpm, 0 rpm below 5 % PWM\"; 200 rpm is the lowest running speed."
+        },
+        {
+          "field": "noise",
+          "text": "ARCTIC publishes noise as \"0.3 Sone\" and no dB(A) figure; it is kept in sone."
+        },
+        {
+          "field": "connector",
+          "text": "A 4-pin connector plus a 4-pin socket for daisy-chaining (PST)."
+        }
+      ]
+    },
+    {
+      "id": "deepcool-fc120-3-in-1",
+      "category": "case-fan",
+      "manufacturer": "deepcool",
+      "brand": "DeepCool",
+      "name": "FC120 3 IN 1",
+      "partNumber": "R-FC120-BKAMN3-G-1",
+      "sizeMm": 120,
+      "thicknessMm": 25,
+      "maxRpm": 1800,
+      "minRpm": 500,
+      "airflowCfm": 61.91,
+      "staticPressureMmH2O": 1.83,
+      "noise": {
+        "value": 28,
+        "unit": "dBA"
+      },
+      "connector": "4-pin PWM",
+      "lighting": "argb-5v-3pin",
+      "packSize": 3,
+      "bearing": "Hydro Bearing",
+      "sources": [
+        {
+          "url": "https://www.deepcool.com/products/Cooling/fans/FC120-3-IN-1-Daisy-Chain-Performance-ARGB-Fan/2021/13582.shtml",
+          "publisher": "deepcool",
+          "retrievedAt": "2026-09-30",
+          "docType": "product-page",
+          "title": "FC120 3 IN 1 - DeepCool",
+          "locator": "Technical Spec"
+        }
+      ],
+      "notes": [
+        {
+          "field": "staticPressureMmH2O",
+          "text": "DeepCool lists \"1.83 mmAq\" (mmAq and mmH2O are the same unit)."
+        },
+        {
+          "field": "noise",
+          "text": "From \"Fan Noise ≤28 dB(A)\"."
+        },
+        {
+          "field": "lighting",
+          "text": "From \"LED Type Addressable RGB LED, LED Connector 3-pin (+5V-D-G)\"."
+        },
+        {
+          "field": "packSize",
+          "text": "Sold as a three-fan pack (\"3 IN 1\")."
+        },
+        {
+          "field": "minRpm",
+          "text": "From \"Fan Speed 500~1800 RPM±10%\"."
+        }
+      ]
+    }
+  ]
+}

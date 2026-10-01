@@ -59,6 +59,12 @@ final hand-off commit; the hand-off message replaces it.
   > the one-line reply "Report sent to `<lead>`."
 - If an `Agent` call returns "ended without delivering a report", wait for the worker's message.
   If none comes, SendMessage the worker by the agentId in that result, which resumes it.
+- **Report file (design-lead's finding, 2026-10-01).** An `Agent` call blocks for the worker's
+  whole run, even with `run_in_background`. A worker's SendMessage may not reach you until your
+  turn ends.
+  - So every worker prompt also says: "Write your full report to
+    `<your worktree>/artifacts/reports/<task>.md` before you finish."
+  - Read that file as soon as the `Agent` call returns.
 - Give each worker one well-scoped task, the exact files it may touch, and what evidence to return.
   Review every worker's output against the spec before it goes anywhere (BUILD_PROMPT §1).
 - The Context7 MCP is for library APIs. If it hits its quota, check the official docs and the
@@ -103,6 +109,10 @@ Don't use these in Phase 0. They clash with how this project runs:
 - Messages are short and factual. The first line says what the message is about.
 - You have no `ListAgents` and no shared task list. The Director keeps the task list in
   `docs/reports/progress.md`.
+- **Messages reach you only between your turns** (tested 2026-10-01). While you work through
+  steps in one turn, or wait on workers (`Agent` calls block), nothing new arrives.
+  - So read every message batch in full when your turn ends, the oldest first.
+  - A pause request from the Director overrides anything else in the batch.
 
 ### Hand-off to the Director (plan §6 format), by SendMessage to `team-lead`
 ```
@@ -128,9 +138,10 @@ Known gaps: <honest list, or "none">
 - **Status file:** `data/WIP-STATUS.md`
 - **Owns:** `src/data/**`, `data/**`, the data rows in `CREDITS.md`.
 - **Evidence:** your `artifacts/` holds 1,167 files restored from the cloud container. All of them
-  match `docs/reports/phase-0-wip/evidence/data-lead-evidence-manifest.sha256.txt`, except the one
-  page left out by design (see `EXCLUDED.txt`). Price rows point at these paths and hashes, so
-  never rename or move a capture that a row cites.
+  match `docs/reports/evidence/data-lead-evidence-manifest.sha256.txt`, except the one page left out
+  by design (see `docs/reports/evidence/EXCLUDED.txt`). Price rows point at these paths and hashes,
+  so never rename or move a capture that a row cites. Captures never go into git; see
+  `docs/reports/evidence/README.md`.
 
 Steps:
 1. Merge `claude/keen-lamport-0794zj` into your branch and resolve any conflicts. Run
@@ -267,7 +278,9 @@ A `frontend-engineer` worker may do steps 1 and 5. You review every diff and run
    WP-Q1, have a fresh worker check them, not you.
 3. Build the rule-1 compliance check (Owner's rule 1, plan, top) for **100% of price and benchmark
    rows**. Read data-lead's branch read-only (`git show feat/data-foundations:…`), and the captures
-   in `C:\Projects\rig-lab-evidence\data-lead-artifacts\artifacts\` with their SHA-256 manifest.
+   in `C:\Projects\rig-lab-evidence\data-lead-artifacts\artifacts\` with their SHA-256 manifest,
+   `docs/reports/evidence/data-lead-evidence-manifest.sha256.txt`. The README in that folder
+   lists every evidence manifest.
 4. Plan the seeded 10% data audit, run by a fresh `data-auditor` worker. Run it for real once
    WP-D0 is merged.
 

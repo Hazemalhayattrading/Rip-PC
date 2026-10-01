@@ -19,11 +19,63 @@ Until step 2 is done, the deploy workflow fails at `actions/configure-pages`. Ev
 
 ## Local setup
 
-- Node **22.22.2** (see [`.nvmrc`](.nvmrc); ESLint 10 needs 22.13 or later) and npm 10.
+- Node **22.22.2** (see [`.nvmrc`](.nvmrc); ESLint 10 needs 22.13 or later) and npm 10. CI
+  uses the version in `.nvmrc`, so use the same one locally.
 - `npm ci`
-- Playwright's Chromium, once: `npx playwright install chromium`. In the Rig Lab Claude
-  container, skip this: Chromium is preinstalled at `/opt/pw-browsers`
-  (`PLAYWRIGHT_BROWSERS_PATH`), and `@playwright/test` is pinned to 1.56.1 to match it.
+- Playwright's Chromium, once: `npx playwright install chromium`. `@playwright/test` is pinned
+  to 1.56.1, so this installs Chromium build 1194, the one CI uses.
+
+### MCP servers for Claude Code
+
+- **Playwright** is declared in [`.mcp.json`](.mcp.json). Claude Code loads it for everyone who
+  opens the project, after asking each person once. It drives the installed Google Chrome,
+  headless.
+- **Context7** (current library docs, [`CLAUDE.md`](CLAUDE.md) rule 6) is **not** in
+  `.mcp.json`, because it takes a personal API key and no key may enter the repo. Add it once,
+  at user scope, with your own key from the [Context7 dashboard](https://context7.com/dashboard):
+
+  ```sh
+  claude mcp add --scope user context7 -- npx -y @upstash/context7-mcp --api-key <your key>
+  ```
+
+  User scope keeps it in your own `~/.claude.json` (`%USERPROFILE%\.claude.json` on Windows),
+  outside the repo, and it then loads in every project. `claude mcp get context7` shows where
+  it is defined. Don't add a `context7` entry to `.mcp.json`, even one without a key: a
+  project-scope server overrides a user-scope one with the same name, so it would hide yours.
+
+### On Windows
+
+Use Git for Windows and run the commands in Git Bash. The quality-gate hook in
+`.claude/settings.json` runs `bash scripts/verify-gate.sh`, so Claude Code needs Git Bash too.
+
+- **Node 22**, per `.nvmrc`, with nvm-windows or fnm. Node 24 also passes `npm run verify`
+  (checked on 2026-10-01), but npm then prints an `EBADENGINE` warning, because `engines` asks
+  for `^22.13.0`, and CI runs 22.
+- **Symlinks.** `.claude/skills/*` are 45 symlinks into `.agents/skills/`. Without symlink
+  support, Git checks each one out as a small text file, and Claude Code then finds no project
+  skills. Turn on **Developer Mode** (Settings → System → For developers), then clone with
+  `git clone -c core.symlinks=true <repo url>`. To fix an existing clone, with Developer Mode
+  on: run `git config core.symlinks true`, delete the `.claude/skills` folder, and run
+  `git checkout -- .claude/skills`.
+- **Line endings.** `.gitattributes` (`* text=auto eol=lf`) checks every text file out with LF,
+  whatever `core.autocrlf` says, so a fresh clone passes Prettier. A checkout made before that
+  file existed can still hold CRLF copies, which fail `prettier --check` and with it
+  `npm run verify`. `git ls-files --eol | grep w/crlf` lists them; check them out again.
+- **No Docker, no visual baselines.** Visual baselines are made and compared only in the pinned
+  Playwright Docker image (`tests/visual/run-in-docker.sh`), which needs Docker Desktop. Never
+  create baselines on Windows directly: its font rendering differs from the image's. Everything
+  else, `npm run verify` included, runs without Docker. See
+  [`tests/visual/README.md`](tests/visual/README.md).
+- **Lighthouse CI** needs no `CHROME_PATH` here: it finds the installed Google Chrome (checked
+  on 2026-10-01 with Chrome 151). CI points it at Playwright's Chromium 1194 instead, so local
+  Lighthouse numbers come from a different browser build than CI's.
+
+### In the Phase 0 cloud container (history)
+
+Phase 0 started in a Claude Code cloud container. These notes apply only there: Chromium was
+preinstalled at `/opt/pw-browsers` (`PLAYWRIGHT_BROWSERS_PATH`), so the install step was
+skipped, and Lighthouse CI needed `CHROME_PATH=/opt/pw-browsers/chromium`. No config depends on
+these paths.
 
 ## Commands
 
@@ -44,6 +96,26 @@ Until step 2 is done, the deploy workflow fails at `actions/configure-pages`. Ev
 
 `npm run verify` must pass before anything merges. CI runs it on every push and pull request,
 and `scripts/verify-gate.sh` runs it before a task can be marked complete.
+
+### Performance budgets and the data audit
+
+QA owns these tools ([`docs/qa/test-plan.md`](docs/qa/test-plan.md) §6 and §7), and every
+threshold comes from [`tests/perf/budget.json`](tests/perf/budget.json). All but
+`audit:sample` measure the production build, so run `npm run build` first. CI runs the first
+four in its **Performance budgets** job on every push and pull request, once `npm run verify`
+has passed.
+
+| Command | What it does |
+|---|---|
+| `npm run perf:bundle` | Initial JS (gzip) of every built page against the 250 KB budget, with lazy chunks such as 3D reported apart. Writes `artifacts/perf/bundle-budget.json` |
+| `npm run perf:lhci` | Lighthouse CI on the landing page, mobile preset: 3 runs, median, asserting performance, LCP, CLS and TBT. Reports go to `artifacts/lhci/mobile/` |
+| `npm run perf:lhci:desktop` | The same with the desktop preset, into `artifacts/lhci/desktop/` |
+| `npm run perf:vitals` | LCP and CLS from the web-vitals library on cold loads, at 390 and 1440 px and CPU x1 and x4 (Playwright project `perf`) |
+| `npm run perf:fps` | The 3D frame-rate probe. Needs `--mode reference` on real hardware or `--mode ci`, and `--url`; usage is at the top of `tests/perf/fps-probe.mjs`. It has no scene to measure until Phase 3 |
+| `npm run audit:sample` | The seeded, reproducible sample for the data audit. Needs `--seed` and `--manifest` or `--data-dir`; usage is at the top of `tests/audit/sample.mjs` |
+
+Pass a tool's own flags after `--`, for example
+`npm run audit:sample -- --seed <seed> --data-dir data/parts`.
 
 ## How the site is put together
 

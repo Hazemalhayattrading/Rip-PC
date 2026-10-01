@@ -178,7 +178,7 @@ svg.i { width: 18px; height: 18px; flex: none; stroke: currentColor; fill: none;
 .pst svg.i { width: 15px; height: 15px; }
 .pst .selected { margin-left: auto; color: var(--ink); font-weight: 500; display: inline-flex; gap: 4px; align-items: center; }
 .why { grid-column: 2 / 4; color: var(--ink-2); font-size: 13px; line-height: 19px; margin-top: 2px; }
-.why .rule { color: var(--ink-3); white-space: nowrap; margin-left: 4px; }
+.why .rule { color: var(--ink-3); white-space: nowrap; }
 .part.blocked .pn { color: var(--ink-2); }
 .part.blocked .pr { color: var(--ink-3); font-weight: 400; }
 .divider { margin: 10px 12px 4px; color: var(--ink-3); font-size: 12px; line-height: 16px; border-top: 1px solid var(--edge); padding-top: 10px; }
@@ -324,7 +324,7 @@ svg.i { width: 18px; height: 18px; flex: none; stroke: currentColor; fill: none;
   <div class="callout" id="callout" role="note" aria-label="The part this step changes">
     <div class="t" data-bind="co-name">Ryzen 7 9800X3D</div>
     <div class="s">Seated in the AM5 socket, under your air cooler</div>
-    <div class="chip ok" data-bind="co-state"><svg class="i"><use href="#i-ok"/></svg>Fits your board</div>
+    <div class="chip warn" data-bind="co-state"><svg class="i"><use href="#i-warn"/></svg>BIOS update may be needed</div>
   </div>
   <div class="heading">
     <div class="k">Step 3 of 12</div>
@@ -398,16 +398,18 @@ svg.i { width: 18px; height: 18px; flex: none; stroke: currentColor; fill: none;
 // Illustrative values only. Prices are per-market observations, never conversions.
 const OTHER = { sar: 7513, usd: 1990 };
 const CPUS = [
-  { id: '9800x3d', name: 'AMD Ryzen 7 9800X3D', short: 'Ryzen 7 9800X3D', sub: '8 cores, 5.2 GHz, 120 W', sar: 1899, usd: 479, cp: [96, 108], cs: [470, 540], state: 'ok' },
+  { id: '9800x3d', name: 'AMD Ryzen 7 9800X3D', short: 'Ryzen 7 9800X3D', sub: '8 cores, 5.2 GHz, 120 W', sar: 1899, usd: 479, cp: [96, 108], cs: [470, 540], state: 'warn',
+    why: [{ short: 'BIOS update may be needed', text: 'May need a BIOS update before first boot. Your board can update without a CPU installed.', rule: 'bios-min-version' }] },
   { id: '7800x3d', name: 'AMD Ryzen 7 7800X3D', short: 'Ryzen 7 7800X3D', sub: '8 cores, 5.0 GHz, 120 W', sar: 1549, usd: 399, cp: [95, 107], cs: [420, 490], state: 'ok' },
   { id: '9950x3d', name: 'AMD Ryzen 9 9950X3D', short: 'Ryzen 9 9950X3D', sub: '16 cores, 5.7 GHz, 170 W', sar: 2849, usd: 699, cp: [96, 109], cs: [480, 550], state: 'warn',
-    reason: 'Draws up to 230 W under all-core load, so your 120 mm air cooler will run loud in long renders.', rule: 'cooler-tdp-class' },
+    why: [{ short: 'Air cooler will run loud', text: 'Draws up to 230 W under all-core load, so your 120 mm air cooler will run loud in long renders.', rule: 'cooler-tdp-class' },
+      { short: 'BIOS update may be needed', text: 'May need a BIOS update before first boot. Your board can update without a CPU installed.', rule: 'bios-min-version' }] },
   { id: '265k', name: 'Intel Core Ultra 7 265K', short: 'Core Ultra 7 265K', sub: 'LGA1851, 20 cores, 5.5 GHz', sar: 1199, usd: 299, state: 'block',
-    reason: 'Needs an LGA1851 board. Your board is AM5.', rule: 'socket-match' },
+    why: [{ text: 'Needs an LGA1851 board. Your board is AM5.', rule: 'socket-match' }] },
   { id: '14600k', name: 'Intel Core i5-14600K', short: 'Core i5-14600K', sub: 'LGA1700, 14 cores, 5.3 GHz', sar: 799, usd: 199, state: 'block',
-    reason: 'Needs an LGA1700 board. Your board is AM5.', rule: 'socket-match' },
+    why: [{ text: 'Needs an LGA1700 board. Your board is AM5.', rule: 'socket-match' }] },
   { id: '5700x3d', name: 'AMD Ryzen 7 5700X3D', short: 'Ryzen 7 5700X3D', sub: 'AM4, 8 cores, 4.1 GHz', sar: null, usd: 219, state: 'block',
-    reason: 'Needs an AM4 board and DDR4 memory. Your board is AM5 with DDR5.', rule: 'socket-match' },
+    why: [{ text: 'Needs an AM4 board and DDR4 memory. Your board is AM5 with DDR5.', rule: 'socket-match' }] },
 ];
 const ST = { ok: ['Fits your build', 'i-ok'], warn: ['Fits, with a warning', 'i-warn'], block: ['Incompatible', 'i-block'] };
 let cur = 'sar', selected = '9800x3d';
@@ -441,7 +443,7 @@ function partHTML(c) {
     <div><div class="pn">${c.name}</div><div class="ps">${c.sub}</div></div>
     <div><div class="pr">${price}</div><div class="pf">${c.cp ? `${c.cp[0]}–${c.cp[1]} fps` : '—'}</div></div>
     <div class="pst ${c.state}"><svg class="i"><use href="#${icon}"/></svg>${lab}${c.id === selected ? '<span class="selected"><svg class="i"><use href="#i-check"/></svg>Selected</span>' : ''}</div>
-    ${c.reason ? `<div class="why"><span class="sr">${lab}: </span>${c.reason}<span class="rule">Rule ${c.rule}</span></div>` : ''}
+    ${(c.why || []).map((w) => `<div class="why"><span class="sr">${lab}: </span>${w.text} <span class="rule">Rule ${w.rule}</span></div>`).join('')}
   </div>`;
 }
 function render() {
@@ -464,7 +466,7 @@ function readouts() {
   swap(bind('fps2'), `${c.cs[0]}–${c.cs[1]}<span class="unit">fps</span>`);
   bind('co-name').textContent = c.short;
   const [lab, icon] = ST[c.state];
-  const chip = bind('co-state'); chip.className = 'chip ' + c.state; chip.innerHTML = `<svg class="i"><use href="#${icon}"/></svg>${c.state === 'ok' ? 'Fits your board' : 'Fits, see warning'}`;
+  const chip = bind('co-state'); chip.className = 'chip ' + c.state; chip.innerHTML = `<svg class="i"><use href="#${icon}"/></svg>${c.state === 'ok' ? 'Fits your board' : c.why.length > 1 ? `${c.why.length} warnings` : c.why[0].short}`;
 }
 // Anchor the callout to the CPU socket's on-screen position.
 function place() {
