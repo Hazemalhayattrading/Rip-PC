@@ -57,8 +57,8 @@ Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
 | Task | Who | Branch / worktree | State | Exact next step |
 |---|---|---|---|---|
 | WP-B1 Tokens wiring and follow-ups | build-lead | `feat/build-tokens-wiring` / `.claude/worktrees/build-lead` | Part 1 merged (`c7a099b`). **Part 2 started** after WP-DS1 merged at `21ac5fb` | wire `tokens.css` per `docs/design/tokens.md` §1 (test-first); evidence per §1.5 plus 12 screenshots; hand off, then stay idle for the purge |
-| WP-Q2 Independent verification | qa-lead | `feat/qa-phase0-verification` / `.claude/worktrees/qa-lead` | Part 1 running: Windows tooling fixed (`258c76e`); 3 workers (data-auditor, e2e-tester, visual-tester) running since 16:55 UTC | its `docs/qa/WIP-STATUS.md` |
-| **Evidence purge** (approved by Hazem 2026-10-01) | Director | the 5 branches above | Waiting for all four leads to be idle at once | see "Evidence purge" below |
+| WP-Q2 Independent verification | qa-lead | `feat/qa-phase0-verification` / `.claude/worktrees/qa-lead` | **Part 1 done** (`e909885`): WP-B0 passes 11/11; QA tooling fixed for Windows (QA-P0-002/003/004); rule 1 passes on 100% of the merged WP-D0 rows (97 prices, 27 gaps, 143 benchmarks); 10% sample drawn (43 of 355, seed `rig-lab-audit:phase-0:98d2be5…`). Director approved minObserveMs 5 s, headless fps INVALID, and the QA-P0-005 soak | run the 10% audit with 2 fresh data-auditors; then axe dark/light after WP-B1 Part 2; then `docs/qa/report-phase-0.md`, including an independent check of the purge |
+| **Evidence purge** (approved by Hazem 2026-10-01) | Director | the 5 branches above | data-lead and design-lead paused; waiting for build-lead (WP-B1 Part 2 hand-off) and qa-lead (10% audit) to be idle | see "Evidence purge" below |
 
 ## Next steps (Director)
 
