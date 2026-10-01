@@ -1,5 +1,10 @@
 import { OrbitControls } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
+import { setConsoleFunction } from 'three';
+import { threeConsole } from './three-console';
+
+// Before any Canvas exists, so its THREE.Clock warns no more (QA-P0-001, three-console.ts).
+setConsoleFunction(threeConsole(console));
 
 /**
  * Phase 0 placeholder for the 3D garage: one plain box and two lights.
