@@ -118,11 +118,12 @@ writeFileSync(
 `,
 );
 
-// 1. Build with the real Vite + Tailwind plugin.
+// 1. Build with the real Vite + Tailwind plugin, under the app's own base path (GitHub Pages).
+const BASE = readFileSync(join(REPO, 'src/app/routes.ts'), 'utf8').match(/export const BASE_PATH = '([^']+)'/)[1];
 await build({
   configFile: false,
   root: REPO,
-  base: '/',
+  base: BASE,
   logLevel: 'warn',
   plugins: [tailwindcss()],
   build: { outDir: DIST, emptyOutDir: true, assetsInlineLimit: 0, rolldownOptions: { input: join(TMP, 'index.html') } },
@@ -135,10 +136,11 @@ const cssFile = files.find((f) => f.endsWith('.css'));
 const fontFile = files.find((f) => f.endsWith('.woff2'));
 const css = readFileSync(cssFile, 'utf8');
 writeFileSync(join(OUT, 'compiled.css'), css);
-const fontUrl = '/' + relative(DIST, fontFile).split('\\').join('/');
+const fontUrl = BASE + relative(DIST, fontFile).split('\\').join('/');
 const builtHtml = readFileSync(html, 'utf8');
 const report = {
   vite: {
+    base: BASE,
     css: relative(REPO, cssFile),
     cssBytes: css.length,
     font: relative(REPO, fontFile),
@@ -154,12 +156,13 @@ const report = {
 const types = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.woff2': 'font/woff2' };
 const server = createServer((req, res) => {
   const url = decodeURIComponent(new URL(req.url, 'http://x').pathname);
-  const file = url === '/' ? html : join(DIST, url);
+  if (!url.startsWith(BASE)) return res.writeHead(404).end();
+  const file = join(DIST, url.slice(BASE.length));
   if (!existsSync(file)) return res.writeHead(404).end();
   res.writeHead(200, { 'content-type': types[extname(file)] ?? 'application/octet-stream' }).end(readFileSync(file));
 }).listen(0);
 const origin = `http://127.0.0.1:${server.address().port}`;
-const page = '/' + relative(DIST, html).split('\\').join('/');
+const page = BASE + relative(DIST, html).split('\\').join('/');
 const browser = await chromium.launch();
 const errors = [];
 // Rig Lab's own text: everything visible in the chosen direction's mock.
@@ -276,6 +279,53 @@ report.swap = {
   rolesTallerWithFallback: Object.keys(webFont.roles).filter((k) => fallback.roles[k].h !== webFont.roles[k].h),
   rolesTallerWithPlainArial: Object.keys(webFont.roles).filter((k) => arial.roles[k].h !== webFont.roles[k].h),
 };
+
+// 4. A slow first load: the font arrives 1.5 s late, so the page paints in the fallback first and
+// swaps later. Records when text first paints, the LCP entries, and every layout shift the swap
+// causes, for the calibrated fallback and for plain Arial.
+async function slowFont(width, plainArial) {
+  const context = await browser.newContext({ viewport: { width, height: 1000 } });
+  const tab = await context.newPage();
+  tab.on('pageerror', (e) => errors.push(e.message));
+  await tab.route('**/*.woff2', async (r) => { await new Promise((ok) => setTimeout(ok, 1500)); await r.continue(); });
+  // Init scripts run before <html> exists: set the plain stack the moment it is parsed.
+  if (plainArial) await tab.addInitScript(() => {
+    const apply = () => document.documentElement.style.setProperty('--font-sans', "'Rig Lab Sans', Arial, 'Liberation Sans', sans-serif");
+    if (document.documentElement) apply();
+    else new MutationObserver((_, observer) => { if (document.documentElement) { apply(); observer.disconnect(); } }).observe(document, { childList: true });
+  });
+  await tab.goto(origin + page, { waitUntil: 'load' });
+  const vitals = await tab.evaluate(async (font) => {
+    await document.fonts.ready;
+    await new Promise((ok) => requestAnimationFrame(() => requestAnimationFrame(ok)));
+    const observed = (type) => new Promise((ok) => {
+      new PerformanceObserver((list, observer) => { observer.disconnect(); ok(list.getEntries()); }).observe({ type, buffered: true });
+      setTimeout(() => ok([]), 500);
+    });
+    const ms = (t) => Math.round(t);
+    const lcp = await observed('largest-contentful-paint');
+    const shifts = (await observed('layout-shift')).filter((s) => !s.hadRecentInput);
+    return {
+      firstContentfulPaintMs: ms(performance.getEntriesByName('first-contentful-paint')[0]?.startTime ?? -1),
+      fontArrivedMs: ms(performance.getEntriesByType('resource').find((r) => r.name.endsWith(font))?.responseEnd ?? -1),
+      lcp: lcp.map((e) => ({ atMs: ms(e.startTime), size: e.size, element: `${e.element?.tagName.toLowerCase()} "${(e.element?.textContent ?? '').trim().slice(0, 32)}"` })),
+      fontFamilyAtLoad: getComputedStyle(document.documentElement).getPropertyValue('--font-sans').trim(),
+      layoutShifts: shifts.map((s) => ({
+        atMs: ms(s.startTime),
+        value: +s.value.toFixed(4),
+        moved: s.sources.map((src) => `${src.node?.nodeName.toLowerCase() ?? '?'} "${(src.node?.textContent ?? '').trim().slice(0, 24)}"`),
+      })),
+      cls: +shifts.reduce((sum, s) => sum + s.value, 0).toFixed(4),
+    };
+  }, fontUrl.split('/').pop());
+  await context.close();
+  return vitals;
+}
+report.slowFont = { note: 'The woff2 is held back 1.5 s. CLS here is only what the font swap causes; the budget is < 0.05 (BUILD_PROMPT §8).' };
+for (const width of [390, 1440]) {
+  report.slowFont[`${width}-calibratedFallback`] = await slowFont(width, false);
+  report.slowFont[`${width}-plainArial`] = await slowFont(width, true);
+}
 report.errors = errors;
 await browser.close();
 server.close();

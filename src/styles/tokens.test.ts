@@ -155,6 +155,20 @@ describe('design tokens compile with the installed Tailwind (WP-DS1)', () => {
     css = normalise(compiler.build([...Object.keys(EXPECTED), ...REMOVED]));
   });
 
+  it('must be imported with no layer: Tailwind refuses it inside one', async () => {
+    // The reason for the wiring rule in docs/design/tokens.md: @custom-variant (and @utility)
+    // cannot be nested, and @import ... layer() nests the whole file.
+    for (const layer of ['theme', 'base']) {
+      const entry = ENTRY.replace(
+        "@import './tokens.css';",
+        `@import './tokens.css' layer(${layer});`,
+      );
+      await expect(compile(entry, { base: here, loadStylesheet })).rejects.toThrow(
+        '`@custom-variant` cannot be nested.',
+      );
+    }
+  });
+
   it('is compiled by Tailwind 4.3.3', () => {
     const manifest = readFileSync(require.resolve('tailwindcss/package.json'), 'utf8');
     expect(JSON.parse(manifest)).toMatchObject({ version: '4.3.3' });
