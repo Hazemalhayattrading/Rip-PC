@@ -16,7 +16,7 @@
       "unit": "points",
       "aggregate": null,
       "testSystem": {
-        "cpu": "Intel Core Ultra 9 285K on ASUS Z890 Maximus Hero (BIOS 0805)",
+        "cpu": "Intel Core Ultra 9 285K (Intel stock power settings, ASUS MCE disabled) on ASUS Z890 Maximus Hero (BIOS 0805)",
         "gpu": "PNY GeForce RTX 4090 XLR8",
         "ram": "2 x 16 GB DDR5-6000 36-36-36-76, 2T, Gear 2",
         "os": "Windows 11 Professional 64-bit 23H2 (VBS enabled)"
@@ -170,7 +170,7 @@
       "unit": "points",
       "aggregate": null,
       "testSystem": {
-        "cpu": "Intel Core Ultra 7 265K on ASUS Z890 Maximus Hero (BIOS 0805)",
+        "cpu": "Intel Core Ultra 7 265K (Intel stock power settings, ASUS MCE disabled) on ASUS Z890 Maximus Hero (BIOS 0805)",
         "gpu": "PNY GeForce RTX 4090 XLR8",
         "ram": "2 x 16 GB DDR5-6000 36-36-36-76, 2T, Gear 2",
         "os": "Windows 11 Professional 64-bit 23H2 (VBS enabled)"
@@ -249,7 +249,7 @@
       "unit": "points",
       "aggregate": null,
       "testSystem": {
-        "cpu": "Intel Core i7-14700K on ASUS Z790 Maximus Dark Hero (BIOS 1302)",
+        "cpu": "Intel Core i7-14700K (Intel stock power settings, ASUS MCE disabled) on ASUS Z790 Maximus Dark Hero (BIOS 1302)",
         "gpu": "PNY GeForce RTX 4090 XLR8",
         "ram": "2 x 16 GB DDR5-6000 36-36-36-76, 2T, Gear 2",
         "os": "Windows 11 Professional 64-bit 23H2 (VBS enabled)"
@@ -328,7 +328,7 @@
       "unit": "points",
       "aggregate": null,
       "testSystem": {
-        "cpu": "Intel Core i5-14600K on ASUS Z790 Maximus Dark Hero (BIOS 1302)",
+        "cpu": "Intel Core i5-14600K (Intel stock power settings, ASUS MCE disabled) on ASUS Z790 Maximus Dark Hero (BIOS 1302)",
         "gpu": "PNY GeForce RTX 4090 XLR8",
         "ram": "2 x 16 GB DDR5-6000 36-36-36-76, 2T, Gear 2",
         "os": "Windows 11 Professional 64-bit 23H2 (VBS enabled)"
@@ -707,7 +707,7 @@
       "unit": "points",
       "aggregate": null,
       "testSystem": {
-        "cpu": "Intel Core Ultra 9 285K on ASUS Z890 Maximus Hero (BIOS 0805)",
+        "cpu": "Intel Core Ultra 9 285K (Intel stock power settings, ASUS MCE disabled) on ASUS Z890 Maximus Hero (BIOS 0805)",
         "gpu": "PNY GeForce RTX 4090 XLR8",
         "ram": "2 x 16 GB DDR5-6000 36-36-36-76, 2T, Gear 2",
         "os": "Windows 11 Professional 64-bit 23H2 (VBS enabled)"
@@ -861,7 +861,7 @@
       "unit": "points",
       "aggregate": null,
       "testSystem": {
-        "cpu": "Intel Core Ultra 7 265K on ASUS Z890 Maximus Hero (BIOS 0805)",
+        "cpu": "Intel Core Ultra 7 265K (Intel stock power settings, ASUS MCE disabled) on ASUS Z890 Maximus Hero (BIOS 0805)",
         "gpu": "PNY GeForce RTX 4090 XLR8",
         "ram": "2 x 16 GB DDR5-6000 36-36-36-76, 2T, Gear 2",
         "os": "Windows 11 Professional 64-bit 23H2 (VBS enabled)"
@@ -940,7 +940,7 @@
       "unit": "points",
       "aggregate": null,
       "testSystem": {
-        "cpu": "Intel Core i7-14700K on ASUS Z790 Maximus Dark Hero (BIOS 1302)",
+        "cpu": "Intel Core i7-14700K (Intel stock power settings, ASUS MCE disabled) on ASUS Z790 Maximus Dark Hero (BIOS 1302)",
         "gpu": "PNY GeForce RTX 4090 XLR8",
         "ram": "2 x 16 GB DDR5-6000 36-36-36-76, 2T, Gear 2",
         "os": "Windows 11 Professional 64-bit 23H2 (VBS enabled)"
@@ -1019,7 +1019,7 @@
       "unit": "points",
       "aggregate": null,
       "testSystem": {
-        "cpu": "Intel Core i5-14600K on ASUS Z790 Maximus Dark Hero (BIOS 1302)",
+        "cpu": "Intel Core i5-14600K (Intel stock power settings, ASUS MCE disabled) on ASUS Z790 Maximus Dark Hero (BIOS 1302)",
         "gpu": "PNY GeForce RTX 4090 XLR8",
         "ram": "2 x 16 GB DDR5-6000 36-36-36-76, 2T, Gear 2",
         "os": "Windows 11 Professional 64-bit 23H2 (VBS enabled)"
