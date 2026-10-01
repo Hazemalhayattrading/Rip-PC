@@ -4,6 +4,10 @@ Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
 
 **Last update:** 2026-10-01, Director. Phase 0 is open; nothing is merged to `main`.
 
+> **Commit IDs:** the evidence purge (2026-10-01) gave new IDs to every commit from `63ab40f` on.
+> Older IDs quoted below (for example `c12fabd`, `98d2be5`) resolve through
+> `docs/reports/evidence/purge-sha-map.txt`.
+
 ## How to continue after a stop
 
 1. Read `CLAUDE.md`, `BUILD_PROMPT.md`, this file and `docs/reports/phase-0-briefs.md`.
@@ -50,15 +54,19 @@ Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
 | 2026-10-01 | **WP-B1 Part 1 accepted:** `gpu` → `gpu-card` (URL code `g` kept, test-first); README Windows and perf sections; ESLint `no-import-type-side-effects` | build-lead | **Merged as `c7a099b`**, with the README Context7 follow-up (`77d20f9`). verify on the merged branch: 266 unit, 112 e2e. The probe shows 77.40 → 320.49 KB gzip without the rule |
 | 2026-10-01 | **WP-DS1 accepted and merged** (`21ac5fb`): `tokens.css` dark and light, AA (29 pairs, lowest 4.70:1), Rig Lab Sans (OFL) with its fallback calibrated to 103.14% (corpus width error 0.00%, swap CLS 0.0008), `tokens.md`, `studio-3d-brief.md`, `specs-view.md`, the pick in `direction.md` | design-lead | verify on the merged branch: 361 unit, 112 e2e; initial JS 77.42 KB gzip; the Director re-ran `contrast.mjs --check` (exit 0); parity shots in the design-lead worktree `artifacts/screenshots/phase-0/WP-DS1/` |
 | 2026-10-01 | **WP-DS1 addendum accepted and merged** (`3eb858d`): `::selection` is solid `--stage` on `--ink` (16.75:1 or better on every surface, was 3.06:1); light `--ink-3` is `#5a5e64` (4.61:1 at the floor's near edge, was 4.08:1, QA DS0-01); `contrast.mjs` checks 34 pairs including both floor ends; tokens.md rule 4 (no text over the 3D scene); `docs/design/backlog.md` (41 items, WP-DS2 in Phase 1) | design-lead | the Director re-ran `contrast.mjs --check` (exit 0); verify on the merged branch: 455 unit, 112 e2e |
+| 2026-10-01 | **Evidence purge done** (approved by Hazem): the 11 binary files (9 archive parts, 2 bundles) were removed from the history of all 5 branches; 87 commits rewritten; force-pushed with lease. Integration `1579a52` → `4bbdc0a`. Tip contents byte-identical. Old → new map: `docs/reports/evidence/purge-sha-map.txt` | Director | a fresh mirror clone of GitHub holds 0 of 11 blobs (12 MB pack, was 236 MB); verify on the rewritten tip: 455 unit, 112 e2e; backup `C:Projectsig-lab-evidenceackupip-pc-all-refs-before-purge-2026-10-01.bundle` |
+| 2026-10-01 | **WP-B1 Part 2 accepted and merged** (`91fa4b4`): tokens wired per tokens.md §1 (no-layer tokens.css, Preflight and base.css, font preload, `data-theme`, inline restore script); `theme.ts` test-first; the "Light theme" toggle; test files kept out of Tailwind's scan (CSS 3.3 KB gzip); a test that the build categories match data-lead's buyable categories. Director decision: keep the font preload in Phase 0, and in Phase 2 render the shell text into the static HTML, then re-measure with applied throttling | build-lead | verify on the merged branch: 480 unit, 112 e2e; initial JS 77.92 KB gzip (+506 B); LCP 44–160 ms, CLS 0; 12 screenshots in the build-lead worktree `artifacts/screenshots/phase-0/WP-B1/after/` |
+| 2026-10-01 | Post-purge commit IDs in `data/audits.json` (4 `fixedIn` values) merged (`a3d88a8`). data-lead's Phase 0 work is closed | data-lead | each new ID checked against the map with an identical `git patch-id`; verify: 480 unit, 112 e2e |
+| 2026-10-01 | **WP-B1 addendum merged** (`9286430`): R3F's THREE.Clock deprecation warning filtered through three's `setConsoleFunction` (QA-P0-001), in the lazy 3D chunk only, test-first. WP-B1 is closed | build-lead | 0 Clock warnings on `/build/cpu` (was 1 per load); verify 486 unit, 112 e2e; initial JS 77.92 KB gzip, unchanged |
+| 2026-10-01 | WP-DS0 doc fixes from QA's review merged (`d3799da`): the Tesla waiver (DS0-11), KB = 1,000 B with the Bench image re-encoded (DS0-12), the 3D survey's CC BY author details (DS0-13), and backlog items 42–46. design-lead's Phase 0 work is closed | design-lead | verify 486 unit, 112 e2e |
 | 2026-10-01 | **WP-D0 accepted and merged** (`98d2be5`): Zod schemas, a validator with 34 rules, 73 seed spec records (all plan 5.3 minimums and mixes), live prices (US 52 + 10 gaps, SA 45 + 17 gaps), 116 game and 27 creator anchors, 15 games, the 20% audit (78 items, 8 findings fixed). The Director's review caught the North cooler limit (145 → 170 mm); data-lead's sweep caught the North PSU limit by tray count (schema: `psu.clearance` list) | data-lead | verify on the merged branch: 454 unit, 112 e2e; initial JS 77.42 KB gzip (no catalogue data in the bundle); 21 new evidence files copied and checked (`docs/reports/evidence/data-lead-evidence-2026-10-01.sha256`) |
 
 ## In progress
 
 | Task | Who | Branch / worktree | State | Exact next step |
 |---|---|---|---|---|
-| WP-B1 Tokens wiring and follow-ups | build-lead | `feat/build-tokens-wiring` / `.claude/worktrees/build-lead` | Part 1 merged (`c7a099b`). **Part 2 started** after WP-DS1 merged at `21ac5fb` | wire `tokens.css` per `docs/design/tokens.md` §1 (test-first); evidence per §1.5 plus 12 screenshots; hand off, then stay idle for the purge |
-| WP-Q2 Independent verification | qa-lead | `feat/qa-phase0-verification` / `.claude/worktrees/qa-lead` | Part 1 running: Windows tooling fixed (`258c76e`); 3 workers (data-auditor, e2e-tester, visual-tester) running since 16:55 UTC | its `docs/qa/WIP-STATUS.md` |
-| **Evidence purge** (approved by Hazem 2026-10-01) | Director | the 5 branches above | Waiting for all four leads to be idle at once | see "Evidence purge" below |
+| WP-Q2 Independent verification | qa-lead | `feat/qa-phase0-verification` / `.claude/worktrees/qa-lead` | Part 1 done. **10% audit done:** 43 of 355 records, 1,265 fields; 1,189 MATCH, 67 NULL OK, 9 findings. **2 Blockers** (QA-P0-008: wrong ASUS CPU-support URLs on 2 boards; QA-P0-009: case size class derived, not sourced), 3 Majors (010: radiator thickness limits unrecorded; 011: Core 200S Boost profile missing on 8 TPU rows; 012: 2 SA import-fee notes missing). Rule 1 still 100% pass | after RESUME: verify the purge independently, re-check DS0-01, axe dark/light, the warnings gate with build-lead's allowlist, then re-verify data-lead's fixes and write `docs/qa/report-phase-0.md` |
+| QA data fixes (QA-P0-008 to 012) | data-lead | `feat/data-qa-fixes` (new) / `.claude/worktrees/data-lead` | Assigned by the Director. Blockers first | fix all 5, record them in `data/audits.json`, verify, hand off; Director merges, QA re-verifies |
 
 ## Next steps (Director)
 
@@ -70,7 +78,7 @@ Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
 3. Write `docs/reports/phase-0.md` and report to Hazem **before Phase 1 starts**.
 4. **Evidence purge** (see the section below).
 
-## Evidence purge (approved by Hazem, 2026-10-01: purge now, the 2 bundles included)
+## Evidence purge (approved by Hazem, 2026-10-01: purge now, the 2 bundles included). **Done**; stage 3, the local gc, is still to run
 
 - **What:** remove 11 files from history: the 9 `.tar.xz` archive parts and the 2 git bundles under
   `docs/reports/phase-0-wip/`. The 3 text records stay in history; they moved to
@@ -81,19 +89,24 @@ Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
   keep their ids. Inside it, only `63ab40f` and `9b9244d` lose a signature.
 - **Precondition:** every lead idle, clean and pushed. A lead's tip still holds the 11 files until
   it merges `4467930`, so rewriting under an active lead would let its next commit re-add them.
-- **Why it waits:** teammates receive messages only between turns. design-lead and qa-lead had been
-  in one turn since 16:28 UTC and never saw the pause request. data-lead and build-lead paused, and
-  were resumed so they don't wait idle.
-- **Scripts:** `C:\Projects\rig-lab-evidence\purge\`, both with pre-flight checks.
-  - `purge-1-rewrite.sh`: pre-flight, a full backup bundle into `..\backup\`, the rewrite, and
-    verification. It pushes nothing.
-  - `purge-2-publish.sh`: the `--force-with-lease` pushes, the worktree resets, and `gc`.
-  Review stage 1's output before running stage 2.
-- **After it runs:**
-  - send each lead its new head id;
-  - send data-lead the old-to-new map for the 4 commit IDs in `data/audits.json` (7451f52, 2cedf51, 067eb7e, bf7caad). data-lead updates them on `feat/data-audit-ids`;
-  - update this file's commit ids;
-  - draft the GitHub Support request for Hazem (purge cached views and run GC).
+- **How it ran (2026-10-01):** qa-lead was blocked on 3 read-only audit workers that write only
+  to its scratchpad, so it couldn't commit. The other three leads were idle or paused. Every tip
+  had already merged `4467930`, so no worktree's files changed.
+- **Scripts:** `C:Projectsig-lab-evidencepurge`. The output is in `run` there.
+  - `purge-1-rewrite.sh`: pre-flight, a backup bundle, the rewrite, and verification. Ran clean:
+    87 commits, every tip diff empty, 0 blobs reachable.
+  - `purge-2-publish.sh`: the `--force-with-lease` pushes, the worktree sync, and dropping
+    `refs/original`. Ran clean: all 5 pushed, origin matches, 0 blobs reachable from any ref.
+  - `purge-3-cleanup.sh`: reflog expire and `gc --prune=now`. **Not run yet.** It waits until
+    qa-lead's audit workers no longer need old IDs, then run it.
+- **Done after it ran:**
+  - each lead got its new head id;
+  - data-lead got the map, and the 4 IDs in `data/audits.json` are updated (merged `a3d88a8`);
+  - the map is committed as `docs/reports/evidence/purge-sha-map.txt`.
+- **Still to do:**
+  - run stage 3;
+  - qa-lead's independent purge check in `report-phase-0.md`;
+  - Hazem's GitHub Support request (open items).
 
 ## Open items for Hazem
 
@@ -107,11 +120,21 @@ Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
   system install, and this PC doesn't have it. Without it, textures ship as WebP, which decodes
   to uncompressed GPU memory (about 22 MB per 2K map). The 160 MB texture budget then holds only
   about 7 maps. BUILD_PROMPT §7 asks for KTX2. Installing it needs Hazem's OK.
-- **Decided 2026-10-01:** the 222 MB of third-party page captures leave the public repo. They are
-  kept in `C:\Projects\rig-lab-evidence`, listed by checksum in a manifest in the repo, and purged
-  from branch history before anything merges to `main`. The Director shows Hazem the purge plan
-  before any history rewrite.
+- **Done 2026-10-01 (Hazem's decision):** the 222 MB of third-party page captures are out of the
+  public repo and its branch history. They are kept in `C:\Projects\rig-lab-evidence` and listed by
+  checksum in `docs/reports/evidence/`. Left for Hazem: the GitHub Support request (below), and
+  optionally a private backup of `C:\Projects\rig-lab-evidence`, which is now the only full copy.
 - **3D assets, paid options** (`docs/design/studio-3d-brief.md` §7). Design-lead recommends A now (USD 0, parametric models and CC BY), deciding B before Phase 3 (a commissioned hero set, about USD 1,440, an estimate, not a quote), and skipping C. Its three questions: may we ask ARCTIC and ASUS for permission, and who sends the requests? Who downloads the CC BY files, with what account? Is a budget of about USD 1,500 for B open for Phase 3?
+- **GitHub Support request (after the purge).** GitHub can still serve the purged commits by direct
+  ID until its own GC. Open https://support.github.com/request, choose "Remove sensitive data",
+  and send this text, or adapt it:
+  > Repository Hazemalhayattrading/Rip-PC (public). On 2026-10-01 we rewrote the history of
+  > branches claude/keen-lamport-0794zj, feat/data-foundations, feat/design-tokens,
+  > feat/build-tokens-wiring and feat/qa-phase0-verification, to remove 11 files under
+  > docs/reports/phase-0-wip/ (archives of third-party web page captures). They were added in
+  > commit 63ab40f6ab7e47c4c331e20d2bf7fc7106e27027 and are no longer reachable from any branch.
+  > There are no forks and no pull requests. Please remove cached views of the old commits and
+  > run a garbage collection, so that the orphaned objects are no longer served.
 - **Rotate the Context7 API key.** The Director's check printed it in this session's transcript,
   because a masking bug missed values inside JSON arrays. It was never in the repo. Put the new
   key in the user-level config only.

@@ -27,7 +27,7 @@ export function BuildStepPage({ step }: BuildStepPageProps) {
       <p>Placeholder: the parts for this step arrive in Phase 2.</p>
       <GarageSlot />
       <nav aria-label="Previous and next step">
-        <ul>
+        <ul role="list">
           {previous === null ? null : (
             <li>
               <AppLink to={pathOf({ name: 'build', step: previous })} rel="prev">
@@ -47,7 +47,7 @@ export function BuildStepPage({ step }: BuildStepPageProps) {
         </ul>
       </nav>
       <nav aria-label="Build steps">
-        <ol>
+        <ol role="list">
           {BUILD_STEPS.map((candidate) => (
             <li key={candidate}>
               <AppLink

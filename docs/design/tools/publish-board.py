@@ -14,8 +14,8 @@ for k, name in NAMES.items():
     while True:
         buf = io.BytesIO()
         im.save(buf, 'JPEG', quality=q, optimize=True, progressive=True, subsampling=0 if q >= 80 else 2)
-        if buf.tell() <= 300 * 1024 or q <= 60:
+        if buf.tell() <= 300 * 1000 or q <= 60:  # KB is 1,000 bytes (DS0-12)
             break
         q -= 3
     open(os.path.join(DST, name), 'wb').write(buf.getvalue())
-    print(f'{name:14} {im.width}x{im.height} {buf.tell() // 1024} KB q{q}')
+    print(f'{name:14} {im.width}x{im.height} {buf.tell() // 1000} KB q{q}')

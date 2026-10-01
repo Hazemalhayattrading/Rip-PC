@@ -27,7 +27,7 @@ SHOTS = {
     '390-light': (780, '390 px, light theme'),
     '390-dark-full': (585, '390 px, dark theme, full page'),
 }
-MAX = 300 * 1024
+MAX = 300 * 1000  # 300 KB = 300,000 bytes: KB is 1,000 bytes, as in the bundle budget (DS0-12)
 
 
 def caption(img, title, sub):
@@ -83,5 +83,5 @@ for slug in SLUGS:
         out = os.path.join(DST, slug, shot + '.jpg')
         size, q, dims = save(im, out)
         manifest.append({'file': os.path.relpath(out, ROOT), 'bytes': size, 'quality': q, 'size': dims})
-        print(f'{slug:6} {shot:14} {dims[0]}x{dims[1]}  {size // 1024:4} KB  q{q}')
+        print(f'{slug:6} {shot:14} {dims[0]}x{dims[1]}  {size // 1000:4} KB  q{q}')
 json.dump(manifest, open(MANIFEST, 'w'), indent=1)
