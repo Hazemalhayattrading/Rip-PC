@@ -66,6 +66,8 @@ const PAIRS = {
     ['ink-3', 'surface', 'ui', 'control borders: checkbox, input, pressed chip'], ['ink-3', 'surface-raised', 'ui', 'control borders on a raised row'],
     ['focus', 'surface', 'ui', 'focus ring on panels'], ['focus', 'surface-raised', 'ui', 'focus ring on a raised row'], ['focus', 'stage', 'ui', 'focus ring on the stage'], ['focus', 'stage+stage-key', 'ui', 'focus ring in the key light'],
     ['ink', 'surface-raised', 'ui', 'selected-row bar'], ['action', 'surface', 'ui', 'primary button against its panel'],
+    // Selection is solid (base.css), so this one pair holds on every surface, --action included.
+    ['stage', 'ink', 'text', 'selected text: --stage on the --ink selection, any surface'],
   ],
   bench: [
     ['ink', 'panel', 'text', 'primary text'], ['ink-2', 'panel', 'text', 'secondary text'], ['ink-3', 'panel', 'text', 'labels, units, meta'],

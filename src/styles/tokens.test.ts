@@ -214,6 +214,13 @@ describe('design tokens compile with the installed Tailwind (WP-DS1)', () => {
       ':focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }',
     );
   });
+
+  it('selects text as --stage on --ink, the pair the contrast check measures', () => {
+    // A solid selection holds on every surface; contrast.mjs measures stage on ink.
+    const base = css.slice(css.indexOf('@layer base'));
+    expect(base).toContain('::selection { background: var(--ink); color: var(--stage); }');
+    expect(tokensCss).not.toContain('--selection');
+  });
 });
 
 describe('tokens stay consistent', () => {
