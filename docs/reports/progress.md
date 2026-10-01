@@ -56,6 +56,7 @@ Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
 | 2026-10-01 | **WP-DS1 addendum accepted and merged** (`3eb858d`): `::selection` is solid `--stage` on `--ink` (16.75:1 or better on every surface, was 3.06:1); light `--ink-3` is `#5a5e64` (4.61:1 at the floor's near edge, was 4.08:1, QA DS0-01); `contrast.mjs` checks 34 pairs including both floor ends; tokens.md rule 4 (no text over the 3D scene); `docs/design/backlog.md` (41 items, WP-DS2 in Phase 1) | design-lead | the Director re-ran `contrast.mjs --check` (exit 0); verify on the merged branch: 455 unit, 112 e2e |
 | 2026-10-01 | **Evidence purge done** (approved by Hazem): the 11 binary files (9 archive parts, 2 bundles) were removed from the history of all 5 branches; 87 commits rewritten; force-pushed with lease. Integration `1579a52` → `4bbdc0a`. Tip contents byte-identical. Old → new map: `docs/reports/evidence/purge-sha-map.txt` | Director | a fresh mirror clone of GitHub holds 0 of 11 blobs (12 MB pack, was 236 MB); verify on the rewritten tip: 455 unit, 112 e2e; backup `C:Projectsig-lab-evidenceackupip-pc-all-refs-before-purge-2026-10-01.bundle` |
 | 2026-10-01 | **WP-B1 Part 2 accepted and merged** (`91fa4b4`): tokens wired per tokens.md §1 (no-layer tokens.css, Preflight and base.css, font preload, `data-theme`, inline restore script); `theme.ts` test-first; the "Light theme" toggle; test files kept out of Tailwind's scan (CSS 3.3 KB gzip); a test that the build categories match data-lead's buyable categories. Director decision: keep the font preload in Phase 0, and in Phase 2 render the shell text into the static HTML, then re-measure with applied throttling | build-lead | verify on the merged branch: 480 unit, 112 e2e; initial JS 77.92 KB gzip (+506 B); LCP 44–160 ms, CLS 0; 12 screenshots in the build-lead worktree `artifacts/screenshots/phase-0/WP-B1/after/` |
+| 2026-10-01 | Post-purge commit IDs in `data/audits.json` (4 `fixedIn` values) merged (`a3d88a8`). data-lead's Phase 0 work is closed | data-lead | each new ID checked against the map with an identical `git patch-id`; verify: 480 unit, 112 e2e |
 | 2026-10-01 | **WP-D0 accepted and merged** (`98d2be5`): Zod schemas, a validator with 34 rules, 73 seed spec records (all plan 5.3 minimums and mixes), live prices (US 52 + 10 gaps, SA 45 + 17 gaps), 116 game and 27 creator anchors, 15 games, the 20% audit (78 items, 8 findings fixed). The Director's review caught the North cooler limit (145 → 170 mm); data-lead's sweep caught the North PSU limit by tray count (schema: `psu.clearance` list) | data-lead | verify on the merged branch: 454 unit, 112 e2e; initial JS 77.42 KB gzip (no catalogue data in the bundle); 21 new evidence files copied and checked (`docs/reports/evidence/data-lead-evidence-2026-10-01.sha256`) |
 
 ## In progress
@@ -98,7 +99,7 @@ Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
     qa-lead's audit workers no longer need old IDs, then run it.
 - **Done after it ran:**
   - each lead got its new head id;
-  - data-lead got the map, and updates the 4 IDs in `data/audits.json` on `feat/data-audit-ids`;
+  - data-lead got the map, and the 4 IDs in `data/audits.json` are updated (merged `a3d88a8`);
   - the map is committed as `docs/reports/evidence/purge-sha-map.txt`.
 - **Still to do:**
   - run stage 3;
