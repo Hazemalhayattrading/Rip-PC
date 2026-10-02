@@ -189,7 +189,7 @@ Cooler: memory clearance     Not published
 | Columns, the body 42rem wide or more (`@2xl`) | The `<dl>` takes `@2xl:grid-cols-[minmax(0,13rem)_auto_minmax(0,1fr)] @2xl:gap-x-4`; each item `@2xl:col-span-3 @2xl:grid @2xl:grid-cols-subgrid`, so values and sources line up down the list: spec, value, source. In the mock this is 1440 only |
 | Narrower | The spec and the value on one line (`flex flex-wrap gap-x-2`); the source on the next (`w-full`). At 768 the three columns were tried first: the dates broke across lines |
 | Spec (`<dt>`) | "{Part role}: {spec}", `text-ink-2`: "Graphics card: length", "Case: graphics card limit". build-lead keeps one label map for the catalogue's fields; design-lead reviews it with the strings (copy-guide.md §13) |
-| Value (`<dd>`) | `text-ink`, tabular, `whitespace-nowrap`, formatted by [copy-guide.md §3](copy-guide.md#3-numbers-and-units). A conditional value carries its condition: "300 mm with a 360 mm front radiator" (then it may wrap) |
+| Value (`<dd>`) | `text-ink`, tabular, `whitespace-nowrap`, formatted by [copy-guide.md §3](copy-guide.md#3-numbers-and-units). A conditional value carries its condition, built from the structured fields (copy-guide §3): "300 mm with a 360 mm front radiator" (then it may wrap). Under it, in `type-caption text-ink-3` and typographic quotes, the maker's own words from `asPublished`: “up to 300 mm with a 360 mm front radiator” |
 | Not published | "Not published" in `text-ink-2`; the data's reason under it in `type-caption text-ink-3`. Never a dash on its own |
 | Source (`<dd>`) | The source link, below |
 | Manual quotes | `m2-lanes` adds the manual's words under its source, in `type-small text-ink-2`, inside a `<blockquote>`, in typographic quotes |

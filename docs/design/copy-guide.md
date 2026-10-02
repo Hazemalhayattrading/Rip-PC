@@ -91,8 +91,22 @@ The rules of [direction.md §1.1](direction.md#11-numbers-are-the-product) and
 - **At a numeric limit,** the reason says what happens exactly there (test plan §9.1): "The {card}
   is 355 mm long, exactly the 355 mm the {case} takes, so it fits with no room to spare." Whether
   that passes or warns is the rule's call; the wording says it either way.
-- **Data text shown inside a sentence** (a case's clearance `condition`, such as "with a 360 mm
-  front radiator") follows these rules too. data-lead writes it lowercase, starting with "with".
+- **A clearance's condition is built from its fields,** never copied from the maker's words.
+  data-lead structures each condition (`LayoutCondition` in `src/data/schema/case.ts`) and keeps
+  the maker's own words in `asPublished`, verbatim, for audit. The engine writes the phrase; it
+  goes after the limit, with a space: "takes cards up to 300 mm with a 360 mm front radiator".
+
+  | `kind` | Phrase | Examples |
+  |---|---|---|
+  | `radiator` | "with a {sizes} mm {position} radiator". Several sizes join with "or", and the unit appears once. Positions are the words front, top, rear, side and bottom | "with a 360 mm front radiator" (the North); "with a 120 mm side radiator" (the Terra); "with a 280 or 360 mm front radiator" |
+  | `drive-trays` | "with {count} HDD tray(s)": the count in words up to nine, "tray" for one, "trays" for more | "with one HDD tray", "with two HDD trays" (the North) |
+
+  - Every radiator size (120 to 420 mm) takes "a": "a 120 mm", never "an".
+  - A new `kind` needs its phrase here before a rule may show it. Until then, the rule shows the
+    limit with no condition phrase, and the evidence carries `asPublished`.
+- **The evidence shows both:** the value cell holds the limit and the phrase ("300 mm with a 360 mm
+  front radiator"), and under it, in quotes, the maker's own words: “up to 300 mm with a 360 mm
+  front radiator” (lab-spec.md §5).
 
 ## 4. Part names
 
@@ -368,8 +382,9 @@ Section 8 has the full wording, Hazem's requirement included.
   RGB Black TG Clear Tint takes power supplies up to 150 mm."
 - The North, by its drive trays: "The NZXT C1200 Gold ATX 3.1 is 160 mm long, and the Fractal
   Design North Charcoal Black TG Light takes power supplies up to 255 mm with one HDD tray." With
-  two trays it is Incompatible: "… up to 155 mm with two HDD trays." Layout: "Layout checked:
-  one HDD tray." (The data says "with 1 HDD tray" today; section 3 asks for "one".)
+  two trays it is Incompatible: "… up to 155 mm with two HDD trays." Layout: "One HDD tray
+  fitted." The phrases are built from the structured condition (section 3); the maker's words,
+  "1 HDD tray: 255 mm max", stay in the evidence.
 
 ### 14. `psu-wattage` — Power supply wattage (needs WP-E2)
 
@@ -511,7 +526,7 @@ https://www.asus.com/support/faq/1038568/, last updated 9 Apr 2026, read by desi
 2. Run BIOSRenamer from the download, which gives the BIOS file the name BIOS FlashBack needs.
 3. Copy the renamed .CAP file to the top folder of a USB drive formatted as FAT32.
 4. Shut the PC down, but leave the power supply plugged in and switched on.
-5. Plug the USB drive into the USB port marked BIOS FlashBack.
+5. Plug the USB drive into the board's BIOS FlashBack USB port; the board's manual shows where it is.
 6. Press the BIOS FlashBack button for 3 seconds, until its light blinks three times.
 7. Leave everything plugged in until the light goes out, which means the update is done.
 
@@ -654,12 +669,13 @@ After each E1, E3 and E5 hand-off (brief step 5):
   (`BuildParts.storage`, `15f9b5c`), and the case fans as one model in packs. The v1 share-link
   codec still holds one part per category (`src/state/categories.ts`); carrying the list in the
   URL is build-lead's, in WP-E0.
-- **The FlashBack steps need their source in the data.** For data-lead: add the ASUS FAQ above as
-  a source the `bios-version` result can cite, or the board manuals' BIOS FlashBack pages.
 - **Long names.** Two display names can make a 160-character reason: three lines at the reading
   measure (`max-w-measure`, about 64 characters a line, backlog item 15). The mock measured it.
   That is accepted. If Phase 2 needs shorter names, data-lead adds a sourced short name; the engine
   never makes one up.
-- **Condition texts** ("with 1 HDD tray") appear verbatim in reasons, so they follow section 3:
-  "with one HDD tray". For data-lead, low priority.
+- **Condition texts: answered.** data-lead structured the conditions (`feat/data-engine-data` @
+  `4337e09`) and keeps the maker's words verbatim in `asPublished`. Section 3 has the phrase
+  rules that build the reason's wording from the fields.
+- **The FlashBack steps' source: answered.** data-lead cites ASUS FAQ 1038568 on the 6 boards
+  with BIOS FlashBack (`4337e09`). It lands with D1 batch 1.
 - **Preset names** wait for D2's map (plan WP-D2).
