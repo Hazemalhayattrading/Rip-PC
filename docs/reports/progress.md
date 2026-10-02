@@ -231,6 +231,10 @@ Branch-tidy record:
     and its test conditions. The model may calibrate per source, from the anchors.
   - Where sources disagree by more than 10%, the range shown without a source context contains
     both values, at medium confidence or lower (plan WP-E3).
+- **2026-10-02, a card for the Arc B580 (Director, on qa-lead's data finding).** The
+  `intel-arc-b580` chip has 6 game anchors and a Blender row, but no catalogue card, so no build
+  can reach it. One real, sourced B580 card goes into WP-D1. It's a data-integrity fix, not
+  catalogue growth (plan WP-D1 and §7).
 - **2026-10-02, the dump's query mode (qa-lead's request, accepted).** Given a file of builds and
   queries, it writes exactly those results, so QA never reads the engine's code. E0 fixes the
   input format, and each later WP adds its entry point (plan WP-E0).

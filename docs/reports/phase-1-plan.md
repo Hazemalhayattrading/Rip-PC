@@ -126,6 +126,9 @@ it · Wave 1
      without a native 12V-2x6 is needed, and a real case of too few cables.
    - `cpu-chipset`: every catalogue CPU is on the support list of every board with its socket.
    - `cooler-socket` (added by Hazem, §6): all 5 coolers list all 4 sockets.
+   - **A card for every catalogue GPU chip.** The Intel Arc B580 has 6 game anchors and a
+     Blender row, but no card in the catalogue, so no build can reach it (QA's finding). One real,
+     sourced B580 card fixes this (Director's ruling, 2026-10-02).
    - If no real product exists after 2 tries (rule 11), data-lead records the gap, and the
      Director decides.
 2. **Structured conditions.** Today the conditional clearances are free text. Each becomes
@@ -522,7 +525,8 @@ the four leads, reusing their worktrees. The Phase 0 working rules stay:
 
 - **The builder UI and its step pages** are Phase 2. The lab is the only UI.
 - **Growing the catalogue to the v1 size** (BUILD_PROMPT §4, rule 6) is Phase 2 work, alongside
-  the builder. Phase 1 adds only the products that the rule tests need.
+  the builder. Phase 1 adds only the products that the rule tests need, plus a card for any
+  catalogue GPU chip that has none (the Arc B580).
 - **Prices:**
   - more SA retailers, and Newegg's seller selector: Phase 4, with the Buy Sheet;
   - the re-price batch: before launch.
