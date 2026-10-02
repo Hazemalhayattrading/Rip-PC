@@ -33,6 +33,7 @@ function resolves(batch: AuditBatchName, item: string): boolean {
   }
   if (batch === 'benchmark:game') return (dataset.gameBenchmarks ?? []).some((r) => r.id === item);
   if (batch === 'benchmark:creator') return (dataset.creatorBenchmarks ?? []).some((r) => r.id === item);
+  if (batch === 'compat-fixtures') return (dataset.compatFixtures?.rules ?? []).some((r) => r.fixtures.some((f) => f.id === item));
   return (dataset.games?.games ?? []).some((g) => g.id === item);
 }
 
@@ -63,6 +64,7 @@ describe('audits (data/audits.json)', () => {
       ...(dataset.gameBenchmarks ?? []).map((r) => r.id),
       ...(dataset.creatorBenchmarks ?? []).map((r) => r.id),
       ...(dataset.games?.games ?? []).map((g) => g.id),
+      ...(dataset.compatFixtures?.rules ?? []).flatMap((r) => r.fixtures.map((f) => f.id)),
     ]);
     const unknown = audit.reviews.flatMap((r) => r.findings.flatMap((f) => f.items)).filter((id) => !ids.has(id));
     expect(unknown).toEqual([]);

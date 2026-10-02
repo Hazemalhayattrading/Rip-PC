@@ -2,11 +2,14 @@ import * as z from 'zod';
 import { Id, IsoDate, PosInt } from './common';
 import { SPEC_CATEGORIES } from './files';
 
-/** The batches an audit samples from: one per spec category, price list, benchmark file and the games. */
+/**
+ * The batches an audit samples from: one per spec category, price list and benchmark file, the games,
+ * and the compatibility fixtures.
+ */
 export const AuditBatchName = z.union([
   z.templateLiteral(['spec:', z.enum(SPEC_CATEGORIES)]),
   z.templateLiteral([z.enum(['price-observations', 'price-gaps']), ':', z.enum(['sa', 'us'])]),
-  z.enum(['benchmark:game', 'benchmark:creator', 'games']),
+  z.enum(['benchmark:game', 'benchmark:creator', 'games', 'compat-fixtures']),
 ]);
 export type AuditBatchName = z.infer<typeof AuditBatchName>;
 
