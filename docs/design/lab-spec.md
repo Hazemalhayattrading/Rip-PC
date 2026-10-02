@@ -299,8 +299,20 @@ carry the unit ("Measured (fps)"); cells hold numbers only, right-aligned and ta
 - **Status:** the word is text; icons are `aria-hidden`; colour is never the only signal.
 - **Names, ids, units:** `translate="no"` on part names, rule ids, sockets, chipsets, slot names
   and units (backlog item 20).
-- **Targets:** selects and buttons 44 px tall; nav links and the steps summary at least 24 px;
-  links inside sentences are exempt (WCAG 2.5.8).
+- **Targets** (QA-P1-003 corrected this line):
+  - selects and text buttons are 44 px tall;
+  - round icon buttons, such as the theme toggle, are drawn at 36 px (`size-control-sm`), and on
+    touch screens their hit area reaches 44 × 44 px past the drawn circle (backlog item 4). Use a
+    centred box: `relative pointer-coarse:after:absolute pointer-coarse:after:top-1/2
+    pointer-coarse:after:left-1/2 pointer-coarse:after:size-[max(100%,2.75rem)]
+    pointer-coarse:after:-translate-x-1/2 pointer-coarse:after:-translate-y-1/2`.
+    - Not `after:-inset-1`. An absolutely positioned box sits inside the button's 1 px border, so
+      it measured 42 px, and taps 3 px outside the right and bottom edges missed.
+    - The mock's probe: at 390 (touch) all 4 edges answer a tap 3 px outside the circle; at 768
+      and 1440 (mouse) none do, so the drawn size is the target there;
+  - nav links and the steps summary are at least 24 px;
+  - links inside sentences are exempt.
+  - 24 px is the floor everywhere (WCAG 2.5.8), and every target above clears it.
 - **Focus:** the 2 px `--focus` ring from `base.css`, never clipped (section 1 and section 8);
   nothing sticky covers it.
 - **Forced colours:** check the chips, the confidence mark and the panel borders with Chromium's
