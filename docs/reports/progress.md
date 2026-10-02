@@ -5,6 +5,7 @@ Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
 **Last update:** 2026-10-02, Director. **Phase 0 is closed:**
 - QA's verdict is CLOSED (`docs/qa/report-phase-0.md`).
 - The Director signed off (`docs/reports/phase-0.md` §7).
+- The branch tidy, the final scan of origin and purge stage 3 are done. Every teammate is stopped.
 - Waiting for Hazem: the PR to `main`. Nothing is merged to `main` yet.
 
 > **Commit IDs** in this file are post-purge IDs. The old-to-new map is kept outside the public repo,
@@ -74,14 +75,16 @@ Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
 | 2026-10-02 | **QA report committed**, verdict CLOSED: 0 Blockers, 0 open Majors, 15 open Minors. The Director committed qa-lead's text unchanged, with Hazem's approval, because the harness refuses report files from teammates | qa-lead (author); Director (commit) | `2361fc9` |
 | 2026-10-02 | **Phase 0 report final; the Director signs off** | Director | `docs/reports/phase-0.md` §7 |
 | 2026-10-02 | 7 merged branches deleted on origin, each with a lease | Director | origin heads: the integration branch, `main`, `feat/data-qa-fixes`, `feat/data-seed-wording`, and the old cloud branch |
+| 2026-10-02 | 2fa3e32 (the structured Intel profile) parked for Phase 1 on `feat/data-intel-profile` (`d4e87e3`), not merged. `origin/feat/data-qa-fixes` and `origin/feat/data-seed-wording` deleted, each with a lease; their other commits were superseded by `17ba6b6` and `c9d4183`, and the local refs are kept | data-lead; Director | the patch-id equals 2fa3e32's; verify 597 unit, 166 e2e |
+| 2026-10-02 | **Final scan of origin: clean.** 4 heads (the integration branch, `main`, the old cloud branch, `feat/data-intel-profile`), 0 tags, 0 pull refs, 0 of 11 purged blobs, and 0 files at any tip naming a pre-purge commit | qa-lead | `artifacts/qa/phase-0/audit/purge-recheck-2026-10-02-final/` in the QA worktree |
+| 2026-10-02 | **Purge stage 3 run** (reflog expire, `gc --prune=now`): the local `.git` went from 236 MB to 13 MB, and the 11 blobs are gone from the local object store. The backup bundle still verifies, and `git fsck` passes | Director | `C:\Projects\rig-lab-evidence\purge\purge-3-cleanup.sh` |
+| 2026-10-02 | All teammates stopped: Phase 0 work is complete | Director | `ListAgents` empty |
 | 2026-10-01 | **WP-D0 accepted and merged** (`c04e2a5`): Zod schemas, a validator with 34 rules, 73 seed spec records (all plan 5.3 minimums and mixes), live prices (US 52 + 10 gaps, SA 45 + 17 gaps), 116 game and 27 creator anchors, 15 games, the 20% audit (78 items, 8 findings fixed). The Director's review caught the North cooler limit (145 → 170 mm); data-lead's sweep caught the North PSU limit by tray count (schema: `psu.clearance` list) | data-lead | verify on the merged branch: 454 unit, 112 e2e; initial JS 77.42 KB gzip (no catalogue data in the bundle); 21 new evidence files copied and checked (`docs/reports/evidence/data-lead-evidence-2026-10-01.sha256`) |
 
 ## In progress
 
 | Task | Who | Branch / worktree | State | Exact next step |
 |---|---|---|---|---|
-| Park 2fa3e32 (the structured Intel profile, for Phase 1) | data-lead | `feat/data-intel-profile` (new) / `.claude/worktrees/data-lead` | Asked on 2026-10-02 | Cherry-pick 2fa3e32 onto the integration tip, run verify, and check for pre-purge IDs. Push it without merging. Then the Director deletes `origin/feat/data-qa-fixes` and `origin/feat/data-seed-wording` |
-| Final scan of origin | qa-lead | — | Waiting for the branch tidy | Scan every origin tip for pre-purge IDs once those two branches are gone |
 | Phase 0 merge to `main` | Hazem | `claude/keen-lamport-0794zj` | **Phase 0 closed**: QA CLOSED, and the Director signed off | Hazem approves the PR; the Director opens it on request. Hazem merges, which deploys GitHub Pages |
 
 **Closed for Phase 0:** WP-D0 (data-lead), WP-DS1 (design-lead), WP-B1 (build-lead) and WP-Q2 (qa-lead). Their Phase 1 work starts only after Hazem has read `docs/reports/phase-0.md`. Phase 1's backlog is in its §5, including QA's 15 open Minors by owner.
@@ -89,18 +92,15 @@ Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
 ## Next steps (Director)
 
 On "continue":
-1. **The parking branch.** If data-lead's branch has arrived:
-   - check it: no pre-purge IDs, and verify passes;
-   - delete `origin/feat/data-qa-fixes` and `origin/feat/data-seed-wording`, each with a lease;
-   - ask qa-lead for the final scan of origin.
-2. **Purge stage 3,** once every lead is idle: run
-   `C:\Projects\rig-lab-evidence\purge\purge-3-cleanup.sh`. Never run it while a lead may be
-   committing.
-3. **The PR to `main`,** when Hazem asks: from `claude/keen-lamport-0794zj`, with the Phase 0
-   summary as its description. Hazem merges.
-4. **After GitHub's reply** to the Support request: check that the old commit answers 404, on the
-   API and on raw URLs, and record the result.
-5. **The Phase 1 plan** (the engine), only after Hazem has read `docs/reports/phase-0.md`.
+1. **The PR to `main`,** when Hazem asks: from `claude/keen-lamport-0794zj`, with the Phase 0
+   summary as its description. Hazem merges, which deploys GitHub Pages. After the merge, check the
+   deploy and the live site.
+2. **After GitHub's reply** to the Support request: check that the old commit answers 404, on the
+   API and on raw URLs, and record the result. Its ID is in
+   `C:\Projects\rig-lab-evidence\purge\github-support-request.md`.
+3. **The Phase 1 plan** (the engine), only after Hazem has read `docs/reports/phase-0.md`. Use
+   its §5 backlog, and give fresh briefs to the leads. The parking branch
+   `feat/data-intel-profile` holds 2fa3e32 for the performance-model schema work.
 
 Branch-tidy record:
 - **Deleted on origin, 2026-10-02,** each with a lease and each fully merged into the integration
@@ -115,7 +115,7 @@ Branch-tidy record:
   in history. Hazem's Support request covers every orphaned commit from the one that added the
   archives onward, all 87.
 
-## Evidence purge (approved by Hazem, 2026-10-01: purge now, the 2 bundles included). **Done**; stage 3, the local gc, is still to run
+## Evidence purge (approved by Hazem, 2026-10-01: purge now, the 2 bundles included). **Done**, stage 3 included (2026-10-02). Left: GitHub's reply
 
 - **What:** remove 11 files from history: the 9 `.tar.xz` archive parts and the 2 git bundles under
   `docs/reports/phase-0-wip/`. The 3 text records stay in history; they moved to
@@ -141,7 +141,6 @@ Branch-tidy record:
   - data-lead got the map, and the 4 IDs in `data/audits.json` are updated (merged `a3d88a8`);
   - the map is kept locally at `C:\Projects\rig-lab-evidence\purge\purge-sha-map.txt`, not in the repo (see below).
 - **Still to do:**
-  - run stage 3;
   - qa-lead's independent purge check in `report-phase-0.md`;
   - GitHub's reply to Hazem's Support request (filed 2026-10-02), then the 404 re-check (open
     items).
