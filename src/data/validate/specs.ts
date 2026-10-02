@@ -2,47 +2,12 @@ import { deriveCaseSize } from '../schema/case';
 import { CPU_FAMILIES, SOCKET_MEMORY, type Cpu } from '../schema/cpu';
 import { DATA_PATHS, SPEC_CATEGORIES, type SpecCategory, type SpecRecord } from '../schema/files';
 import { CHIPSETS_BY_SOCKET, type Motherboard } from '../schema/motherboard';
+import { nullMeansNone } from '../semantics';
 import type { IssueSink } from './issues';
 import type { Dataset } from './parse';
 import { checkSourcedRecord, type RecordPolicy, type Registry } from './sources';
 
 const SPEC_EXEMPT = ['id', 'category', 'manufacturer', 'sources', 'notes', 'chipId'] as const;
-
-/** Paths where null means "none" for this record (documented on each schema field). */
-function nullMeansNone(record: SpecRecord): string[] {
-  switch (record.category) {
-    case 'cpu':
-      return ['hybrid', 'igpu', 'boxCooler', 'memory.speeds.*.config'];
-    case 'motherboard':
-      return [
-        'wifi',
-        'bluetooth',
-        'lan',
-        'biosSupport.families.*.minBiosVersion',
-        ...record.biosSupport.cpus.flatMap((row, i) =>
-          row.listing === 'since' ? [] : [`biosSupport.cpus.${String(i)}.minBiosVersion`],
-        ),
-        ...(record.biosFlashback.supported ? [] : ['biosFlashback.name']),
-      ];
-    case 'ram':
-      return ['profiles.xmp'];
-    case 'gpu-card':
-      return [
-        'ocModeBoostClockMhz',
-        ...record.powerConnectors.flatMap((c, i) => (c.type === '16-pin' ? [] : [`powerConnectors.${String(i)}.standard`])),
-      ];
-    case 'psu':
-      return record.connectors.pcie16pin === 0 ? ['connectors.pcie16pinStandard'] : [];
-    case 'cooler':
-      return record.manufacturer === 'noctua' ? [] : ['nsprRating'];
-    case 'case':
-      return ['gpuClearance.*.condition', 'coolerClearance.*.condition', 'psu.clearance.*.condition', 'includedFans.*.model', 'gpuMaxHeightMm'];
-    case 'gpu-chip':
-    case 'storage':
-    case 'case-fan':
-      return [];
-  }
-}
 
 function specPolicy(record: SpecRecord): RecordPolicy {
   return {
