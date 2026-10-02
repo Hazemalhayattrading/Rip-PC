@@ -1,6 +1,13 @@
 # Rig Lab test plan
 
-Owner: qa-lead · Version 3.4 · 2026-10-02 · Applies to every phase, from Phase 0 to release.
+Owner: qa-lead · Version 4 · 2026-10-02 · Applies to every phase, from Phase 0 to release.
+
+**What v4 adds (Phase 1, the engine):** the 20 compatibility rule ids agreed with build-lead and how
+each is traced (§9); the held-out protocol of at least 20 results, 4 per coverage class (§8.2);
+golden tests in each anchor's own source context, and the check on conflicting sources (§8.1); the
+known-incompatibility corpus and the sweep (§9.4); the mutation-test check (§9.5); the Phase 1 audit
+seed (§7.2); and a brief for every independent check of phase-1-plan §4, in
+`docs/qa/phase-1-worker-briefs.md` (§17). The Phase 1 CI wiring is in Appendix C.
 
 This is a working document. Every team follows it. It says how each quality bar in BUILD_PROMPT §8
 and each item of the definition of done in §9 is measured, where, how often, by whom, and what
@@ -20,8 +27,10 @@ Contents: [1 Ground rules](#1-ground-rules) · [2 Environments](#2-environments)
 [11 Visual regression](#11-visual-regression) · [12 End-to-end flows](#12-end-to-end-flows) ·
 [13 Zero console errors](#13-zero-console-errors-and-unhandled-rejections) ·
 [14 Defects and severity](#14-defects-and-severity) · [15 Entry and exit criteria](#15-entry-and-exit-criteria-per-phase) ·
-[16 Change log](#16-change-log) · [Appendix A: report template](#appendix-a-report-template) ·
-[Appendix B: wave-2 wiring](#appendix-b-wave-2-wiring-wp-q1)
+[16 Change log](#16-change-log) · [17 Phase 1 independent checks](#17-phase-1-independent-checks) ·
+[Appendix A: report template](#appendix-a-report-template) ·
+[Appendix B: wave-2 wiring](#appendix-b-wave-2-wiring-wp-q1) ·
+[Appendix C: Phase 1 wiring](#appendix-c-phase-1-wiring)
 
 ---
 
@@ -79,7 +88,7 @@ scene measured 5.3 fps and then 8.5 fps ten minutes apart on 2026-09-30.
 | P8 | 60 fps on the reference laptop and on desktop; 120 fps on a high-end desktop GPU | The absolute gate: scripted camera path on real hardware, frame-rate limit off, median of 3 (§6.5) | `tests/perf/fps-probe.mjs --mode reference` | `fps.targets.referenceLaptop` and `.desktop` ≥ 60 avg fps; `.highEndDesktop` ≥ 120 | REF-LAPTOP, REF-DESKTOP | Phase 3 and Phase 5 exit, and after any change the Director flags as 3D-heavy | perf-tester writes, Hazem runs / build-lead | Blocks the phase exit. CI cannot run it |
 | P8p | fps regression proxy | Same path in headless Chromium on SwiftShader. Base and PR measured interleaved in one job (§6.5) | `fps-probe.mjs --mode ci` | `fps.ciProxy.maxRegressionPct` 10%, `fps.ciProxy.blocking` false | CI | Every PR from Phase 3 | perf-tester / build-lead | No, until its noise floor is measured and the Director approves |
 | P9 | Zero console errors, zero unhandled rejections | A shared auto fixture on every Playwright test (§13). App console warnings fail too, since WP-Q2 | `tests/e2e/fixtures.ts` (WP-Q1) | `console.*` all 0 | CI | Every PR | e2e-tester / owner of the failing code | Yes |
-| P10 | Every compatibility rule has a passing positive and negative test | Unit tests named by rule id, plus a traceability check (§9) | Vitest; `tests/audit/compat-trace.mjs` (Phase 1) | `compatibility.minPositiveTestsPerRule`, `.minNegativeTestsPerRule` = 1; unknown data never `ok` | CI | Every PR from Phase 1 | e2e-tester / build-lead | Yes |
+| P10 | Every compatibility rule has a passing positive and negative test | Unit tests named by rule id and kind, a traceability check against QA's rule list, and the validator tests that stand in for unknown-data tests (§9.3) | Vitest; `tests/audit/compat-trace.mjs` with `tests/audit/compat-rules.json` | `compatibility.minPositiveTestsPerRule`, `.minNegativeTestsPerRule` = 1; unknown data never `ok` | CI | Every PR from WP-E1's first rule (Appendix C) | qa-lead / build-lead, data-lead (validator tests) | Yes |
 | P11 | WCAG 2.1 AA for all non-3D UI | axe on every route and state, both themes, all three widths; manual keyboard and screen-reader checks (§10) | `@axe-core/playwright` 4.13.0 | `accessibility.axeTags`, `accessibility.maxViolations` 0 | CI (axe), REF (manual) | Every PR (axe), phase exit (manual) | e2e-tester / build-lead, design-lead | Yes (axe). Manual findings become defects |
 | P12 | Full keyboard path through the builder | A keyboard-only Playwright flow through all 12 steps to the Buy Sheet, with focus visible at every stop (§10.2) | Playwright | The path completes with no trap | CI | Every PR from Phase 2 | e2e-tester / build-lead | Yes |
 | P13 | Visual regression for every step at 390, 768 and 1440 px, dark and light | `toHaveScreenshot` in the pinned Docker image (§11) | Playwright 1.56.1 in CI-docker | `visual.threshold` 0.2, `visual.maxDiffPixelRatio` 0.001 | CI-docker | Every PR from Phase 2 | visual-tester / owner of the change | Yes, until visual-tester approves the diff |
@@ -92,7 +101,7 @@ scene measured 5.3 fps and then 8.5 fps ten minutes apart on 2026-09-30.
 | D2 | Pick a use case and budget | e2e: each of the 8 presets pre-fills a build the visitor can change; the budget changes the lists | Playwright | Pass | CI | Every PR from Phase 2 | e2e-tester / build-lead | Yes |
 | D3 | Build a full PC with looks | e2e happy path per preset. A look option appears only when the product supports it | Playwright | Pass | CI | Every PR from Phase 2 | e2e-tester / build-lead | Yes |
 | D4 | See it assembled in 3D | e2e: after each pick the scene reports that part as placed (perf contract `info()` or a DOM mirror); a SwiftShader screenshot with tolerance | Playwright | Pass | CI | Every PR from Phase 3 | e2e-tester / build-lead | Yes |
-| D5 | Sourced FPS and creator estimates, and a bottleneck verdict | e2e: ranges plus confidence plus "estimated"; frame generation shown apart; a verdict present. Model golden and held-out tests (§8) | Playwright, Vitest | `models.goldenTolerancePct` 5, `models.heldOutMaxErrorPct` 10 | CI, phase exit | Every PR from Phase 4 | e2e-tester, data-auditor / build-lead | Yes |
+| D5 | Sourced FPS and creator estimates, and a bottleneck verdict | e2e: ranges plus confidence plus "estimated"; frame generation shown apart; a verdict present. Model golden and held-out tests (§8) | Playwright, Vitest | `models.goldenTolerancePct` 5; at least `models.heldOutCount` 20 held-out results, `heldOutPerClassMin` 4 per class, each within `heldOutMaxErrorPct` 10 | CI, phase exit | Every PR from Phase 4 | e2e-tester, data-auditor / build-lead | Yes |
 | D6 | Switch SAR/USD | e2e: every price switches; each value equals the stored observation for that market and is never converted; a missing market shows the gap message with its date; "Price as of <date>" on every price | Playwright | A converted price is a Blocker | CI | Every PR from Phase 2 | e2e-tester / build-lead | Yes |
 | D7 | Leave with a shareable Buy Sheet | e2e: the share URL opened in a fresh context rebuilds the same build; URLs from every earlier codec version still decode (fixtures); print media emulation screenshot | Playwright | Pass | CI | Every PR from Phase 4 | e2e-tester / build-lead | Yes |
 | D8 | Every number on screen links to its source | Provenance check: every number rendered from data sits inside an element that carries its source ids (UI contract in §12.2). The data validator already rejects uncovered values | Playwright; data-lead's validator | 0 unsourced numbers | CI | Every PR from Phase 2 | e2e-tester / build-lead, data-lead | Yes |
@@ -117,8 +126,10 @@ scene measured 5.3 fps and then 8.5 fps ten minutes apart on 2026-09-30.
       at 390, 768 and 1440 px (P11).
   - The `Performance budgets` job from WP-Q1 (Appendix B), which covers P1, P2, P4–P7. It runs
     after `verify` on every push and PR, and fails on any miss.
-  - Later: Phase 1 adds compatibility traceability (P10). Phase 2 adds the keyboard path (P12),
-    visual regression (P13) and INP (P7).
+  - Phase 1 adds, inside `verify` (Appendix C): the Vitest JSON report, compatibility traceability
+    (P10, from WP-E1's first rule) and the golden-count check (§8.1, from WP-E3 for game anchors
+    and WP-E4 for creator anchors). Phase 2 adds the keyboard path (P12), visual regression (P13)
+    and INP (P7).
   - Hazem makes these required status checks on `main` in GitHub branch settings.
 - **Reported, not blocking.**
   - The fps proxy (P8p).
@@ -638,6 +649,19 @@ a message.
   integration-branch commit being audited>`, for example `rig-lab-audit:phase-0:4319c8cc…`.
   - The commit is fixed before sampling, so the auditor cannot pick a convenient seed.
   - The tool rejects any other seed format.
+  - A seed names only a post-purge commit (`git log` of the current history), never a pre-purge
+    ID (QA-P0-041).
+- **The Phase 1 seed** (phase-1-plan §4, wave 4): `rig-lab-audit:phase-1:<sha>`.
+  - `<sha>` is the integration-branch commit the Director names for the wave 4 audit. It comes
+    after the engine freeze and holds every accepted WP-D1 and WP-D2 batch, so the sample covers
+    the data the frozen model ran on.
+  - qa-lead writes the seed into `docs/qa/WIP-STATUS.md` and commits it before the first sample is
+    drawn.
+  - Every data file at that commit is a stratum. `strata.mjs` refuses a file it doesn't know, so
+    each new WP-D1 or WP-D2 file (`data/compat-fixtures.json`, the power constants registry) is
+    added to it in the same QA change that first audits it.
+  - Benchmark rows are also re-read at 100% by the per-source workers (§17). The 10% sample still
+    draws from their strata, so the report's totals cover every category.
 - **Algorithm** `sha256-rank-v1` (`dataAudit.algorithm`):
   - rank = lowercase hex SHA-256 of `seed + "\n" + stratum + "\n" + id`.
   - Sort each stratum by rank and take the first k = max(1, ceil(0.10 × population)), or
@@ -753,7 +777,7 @@ retrievedAt, capture, captureSha256}`):
 | R1-P1 | `url` is a retailer product page, and the retailer is in the source registry as a retailer. Never web.archive.org, archive.today or archive.ph, a search engine cache or snippet, a price tracker, or an aggregator |
 | R1-P2 | No `archiveUrl` on a price row |
 | R1-P3 | `capture` = `artifacts/prices/<SA\|US>/<partId>--<retailer>--<retrievedAt>[--<n>].<html\|png>`, matching the row's own market, partId, retailer and retrievedAt; `--<n>` (n ≥ 2) marks a later attempt that day (data-lead's `data/tools/capture-name.mjs`). The file exists under the evidence root (git-ignored `artifacts/`; on the home PC, `C:\Projects\rig-lab-evidence\data-lead-artifacts\artifacts\prices\`). Its SHA-256 equals `captureSha256` |
-| R1-P4 | `retrievedAt` is the UTC date of that live fetch, falls in the batch window, and matches independent evidence rather than just the file name (which is built from `retrievedAt`). The evidence is the capture file's modification time (UTC date), and, for saved HTML, any fetch timestamp the capture records |
+| R1-P4 | `retrievedAt` is the UTC date of that live fetch, falls in its batch's window, and matches independent evidence rather than just the file name (which is built from `retrievedAt`). The evidence is the capture file's modification time (UTC date), and, for saved HTML, any fetch timestamp the capture records. The window is the file's single `batch` in the seed format; from WP-D1, it is the window of the `batches` entry the row names in its own `batch`, and a row that names no batch, or one the file lists other than once, fails |
 | R1-P5 | `currency` matches `market` (SA with SAR, US with USD) |
 | R1-P6 | For the 10% sample: the captured page shows the recorded amount, stock state and seller type. A saved HTML capture is searched for the amount; a screenshot is read by eye |
 
@@ -766,7 +790,7 @@ data-lead as a Minor so the refresh cadence can change.
 
 - `reasonCode` and `reason` are present.
 - `retailersTried` is a non-empty list of registry retailers.
-- `checkedAt` is a valid date that is not in the future.
+- `checkedAt` is a valid date that is not in the future, inside its batch's window (as R1-P4).
 - No part has both a price and a gap for the same market.
 
 **Benchmarks** (`url`, `archiveUrl?`, `publishedAt`, `retrievedAt`, full test conditions):
@@ -794,113 +818,405 @@ Captures QA makes go to `artifacts/audit/<phase>/` (git-ignored).
 
 ## 8. Model tests: golden and held-out
 
-- **Golden tests** (BUILD_PROMPT §5.3; `models.goldenTolerancePct` 5):
-  - For every anchor row in the benchmark data, the model reproduces the published number within
-    ±5%.
-  - The engine's golden test must be **generated from the anchor files**, not hand-copied, so
-    coverage is 100% by construction.
-  - QA re-runs it and checks that the number of golden cases equals the number of anchor rows.
-  - Any anchor outside ±5% is a Blocker.
-- **Held-out tests** (`models.heldOutCount` 5, `models.heldOutMaxErrorPct` 10):
-  - **Blind.** Chosen by the data-auditor after the model is frozen: record the engine commit SHA
-    first, then choose, then run the model once.
-  - **Not already in the data.** The result's page URL (and its archive) does not appear in any
-    `sources[].url` or `archiveUrl` in `src/data/**` or `data/**`, checked by grep. The chip,
-    game, resolution and preset combination is not an anchor.
-  - **Coverage** of the 5 results:
-    - at least 1 GPU-bound (1440p or 4K);
-    - at least 1 CPU-bound (1080p with a top GPU);
-    - at least 1 from a publisher other than the anchors' most common one;
-    - at least 1 creator workload (Blender or Cinebench R24);
-    - at least 1 interpolated GPU, a chip between two anchors.
-  - **Same source standard as anchors:** registry publisher, full conditions, `publishedAt`.
-  - **Error** = |range midpoint − published| / published. Each result must be ≤ 10%; over 10% is a
-    Blocker.
-  - Whether the published value falls inside the displayed range is tracked. If more than half
-    fall outside at "high" confidence, the confidence labels are wrong: a Major.
-  - **Storage and reuse.**
-    - Held-out sets live in `tests/audit/holdout/phase-N.json`, which engine code must never
-      import. QA asks build-lead in Phase 1 for an ESLint rule that forbids importing `tests/**`
-      from `src/**`.
-    - A published held-out set becomes eligible as anchors later, and the next phase draws a new
-      set.
-- **Frame generation and VRAM:**
-  - Unit and e2e tests check that frame-gen numbers never appear in native fields or native UI
-    rows.
-  - A setting that exceeds the GPU's VRAM is flagged.
+### 8.1 Golden tests: every anchor row
+
+- **What** (BUILD_PROMPT §5.3; `models.goldenTolerancePct` 5): for every anchor row in
+  `data/benchmarks/game.json` and `data/benchmarks/creator.json`, the model reproduces the published
+  number within ±5%.
+- **In the anchor's own source context** (the Director's ruling, 2026-10-02, phase-1-plan WP-E3):
+  - Each case runs the model on the anchor's publisher and its test conditions: the test system's
+    CPU, GPU chip and RAM, and the resolution, preset, ray tracing and upscaling. The preset is the
+    game's own English name, from WP-D2's preset map.
+  - The model may calibrate per source, for example with a scene factor per publisher and game.
+    The calibration comes from the anchors, and the result's explanation names it.
+  - The test system is described as published, not as a catalogue build: at `c621c15`, 106 of the
+    116 game anchors name a card that isn't in the catalogue, and no anchor's RAM is a catalogue
+    kit. QA's review of the result types asked for a test-system entry point (change C1).
+- **Generated, not copied.** The golden test reads the anchor files and makes one case per row, so
+  a new row gets its case by construction.
+- **Names.** Each case's own title is `[golden] <anchor id>` or `[golden] <anchor id>: <text>`, in a
+  file under `src/engine/`. Build the title with a template literal: Vitest 5 cuts values
+  interpolated into `it.each` and `test.for` titles at 40 characters (`taskTitleValueFormatTruncate`),
+  and 141 of the 143 anchor ids at `c621c15` are longer. Cut down, they collapse into 32 names.
+- **The error** is |midpoint − published| / published. The midpoint is (low + high) / 2 of the
+  estimate, in the anchor's own unit: avg fps for a game row, the score for a creator row. Within
+  5% passes, exactly 5% included.
+- **QA's check:** `node tests/audit/golden-count.mjs --vitest <report> [--estimates <file>]`.
+  - It reads the anchor files and the Vitest JSON report, never the engine's code.
+  - Every anchor row must have exactly one passing golden case, matched by id. Equal counts can
+    hide one missing case and one duplicate. A missing, extra, duplicated, failed, skipped or
+    misnamed case fails, and a title that Vitest cut short is named as the cause.
+  - With `--estimates`, it reads the engine's own estimate for each anchor (from the dump,
+    `artifacts/engine/golden-estimates.json`: `[{ anchorId, low, high, confidence }]`) and checks
+    the ±5% itself. A golden test that asserted a looser tolerance would pass Vitest and fail here.
+  - `--anchors data/benchmarks/game.json` limits it to the game rows, while WP-E3 has landed and
+    WP-E4 hasn't.
+  - Exit 0 pass, 1 a failed check, 2 cannot measure. Its tests run on real Vitest output of a
+    fixture suite, with one planted defect per scenario file.
+  - On the real data at `c621c15` it finds 143 anchor rows and no golden cases yet (exit 1).
+- **Conflicting sources** (`conflictsWith`: rows from another publisher that differ by more than
+  10% on the same configuration; the Director's ruling, 2026-10-02):
+  - each row still passes ±5% in its own source context;
+  - and the estimate shown without a source context, which is what the lab and the builder show,
+    has a range that contains both published values, at confidence `medium` or `low`.
+  - QA checks the second through the dump's query mode: for each pair, the configuration without a
+    source context gives `low` at most the smaller value, `high` at least the larger, and a
+    confidence other than `high`.
+- **Tracked, not gated:** whether each published value lies inside its estimate's range, and the
+  range's width relative to its midpoint. A model that meets ±5% only with very wide ranges is
+  reported to the Director.
+- **Severity.** An anchor outside ±5%, a missing or duplicated golden case, and a conflicting pair
+  whose range leaves out a published value are each a Blocker.
+- **When.** On every PR, inside `verify`: from WP-E3 for the game rows and from WP-E4 for the creator
+  rows (Appendix C).
+
+### 8.2 Held-out results: at least 20
+
+- **Why.** The golden test reads the anchors, so ±5% there is easy (phase-1-plan §8, risk 3). The
+  held-out set is the real proof of accuracy: published results the model has never seen.
+- **How many** (Hazem, 2026-10-02, phase-1-plan §6.3; `budget.json` → `models`): at least
+  `heldOutCount` 20 results, and at least `heldOutPerClassMin` 4 in each of the 5 classes of
+  `heldOutClasses`. Each result counts in one class only, its primary class.
+- **The classes:**
+
+  | Class | A result counts here when |
+  |---|---|
+  | `gpu-bound` | It is a game result at 1440p or 4K, on a test system whose CPU is the review's fastest or close to it, so the GPU limits. The chip is a catalogue GPU chip |
+  | `cpu-bound` | It is a game result at 1080p or lower, with the review's fastest GPU, so the CPU limits. The CPU is a catalogue CPU |
+  | `other-publisher` | It is a game result from a registry publisher whose rows are not anchors for that game at the frozen commit |
+  | `creator` | It is a Blender, Cinebench 2024, video export, code compile or local AI result, for a catalogue CPU or GPU chip |
+  | `interpolated-gpu` | Its catalogue GPU chip has no anchor for that game, resolution and preset, while a faster and a slower catalogue chip in the same published chart do |
+
+- **The mix** (QA's rules, so that every check below has something to measure):
+  - At least 4 results are at a configuration the data anchors from another review: the same chip
+    or CPU, game or test, resolution and preset. By the confidence definitions these are the ones
+    the model should call `high`, so the calibration check has a sample.
+  - At most 4 results come from any one review page, and the set uses at least 3 publishers. If
+    the reachable sources can't give that, the picker records why.
+- **Eligible results** (each checked again by a second worker):
+  1. The publisher is in `data/publishers.json` as a reviewer or a benchmark publisher.
+  2. The result's page URL, and any archive of it, appears in no `sources[].url` or `archiveUrl`
+     in `data/**` or `src/data/**` at the frozen commit, checked by grep.
+  3. It carries the full test conditions of §7.3 and a `publishedAt`, as an anchor must, and frame
+     generation is off.
+  4. The model claims to cover it: the game has at least one anchor at that resolution and preset,
+     and the chip or CPU is in the catalogue at the frozen commit.
+  5. The value is printed in the source, or read from a chart by §7.3's rule (±1% or ±1 unit) and
+     marked as read from a chart.
+- **The procedure** (blind; phase-1-plan §4, "Held-out results"):
+  1. The Director records the frozen commit, engine and data, in `docs/reports/progress.md`. From
+     then on the model doesn't change until QA reports (briefs, "The engine freeze").
+  2. A fresh data-auditor, the picker, chooses the results from the sources alone. It never sees
+     the model's output, the lab or the dump. It writes `tests/audit/holdout/phase-1.json` (format
+     below), with the frozen commit in it.
+  3. qa-lead commits the picks before any run. The commit's time proves they were fixed first.
+  4. A second fresh data-auditor, the checker, re-checks every pick against the eligibility rules
+     and its source, also without any model output. The picker replaces an ineligible pick, and the
+     replacement is committed before the run.
+  5. qa-lead runs the model once, at the frozen commit, in a worktree checked out at that commit,
+     through the dump's query mode. Each pick is one query: its published test system, its game or
+     workload and its setting, without a source context, since that is the estimate the lab shows.
+  6. QA's script computes each error and writes the results under `artifacts/qa/phase-1/holdout/`.
+     A tooling crash may be fixed and the same picks run once more, and the report says so. The
+     picks never change after the run.
+- **Gates:**
+  - Error = |midpoint − published| / published. Each result is within `heldOutMaxErrorPct` 10%.
+    Over 10% is a Blocker.
+  - "No estimate" on an eligible pick fails like an error over 10%, since eligibility already
+    requires a configuration the model claims to cover.
+  - **Calibration:** of the results the model labels `high`, at least half have the published value
+    inside the range (plan WP-E3, "Done means"). Otherwise the confidence labels are wrong: a Major,
+    and WP-E3 isn't done.
+  - The `creator` class gives the at least 4 held-out creator results within 10% that plan WP-E4
+    asks for.
+- **The report** lists every result: its class, source, published value, the model's range and
+  confidence, the midpoint, the error, and whether the value is inside the range. Then, per class,
+  the mean and the largest error, and per confidence level, the share inside the range. The error
+  report also goes into `docs/reports/phase-1.md` (plan WP-E3).
+- **The file**, `tests/audit/holdout/phase-1.json`:
+
+  ```json
+  {
+    "schemaVersion": 1,
+    "phase": 1,
+    "frozenCommit": "<40-hex commit of the integration branch>",
+    "pickedBy": "<agent id>",
+    "checkedBy": "<agent id>",
+    "results": [
+      {
+        "id": "ho1-01",
+        "class": "gpu-bound",
+        "kind": "game",
+        "source": {
+          "publisher": "<registry id>",
+          "url": "<the review page>",
+          "archiveUrl": null,
+          "title": "<the page title>",
+          "publishedAt": "YYYY-MM-DD",
+          "retrievedAt": "YYYY-MM-DD",
+          "locator": "<chart or table>",
+          "capture": "artifacts/qa/phase-1/holdout/<file>",
+          "captureSha256": "<hex>"
+        },
+        "testSystem": {
+          "cpu": "<as published>",
+          "cpuId": "<catalogue id>",
+          "gpu": "<as published>",
+          "gpuChipId": "<catalogue id>",
+          "ram": "<as published>"
+        },
+        "query": {
+          "gameId": "<catalogue game id>",
+          "resolution": "2560x1440",
+          "preset": "<the game's English preset>",
+          "presetAsPublished": "<the publisher's label>",
+          "rayTracing": "off",
+          "upscaling": null
+        },
+        "published": { "value": 0, "unit": "fps", "readFrom": "number" },
+        "anchoredConfig": false
+      }
+    ]
+  }
+  ```
+
+  A creator result has `"kind": "creator"`, and its `query` names the workload, the test and the
+  device (a `cpuId` or a `gpuChipId`) instead of a game. Third-party captures stay under
+  `artifacts/`, never in git (briefs, "Evidence").
+- **Who may read it.** build-lead never reads `tests/audit/holdout/**` (briefs, "Shared contracts"),
+  and WP-E0's ESLint rule stops `src/**` from importing `tests/**`. A published held-out set may
+  become anchors later, and the next phase draws a new one.
+
+### 8.3 Frame generation and VRAM
+
+- In build-lead's result types, `FpsEstimate.frameGeneration` can only be a `NoEstimate` in Phase 1,
+  so no frame-generation number can exist. Unit and e2e tests check that frame-generation figures
+  never appear in native fields or native UI rows.
+- A setting that needs more VRAM than the card has is flagged (`VramCheck`, `exceeds`), never
+  hidden. The lab's local-AI case, "doesn't fit in 8 GB" (plan WP-E4), is checked in e2e.
 
 ## 9. Compatibility rules
 
 ### 9.1 What every rule needs
 
-For each rule in BUILD_PROMPT §5.1:
+For each of the 20 rules in §9.2:
 
-- A stable **rule id**. The engine's registry `COMPAT_RULES` (Phase 1) owns the final names; the
-  ids below are proposals.
-- A result of `ok`, `warn` or `block`, with a one-sentence reason and the source or rule id.
-- **Tests:**
-  - at least one **positive** (`ok`);
-  - at least one **negative** (`block`, or `warn` where the rule only warns);
-  - for numeric limits, **boundary** tests at the limit, 1 unit under and 1 unit over. The
-    engine's chosen policy at exactly the limit is written in its reason text;
-  - an **unknown-data** test: a null spec gives `warn` ("can't verify: <field> not published"),
-    never `ok` (`compatibility.unknownDataMustNotReturn`).
-- **Test fixtures use real, sourced products** from the catalogue, never invented ones.
+- **A stable rule id.** The ids are agreed with build-lead: `RULE_IDS` in `src/engine/types.ts`
+  equals `tests/audit/compat-rules.json`, in the same order (QA's review of the result types at
+  `4fa8a95`). An id is never renamed: tests, the trace and share links name it.
+- **A result** of `ok`, `warn` or `block`, with a one-sentence reason that gives the numbers with
+  their units, the rule id, and the sources of every spec the rule read (`RuleResult.evidence`).
+  "Can't verify" is a `warn` with `cantVerify: true`, never a fifth status.
+- **Never `ok` on an unpublished value.** An `ok` result has no evidence item whose `availability`
+  is `not-published` (QA's review of the result types, change C3). The sweep checks it on every
+  combination (§9.4, S12).
+- **Tests**, named as in §9.3:
+  - at least one passing test of each status in the rule's outcomes (§9.2). `ok` is the positive
+    test, and `warn` and `block` are the negative ones (`compatibility.minPositiveTestsPerRule`,
+    `.minNegativeTestsPerRule`);
+  - for a numeric rule, three boundary tests: **at** the limit, **inside** (1 unit on the passing
+    side) and **outside** (1 unit on the failing side). One unit is the limit's own step: 1 mm,
+    1 W, 1 MT/s, one module, one drive, one 8-pin cable, 0.1 slot, or the next radiator size (120,
+    140, 240, 280, 360, 420 mm). The reason says what happens exactly at the limit;
+  - an **unknown-data** test for each rule whose decision can depend on a value the data doesn't
+    publish (`unknownData: true` in `compat-rules.json`): the unpublished value gives `warn` with
+    `cantVerify`, never `ok` (`compatibility.unknownDataMustNotReturn`).
+- **The unknown-data ruling** (the Director, 2026-10-02, phase-1-plan WP-E1):
+  - A rule whose every input is required by the schema or the validator has no unknown-data test,
+    since valid data can't be unpublished there. Instead, `compat-rules.json` names, for each field
+    it reads, the validator test that proves a null (or an empty list) there is rejected.
+    compat-trace fails when that test is missing, failed or skipped.
+  - A field whose schema defines null or `[]` as "the part has none" (`cpu.igpu`,
+    `case.frontIo.usbC`) holds a real answer, not an unpublished one.
+  - The lists are re-checked whenever a rule starts to read a new field, every WP-D1 field
+    included. The first re-check, against WP-D1 batch 1 (`c588afb`), moved gpu-length and
+    psu-form-factor into the unknown-data group, so 10 rules have unknown-data tests and 10 have
+    validator proofs.
+- **Real products.** Fixtures use real, sourced catalogue products (`data/compat-fixtures.json`,
+  WP-D1). A boundary or unknown-data test may take a real product and override the one field under
+  test, and its title says so ("Sapphire Pulse RX 9070 XT with its length set to 355 mm"). No test
+  adds an invented product to the catalogue (CLAUDE.md rule 8).
 
-### 9.2 Traceability matrix
+### 9.2 The 20 rules
 
-| # | §5.1 rule | Proposed id | Results | Data fields | Positive (unit) | Negative (unit) | E2E message check |
-|---|---|---|---|---|---|---|---|
-| 1 | Socket match | `cpu-socket` | ok, block | cpu socket, board socket | Same socket gives ok | AM5 CPU on an LGA1851 board: block, "Needs AM5 — your board is LGA1851" (BUILD_PROMPT §2) | On the CPU step with an LGA1851 board picked, AM5 CPUs are shown but disabled, with that reason |
-| 2 | Chipset supports CPU | `cpu-chipset` | ok, block | board's supported CPU families, CPU family | A family on the board's official support list gives ok | A family the board's support list excludes gives block | Disabled row with the reason |
-| 3 | BIOS flashback needed? | `bios-version` | ok, warn, block | minimum BIOS per CPU family, flashback present | The board's shipped BIOS already supports the CPU: ok | Needs an update and has flashback: warn with instructions. Needs an update and has no flashback: the engine's policy (warn or block), tested | Warn badge text and help link |
-| 4 | RAM type | `ram-type` | ok, block | RAM type, board memory type | DDR5 kit on a DDR5 board gives ok | DDR4 kit on an AM5 board gives block (BUILD_PROMPT §1) | Disabled kit with the reason |
-| 5 | RAM slot count | `ram-slots` | ok, block | kit module count, DIMM slots | 2 modules on 2 or 4 slots gives ok | 4 modules on a 2-slot board gives block | Reason text |
-| 6 | RAM speed vs support | `ram-speed` | ok, warn | kit speed, board and CPU official speed | At or below the official speed gives ok | Above it gives warn, explaining EXPO/XMP | Warn text names the official speed |
-| 7 | GPU length vs case | `gpu-length` | ok, block (+ unknown) | card `lengthMm`, case max GPU length | Under the limit gives ok | Over the limit gives block | Reason with both numbers and units |
-| 8 | GPU thickness vs slot spacing | `gpu-thickness` | ok, warn, block | card slot thickness, case expansion slots, board slot layout | Fits gives ok | Blocks the case or covers another slot: block or warn | Reason text |
-| 9 | Cooler height vs case | `cooler-height` | ok, block (+ unknown) | cooler `heightMm`, case max cooler height | Under the limit gives ok | Over the limit gives block | Reason with numbers |
-| 10 | RAM height vs air-cooler overhang | `ram-cooler-clearance` | ok, warn, block | RAM `heightMm`, cooler RAM clearance | Low-profile kit under the clearance gives ok | Tall kit over the clearance gives block, or warn where the fan can be raised | Reason text |
-| 11 | Radiator size and position vs case | `radiator-fit` | ok, block | radiator size, case support per position | Supported size and position gives ok | A 360 mm radiator in a case that fits only 280 mm gives block (BUILD_PROMPT §1) | Reason names the position |
-| 12 | PSU form factor vs case | `psu-form-factor` | ok, warn, block | PSU form factor, case PSU support | Supported gives ok | An ATX PSU in an SFX-only case gives block | Reason text |
-| 13 | PSU length vs case | `psu-length` | ok, block (+ unknown) | PSU `lengthMm`, case max PSU length | Under the limit gives ok | Over the limit gives block | Reason with numbers |
-| 14 | PSU wattage vs load with transient headroom | `psu-wattage` | ok, warn, block | power estimate (§5.2), PSU wattage | Inside the recommended range gives ok | Below the minimum gives block; below the headroom gives warn | Reason shows the recommended range |
-| 15 | 12V-2x6 availability | `gpu-power-connector` | ok, warn, block | card power connectors, PSU native 12V-2x6 and connector counts | A native 12V-2x6 PSU for a 12V-2x6 card gives ok | Adapter needed gives warn; too few connectors gives block | Reason names the connectors |
-| 16 | M.2 count and lane-sharing side effects | `m2-lanes` | ok, warn, block | board M.2 slots and lane-sharing rules, drive count | Drives fit without sharing gives ok | A drive in a shared slot gives warn with the exact side effect ("M2_3 disables SATA 5–6"); more drives than slots gives block | Warn text matches the board manual's rule |
-| 17 | Form factor, board vs case | `board-form-factor` | ok, block | board form factor, case supported form factors | mATX board in an ATX case gives ok | ATX board in a Mini-ITX case gives block | Reason text |
-| 18 | Front-panel USB-C header present | `usb-c-header` | ok, warn | case front USB-C, board USB-C header | Both present gives ok | The case has front USB-C but the board has no header: warn | Warn text |
+`tests/audit/compat-rules.json` is the machine copy of this table, and `compat-trace.test.mjs`
+pins its ids. In "Unknown data", **yes** means the rule has an unknown-data test, and the file
+lists the values that can be unpublished; **no** means the file names the validator tests instead.
+The examples are phase-1-plan §3's real products.
 
-Two §5.1 items are split into two ids each: "RAM type and slot count" (rows 4 and 5) and "PSU form
-factor and length" (rows 12 and 13). That gives 18 rule ids.
+| # | Rule id | Checks | Outcomes | Numeric | Unknown data | Examples (plan §3) |
+|---|---|---|---|---|---|---|
+| 1 | `cpu-socket` | The CPU socket matches the board | ok, block | no | no | Ryzen 7 9800X3D on the TUF Gaming Z890-Plus WiFi: block, "Needs AM5 — your board is LGA1851" |
+| 2 | `cpu-chipset` | The board's CPU support list includes the CPU | ok, block | no | no | A CPU left off the support list of a board with its socket (WP-D1 adds one) |
+| 3 | `bios-version` | Whether the CPU needs a newer BIOS than the board shipped with, and whether the board has BIOS FlashBack | ok, warn | no | yes | Ryzen 7 9850X3D on the TUF Gaming X870-Plus WiFi: warn, with the update steps. Core i5-14600K on the Prime B760M-A WiFi D4: warn, naming BIOS 1205 and the retailer advice. Never block (Hazem, §6.1) |
+| 4 | `ram-type` | DDR4 or DDR5 matches the board | ok, block | no | no | Trident Z Neo DDR4-3600 on the TUF Gaming B650-Plus WiFi: block |
+| 5 | `ram-slots` | The kit's modules fit the DIMM slots | ok, block | yes | no | A 4-module kit on the 2-slot ROG Strix B650E-I: block |
+| 6 | `ram-speed` | The kit's speed against the board's and the CPU's official speeds | ok, warn | yes | yes | Trident Z5 CK DDR5-8200 with the Core Ultra 9 285K on the TUF Gaming Z890-Plus WiFi: warn, naming the official speed and explaining XMP |
+| 7 | `gpu-length` | Card length against the case, per layout | ok, block | yes | yes | Sapphire Pulse RX 9070 XT (320 mm) in the Fractal North: ok (355 mm). With the ARCTIC Liquid Freezer III Pro 360 at the front: block (300 mm) |
+| 8 | `gpu-thickness` | Card thickness against slot spacing and the case's slots | ok, warn, block | yes | yes | Fractal Terra with the Sapphire Pulse RX 9060 XT and the DeepCool AN400: names the spine positions where both fit |
+| 9 | `cooler-height` | Air-cooler height against the case, per layout | ok, block | yes | no | DeepCool AK620 (160 mm) in the Fractal Terra: block |
+| 10 | `ram-cooler-clearance` | RAM height under an air cooler | ok, warn, block | yes | yes | TeamGroup T-Force Delta RGB (46.1 mm) under the AK620 (43 mm): block, or warn if the fan can move up. DeepCool AN400 (clearance not published): warn, can't verify |
+| 11 | `radiator-fit` | Radiator size and position against the case | ok, block | yes | yes | ARCTIC Liquid Freezer III Pro 360 in the Fractal Pop Mini Air (240 mm at most): block |
+| 12 | `psu-form-factor` | The PSU form factor against the case | ok, warn, block | no | yes | DeepCool PN850M (ATX) in the Fractal Terra (SFX and SFX-L only): block |
+| 13 | `psu-length` | PSU length against the case, per layout | ok, block | yes | yes | NZXT C1200 Gold (160 mm) in the Pop Mini Air (150 mm): block. In the North it fits with one drive tray, but not with two |
+| 14 | `psu-wattage` | Wattage against the estimated load, with transient headroom | ok, warn, block | yes | yes | RTX 5090 Founders Edition with the DeepCool PN650M: block, showing the recommended range |
+| 15 | `gpu-power-connector` | A native 12V-2x6 where needed, and enough 8-pin cables | ok, warn, block | yes | yes | A PSU without a native 12V-2x6, and a real case of too few cables (WP-D1 adds both) |
+| 16 | `m2-lanes` | M.2 count, and lane-sharing side effects | ok, warn, block | yes | no | Three NVMe drives on the ROG Strix B650E-I (2 slots): block. A drive in a shared slot on the TUF Gaming B550-Plus WiFi II: warn, quoting the manual |
+| 17 | `board-form-factor` | The board's form factor against the case | ok, block | no | no | TUF Gaming B650-Plus WiFi (ATX) in the Pop Mini Air: block |
+| 18 | `usb-c-header` | A front USB-C port needs a header on the board | ok, warn | no | no | Fractal North with the TUF Gaming B550-Plus WiFi II (no header): warn |
+| 19 | `cooler-socket` | The cooler's mounting kit fits the CPU socket | ok, block | no | no | A cooler that doesn't list every socket (WP-D1 adds one) |
+| 20 | `display-output` | A build with no graphics card needs a CPU with integrated graphics | ok, block | no | no | Core i5-12400F with no graphics card: block |
 
-### 9.3 Enforcement (Phase 1)
+Rows 4 and 5, and 12 and 13, each split one item of BUILD_PROMPT §5.1, as in v3. Rows 19 and 20
+are Hazem's additions (phase-1-plan §6.2).
 
-- **Unit test names:** `[<rule-id>] ok: …`, `[<rule-id>] block: …` or `[<rule-id>] warn: …`,
-  plus `[<rule-id>] boundary: …` and `[<rule-id>] unknown: …`.
-- **E2E test names:** `[<rule-id>] message: …`. They assert the exact reason the engine produces
-  for the same fixture, by calling the engine in the test, so the text is never duplicated.
-- **The check.** `tests/audit/compat-trace.mjs` reads the registry, the Vitest JSON report and the
-  Playwright JSON report. It writes the matrix to `artifacts/qa/compat-trace/` and exits 1 if any
-  rule lacks:
-  - a passing positive test;
-  - a passing negative test;
-  - the boundary and unknown tests for numeric rules;
-  - from Phase 2, a passing e2e message check.
+### 9.3 Enforcement
+
+- **Unit test names.** A test counts by its own title, not its describe blocks, in a file under
+  `src/engine/`: `[<rule-id>] <kind>: <description>`, where the kind is `ok`, `warn`, `block`,
+  `unknown`, `boundary at`, `boundary inside` or `boundary outside`. Build a title that interpolates
+  a long product name with a template literal (Vitest's 40-character cut, §8.1).
+- **E2E test names**, from Phase 2: `[<rule-id>] message: …`. They assert the exact reason the
+  engine gives for the same build, by calling the engine in the test, so the text is never
+  duplicated.
+- **The bios-version variants.** Hazem's decision needs two warnings told apart. The rule needs a
+  passing `warn` test whose description matches `\bwith (BIOS )?FlashBack\b` (the update steps), and
+  one that matches `\b(without|no) (BIOS )?FlashBack\b` (the BIOS version and the retailer advice).
+- **The check:** `node tests/audit/compat-trace.mjs --registry artifacts/engine/rules.json --vitest
+  artifacts/test/vitest-report.json [--allow-pending <ids>] [--playwright <report> --require-e2e]`.
+  - It reads QA's rule list, the engine's registry (the dump's `RuleSpec` list) and the Vitest JSON
+    report, never the engine's code.
+  - It exits 1 when:
+    - a registered rule lacks a passing test of a kind it needs, or a variant;
+    - any of its tests fails, or an e2e check is flaky;
+    - one of its validator tests is missing, failed or skipped;
+    - a rule in QA's list is missing from the registry and `--allow-pending` doesn't name it, or
+      the registry has an id the list doesn't, or one id twice;
+    - a `RuleSpec`'s outcomes or numeric flag differ from §9.2;
+    - a test name has a known rule id but a wrong kind, a valid kind but an unknown id, or a status
+      that §9.2 doesn't give that rule (usually an unknown-data test named `warn:`).
+  - It exits 2 when it can't measure: bad input, or a test file under `src/engine/` or `src/data/`
+    that didn't load.
+  - It writes the matrix, with each input's SHA-256, to `artifacts/qa/compat-trace/compat-trace.json`
+    and prints it.
+  - During WP-E1, `--allow-pending` names the rules not built yet, one by one. A rule in the
+    registry may not be on the list, so the list only shrinks.
+  - Its tests run on real Vitest output of a fixture suite, one planted defect per scenario file.
+    Of 19 bugs planted in the two tools themselves on 2026-10-02, every one was caught.
+- **CI.** Inside `verify`, from WP-E1's first rule (Appendix C).
 
 ### 9.4 Hunting false negatives
 
-A compatibility false negative is `ok` for a combination that cannot work, and it is a Blocker.
-Two defences beyond the unit tests:
+A compatibility false negative is `ok` for a combination that can't work. It is a Blocker. Two
+defences beyond the unit tests, both run on the engine's output through the dump's query mode,
+never on its code:
 
-- **Incompatibility corpus.** `tests/audit/compat-corpus.json` holds real, sourced combinations
-  known not to work (from manuals, CPU support lists, case spec pages). It runs through the engine
-  on every PR, and any `ok` is a Blocker.
-- **Invariant sweep.** Every pair in the curated catalogue is run through the engine. For example:
-  - different sockets must give block;
-  - a RAM type other than the board's must give block;
-  - a card longer than the case limit must give block.
+- **The known-incompatibility corpus**, `tests/audit/compat-corpus.json`: real, sourced
+  combinations known not to work, from makers' manuals, CPU support lists and case pages.
 
-  The catalogue is small (about 60 CPUs × 60 boards is 3,600 pairs), so the sweep is exhaustive.
+  ```json
+  {
+    "schemaVersion": 1,
+    "owner": "qa-lead",
+    "items": [
+      {
+        "id": "corpus-ddr4-kit-in-ddr5-board",
+        "build": {
+          "cpu": null,
+          "motherboard": "<catalogue id>",
+          "ram": "<catalogue id>",
+          "gpu-card": null,
+          "storage": [],
+          "psu": null,
+          "cooler": null,
+          "case": null,
+          "case-fan": null
+        },
+        "expect": [{ "ruleId": "ram-type", "status": "block" }],
+        "why": "One sentence, with the numbers and their units.",
+        "sources": [
+          {
+            "url": "<maker page or manual>",
+            "publisher": "<registry id>",
+            "retrievedAt": "YYYY-MM-DD",
+            "locator": "<section or page>",
+            "capture": "artifacts/qa/phase-1/corpus/<file>",
+            "captureSha256": "<hex>"
+          }
+        ]
+      }
+    ]
+  }
+  ```
+
+  - `build` has the shape of the engine's `BuildParts`, and every part id exists in the catalogue
+    at the commit tested.
+  - The engine chooses the case layout, so an entry must fail under every layout. A combination
+    that fails in one layout only belongs in a rule's unit tests.
+  - `expect` lists every rule that must not be `ok`, each with `block` or `warn`.
+  - **Results:** `ok` for an expected rule, or the rule not run, is a Blocker: a false negative. A
+    milder status than expected (`warn` for `block`) is a Major. `worst` must be `block` whenever an
+    expected status is `block`.
+  - The corpus worker (§17) builds it from sources, independently of data-lead's
+    `data/compat-fixtures.json`: at least one entry for each of the 17 rules that can block, and two
+    where the catalogue allows.
+  - It runs on every PR once WP-E1 lands (Appendix C).
+- **The sweep.** Every combination the dump enumerates for a rule, from `RuleSpec.reads`, is checked
+  against invariants that QA reads from the catalogue's JSON itself:
+
+  | # | Invariant |
+  |---|---|
+  | S1 | `cpu-socket`: a CPU socket other than the board's gives block; the same socket gives ok |
+  | S2 | `ram-type`: a kit type other than the board's gives block |
+  | S3 | `board-form-factor`: a board form factor the case doesn't list gives block |
+  | S4 | `psu-form-factor`: an ATX unit in a case that takes only SFX or SFX-L gives block |
+  | S5 | `gpu-length`: a card longer than the case's unconditional limit gives block, since conditional rows only tighten it |
+  | S6 | `cooler-height`: an air cooler taller than every published limit of the case gives block |
+  | S7 | `psu-length`: a unit longer than every published limit of the case gives block |
+  | S8 | `ram-slots`: more modules than DIMM slots gives block |
+  | S9 | `m2-lanes`: more NVMe drives than M.2 slots that take NVMe gives block |
+  | S10 | `cooler-socket`: a CPU socket the cooler doesn't list gives block |
+  | S11 | `display-output`: no graphics card, and a CPU whose `igpu` is null, gives block |
+  | S12 | No `ok` result has a `not-published` evidence item, and every `cantVerify` warning has one (change C3) |
+  | S13 | Every report names each rule exactly once, in `results` or `notRun`, and `worst` is the worst status in `results`, or null when none ran |
+  | S14 | A report whose layout search finds no layout has `worst` = block (change C4) |
+  | S15 | Each rule's combination count equals the product of its categories' sizes, plus one for each optional category (change C5) |
+
+  - The sweep worker (§17) owns these checks. A failed invariant is a Blocker when it hides an
+    incompatibility (S1 to S11, S14), and a Major otherwise.
+  - The catalogue is small (16 CPUs and 7 boards make 112 socket pairs at `c621c15`), so each
+    rule's sweep is exhaustive.
+
+### 9.5 The mutation-test check
+
+phase-1-plan WP-E1: "Mutation tests (StrykerJS) run on the rules. Every surviving mutant is killed
+by a new test, or explained in writing."
+
+- **The run.** build-lead runs StrykerJS with its Vitest runner on the rule files, with the JSON
+  reporter (by default `reports/mutation/mutation.json`, in the mutation-testing report schema).
+- **Statuses, as Stryker counts them:** `Killed`, `Timeout` and `RuntimeError` are detected;
+  `Survived` and `NoCoverage` are not; `CompileError` mutants are invalid and don't count; `Ignored`
+  mutants were disabled in the source.
+- **"Explained in writing"** is a `// Stryker disable next-line <Mutator>: <reason>` comment on the
+  line. The reason then sits in the code where reviewers see it, and the report carries it as the
+  `Ignored` mutant's reason.
+- **QA's check**, `tests/audit/mutation-check.mjs`, is written against the first real report in
+  WP-Q4. It fails when:
+  - a mutant in a rule file is `Survived` or `NoCoverage`. Each is listed by file, line, column,
+    mutator and replacement, the identity Stryker itself keeps across runs;
+  - an `Ignored` mutant has no reason, or one under 20 characters;
+  - a rule file is missing from the report, or a mutant is still `Pending` (the run didn't finish).
+- QA reads every `Ignored` reason and lists them in the phase report with a verdict on each. "An
+  equivalent mutant: `<` and `<=` give the same result for these integer slot counts" is a reason;
+  "not worth testing" isn't.
+- It runs at WP-E1's hand-off and before the phase exit, not on every PR: a Stryker run takes
+  minutes.
+
+### 9.6 Each rule's own QA worker
+
+Every rule also passes a fresh QA worker of its own (phase-1-plan §4). The worker writes its
+expected results from the makers' sources before it sees the engine's output. The protocol and the
+evidence are in §17 and `docs/qa/phase-1-worker-briefs.md`.
 
 ## 10. Accessibility
 
@@ -1371,7 +1687,7 @@ QA re-tests every fix on the integration branch before closing the defect.
 | Phase | QA can start verifying when | The phase can close when |
 |---|---|---|
 | 0 Foundations | WP-D0, WP-B0, WP-DS0 and WP-Q0 are accepted by the Director and merged into the integration branch; `npm run verify` passes on its head; WP-Q1's budget jobs are merged and blocking | `docs/qa/report-phase-0.md` is published. Every plan §5 criterion passes, or is waived in writing. 0 open Blockers. The seeded 10% audit of the seed data has no unresolved mismatch. R1 checks pass on 100% of price and benchmark rows. P1, P2 and P4–P7 pass on the integration head. axe is clean on the empty routes, and the smoke has zero console errors |
-| 1 Engine | The engine is merged with its coverage report, and the golden test is generated from the anchors | 100% coverage on `src/engine/**` (enforced by vitest thresholds). The traceability check (§9.3) passes for all 18 rule ids, and the false-negative corpus and sweep pass. Every golden anchor is within ±5%. 5 held-out results are within 10%. The 10% audit of all numbers is done. The initial JS gate still passes |
+| 1 Engine | Per work package, as each lands (phase-1-plan §4): QA has reviewed WP-E0's result types; the engine is merged with its coverage report; the golden test is generated from the anchors; the dump's query mode covers the WP's entry point | 100% coverage on `src/engine/**` (vitest thresholds). compat-trace exits 0 for all 20 rule ids, every validator proof included (§9.3). The corpus gives no `ok` and the sweep holds (§9.4). The mutation check passes (§9.5). Every golden case passes within ±5% in its own source context, golden-count passes with the engine's estimates, and every conflicting pair's range holds both values (§8.1). At least 20 held-out results, 4 per class, each within 10%, and the calibration check passes (§8.2). Every rule, anchor source, power constant and bottleneck verdict has passed its own QA worker (§17). The seeded 10% audit is done (§7). The lab has no console errors or warnings, is axe-clean in both themes at all three widths, and stays in the JS budget; the product pages' initial JS stays within 2 KB of 77.92 KB gzip |
 | 2 Builder UI | The builder flows exist behind real data, and the frozen catalogue snapshot exists | §12.2 flows pass at 390 and 1440. axe is clean on every route and state in six cells. The keyboard path passes. Visual baselines are approved in six cells. INP < 200 ms at x1 and x4. LCP, CLS and Lighthouse still pass. The provenance check passes. The usability pilot has run |
 | 3 3D garage | The garage exposes the perf contract, and `tests/perf/fps-scenarios.json` exists | Reference runs **PASS**: ≥ 60 fps on REF-LAPTOP and ≥ 120 fps on REF-DESKTOP, committed in `docs/qa/perf-runs/`. The CI proxy is calibrated. Initial JS < 250 KB with three.js lazy. The progressive-streaming checks (P3) pass. The canvas has a name and a text alternative, and auto-rotation can pause. WebGL context loss recovers |
 | 4 Results and Buy Sheet | The dashboard, bottleneck page and Buy Sheet are merged | Provenance passes on results, bottleneck and buy. The share URL round-trips, including fixtures from every earlier codec version. The print view is checked. SAR/USD are observations only. The bottleneck verdict text is covered by tests |
@@ -1389,6 +1705,41 @@ QA re-tests every fix on the integration branch before closing the defect.
 | 2026-10-02 | 3.2 | WP-Q2: console warnings fail the e2e run like errors (`console.maxConsoleWarnings` 0, §13.2), with two allow-list entries for the browser's software-WebGL notice and the GPU driver's ReadPixels note, from build-lead's proposal. `budget.test.mjs` pins it. The unused-preload warning the gate cannot see is recorded (QA-P0-017). No §8 number changed | Approved by: Director, 2026-10-01 (`progress.md`, WP-Q2 next step 4) |
 | 2026-10-02 | 3.3 | WP-Q2: fixes from the independent check of v3.2, QA-P0-032 to 037. Both warning entries match the whole notice and only from the page itself, and the ReadPixels notice is attributed to ANGLE on SwiftShader, not a GPU driver (§13.2). The self-test table and how the checker catches a broken fixture (§13.2). Seven more method values pinned, and the web-vitals spec refuses an empty plan. D10's environment and blocks columns (§3.2). No gate value changed | qa-lead; no approval needed (no gate or method changed) |
 | 2026-10-02 | 3.4 | WP-Q2: from the re-test of v3.3, QA-P0-038 to 040. The software-WebGL entry takes only the two prefixes Chromium's GPU logger writes, and §13.2 states the page-URL limit exactly: inline scripts and inline event handlers, even ones a script file sets. The remaining approved method values pinned (visual thresholds, viewport sizes and flags, scale, gzip level and bytes per KB, the 95% warning, fps spread and calibration, the CI proxy, INP spread and rates, the model, D1 and audit values). Two §13.2 slips | qa-lead; no approval needed (no gate or method changed) |
+| 2026-10-02 | 4 | WP-Q3, Phase 1. The 20 rule ids agreed with build-lead, with their outcomes and their numeric and unknown-data flags (§9.1, §9.2), and their trace: compat-trace with `compat-rules.json`, the validator proofs of the unknown-data ruling, and the check of the engine's `RuleSpec` (§9.3). Golden tests in each anchor's own source context, the golden-count check and the conflicting-pairs check (§8.1). The held-out protocol: at least 20 results, 4 per class, blind picks committed before one run, the eligibility and mix rules, and the calibration check (§8.2); `models.heldOutCount` 20, with `heldOutPerClassMin` 4 and `heldOutClasses`, pinned. The corpus format and the sweep invariants (§9.4). The mutation-test check (§9.5). The Phase 1 audit seed (§7.2). The independent checks of phase-1-plan §4 (§17 and `docs/qa/phase-1-worker-briefs.md`). The Phase 1 wiring (Appendix C). `rule1.mjs` reads WP-D1's per-batch price windows (§7.5) | The held-out count and classes: Hazem, 2026-10-02 (phase-1-plan §6.3). The unknown-data ruling and the golden source context: the Director, 2026-10-02 (`9f47477`). The rest: pending the Director's review of WP-Q3 |
+
+## 17. Phase 1 independent checks
+
+phase-1-plan §4 fans the verification out to fresh QA workers. Each worker's brief, with its
+inputs, steps, evidence and pass rule, is in `docs/qa/phase-1-worker-briefs.md`. Rules for all of
+them:
+
+- **Fresh and independent.** One new worker per item, never the author of the work, with no shared
+  context. Workers never read the engine's code. They read the catalogue, the sources, and the
+  engine's output from the dump's query mode or the lab.
+- **Expectations first.** A worker writes its expected results from the makers' or the publishers'
+  sources, and qa-lead commits that file before the worker sees any engine output. The commit
+  proves the order.
+- **Evidence** is JSON under `artifacts/qa/phase-1/<check>/<item>/`, with a SHA-256 manifest.
+  Third-party captures stay under `artifacts/` and are cited by path and SHA-256, never committed.
+- **Defects** go to the owning lead in the §14 format. The committed expectations re-test the fix.
+- **At most 4 workers at once**, and no more than 3 of them with a browser (briefs, "This PC").
+  Each batch ends with a commit (CLAUDE.md rule 12).
+
+| Check (plan §4) | Workers | When | Passes when |
+|---|---|---|---|
+| A. Each compatibility rule | 1 per rule: 20 | As each rule hands off, 4 at a time | Each real combination tried matches its expected result. The reason names the right parts, numbers and units, and the source links open the right page. The boundary and unknown-data cases behave as specified |
+| B. Known incompatibilities and the sweep | 1 | After WP-E1 | The corpus gives no `ok`, and S1 to S15 hold (§9.4) |
+| C. Each anchor source: the data | 1 per source review; a review of more than about 50 rows is split | After each WP-D2 batch the Director accepts | Every row's value and test conditions match the source (§7.3) |
+| D. Each anchor: the model | None: it runs in CI | Every PR | golden-count passes, with the engine's estimates, and the conflicting pairs hold (§8.1) |
+| E. Held-out results | 1 or 2 pickers, and 1 checker | After the engine freeze | §8.2 |
+| F. Power constants | 1 | After WP-E2 | Every constant matches its source, every derivation is recomputed, and each card maker's recommended PSU falls in the range, or the hand-off explains the difference |
+| G. Bottleneck verdicts | 1 | After WP-E5 | For 20 builds that QA picks, each sentence matches the model's numbers, and each rebalanced build passes the rules and the 5% price limit |
+| H. 10% of all numbers | 2 or 3 | Wave 4, with the Phase 1 seed (§7.2) | §7 |
+| I. The lab pages (WP-Q4) | an e2e-tester and a perf-tester | As the lab pages land | No console errors or warnings; axe clean in both themes at all three widths; the lab marked internal, not indexed and out of the nav; the engine and the catalogue loaded only on lab pages; the JS budgets hold |
+
+Today's 143 anchors, by source, for check C: ComputerBase's "Gaming-Grafikkarten 2026 im Test",
+page 4 (48 rows) and page 5 (32 rows); TechPowerUp's Ryzen 7 9850X3D review, page 18 (36 rows);
+TechPowerUp's Ryzen 7 9800X3D review, page 9 (18 rows); Blender Open Data 5.2.0 (9 rows).
 
 ---
 
@@ -1579,3 +1930,46 @@ status checks on `main`.
 
 **B.6 Before WP-Q1 hands off,** run `npm run verify` and each new script in C, and attach the
 logs.
+
+## Appendix C. Phase 1 wiring
+
+build-lead owns `package.json` and `.github/workflows/ci.yml`. This is QA's request, applied as each
+work package lands, and QA re-runs each check on the merged result.
+
+**C.1 The Vitest JSON report.** In `package.json`, `test:coverage` becomes:
+
+```json
+"test:coverage": "vitest run --coverage --reporter=default --reporter=json --outputFile.json=artifacts/test/vitest-report.json"
+```
+
+Tested with Vitest 5.0.3 on 2026-10-02: the console output is the same, and the report is written.
+With coverage on, the report also carries the coverage map.
+
+**C.2 Scripts.**
+
+```json
+"audit:compat-trace": "node tests/audit/compat-trace.mjs --registry artifacts/engine/rules.json --vitest artifacts/test/vitest-report.json",
+"audit:golden": "node tests/audit/golden-count.mjs --vitest artifacts/test/vitest-report.json"
+```
+
+- `artifacts/engine/rules.json` is the dump's `RuleSpec` list. Its file name is the one agreed with
+  build-lead in WP-E0.
+- During WP-E1, `audit:compat-trace` adds `--allow-pending <the ids not built yet>`. A rule comes
+  off the list in the commit that adds it.
+- Until WP-E4 lands, `audit:golden` adds `--anchors data/benchmarks/game.json`. Once the dump
+  writes the golden estimates, it also adds `--estimates artifacts/engine/golden-estimates.json`.
+
+**C.3 `verify`.** The two checks run after the unit tests and the engine dump, and before the
+build:
+
+```json
+"verify": "npm run typecheck && npm run lint && npm run test:coverage && npm run engine:dump && npm run audit:compat-trace && npm run audit:golden && npm run build && npm run e2e:smoke"
+```
+
+- `audit:compat-trace` joins with WP-E1's first rule, and `audit:golden` with WP-E3.
+- The corpus and the sweep (§9.4) join at WP-E1's hand-off, as QA scripts on the dump's output. QA
+  sends the exact line then.
+
+**C.4 CI.** `ci.yml` already runs `npm run verify`, so its steps don't change. When a step fails, it
+should upload `artifacts/test/`, `artifacts/engine/` and `artifacts/qa/compat-trace/`, so a red run
+shows the trace matrix and the dump.

@@ -160,6 +160,35 @@ describe('the real rule set, tests/audit/compat-rules.json', () => {
     }
   });
 
+  // docs/qa/test-plan.md §9.2 is the human copy of compat-rules.json. Either side changing alone fails
+  // here, as budget.test.mjs does for budget.json and BUILD_PROMPT §8.
+  it('matches the table in test plan §9.2: ids in order, outcomes, numeric and unknown data', () => {
+    const plan = readFileSync(path.join(REPO, 'docs', 'qa', 'test-plan.md'), 'utf8');
+    const start = plan.indexOf('### 9.2 The 20 rules');
+    const section = plan.slice(start, plan.indexOf('### 9.3', start));
+    const rows = [
+      ...section.matchAll(
+        /^\| (\d+) \| `([a-z0-9-]+)` \| [^|]+ \| ([a-z, ]+) \| (yes|no) \| (yes|no) \|/gm,
+      ),
+    ];
+    expect(rows.map((m) => Number(m[1]))).toEqual(rules.map((_, i) => i + 1));
+    expect(
+      rows.map((m) => ({
+        id: m[2],
+        outcomes: m[3].split(', '),
+        numeric: m[4] === 'yes',
+        unknownData: m[5] === 'yes',
+      })),
+    ).toEqual(
+      rules.map((r) => ({
+        id: r.id,
+        outcomes: r.outcomes,
+        numeric: r.numeric,
+        unknownData: r.unknownData,
+      })),
+    );
+  });
+
   it('never lets bios-version block, and keeps both FlashBack variants (Hazem, plan §6.1)', () => {
     const bios = rules.find((r) => r.id === 'bios-version');
     expect(bios.outcomes).toEqual(['ok', 'warn']);
