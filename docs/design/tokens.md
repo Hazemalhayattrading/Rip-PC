@@ -15,7 +15,7 @@ document is the contract between design and build:
 | [`src/styles/base.css`](../../src/styles/base.css) | What Preflight removes and Rig Lab needs back (section 3) |
 | [`src/styles/motion.ts`](../../src/styles/motion.ts) | The motion tokens for Motion and the 3D scene, in milliseconds and seconds |
 | [`src/styles/fonts/`](../../src/styles/fonts/) | `rig-lab-sans.woff2` (72,332 bytes), `OFL.txt`, `FONTLOG.txt` |
-| [`src/styles/tokens.test.ts`](../../src/styles/tokens.test.ts) | 96 tests, run by `npm run test` (section 6) |
+| [`src/styles/tokens.test.ts`](../../src/styles/tokens.test.ts) | 97 tests, run by `npm run test` (section 6) |
 
 Every value below is the value in `tokens.css`. If the two ever disagree, `tokens.css` wins, and
 this document has a bug.
@@ -196,6 +196,11 @@ Any colour utility takes Tailwind's opacity modifier (`bg-ink/10`); it compiles 
    are in `--ink-2` and `--ink-3`, so a list full of warnings stays calm. Every state also has its
    icon silhouette and its word ([direction.md §1.3](direction.md#13-compatibility-ok-warn-block)):
    colour is never the only signal (WCAG 1.4.1).
+   - **State colours sit on `--surface` or `--surface-raised` only,** where they pass at 4.82:1 or
+     more. Never on the stage or the floor: there, in light, `--ok` falls to 4.36:1 on
+     `--stage-floor` and 3.79:1 on `--stage-floor-deep`, and `--warn` to 4.23:1 on
+     `--stage-floor-deep` (QA-P0-018, re-measured by design-lead on 2026-10-02). A state shown
+     over the stage sits in a callout, which is a `--surface` panel.
 3. **Three text tiers, no others.** `--ink`, `--ink-2`, `--ink-3`. Never fade text with opacity:
    the contrast table below measures these three tokens, not faded copies of them.
    - Light `--ink-3` is `#5a5e64`, darker than the picked mock's `#62666c` (changed 2026-10-01).
@@ -214,6 +219,13 @@ Any colour utility takes Tailwind's opacity modifier (`bg-ink/10`); it compiles 
    for panel edges and dividers only, and is never a control's only boundary.
 6. **Focus is always visible:** a 2 px ring in `--focus`, offset 3 px, from `base.css`. Never remove
    it, on the stage too.
+   - **No ancestor may clip it** (backlog item 45): give clip and scroll containers inner padding,
+     or use `overflow: clip` with `overflow-clip-margin`, or an inset ring (`-2px` offset, as in
+     the Specs grid).
+   - **Never an inset ring on an `--action` surface.** `--focus` against `--action` is 1.10:1 in
+     dark and 1.00:1 in light, so an inset ring vanishes on the primary button. Its ring stays
+     outside, on the surface around it, at 15.89:1 or more on every measured surface (QA-P0-019,
+     re-measured on 2026-10-02).
 7. **Panels are opaque.** No glass blur, no gradients in the chrome. The key light's pool on the
    stage is the only gradient.
 8. **Selection:** a selected row is `--surface-raised` with a 3 px `--ink` bar at its leading
@@ -375,6 +387,15 @@ callouts), `rounded-panel` 20 px (the rail, sheets), `rounded-dock` 22 px (the d
 
 **Named sizes on top of the 4 px step:** `h-control` 48 px (primary buttons), `size-control-sm`
 36 px (round icon buttons), `h-chip` 30 px (filter chips).
+
+**The reading measure** (added in WP-DS2, backlog item 15): `max-w-measure`, 32 em. Every
+sentence that can run longer than one line takes it: reasons, actions, hints, descriptions.
+- It sets about 64 characters a line on average and 75 at most, in any type role, because it is in
+  em. Measured in Rig Lab Sans on the engine's own sentences (the lab mock,
+  [lab-spec.md](lab-spec.md)): 64.3 characters a line on average, 75 at most.
+- **Not `65ch`.** A ch is the width of a zero: 9.2 px in `type-body`, against 7.17 px for an
+  average character. `max-w-[65ch]` set lines of up to 83 characters.
+- The rule: 45 to 75 characters a line. Tables and single-line labels don't need it.
 
 **Hit areas are at least 24 × 24 px** (WCAG 2.2, 2.5.8, one step above the project's 2.1 AA floor).
 The mock's compare checkbox is drawn at 18 px. In Phase 2 its button gets a 24 px hit area, with
@@ -598,7 +619,7 @@ node docs/design/tools/tokens-check.mjs                     # browser check, on 
 
 | What | Command | Proves |
 |---|---|---|
-| `src/styles/tokens.test.ts`, 96 tests | `npm run test` (in `verify`) | Every utility compiles with Tailwind 4.3.3, and the removed defaults stay removed. `tokens.css` fails inside a layer (the wiring rule). `motion.ts` equals the CSS, and reduced motion zeroes everything but `cut`. The fallback's overrides stay Rig Lab Sans's metrics ÷ `size-adjust`. The font is a WOFF2 within the 80 KB budget, with its licence. Selected text is `--stage` on `--ink`, the pair the contrast check measures, and the contrast check passes. |
+| `src/styles/tokens.test.ts`, 97 tests | `npm run test` (in `verify`) | Every utility compiles with Tailwind 4.3.3, and the removed defaults stay removed. `tokens.css` fails inside a layer (the wiring rule). `motion.ts` equals the CSS, and reduced motion zeroes everything but `cut`. The fallback's overrides stay Rig Lab Sans's metrics ÷ `size-adjust`. The font is a WOFF2 within the 80 KB budget, with its licence. Selected text is `--stage` on `--ink`, the pair the contrast check measures, and the contrast check passes. |
 | `docs/design/tools/contrast.mjs` | `node docs/design/tools/contrast.mjs [--check]` | WCAG 2.1 AA for every pair in section 2.2, dark and light, from `tokens.css` itself |
 | `docs/design/tools/tokens-check.mjs` | `node docs/design/tools/tokens-check.mjs` | The real Vite and Tailwind build under `/Rip-PC/`: hashed font, preload rewritten to the same file, no default palette. Six specimen screenshots (390, 768 and 1440, dark and light), both variable axes, the fallback's width and baselines, and the slow-font LCP and CLS |
 | `docs/design/tools/calibrate-fallback.mjs` | section 4.4 | The fallback descriptors from the font files |

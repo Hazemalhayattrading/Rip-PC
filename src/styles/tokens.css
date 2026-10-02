@@ -240,6 +240,14 @@
   --spacing-control-sm: 2.25rem; /* 36 px: round icon buttons */
   --spacing-chip: 1.875rem; /* 30 px: filter chips */
 
+  /*
+   * The reading measure for sentences: max-w-measure. In em, so it holds in every type role: about
+   * 64 characters a line on average, 75 at most (WP-DS2, measured in Rig Lab Sans). Not 65ch: a ch
+   * is the width of a zero, 9.2 px in type-body against 7.17 px for an average character, so 65ch
+   * would set lines of up to 83 characters.
+   */
+  --container-measure: 32em;
+
   --ease-*: initial;
   --ease-settle: cubic-bezier(0.2, 0.8, 0.2, 1); /* UI: quick start, soft stop, no overshoot */
   --ease-dolly: cubic-bezier(0.65, 0, 0.35, 1); /* camera: eases in and out */

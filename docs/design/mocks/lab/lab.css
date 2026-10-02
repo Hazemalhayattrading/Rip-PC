@@ -1,0 +1,11 @@
+/*
+ * The lab mock's Tailwind entry: the app's own wiring (docs/design/tokens.md §1.1), with class
+ * detection limited to the mock. Built and shot by docs/design/tools/lab-mock.mjs.
+ */
+@layer theme, base, components, utilities;
+@import 'tailwindcss/theme.css' layer(theme);
+@import '../../../../src/styles/tokens.css';
+@import 'tailwindcss/preflight.css' layer(base);
+@import '../../../../src/styles/base.css' layer(base);
+@import 'tailwindcss/utilities.css' layer(utilities) source(none);
+@source './index.html';
