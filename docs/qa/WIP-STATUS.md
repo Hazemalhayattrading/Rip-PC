@@ -23,23 +23,28 @@ Owner: qa-lead. Spec: `docs/reports/phase-1-plan.md` §2 (WP-Q4) and §4; test p
    - verify on `f20b156`: 696 unit, 184 e2e, exit 0.
 3. Test plan v4.2: §5, §12.1, §13.2 and the change log; v4.1 records the Director's approvals of the
    v4 proposals and the "no estimate" eligibility rule (§8.2, rule 4).
+4. 2026-10-03: the second live run, five browsers × three widths: 81 of 90 pass. All 9 failures are
+   Firefox build steps, on two WebGL warnings only (sent to build-lead for triage). The 404 tests
+   pass with the HTTP/2 allow-list form. WebKit at 390 px passed every time (the earlier miss did not
+   recur in 18 more tests).
+5. 2026-10-03: WP-DS2 batch 1's AA claims checked: they hold. 28 contrast pairs recomputed
+   independently; the mock axe-clean (with wcag22aa) in 7 cells, 320 px included; targets, chips,
+   focus ring and forced colours as claimed. One Minor to design-lead: QA-P1-003, §9 says buttons are
+   44 px but the round theme toggle is 36 px (passes 2.5.8's 24 px). Evidence:
+   `artifacts/qa/phase-1/ds2-aa/`, with `manifest.sha256`.
 
 ## In progress
-- The second live run (all five browsers), for the closing record.
 - Waiting: build-lead's revised `types.ts` (C1 to C6), which gates WP-E1; data-lead's 23 validator
   tests.
 
 ## Next steps, in order
 1. When build-lead's revised types arrive: re-review C1 to C6 in the next turn, and reply OK or a
    numbered list of changes, copying team-lead.
-2. The AA claims of WP-DS2 batch 1 (`427d241`): `docs/design/lab-spec.md`, `copy-guide.md` and the
-   tokens. Re-run `contrast.mjs --check` and axe on the lab mock, at 390, 768 and 1440 px, dark and
-   light.
+2. Re-test QA-P1-001, QA-P1-002 and QA-P1-003 when their owners report fixes.
 3. Triage, with build-lead, the two Firefox WebGL warnings the live run shows on the build steps:
    "WebGL context was lost" (likely R3F's forceContextLoss on unmount) and "drawElementsInstanced:
    Drawing to a destination rect smaller than the viewport rect". Then allow-list them with reasons,
    or file them.
-4. Watch the WebKit 390 px tap that failed twice in the first live run (0 of 9 in the reruns).
-5. The Q4 tools, as E0 and E1 land: `mutation-check.mjs`, the sweep, the corpus runner, the
+4. The Q4 tools, as E0 and E1 land: `mutation-check.mjs`, the sweep, the corpus runner, the
    per-rule compare script, the blind anchor key list; `strata.mjs` for WP-D1's new data files.
-6. The §4 fan-out, as each WP hands off (the briefs file).
+5. The §4 fan-out, as each WP hands off (the briefs file).
