@@ -62,34 +62,36 @@ export interface Estimate {
  * Units the engine shows. Spec field names carry their unit as a suffix (`lengthMm`,
  * `cardPowerW`, `speedMtps`), and the lab maps each suffix to one of these.
  */
-export type Unit =
-  | 'mm'
-  | 'W'
-  | 'V'
-  | 'MHz'
-  | 'MT/s'
-  | 'MB'
-  | 'GB'
-  | 'Gbps'
-  | 'GB/s'
-  | 'MB/s'
-  | 'TBW'
-  | 'bits'
-  | 'RPM'
-  | 'CFM'
-  | 'mmH2O'
-  | 'dBA'
-  | 'sone'
-  | 'L'
-  | 'years'
-  | 'slots'
-  | 'lanes'
-  | 'fps'
-  | 'points'
-  | 'samples/min'
-  | 's'
-  | 'tokens/s'
-  | '%';
+export const UNITS = [
+  'mm',
+  'W',
+  'V',
+  'MHz',
+  'MT/s',
+  'MB',
+  'GB',
+  'Gbps',
+  'GB/s',
+  'MB/s',
+  'TBW',
+  'bits',
+  'RPM',
+  'CFM',
+  'mmH2O',
+  'dBA',
+  'sone',
+  'L',
+  'years',
+  'slots',
+  'lanes',
+  'fps',
+  'points',
+  'samples/min',
+  's',
+  'tokens/s',
+  '%',
+] as const;
+export type Unit = (typeof UNITS)[number];
 
 /** A spec value as the engine read it. `null` means the maker does not publish it. */
 export type SpecValue = string | number | boolean | null | readonly (string | number)[];
@@ -133,8 +135,9 @@ export interface SpecEvidence {
    */
   readonly note: string | null;
   /**
-   * The record's sources whose `fields` cover this path, plus those without `fields` (they
-   * back the whole record). Never empty: the validator requires a source for every value.
+   * The record's sources whose `fields` overlap this path, plus those without `fields` (they
+   * back the whole record). Never empty for a published value, because the validator requires a
+   * source for every non-null value. A null value may have none: its `note` says why.
    */
   readonly sources: readonly SourceRef[];
 }
