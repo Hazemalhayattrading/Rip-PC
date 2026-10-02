@@ -6,7 +6,10 @@ Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
 - QA's verdict is CLOSED (`docs/qa/report-phase-0.md`).
 - The Director signed off (`docs/reports/phase-0.md` §7).
 - The branch tidy, the final scan of origin and purge stage 3 are done. Every teammate is stopped.
-- Waiting for Hazem: the PR to `main`. Nothing is merged to `main` yet.
+- **PR #1 to `main` is open** at `53f52dd`: green and mergeable. Waiting for Hazem to merge it.
+- **The Phase 1 plan is drafted** for Hazem's review: `docs/reports/phase-1-plan.md`, on
+  `feat/director-phase-1-plan`, kept off the PR branch so PR #1 stays as reviewed. No Phase 1
+  work starts, and no lead is spawned, before Hazem approves the plan.
 
 > **Commit IDs** in this file are post-purge IDs. The old-to-new map is kept outside the public repo,
 > at `C:\Projects\rig-lab-evidence\purge\purge-sha-map.txt`, because GitHub still serves pre-purge commits by ID until its garbage collection runs.
@@ -16,8 +19,9 @@ Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
 1. Read `CLAUDE.md`, `BUILD_PROMPT.md`, this file and `docs/reports/phase-0-briefs.md`.
 2. Run `git worktree list` and `git branch -vv`. Each lead's latest state is its `WIP-STATUS.md`,
    on its branch, in its worktree (table below).
-3. Re-spawn only the leads marked *in progress* in the table below. On 2026-10-01 that is **only
-   qa-lead**: data, design and build are closed for Phase 0.
+3. Re-spawn only the leads marked *in progress* in the table below. On 2026-10-02 **none is**:
+   Phase 0 is closed, and Phase 1 starts only after Hazem approves `docs/reports/phase-1-plan.md`.
+   Phase 1 leads then get `docs/reports/phase-1-briefs.md` in place of the Phase 0 briefs.
    - Use the `Agent` tool with `name` and `subagent_type` both set to the lead's name, and model
      `opus`.
    - The prompt: "You are <lead>, a teammate in the Rig Lab agent team. Read
@@ -34,10 +38,10 @@ Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
 
 | Item | State |
 |---|---|
-| Checkout | `C:\Projects\Rip-PC`, branch `claude/keen-lamport-0794zj` (integration) |
+| Checkout | `C:\Projects\Rip-PC`, branch `claude/keen-lamport-0794zj` (integration). Until PR #1 merges, the checkout is on `feat/director-phase-1-plan`, so the PR branch doesn't move |
 | Worktrees | `C:\Projects\Rip-PC\.claude\worktrees\<lead>` (git-ignored) |
 | Restored evidence | `C:\Projects\rig-lab-evidence\`: 6 extracted folders and `archives\`. Listed by SHA-256 in `docs/reports/evidence/` (2,243 files); `sha256sum -c` passes |
-| Toolchain | Node 24.21.0, npm 11.19.0 (the project asks for ^22.13.0; npm only warns); Playwright 1.56.1 Chromium installed |
+| Toolchain | Node 24.21.0, npm 11.19.0 (the project asks for ^22.13.0; npm only warns); Playwright 1.56.1 Chromium installed; KTX-Software 4.4.2 (`toktx`, `ktx`) in `C:\Program Files\KTX-Software\bin`, on the user PATH |
 | Git, local repo config | `core.symlinks=true` and `core.autocrlf=false` (the system git config has `autocrlf=true`, which broke LF on older branches) |
 | Project skills | All 45 `.claude/skills/*` are real symlinks in every checkout and load (Developer Mode on since 2026-10-01) |
 | Missing | Python, Docker |
@@ -79,28 +83,33 @@ Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
 | 2026-10-02 | **Final scan of origin: clean.** 4 heads (the integration branch, `main`, the old cloud branch, `feat/data-intel-profile`), 0 tags, 0 pull refs, 0 of 11 purged blobs, and 0 files at any tip naming a pre-purge commit | qa-lead | `artifacts/qa/phase-0/audit/purge-recheck-2026-10-02-final/` in the QA worktree |
 | 2026-10-02 | **Purge stage 3 run** (reflog expire, `gc --prune=now`): the local `.git` went from 236 MB to 13 MB, and the 11 blobs are gone from the local object store. The backup bundle still verifies, and `git fsck` passes | Director | `C:\Projects\rig-lab-evidence\purge\purge-3-cleanup.sh` |
 | 2026-10-02 | All teammates stopped: Phase 0 work is complete | Director | `ListAgents` empty |
+| 2026-10-02 | **PR #1 opened**, from the integration branch to `main`, with the Phase 0 summary. Both required checks pass, and GitHub reports it mergeable | Director | [PR #1](https://github.com/Hazemalhayattrading/Rip-PC/pull/1) at `53f52dd` |
+| 2026-10-02 | **KTX-Software 4.4.2 installed**, with Hazem's approval: the official Khronos release, signature checked. gltf-transform's `etc1s` and `uastc` both write `KHR_texture_basisu`, and `ktx validate` passes | Director | a test GLB went from 8.75 KB to 2.53 KB (ETC1S) and 2.57 KB (UASTC) |
+| 2026-10-02 | Hazem: paid 3D assets are decided later, before Phase 3 | Hazem | — |
+| 2026-10-02 | **Phase 1 plan drafted** for Hazem's review | Director | `docs/reports/phase-1-plan.md` on `feat/director-phase-1-plan` |
 | 2026-10-01 | **WP-D0 accepted and merged** (`c04e2a5`): Zod schemas, a validator with 34 rules, 73 seed spec records (all plan 5.3 minimums and mixes), live prices (US 52 + 10 gaps, SA 45 + 17 gaps), 116 game and 27 creator anchors, 15 games, the 20% audit (78 items, 8 findings fixed). The Director's review caught the North cooler limit (145 → 170 mm); data-lead's sweep caught the North PSU limit by tray count (schema: `psu.clearance` list) | data-lead | verify on the merged branch: 454 unit, 112 e2e; initial JS 77.42 KB gzip (no catalogue data in the bundle); 21 new evidence files copied and checked (`docs/reports/evidence/data-lead-evidence-2026-10-01.sha256`) |
 
 ## In progress
 
 | Task | Who | Branch / worktree | State | Exact next step |
 |---|---|---|---|---|
-| Phase 0 merge to `main` | Hazem | `claude/keen-lamport-0794zj` | **Phase 0 closed**: QA CLOSED, and the Director signed off | Hazem approves the PR; the Director opens it on request. Hazem merges, which deploys GitHub Pages |
+| Phase 0 merge to `main` | Hazem | [PR #1](https://github.com/Hazemalhayattrading/Rip-PC/pull/1), from `claude/keen-lamport-0794zj` | **Open**: both checks green, mergeable, at `53f52dd` | Hazem merges with **"Create a merge commit"**. Squash or rebase would give the commits new IDs, and the reports cite these. The merge deploys GitHub Pages |
+| Phase 1 plan review | Hazem | `feat/director-phase-1-plan` | Drafted, waiting for Hazem | Hazem approves it or asks for changes, and answers its §6 decisions. Then the Director writes `docs/reports/phase-1-briefs.md` and spawns the four leads |
 
-**Closed for Phase 0:** WP-D0 (data-lead), WP-DS1 (design-lead), WP-B1 (build-lead) and WP-Q2 (qa-lead). Their Phase 1 work starts only after Hazem has read `docs/reports/phase-0.md`. Phase 1's backlog is in its §5, including QA's 15 open Minors by owner.
+**Closed for Phase 0:** WP-D0 (data-lead), WP-DS1 (design-lead), WP-B1 (build-lead) and WP-Q2 (qa-lead). Their Phase 1 work starts only after Hazem approves `docs/reports/phase-1-plan.md`, which takes in the Phase 0 report's §5 backlog, QA's 15 open Minors included.
 
 ## Next steps (Director)
 
 On "continue":
-1. **The PR to `main`,** when Hazem asks: from `claude/keen-lamport-0794zj`, with the Phase 0
-   summary as its description. Hazem merges, which deploys GitHub Pages. After the merge, check the
-   deploy and the live site.
-2. **After GitHub's reply** to the Support request: check that the old commit answers 404, on the
+1. **After Hazem merges PR #1:** check the Pages deploy run and the live site (every route
+   answers 200, and an unknown path gets the 404 page). Then merge `feat/director-phase-1-plan`
+   into the integration branch and switch the main checkout back to the integration branch.
+2. **After Hazem's decision on the Phase 1 plan:** apply his changes, write
+   `docs/reports/phase-1-briefs.md` from the plan, re-spawn the four leads, and start wave 1
+   (plan §5). The parking branch `feat/data-intel-profile` holds 2fa3e32 for WP-D1.
+3. **After GitHub's reply** to the Support request: check that the old commit answers 404, on the
    API and on raw URLs, and record the result. Its ID is in
    `C:\Projects\rig-lab-evidence\purge\github-support-request.md`.
-3. **The Phase 1 plan** (the engine), only after Hazem has read `docs/reports/phase-0.md`. Use
-   its §5 backlog, and give fresh briefs to the leads. The parking branch
-   `feat/data-intel-profile` holds 2fa3e32 for the performance-model schema work.
 
 Branch-tidy record:
 - **Deleted on origin, 2026-10-02,** each with a lease and each fully merged into the integration
@@ -153,16 +162,17 @@ Branch-tidy record:
   - The Director confirmed it through the API: CI's check runs on `3966db1` report exactly those
     two names, from github-actions (app id 15368), both successful.
   - Found by QA as V4 / QA-P0-007. GitHub Pages already deploys from GitHub Actions.
-- **KTX2 texture tool, decide before Phase 3.** `toktx` (KTX-Software, free, Apache 2.0) is a
-  system install, and this PC doesn't have it. Without it, textures ship as WebP, which decodes
-  to uncompressed GPU memory (about 22 MB per 2K map). The 160 MB texture budget then holds only
-  about 7 maps. BUILD_PROMPT §7 asks for KTX2. Installing it needs Hazem's OK.
+- **Done 2026-10-02 (Hazem approved): the KTX2 texture tool is installed.** KTX-Software 4.4.2
+  (free, Apache 2.0) puts `toktx` and `ktx` in `C:\Program Files\KTX-Software\bin`, on the user
+  PATH. The gltf-transform `etc1s` and `uastc` pipeline works end to end, so textures can ship as
+  KTX2 as BUILD_PROMPT §7 asks, not as WebP. Design backlog item 38 can close.
 - **Done 2026-10-01 (Hazem's decision):** the 222 MB of third-party page captures are out of the
   public repo and its branch history. They are kept in `C:\Projects\rig-lab-evidence` and listed by
   checksum in `docs/reports/evidence/`. The GitHub Support request is filed (below). Left for
   Hazem, optionally: a private backup of `C:\Projects\rig-lab-evidence`, which is now the only
   full copy.
-- **3D assets, paid options** (`docs/design/studio-3d-brief.md` §7). Design-lead recommends A now (USD 0, parametric models and CC BY), deciding B before Phase 3 (a commissioned hero set, about USD 1,440, an estimate, not a quote), and skipping C. Its three questions: may we ask ARCTIC and ASUS for permission, and who sends the requests? Who downloads the CC BY files, with what account? Is a budget of about USD 1,500 for B open for Phase 3?
+- **3D assets, paid options: Hazem decides later, before Phase 3** (his answer, 2026-10-02).
+  The options are in `docs/design/studio-3d-brief.md` §7. Design-lead recommends A now (USD 0, parametric models and CC BY), deciding B before Phase 3 (a commissioned hero set, about USD 1,440, an estimate, not a quote), and skipping C. Its three questions: may we ask ARCTIC and ASUS for permission, and who sends the requests? Who downloads the CC BY files, with what account? Is a budget of about USD 1,500 for B open for Phase 3?
 - **GitHub Support request: done, waiting for GitHub's reply.** Hazem filed it on 2026-10-02
   through GitHub's Virtual Assistant. It covers the cached pre-purge commits, from the one that
   added the archives onward.
