@@ -37,14 +37,25 @@ Owner: qa-lead. Spec: `docs/reports/phase-1-plan.md` §2 (WP-Q4) and §4; test p
    h1, header and site nav on screen; Back restores the scroll, focus on the h1; the theme toggle
    neither scrolls nor moves focus) are measured in `tests/e2e/navigation.spec.ts` (`dc21124`).
    Rule 3 is enforced; rules 1 and 2 are recorded as QA-P1-001 annotations until build-lead's fix.
+7. 2026-10-03: the re-review of the engine contract at `83aa5ab` (`types.ts`, `rules.ts`,
+   `invariants.ts`): **OK, WP-E1 can start.** C1 to C6 are resolved. Five follow-ups went to
+   build-lead, none blocking: (1) `fpsEstimateProblems()` in E3 (frameGeneration NoEstimate in
+   Phase 1, disagreement means confidence below high); (2) ram-cooler-clearance's "the fan can move
+   up" against cooler-height; (3) query mode: systemOf's result per build, and the invariants'
+   problems with exit 1; (4) no `golden-estimates.json`, since QA builds its own golden queries;
+   (5) optional, cooler-socket on the board's socket. The query-mode format is agreed.
+   compat-trace compares `RuleSpec.unknownData` too, and v4.3 follows the contract (`81d18e5`).
+8. data-lead's 23 validator tests are ready on `feat/data-engine-data` @ `4337e09`, landing with
+   WP-D1 batch 1. The laneSharing `[]` reason follows data-lead's manual search.
 
 ## In progress
-- Waiting: build-lead's revised `types.ts` (C1 to C6), which gates WP-E1; data-lead's 23 validator
-  tests.
+- Waiting: build-lead's answers to follow-ups 2 and 3; the dump's query mode and `rules.json`
+  (WP-E0); WP-D1 batch 1's merge (the validator tests).
 
 ## Next steps, in order
-1. When build-lead's revised types arrive: re-review C1 to C6 in the next turn, and reply OK or a
-   numbered list of changes, copying team-lead.
+1. When the dump's query mode lands (WP-E0): the golden-query step (`tests/audit/golden-queries.mjs`:
+   one query per anchor row, the preset through WP-D2's map), the corpus runner and the sweep (S1
+   to S15, S15 by sweep kind), and the per-rule compare script for check A.
 2. Re-test QA-P1-001, QA-P1-002 and QA-P1-003 when their owners report fixes.
    - QA-P1-001: when build-lead's fix lands, the navigation spec goes back to hard assertions (the
      Director, 2026-10-03): set `FOCUS_RULES.enforced` to true and empty `KNOWN_OFF_SCREEN`, run it
@@ -56,6 +67,6 @@ Owner: qa-lead. Spec: `docs/reports/phase-1-plan.md` §2 (WP-Q4) and §4; test p
    "WebGL context was lost" (likely R3F's forceContextLoss on unmount) and "drawElementsInstanced:
    Drawing to a destination rect smaller than the viewport rect". Then allow-list them with reasons,
    or file them.
-4. The Q4 tools, as E0 and E1 land: `mutation-check.mjs`, the sweep, the corpus runner, the
-   per-rule compare script, the blind anchor key list; `strata.mjs` for WP-D1's new data files.
+4. The other Q4 tools, as E0 and E1 land: `mutation-check.mjs` (the first Stryker report), the
+   blind anchor key list; `strata.mjs` for WP-D1's new data files.
 5. The §4 fan-out, as each WP hands off (the briefs file).
