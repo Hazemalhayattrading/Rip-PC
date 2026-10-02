@@ -96,8 +96,9 @@ On "continue":
 5. **Tidy branches:**
    - delete merged feature branches, local and on origin;
    - keep `feat/data-qa-fixes`, which holds 2fa3e32 for Phase 1.
-6. **Report to Hazem.** Ask him to fix the `main` ruleset's check name, then open the PR from
-   `claude/keen-lamport-0794zj` to `main`. Phase 1 starts only after he has read the report.
+6. **Report to Hazem,** then open the PR from `claude/keen-lamport-0794zj` to `main`. The
+   ruleset's check names match CI as of 2026-10-02. Phase 1 starts only after he has read the
+   report.
 
 ## Evidence purge (approved by Hazem, 2026-10-01: purge now, the 2 bundles included). **Done**; stage 3, the local gc, is still to run
 
@@ -132,12 +133,12 @@ On "continue":
 
 ## Open items for Hazem
 
-- **The `main` ruleset's check name doesn't match.** Ruleset "main" (id 24320209, active, default
-  branch only) requires `verify` and `Performance budgets`. CI reports the first job as
-  `npm run verify`, so `verify` never reports and a PR to `main` would stay blocked. Fix: rename
-  the required check to `npm run verify` (source: GitHub Actions), or have build-lead rename the
-  CI job. The Director recommends changing the ruleset. Found by QA (V4, Major); confirmed by the
-  Director through the API. GitHub Pages already deploys from GitHub Actions.
+- **Done 2026-10-02 (Hazem): the `main` ruleset's check names now match CI.** Ruleset "main"
+  (id 24320209, active, default branch only) requires `npm run verify` and `Performance
+  budgets`. Both are tied to the GitHub Actions app (integration id 15368).
+  - The Director confirmed it through the API: CI's check runs on `3966db1` report exactly those
+    two names, from github-actions (app id 15368), both successful.
+  - Found by QA as V4 / QA-P0-007. GitHub Pages already deploys from GitHub Actions.
 - **KTX2 texture tool, decide before Phase 3.** `toktx` (KTX-Software, free, Apache 2.0) is a
   system install, and this PC doesn't have it. Without it, textures ship as WebP, which decodes
   to uncompressed GPU memory (about 22 MB per 2K map). The 160 MB texture budget then holds only

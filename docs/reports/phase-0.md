@@ -134,11 +134,12 @@ because GitHub still serves pre-purge commits by ID until its garbage collection
 ## 5. Open issues
 
 **For Hazem** (details in `progress.md`, "Open items"):
-1. **The `main` ruleset requires a check named `verify`, but CI reports `npm run verify`.** As
-   things stand, the PR to `main` can't pass. Rename the required check, or have build-lead rename
-   the job.
-2. **The GitHub Support request** to drop the purged commits' cached views. The draft text is in
-   `progress.md`.
+1. **Done 2026-10-02: the `main` ruleset's check names.** It now requires `npm run verify` and
+   `Performance budgets`, both tied to GitHub Actions, which match what CI reports. The Director
+   confirmed this through the API.
+2. **Done 2026-10-02, waiting for GitHub's reply: the GitHub Support request** to drop the
+   purged commits' cached views. After the reply, the Director re-checks that the old commit
+   answers 404.
 3. **Rotate the Context7 API key.** It was printed in a session transcript, never in the repo.
 4. **Paid 3D assets** (`studio-3d-brief.md` §7): A now, B before Phase 3 (about USD 1,440, an
    estimate), skip C. Three questions are attached.
