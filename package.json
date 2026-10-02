@@ -16,7 +16,7 @@
     "format": "prettier . --write",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage",
+    "test:coverage": "vitest run --coverage --reporter=default --reporter=json --outputFile.json=artifacts/test/vitest-report.json",
     "e2e": "playwright test --project=e2e-*",
     "e2e:smoke": "playwright test --grep @smoke",
     "verify": "npm run typecheck && npm run lint && npm run test:coverage && npm run build && npm run e2e:smoke",

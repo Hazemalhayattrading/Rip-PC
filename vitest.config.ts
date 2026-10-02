@@ -5,6 +5,9 @@ export default defineConfig({
   test: {
     // Engine, data and state code is pure TypeScript, so unit tests run in Node.
     environment: 'node',
+    // Never cut values interpolated into it.each / test.for titles (default 40 characters):
+    // QA's trace counts tests by title, and anchor ids and product names run longer (test plan v4).
+    taskTitleValueFormatTruncate: 0,
     // QA's tooling tests are tests/**/*.test.mjs.
     include: ['src/**/*.test.{ts,tsx}', 'scripts/**/*.test.ts', 'tests/**/*.test.{ts,mts,mjs}'],
     // Playwright specs (*.spec.ts, under tests/e2e, tests/visual, tests/perf) are not Vitest's.
