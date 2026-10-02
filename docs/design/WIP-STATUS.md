@@ -22,9 +22,30 @@ name, using the batch 2 prompt in this file's history (`3481d85`'s split) and th
 | motion-designer (`abbcc75f5520958a0`) | 10–13, 23 (the rule) | motion.md, motion.ts, motion.types.test.ts (new) | Nothing yet |
 | 3d-artist (`acff69b9b412c86fa`) | 23 (the brief), 24 (the orbit), 25–38, 40, 46 | studio-3d-brief.md, 3d-asset-survey.md | Nothing yet |
 
-After review, design-lead does: backlog.md statuses; the `--dur-ui` comment in tokens.css (the
-motion-designer's wording); the cross-link from studio-3d-brief.md §3.1 to components.md's text
-zones; a pointer from tokens.md §2.6 to motion.md's Phase 2 rules.
+After review, design-lead does:
+- backlog.md statuses;
+- the `--dur-ui` comment in tokens.css: `/* a hover overlay's fade, the pressed scale, a chevron's
+  turn */` (the motion-designer's wording, ruled 2026-10-03);
+- a new token `--z-under: -1` (utility `z-under`, test first): only for an overlay inside an
+  `isolate` component (the motion-designer's hover overlay, item 10);
+- the cross-link from studio-3d-brief.md §3.1 to components.md's text zones;
+- a pointer from tokens.md §2.6 to motion.md's Phase 2 rules.
+
+**Rulings sent on 2026-10-03:**
+- Workers: the market pill switches instantly, with no slide (motion.md rule 2); fans spin up and
+  down over `--dur-seat`; item 16 reads "No CPUs match these filters."; item 19 needs no
+  virtualisation.
+- The focus rule on a page or step change, sent to the ui-designer for components.md, to qa-lead
+  to test, and to build-lead for QA-P1-001:
+  - scroll to the top at once, then focus the h1 with `preventScroll`;
+  - on Back and Forward, the browser restores the scroll position;
+  - in-page changes move neither focus nor scroll.
+
+**Lab-spec fixes done** (`7556bdb`): icon colours on wrappers, never on the svg (forced colours);
+money fraction digits; dates with `timeZone: 'UTC'`.
+
+**Don't message a worker after its report:** a send to a finished worker re-runs it. After the
+reports, design-lead makes corrections itself.
 
 **Asked and waiting:** qa-lead, the focus-scroll finding's steps (2026-10-03).
 
