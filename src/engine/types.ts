@@ -362,7 +362,10 @@ export type StatusChip = RuleStatus | 'cant-verify';
 
 /** A maker's procedure, condensed: today the BIOS FlashBack update (copy guide §8). */
 export interface Steps {
-  /** "Update the BIOS with BIOS FlashBack". */
+  /**
+   * A label, not a sentence, so no full stop: the lab's disclosure shows it as its text
+   * (lab-spec §4). "How to update with {flashbackName}": "How to update with BIOS FlashBack".
+   */
   readonly title: string;
   /** One sentence per step, in order. */
   readonly items: readonly string[];
