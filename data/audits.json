@@ -408,7 +408,7 @@
         {
           "by": "qa-lead (seeded 10% audit)",
           "at": "2026-10-01",
-          "scope": "Seed rig-lab-audit:phase-0:98d2be5a843770b8b33b8b5147c77339c1b09e92: 43 of 355 records, 1,265 fields, read against the sources by three independent data-auditor workers; where a pattern repeated, QA swept the whole file. 1,189 fields matched, 67 were null as allowed and 9 were findings; rule 1 passed for every price and benchmark row.",
+          "scope": "Sample artifacts/qa/phase-0/audit/sample-phase-0.json (SHA-256 3904d1169be7eb67fd2647f939d5b0d7b7a6a2fd50462c5056e8848c7462001b, listed in docs/qa/evidence/report-phase-0.sha256): 43 of 355 records, 1,265 fields, read against the sources by three independent data-auditor workers; where a pattern repeated, QA swept the whole file. 1,189 fields matched, 67 were null as allowed and 9 were findings; rule 1 passed for every price and benchmark row. The sample's seed names the WP-D0 merge (c04e2a5 since the history purge); the original seed string carries the pre-purge ID, so it is kept locally, outside the public repo.",
           "findings": [
             {
               "items": [
