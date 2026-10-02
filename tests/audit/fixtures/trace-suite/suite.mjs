@@ -22,11 +22,9 @@ export function defineRuleSuite(defect = 'none') {
   test('[cpu-socket] block: Ryzen 7 9800X3D on the TUF Gaming Z890-Plus WiFi, AM5 on LGA1851', {
     fail: defect === 'failing-negative',
   });
-  test(
-    defect === 'warn-misnamed'
-      ? '[cpu-socket] warn: the board socket is not published'
-      : '[cpu-socket] unknown: the board socket is not published',
-  );
+  // cpu-socket reads only required fields, so it has no unknown-data test; the validator tests in
+  // src/data/ stand in for it. A "warn:" test is a misnamed unknown-data test.
+  if (defect === 'warn-misnamed') test('[cpu-socket] warn: the board socket is not published');
 
   // gpu-length: numeric, so it also needs the three boundary tests.
   test(

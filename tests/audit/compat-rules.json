@@ -1,11 +1,13 @@
 {
-  "$comment": "QA's expected compatibility rule set: the 20 rule ids of docs/qa/test-plan.md §9.2 (v4), which are the 18 ids of test plan v3 plus cooler-socket and display-output (Hazem, 2026-10-02, phase-1-plan §6). tests/audit/compat-trace.mjs checks the engine's registry against this list and every rule's tests against its fields. Owner: qa-lead. A change here needs the same change in test plan §9.2 (tests/audit/compat-trace.test.mjs pins both) and the Director's approval, recorded in test plan §16.",
+  "$comment": "QA's expected compatibility rule set: the 20 rule ids of docs/qa/test-plan.md §9.2 (v4), which are the 18 ids of test plan v3 plus cooler-socket and display-output (Hazem, 2026-10-02, phase-1-plan §6), agreed with build-lead (src/engine/types.ts RULE_IDS at 4fa8a95). tests/audit/compat-trace.mjs checks the engine's registry against this list and every rule's tests against its fields. Owner: qa-lead. A change here needs the same change in test plan §9.2 (tests/audit/compat-trace.test.mjs pins both) and the Director's approval, recorded in test plan §16.",
   "schemaVersion": 1,
   "owner": "qa-lead",
   "fields": {
     "outcomes": "Every status the rule returns for real, fully published data. Each needs at least one passing test of that kind: 'ok' is the positive test, and 'warn' and 'block' are the negative tests.",
     "numeric": "The rule compares a number with a limit, so it needs 'boundary at', 'boundary inside' and 'boundary outside' tests (test plan §9.1).",
-    "unknownData": "The rule needs an 'unknown' test: a spec that is not published gives warn ('can't verify: <field> not published'), never ok (budget.json compatibility.unknownDataMustNotReturn).",
+    "unknownData": "true: the rule's decision can depend on a value the data does not publish, so it needs an 'unknown' test, and an unpublished value gives warn with cantVerify, never ok (budget.json compatibility.unknownDataMustNotReturn). false: every value the rule reads is required, so valid data cannot be unpublished there (the Director's ruling, 2026-10-02, phase-1-plan WP-E1).",
+    "unpublishable": "For unknownData true: the values that can be unpublished, as dot paths (category.field, [] for every list item).",
+    "requiredFields": "For unknownData false: each field the rule reads, and the proof that it cannot be unpublished. 'null-rejected' and 'empty-rejected' name a validator test that must pass in a file under src/data/; 'validator' names an existing validator test; 'none-by-definition' is a field whose schema defines null or [] as 'the part has none', a real answer, so no test applies. Re-checked whenever a rule starts to read a new field.",
     "variants": "Cases a decision requires to be told apart. Each needs at least one passing test of that kind whose description matches the pattern (case-insensitive).",
     "data": "When the rule's test data exists (phase-1-plan §3): ready, or the work package it waits for."
   },
@@ -15,7 +17,19 @@
       "check": "The CPU socket matches the board",
       "outcomes": ["ok", "block"],
       "numeric": false,
-      "unknownData": true,
+      "unknownData": false,
+      "requiredFields": [
+        {
+          "field": "cpu.socket",
+          "proof": "null-rejected",
+          "test": "[schema] cpu.socket: null is rejected"
+        },
+        {
+          "field": "motherboard.socket",
+          "proof": "null-rejected",
+          "test": "[schema] motherboard.socket: null is rejected"
+        }
+      ],
       "data": "ready"
     },
     {
@@ -23,7 +37,19 @@
       "check": "The board's CPU support list includes the CPU",
       "outcomes": ["ok", "block"],
       "numeric": false,
-      "unknownData": true,
+      "unknownData": false,
+      "requiredFields": [
+        {
+          "field": "motherboard.biosSupport.cpus",
+          "proof": "validator",
+          "test": "bios-coverage: every catalogue CPU on the socket has a BIOS row"
+        },
+        {
+          "field": "motherboard.biosSupport.cpus[].listing",
+          "proof": "null-rejected",
+          "test": "[schema] motherboard.biosSupport.cpus[].listing: null is rejected"
+        }
+      ],
       "data": "needs WP-D1"
     },
     {
@@ -32,6 +58,9 @@
       "outcomes": ["ok", "warn"],
       "numeric": false,
       "unknownData": true,
+      "unpublishable": [
+        "motherboard: the first-BIOS or launch date that WP-D1 item 5 adds, when the maker does not publish it"
+      ],
       "variants": [
         {
           "kind": "warn",
@@ -51,7 +80,19 @@
       "check": "The kit's memory type (DDR4 or DDR5) matches the board",
       "outcomes": ["ok", "block"],
       "numeric": false,
-      "unknownData": true,
+      "unknownData": false,
+      "requiredFields": [
+        {
+          "field": "ram.type",
+          "proof": "null-rejected",
+          "test": "[schema] ram.type: null is rejected"
+        },
+        {
+          "field": "motherboard.memory.type",
+          "proof": "null-rejected",
+          "test": "[schema] motherboard.memory.type: null is rejected"
+        }
+      ],
       "data": "ready"
     },
     {
@@ -59,7 +100,19 @@
       "check": "The kit's modules fit the board's DIMM slots",
       "outcomes": ["ok", "block"],
       "numeric": true,
-      "unknownData": true,
+      "unknownData": false,
+      "requiredFields": [
+        {
+          "field": "ram.moduleCount",
+          "proof": "null-rejected",
+          "test": "[schema] ram.moduleCount: null is rejected"
+        },
+        {
+          "field": "motherboard.memory.slots",
+          "proof": "null-rejected",
+          "test": "[schema] motherboard.memory.slots: null is rejected"
+        }
+      ],
       "data": "needs WP-D1"
     },
     {
@@ -68,6 +121,9 @@
       "outcomes": ["ok", "warn"],
       "numeric": true,
       "unknownData": true,
+      "unpublishable": [
+        "ram: the modules' rank, which the schema does not hold; the CPU's official speed depends on it for DDR4 with 4 modules (Ryzen 5000: 4x1R 2933 MT/s, 4x2R 2667 MT/s, data/parts/cpu.json)"
+      ],
       "data": "ready"
     },
     {
@@ -75,7 +131,24 @@
       "check": "The card's length against the case, per layout",
       "outcomes": ["ok", "block"],
       "numeric": true,
-      "unknownData": true,
+      "unknownData": false,
+      "requiredFields": [
+        {
+          "field": "gpu-card.lengthMm",
+          "proof": "null-rejected",
+          "test": "[schema] gpu-card.lengthMm: null is rejected"
+        },
+        {
+          "field": "case.gpuClearance",
+          "proof": "empty-rejected",
+          "test": "[schema] case.gpuClearance: an empty list is rejected"
+        },
+        {
+          "field": "case.gpuClearance[].maxLengthMm",
+          "proof": "null-rejected",
+          "test": "[schema] case.gpuClearance[].maxLengthMm: null is rejected"
+        }
+      ],
       "data": "ready"
     },
     {
@@ -84,6 +157,11 @@
       "outcomes": ["ok", "warn", "block"],
       "numeric": true,
       "unknownData": true,
+      "unpublishable": [
+        "gpu-card.thicknessMm",
+        "case.gpuMaxThicknessMm",
+        "case.layoutPositions[].tallGpuLimit"
+      ],
       "data": "the Terra's data is ready; the board slots need WP-D1"
     },
     {
@@ -91,7 +169,29 @@
       "check": "The air cooler's height against the case, per layout",
       "outcomes": ["ok", "block"],
       "numeric": true,
-      "unknownData": true,
+      "unknownData": false,
+      "requiredFields": [
+        {
+          "field": "cooler.heightMm",
+          "proof": "null-rejected",
+          "test": "[schema] cooler.heightMm: null is rejected"
+        },
+        {
+          "field": "case.coolerClearance",
+          "proof": "empty-rejected",
+          "test": "[schema] case.coolerClearance: an empty list is rejected"
+        },
+        {
+          "field": "case.coolerClearance[].maxHeightMm",
+          "proof": "null-rejected",
+          "test": "[schema] case.coolerClearance[].maxHeightMm: null is rejected"
+        },
+        {
+          "field": "case.layoutPositions[].coolerMaxHeightMm",
+          "proof": "null-rejected",
+          "test": "[schema] case.layoutPositions[].coolerMaxHeightMm: null is rejected"
+        }
+      ],
       "data": "ready"
     },
     {
@@ -100,6 +200,7 @@
       "outcomes": ["ok", "warn", "block"],
       "numeric": true,
       "unknownData": true,
+      "unpublishable": ["cooler.ramClearanceMm", "ram.heightMm"],
       "data": "ready"
     },
     {
@@ -108,6 +209,12 @@
       "outcomes": ["ok", "block"],
       "numeric": true,
       "unknownData": true,
+      "unpublishable": [
+        "cooler.radiatorLengthMm",
+        "cooler.radiatorWidthMm",
+        "case.radiatorSupport[].maxThicknessMm",
+        "case.layoutPositions[].radiatorFanMaxThicknessMm"
+      ],
       "data": "ready; the North needs WP-D1"
     },
     {
@@ -115,7 +222,19 @@
       "check": "The PSU's form factor against the case",
       "outcomes": ["ok", "warn", "block"],
       "numeric": false,
-      "unknownData": true,
+      "unknownData": false,
+      "requiredFields": [
+        {
+          "field": "psu.formFactor",
+          "proof": "null-rejected",
+          "test": "[schema] psu.formFactor: null is rejected"
+        },
+        {
+          "field": "case.psu.formFactors",
+          "proof": "empty-rejected",
+          "test": "[schema] case.psu.formFactors: an empty list is rejected"
+        }
+      ],
       "data": "ready"
     },
     {
@@ -124,6 +243,7 @@
       "outcomes": ["ok", "block"],
       "numeric": true,
       "unknownData": true,
+      "unpublishable": ["case.psu.clearance"],
       "data": "ready; the North needs WP-D1"
     },
     {
@@ -132,6 +252,7 @@
       "outcomes": ["ok", "warn", "block"],
       "numeric": true,
       "unknownData": true,
+      "unpublishable": ["cpu.power.pptW", "gpu-card.cardPowerW"],
       "data": "needs WP-E2"
     },
     {
@@ -140,6 +261,9 @@
       "outcomes": ["ok", "warn", "block"],
       "numeric": true,
       "unknownData": true,
+      "unpublishable": [
+        "gpu-card: the 16-pin connector's standard (12V-2x6 or 12VHPWR), when the maker does not name it"
+      ],
       "data": "needs WP-D1"
     },
     {
@@ -147,7 +271,47 @@
       "check": "The M.2 drive count against the board's slots, and lane-sharing side effects",
       "outcomes": ["ok", "warn", "block"],
       "numeric": true,
-      "unknownData": true,
+      "unknownData": false,
+      "requiredFields": [
+        {
+          "field": "storage.interface",
+          "proof": "null-rejected",
+          "test": "[schema] storage.interface: null is rejected"
+        },
+        {
+          "field": "storage.formFactor",
+          "proof": "null-rejected",
+          "test": "[schema] storage.formFactor: null is rejected"
+        },
+        {
+          "field": "motherboard.m2Slots",
+          "proof": "null-rejected",
+          "test": "[schema] motherboard.m2Slots: null is rejected",
+          "why": "[] means the board has no M.2 slot"
+        },
+        {
+          "field": "motherboard.m2Slots[].sizes",
+          "proof": "empty-rejected",
+          "test": "[schema] motherboard.m2Slots[].sizes: an empty list is rejected"
+        },
+        {
+          "field": "motherboard.m2Slots[].sataSupport",
+          "proof": "null-rejected",
+          "test": "[schema] motherboard.m2Slots[].sataSupport: null is rejected"
+        },
+        {
+          "field": "motherboard.sataPorts",
+          "proof": "null-rejected",
+          "test": "[schema] motherboard.sataPorts: null is rejected",
+          "why": "[] means the board has no SATA port"
+        },
+        {
+          "field": "motherboard.laneSharing",
+          "proof": "null-rejected",
+          "test": "[schema] motherboard.laneSharing: null is rejected",
+          "why": "[] means the manual states the board shares no lanes; the per-rule worker checks each [] against the manual"
+        }
+      ],
       "data": "ready"
     },
     {
@@ -155,7 +319,19 @@
       "check": "The board's form factor against the case",
       "outcomes": ["ok", "block"],
       "numeric": false,
-      "unknownData": true,
+      "unknownData": false,
+      "requiredFields": [
+        {
+          "field": "motherboard.formFactor",
+          "proof": "null-rejected",
+          "test": "[schema] motherboard.formFactor: null is rejected"
+        },
+        {
+          "field": "case.supportedBoards",
+          "proof": "empty-rejected",
+          "test": "[schema] case.supportedBoards: an empty list is rejected"
+        }
+      ],
       "data": "ready"
     },
     {
@@ -163,7 +339,21 @@
       "check": "A front USB-C port needs a USB-C header on the board",
       "outcomes": ["ok", "warn"],
       "numeric": false,
-      "unknownData": true,
+      "unknownData": false,
+      "requiredFields": [
+        {
+          "field": "case.frontIo.usbC",
+          "proof": "null-rejected",
+          "test": "[schema] case.frontIo.usbC: null is rejected",
+          "why": "[] means the case has no front USB-C port"
+        },
+        {
+          "field": "motherboard.headers.usbCFront",
+          "proof": "null-rejected",
+          "test": "[schema] motherboard.headers.usbCFront: null is rejected",
+          "why": "[] means the board has no front USB-C header"
+        }
+      ],
       "data": "ready"
     },
     {
@@ -171,7 +361,19 @@
       "check": "The cooler's mounting kit fits the CPU socket",
       "outcomes": ["ok", "block"],
       "numeric": false,
-      "unknownData": true,
+      "unknownData": false,
+      "requiredFields": [
+        {
+          "field": "cooler.sockets",
+          "proof": "empty-rejected",
+          "test": "[schema] cooler.sockets: an empty list is rejected"
+        },
+        {
+          "field": "cpu.socket",
+          "proof": "null-rejected",
+          "test": "[schema] cpu.socket: null is rejected"
+        }
+      ],
       "data": "needs WP-D1"
     },
     {
@@ -179,7 +381,15 @@
       "check": "A build with no graphics card needs a CPU with integrated graphics",
       "outcomes": ["ok", "block"],
       "numeric": false,
-      "unknownData": true,
+      "unknownData": false,
+      "requiredFields": [
+        {
+          "field": "cpu.igpu",
+          "proof": "none-by-definition",
+          "test": null,
+          "why": "src/data/schema/cpu.ts: null means no integrated graphics (Intel F SKUs), a real answer"
+        }
+      ],
       "data": "ready"
     }
   ]

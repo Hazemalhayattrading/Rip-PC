@@ -1,19 +1,56 @@
 {
-  "$comment": "A reduced rule set for tests/audit/compat-trace.test.mjs: one categorical rule, one numeric rule, one with variants, and one the registry does not have yet.",
+  "$comment": "A reduced rule set for tests/audit/compat-trace.test.mjs. Fixture values, not the real ones: here gpu-length stands in for a numeric rule with unpublishable data. cpu-socket proves its fields with validator tests, and display-output's field is 'none' by definition. display-output is the rule the registry does not have yet.",
   "schemaVersion": 1,
   "rules": [
-    { "id": "cpu-socket", "outcomes": ["ok", "block"], "numeric": false, "unknownData": true },
-    { "id": "gpu-length", "outcomes": ["ok", "block"], "numeric": true, "unknownData": true },
+    {
+      "id": "cpu-socket",
+      "outcomes": ["ok", "block"],
+      "numeric": false,
+      "unknownData": false,
+      "requiredFields": [
+        {
+          "field": "cpu.socket",
+          "proof": "null-rejected",
+          "test": "[schema] cpu.socket: null is rejected"
+        },
+        {
+          "field": "motherboard.socket",
+          "proof": "null-rejected",
+          "test": "[schema] motherboard.socket: null is rejected"
+        }
+      ]
+    },
+    {
+      "id": "gpu-length",
+      "outcomes": ["ok", "block"],
+      "numeric": true,
+      "unknownData": true,
+      "unpublishable": ["gpu-card.lengthMm (fixture only)"]
+    },
     {
       "id": "bios-version",
       "outcomes": ["ok", "warn"],
       "numeric": false,
       "unknownData": true,
+      "unpublishable": ["motherboard: the first-BIOS date (fixture)"],
       "variants": [
         { "kind": "warn", "pattern": "\\bwith (BIOS )?FlashBack\\b" },
         { "kind": "warn", "pattern": "\\b(without|no) (BIOS )?FlashBack\\b" }
       ]
     },
-    { "id": "display-output", "outcomes": ["ok", "block"], "numeric": false, "unknownData": true }
+    {
+      "id": "display-output",
+      "outcomes": ["ok", "block"],
+      "numeric": false,
+      "unknownData": false,
+      "requiredFields": [
+        {
+          "field": "cpu.igpu",
+          "proof": "none-by-definition",
+          "test": null,
+          "why": "null means no integrated graphics"
+        }
+      ]
+    }
   ]
 }

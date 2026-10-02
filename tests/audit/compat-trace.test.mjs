@@ -1,7 +1,8 @@
 /**
  * Tests for tests/audit/compat-trace.mjs (test plan §9.3). The planted defects go through real
  * Vitest: the fixture suite in fixtures/trace-suite runs once with the JSON reporter, and each
- * scenario is that real report narrowed to one scenario file, plus the file outside the test root.
+ * scenario is that real report narrowed to one engine scenario file and one validator file, plus
+ * the file outside the test root.
  */
 import { spawnSync } from 'node:child_process';
 import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
@@ -10,9 +11,11 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
+  dataTestCases,
   formatTrace,
   parseTitle,
   playwrightCases,
+  registryEntries,
   registryIds,
   trace,
   TraceInputError,
@@ -62,22 +65,26 @@ beforeAll(() => {
 }, 60_000);
 
 const posix = (file) => String(file).replace(/\\/g, '/');
-function scenario(name) {
+function scenario(name, dataName = 'schema') {
   return {
     ...report,
     testResults: report.testResults.filter(
       (f) =>
         posix(f.name).endsWith(`/src/engine/${name}.fixture.mjs`) ||
+        posix(f.name).endsWith(`/src/data/${dataName}.fixture.mjs`) ||
         posix(f.name).endsWith('/src/lab/outside.fixture.mjs'),
     ),
   };
 }
-function traceScenario(name, options = {}) {
-  const { cases } = vitestCases(scenario(name), { repoRoot: SUITE, testRoot: 'src/engine' });
+function traceScenario(name, options = {}, dataName = 'schema') {
+  const rep = scenario(name, dataName);
+  const { cases } = vitestCases(rep, { repoRoot: SUITE, testRoot: 'src/engine' });
+  const data = dataTestCases(rep, { repoRoot: SUITE, dataTestRoot: 'src/data' });
   return trace({
     rules: fixtureRules,
     registry: fixtureRegistry,
     unitCases: cases,
+    dataCases: data.cases,
     allowPending: ['display-output'],
     ...options,
   });
@@ -110,6 +117,31 @@ describe('the real rule set, tests/audit/compat-rules.json', () => {
       'cooler-socket',
       'display-output',
     ]);
+  });
+
+  it('asks unknown-data tests of the 8 rules the Director named, and proofs of the other 12', () => {
+    expect(rules.filter((r) => r.unknownData).map((r) => r.id)).toEqual([
+      'bios-version',
+      'ram-speed',
+      'gpu-thickness',
+      'ram-cooler-clearance',
+      'radiator-fit',
+      'psu-length',
+      'psu-wattage',
+      'gpu-power-connector',
+    ]);
+    expect(rules.filter((r) => !r.unknownData)).toHaveLength(12);
+  });
+
+  it('names each validator test as "[schema] <field>: null is rejected" or "...: an empty list is rejected"', () => {
+    const named = rules
+      .flatMap((r) => r.requiredFields ?? [])
+      .filter((f) => f.proof.endsWith('-rejected'));
+    expect(named.length).toBeGreaterThan(20);
+    for (const f of named) {
+      const tail = f.proof === 'null-rejected' ? 'null is rejected' : 'an empty list is rejected';
+      expect(f.test).toBe(`[schema] ${f.field}: ${tail}`);
+    }
   });
 
   it('never lets bios-version block, and keeps both FlashBack variants (Hazem, plan §6.1)', () => {
@@ -178,6 +210,10 @@ describe('the clean suite, through real Vitest', () => {
       'boundary outside': 1,
     });
     expect(resultOf(r, 'bios-version').counts.warn).toBe(2);
+    expect(resultOf(r, 'cpu-socket').fieldProofs.map((f) => [f.field, f.status])).toEqual([
+      ['cpu.socket', 'passed'],
+      ['motherboard.socket', 'passed'],
+    ]);
   });
 
   it('does not count a rule-like test outside the test root', () => {
@@ -194,10 +230,93 @@ describe('the clean suite, through real Vitest', () => {
     ]);
   });
 
-  it('prints a matrix that marks a missing kind', () => {
+  it('prints a matrix that marks a missing kind, and the validator proofs', () => {
     const text = formatTrace(traceScenario('no-unknown'));
-    expect(text).toMatch(/^gpu-length\s+1\s+-\s+1\s+0!\s+1\s+1\s+1\s+-\s+UNTRACED$/m);
+    expect(text).toMatch(/^gpu-length\s+1\s+-\s+1\s+0!\s+1\s+1\s+1\s+-\s+-\s+UNTRACED$/m);
+    expect(text).toMatch(/^cpu-socket\s+1\s+-\s+1\s+-\s+-\s+-\s+-\s+-\s+2\/2\s+TRACED$/m);
     expect(text).toMatch(/FAIL$/);
+  });
+});
+
+describe('the unknown-data ruling: validator tests for rules that read only required fields', () => {
+  it('fails when a named validator test is missing', () => {
+    const r = traceScenario('clean', {}, 'schema-missing');
+    expect(r.ok).toBe(false);
+    expect(r.errors).toContain(
+      'cpu-socket: the validator test "[schema] motherboard.socket: null is rejected" for motherboard.socket is missing (unknown-data ruling, 2026-10-02)',
+    );
+    expect(resultOf(r, 'cpu-socket').result).toBe('UNTRACED');
+  });
+
+  it('fails when a named validator test fails', () => {
+    const r = traceScenario('clean', {}, 'schema-failing');
+    expect(r.errors).toContain(
+      'cpu-socket: the validator test "[schema] motherboard.socket: null is rejected" for motherboard.socket failed (unknown-data ruling, 2026-10-02)',
+    );
+  });
+
+  it('fails when a named validator test is skipped: a test that did not run proves nothing', () => {
+    const r = traceScenario('clean', {}, 'schema-skipped');
+    expect(r.errors).toEqual([
+      'cpu-socket: the validator test "[schema] motherboard.socket: null is rejected" for motherboard.socket did not run (unknown-data ruling, 2026-10-02)',
+    ]);
+  });
+
+  it('needs no test for a field that is "none" by definition, and none for a pending rule', () => {
+    const r = traceScenario('clean', {
+      registry: [...fixtureRegistry, 'display-output'],
+      allowPending: [],
+    });
+    expect(resultOf(r, 'display-output').fieldProofs).toEqual([
+      { field: 'cpu.igpu', proof: 'none-by-definition', test: null, status: 'n/a' },
+    ]);
+    // display-output has no rule tests in the fixture suite, so it is untraced for that alone.
+    expect(r.errors.filter((e) => e.startsWith('display-output:'))).toEqual([
+      'display-output: no passing "ok", "block" test',
+    ]);
+  });
+
+  it('reads validator tests only under the data test root', () => {
+    const { cases } = dataTestCases(scenario('clean'), {
+      repoRoot: SUITE,
+      dataTestRoot: 'src/data',
+    });
+    expect(cases.map((c) => c.file)).toEqual([
+      'src/data/schema.fixture.mjs',
+      'src/data/schema.fixture.mjs',
+    ]);
+  });
+});
+
+describe("the engine's RuleSpec against test plan §9.2", () => {
+  const specs = [
+    { id: 'cpu-socket', outcomes: ['ok', 'block'], numeric: false },
+    { id: 'gpu-length', outcomes: ['block', 'ok'], numeric: true },
+    { id: 'bios-version', outcomes: ['ok', 'warn'], numeric: false },
+  ];
+  const run = (registrySpecs) => traceScenario('clean', { registrySpecs });
+
+  it('passes when the outcomes (in any order) and numeric flags agree', () => {
+    expect(run(specs).errors).toEqual([]);
+  });
+
+  it('fails on a different outcome set or numeric flag', () => {
+    const r = run([
+      { ...specs[0], outcomes: ['ok', 'warn', 'block'] },
+      { ...specs[1], numeric: false },
+      specs[2],
+    ]);
+    expect(r.errors).toEqual([
+      'cpu-socket: the registry gives the outcomes ok, warn, block, test plan §9.2 gives ok, block',
+      'gpu-length: the registry says numeric is false, test plan §9.2 says true',
+    ]);
+  });
+
+  it('reads RuleSpec objects from the registry file', () => {
+    expect(registryEntries({ rules: specs })).toEqual(specs);
+    expect(registryEntries(['cpu-socket'])).toEqual([
+      { id: 'cpu-socket', outcomes: null, numeric: null },
+    ]);
   });
 });
 
@@ -224,13 +343,7 @@ describe('planted defects, through real Vitest', () => {
       [/^bios-version: no passing test for the variant warn matching \/\\b\(without\|no\)/],
     ],
     ['id-typo', [/names an unknown rule id "gpu-lenght"/, /^gpu-length: no passing "ok" test$/]],
-    [
-      'warn-misnamed',
-      [
-        /is a "warn" test, but test plan §9\.2 gives cpu-socket only ok, block/,
-        /^cpu-socket: no passing "unknown" test$/,
-      ],
-    ],
+    ['warn-misnamed', [/is a "warn" test, but test plan §9\.2 gives cpu-socket only ok, block/]],
   ])('%s fails the trace', (name, expected) => {
     const r = traceScenario(name);
     expect(r.ok).toBe(false);
@@ -303,7 +416,29 @@ describe('the registry against the rule set', () => {
 });
 
 describe('the rule set is validated', () => {
-  const base = { id: 'cpu-socket', outcomes: ['ok', 'block'], numeric: false, unknownData: true };
+  const base = {
+    id: 'ram-cooler-clearance',
+    outcomes: ['ok', 'warn', 'block'],
+    numeric: true,
+    unknownData: true,
+    unpublishable: ['cooler.ramClearanceMm'],
+  };
+  const proof = {
+    field: 'cpu.socket',
+    proof: 'null-rejected',
+    test: '[schema] cpu.socket: null is rejected',
+  };
+  const required = {
+    id: 'cpu-socket',
+    outcomes: ['ok', 'block'],
+    numeric: false,
+    unknownData: false,
+    requiredFields: [proof],
+  };
+  it('accepts both kinds of rule', () => {
+    expect(validateRules({ schemaVersion: 1, rules: [base, required] })).toHaveLength(2);
+  });
+
   it.each([
     ['no ok outcome', { ...base, outcomes: ['block'] }],
     ['no negative outcome', { ...base, outcomes: ['ok'] }],
@@ -313,6 +448,29 @@ describe('the rule set is validated', () => {
     ['a variant that does not compile', { ...base, variants: [{ kind: 'warn', pattern: '(' }] }],
     ['a variant with an e2e kind', { ...base, variants: [{ kind: 'message', pattern: 'x' }] }],
     ['a non-kebab id', { ...base, id: 'CPU_socket' }],
+    ['unknown data without the values that can be unpublished', { ...base, unpublishable: [] }],
+    ['unknown data with required-field proofs', { ...base, requiredFields: [proof] }],
+    ['no unknown data and no required-field proofs', { ...required, requiredFields: [] }],
+    ['no unknown data with unpublishable values', { ...required, unpublishable: ['x'] }],
+    [
+      'a proof of an unknown kind',
+      { ...required, requiredFields: [{ ...proof, proof: 'trust-me' }] },
+    ],
+    ['a rejection proof with no test', { ...required, requiredFields: [{ ...proof, test: null }] }],
+    [
+      'a none-by-definition proof with a test',
+      {
+        ...required,
+        requiredFields: [{ field: 'cpu.igpu', proof: 'none-by-definition', test: 'x', why: 'y' }],
+      },
+    ],
+    [
+      'a none-by-definition proof without a why',
+      {
+        ...required,
+        requiredFields: [{ field: 'cpu.igpu', proof: 'none-by-definition', test: null }],
+      },
+    ],
   ])('refuses %s', (_, rule) => {
     expect(() => validateRules({ schemaVersion: 1, rules: [rule] })).toThrow(TraceInputError);
   });
@@ -357,6 +515,8 @@ describe('Playwright message checks (from Phase 2)', () => {
       rules: fixtureRules,
       registry: fixtureRegistry,
       unitCases: clean(),
+      dataCases: dataTestCases(scenario('clean'), { repoRoot: SUITE, dataTestRoot: 'src/data' })
+        .cases,
       e2eCases: playwrightCases(pwReport(e2e), { repoRoot: REPO }),
       requireE2e: true,
       allowPending: ['display-output'],

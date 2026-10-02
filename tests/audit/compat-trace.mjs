@@ -17,10 +17,16 @@
  * --allow-pending names it. A misspelt kind, or a valid kind on an unknown rule id, is an error, so a
  * typo cannot quietly drop a test out of the count.
  *
+ * A rule that reads only required fields has no unknown-data test. Instead, each validator test its
+ * "requiredFields" names must pass, in a file under --data-test-root (the Director's ruling,
+ * 2026-10-02, phase-1-plan WP-E1). When the registry holds the engine's RuleSpec objects, their
+ * "outcomes" and "numeric" must equal compat-rules.json's, so the two sides cannot drift apart.
+ *
  * Usage:
  *   node tests/audit/compat-trace.mjs --registry <rules.json> --vitest <vitest-report.json>
  *     [--playwright <playwright-report.json>] [--require-e2e] [--allow-pending <id,id,...>]
- *     [--rules tests/audit/compat-rules.json] [--test-root src/engine] [--repo-root .] [--json <out>]
+ *     [--rules tests/audit/compat-rules.json] [--test-root src/engine] [--data-test-root src/data]
+ *     [--repo-root .] [--json <out>]
  * The registry is a JSON array of ids or of { id } objects, or an object holding one under "rules".
  * Exit codes: 0 every rule traced · 1 a rule is untraced, a rule test failed or a name is wrong ·
  * 2 cannot measure (bad input, or a test file under --test-root that failed to load).
@@ -46,6 +52,8 @@ export const UNIT_KINDS = [
   'boundary outside',
 ];
 export const E2E_KINDS = ['message'];
+/** How compat-rules.json proves that a field a rule reads cannot be unpublished. */
+export const PROOFS = ['null-rejected', 'empty-rejected', 'validator', 'none-by-definition'];
 const BOUNDARY_KINDS = ['boundary at', 'boundary inside', 'boundary outside'];
 const ID = '[a-z0-9]+(?:-[a-z0-9]+)*';
 const ID_RE = new RegExp(`^${ID}$`);
@@ -96,6 +104,37 @@ export function validateRules(doc) {
       );
     if (typeof r.numeric !== 'boolean' || typeof r.unknownData !== 'boolean')
       throw new TraceInputError(`${r.id}: "numeric" and "unknownData" must be true or false`);
+    if (r.unknownData) {
+      if (r.requiredFields !== undefined)
+        throw new TraceInputError(`${r.id}: a rule with unknown data has no "requiredFields"`);
+      if (
+        !Array.isArray(r.unpublishable) ||
+        r.unpublishable.length === 0 ||
+        r.unpublishable.some((u) => typeof u !== 'string' || u === '')
+      )
+        throw new TraceInputError(
+          `${r.id}: "unpublishable" must list the values that can be unpublished`,
+        );
+    } else {
+      if (r.unpublishable !== undefined)
+        throw new TraceInputError(`${r.id}: a rule without unknown data has no "unpublishable"`);
+      if (!Array.isArray(r.requiredFields) || r.requiredFields.length === 0)
+        throw new TraceInputError(
+          `${r.id}: a rule without unknown data must list its "requiredFields" and their proofs`,
+        );
+      for (const [j, f] of r.requiredFields.entries()) {
+        const named = typeof f?.test === 'string' && f.test !== '';
+        if (
+          !f ||
+          typeof f.field !== 'string' ||
+          !PROOFS.includes(f.proof) ||
+          (f.proof === 'none-by-definition' ? f.test !== null || !f.why : !named)
+        )
+          throw new TraceInputError(
+            `${r.id}: requiredFields ${j} needs a "field", a "proof" of ${PROOFS.join(', ')}, and the test that proves it (null, with a "why", only for none-by-definition)`,
+          );
+      }
+    }
     for (const [j, v] of (r.variants ?? []).entries()) {
       if (!v || !UNIT_KINDS.includes(v.kind) || typeof v.pattern !== 'string')
         throw new TraceInputError(`${r.id}: variant ${j} needs a unit-test "kind" and a "pattern"`);
@@ -111,8 +150,11 @@ export function validateRules(doc) {
   return doc.rules;
 }
 
-/** The engine's registry ids, from any of the accepted shapes. Duplicates are kept for the check. */
-export function registryIds(doc) {
+/**
+ * The engine's registry entries, from any of the accepted shapes: { id, outcomes, numeric }, where
+ * outcomes and numeric are null when the registry does not give them. Duplicates are kept.
+ */
+export function registryEntries(doc) {
   const list = Array.isArray(doc) ? doc : Array.isArray(doc?.rules) ? doc.rules : null;
   if (!list)
     throw new TraceInputError(
@@ -122,8 +164,15 @@ export function registryIds(doc) {
     const id = typeof entry === 'string' ? entry : entry?.id;
     if (typeof id !== 'string' || id === '')
       throw new TraceInputError(`registry entry ${i} has no rule id`);
-    return id;
+    const outcomes = Array.isArray(entry?.outcomes) ? entry.outcomes.map(String) : null;
+    const numeric = typeof entry?.numeric === 'boolean' ? entry.numeric : null;
+    return { id, outcomes, numeric };
   });
+}
+
+/** The engine's registry ids. Duplicates are kept for the check. */
+export function registryIds(doc) {
+  return registryEntries(doc).map((e) => e.id);
 }
 
 /** Splits a test title into its rule id, kind and description, or says why it is malformed. */
@@ -140,6 +189,12 @@ export function parseTitle(title, knownIds, allowedKinds) {
   return {
     error: `starts with [${prefix[1]}] but is not "[${prefix[1]}] <kind>: <description>" with a kind of ${allowedKinds.join(', ')}`,
   };
+}
+
+/** "[<id>] <unit kind>: <text>": a rule test by its shape, whatever the id. */
+function looksLikeRuleTest(title) {
+  const m = TITLE_RE.exec(title);
+  return m !== null && UNIT_KINDS.includes(m[2]);
 }
 
 function relativeTo(repoRoot, file) {
@@ -166,7 +221,7 @@ export function vitestCases(report, { repoRoot, testRoot }) {
     const results = Array.isArray(file.assertionResults) ? file.assertionResults : [];
     if (!underRoot(rel, testRoot)) {
       for (const t of results)
-        if (PREFIX_RE.test(String(t.title))) outside.push({ file: rel, title: String(t.title) });
+        if (looksLikeRuleTest(String(t.title))) outside.push({ file: rel, title: String(t.title) });
       continue;
     }
     if (file.status === 'failed' && results.length === 0)
@@ -178,6 +233,30 @@ export function vitestCases(report, { repoRoot, testRoot }) {
     }
   }
   return { cases, outside, loadErrors };
+}
+
+/**
+ * Every test in files under dataTestRoot, by title: the validator tests that prove a field cannot
+ * be unpublished. A file there that failed to load is a load error, as under the test root.
+ */
+export function dataTestCases(report, { repoRoot, dataTestRoot }) {
+  if (!report || !Array.isArray(report.testResults))
+    throw new TraceInputError('the Vitest report has no "testResults" list (use --reporter=json)');
+  const cases = [];
+  const loadErrors = [];
+  for (const file of report.testResults) {
+    const rel = relativeTo(repoRoot, String(file.name));
+    if (!underRoot(rel, dataTestRoot)) continue;
+    const results = Array.isArray(file.assertionResults) ? file.assertionResults : [];
+    if (file.status === 'failed' && results.length === 0)
+      loadErrors.push(`${rel} failed to load: ${String(file.message || 'no message')}`);
+    for (const t of results) {
+      const status =
+        t.status === 'passed' ? 'passed' : t.status === 'failed' ? 'failed' : 'not run';
+      cases.push({ file: rel, title: String(t.title), status });
+    }
+  }
+  return { cases, loadErrors };
 }
 
 /** Test cases from a Playwright JSON report: one per spec, over every project it ran in. */
@@ -223,7 +302,9 @@ export function requiredKinds(rule, { requireE2e = false } = {}) {
 export function trace({
   rules,
   registry,
+  registrySpecs = [],
   unitCases,
+  dataCases = [],
   e2eCases = [],
   requireE2e = false,
   allowPending = [],
@@ -244,6 +325,22 @@ export function trace({
         `the registry has "${id}", which is not in test plan §9.2: agree the id with QA first`,
       );
     if (n > 1) errors.push(`the registry lists "${id}" ${n} times`);
+  }
+
+  // The engine's RuleSpec against test plan §9.2, where the registry gives them.
+  const byId = new Map(rules.map((r) => [r.id, r]));
+  const sorted = (list) => STATUSES.filter((s) => list.includes(s));
+  for (const spec of registrySpecs) {
+    const rule = byId.get(spec.id);
+    if (!rule) continue;
+    if (spec.outcomes && sorted(spec.outcomes).join() !== sorted(rule.outcomes).join())
+      errors.push(
+        `${spec.id}: the registry gives the outcomes ${spec.outcomes.join(', ')}, test plan §9.2 gives ${rule.outcomes.join(', ')}`,
+      );
+    if (spec.numeric !== null && spec.numeric !== rule.numeric)
+      errors.push(
+        `${spec.id}: the registry says numeric is ${spec.numeric}, test plan §9.2 says ${rule.numeric}`,
+      );
   }
   for (const id of allowPending)
     if (inRegistry.has(id))
@@ -283,15 +380,37 @@ export function trace({
       .map((v) => `${v.kind} matching /${v.pattern}/i`);
     const failing = tests.filter((t) => t.status === 'failed' || t.status === 'flaky');
     const notRun = tests.filter((t) => t.status === 'not run');
+    // The Director's unknown-data ruling (2026-10-02): a rule that reads only required fields
+    // proves it with validator tests, and each of them must pass.
+    const fieldProofs = (rule.requiredFields ?? []).map((f) => {
+      if (f.test === null) return { field: f.field, proof: f.proof, test: null, status: 'n/a' };
+      const found = dataCases.filter((c) => c.title === f.test);
+      const status = found.some((c) => c.status === 'failed')
+        ? 'failed'
+        : found.some((c) => c.status === 'passed')
+          ? 'passed'
+          : found.length
+            ? 'not run'
+            : 'missing';
+      return { field: f.field, proof: f.proof, test: f.test, status };
+    });
+    const unproven = fieldProofs.filter((f) => f.status !== 'passed' && f.status !== 'n/a');
     let result;
     if (!inRegistry.has(rule.id)) {
       result = pending ? 'PENDING' : 'NOT IN REGISTRY';
       if (!pending) errors.push(`${rule.id}: not in the engine's registry`);
     } else {
-      result = missing.length || missingVariants.length || failing.length ? 'UNTRACED' : 'TRACED';
+      result =
+        missing.length || missingVariants.length || failing.length || unproven.length
+          ? 'UNTRACED'
+          : 'TRACED';
       if (missing.length) errors.push(`${rule.id}: no passing "${missing.join('", "')}" test`);
       if (missingVariants.length)
         errors.push(`${rule.id}: no passing test for the variant ${missingVariants.join('; ')}`);
+      for (const f of unproven)
+        errors.push(
+          `${rule.id}: the validator test "${f.test}" for ${f.field} ${f.status === 'missing' ? 'is missing' : f.status === 'failed' ? 'failed' : 'did not run'} (unknown-data ruling, 2026-10-02)`,
+        );
     }
     for (const t of failing)
       errors.push(
@@ -306,6 +425,7 @@ export function trace({
       missingVariants,
       failing: failing.map((t) => ({ title: t.title, file: t.file, status: t.status })),
       notRun: notRun.map((t) => ({ title: t.title, file: t.file })),
+      fieldProofs,
       tests: tests.map((t) => ({ kind: t.kind, title: t.title, file: t.file, status: t.status })),
     });
   }
@@ -339,15 +459,16 @@ const COLUMNS = [
 ];
 
 /**
- * A text matrix of passing tests per kind: "-" not required, "0!" required and missing. A rule not
- * in the registry shows its counts only, since nothing is required of it yet.
+ * A text matrix of passing tests per kind: "-" not required, "0!" required and missing. "fields" is
+ * the passing validator tests over those required, for a rule without unknown data. A rule not in
+ * the registry shows its counts only, since nothing is required of it yet.
  */
 export function formatTrace(result) {
   const s = result.summary;
   const width = Math.max(...result.rules.map((r) => r.id.length), 4) + 2;
   const lines = [
     `Compatibility trace · ${s.rulesInPlan} rules in test plan §9.2 · ${s.inRegistry} in the registry · ${s.traced} traced, ${s.untraced} untraced, ${s.pending.length} pending`,
-    `${'rule'.padEnd(width)}${COLUMNS.map(([, h]) => h.padStart(6)).join('')}  result`,
+    `${'rule'.padEnd(width)}${COLUMNS.map(([, h]) => h.padStart(6)).join('')}  fields  result`,
   ];
   for (const r of result.rules) {
     const registered = r.result === 'TRACED' || r.result === 'UNTRACED';
@@ -356,7 +477,11 @@ export function formatTrace(result) {
         return (r.counts[kind] ? String(r.counts[kind]) : '-').padStart(6);
       return (r.counts[kind] ? String(r.counts[kind]) : '0!').padStart(6);
     });
-    lines.push(`${r.id.padEnd(width)}${cells.join('')}  ${r.result}`);
+    const proofs = r.fieldProofs.filter((f) => f.status !== 'n/a');
+    const fields = proofs.length
+      ? `${proofs.filter((f) => f.status === 'passed').length}/${proofs.length}`
+      : '-';
+    lines.push(`${r.id.padEnd(width)}${cells.join('')}  ${fields.padStart(6)}  ${r.result}`);
   }
   if (result.errors.length) {
     lines.push('', `${result.errors.length} problem(s):`);
@@ -378,6 +503,7 @@ export function main(argv = process.argv.slice(2)) {
         'require-e2e': { type: 'boolean' },
         'allow-pending': { type: 'string' },
         'test-root': { type: 'string' },
+        'data-test-root': { type: 'string' },
         'repo-root': { type: 'string' },
         json: { type: 'string' },
       },
@@ -389,6 +515,7 @@ export function main(argv = process.argv.slice(2)) {
       throw new TraceInputError('--require-e2e needs --playwright');
     const repoRoot = path.resolve(values['repo-root'] ?? '.');
     const testRoot = values['test-root'] ?? 'src/engine';
+    const dataTestRoot = values['data-test-root'] ?? 'src/data';
     const rulesFile = values.rules ?? DEFAULT_RULES;
     const rulesDoc = readJson(rulesFile, 'rule set');
     const registryDoc = readJson(values.registry, 'registry');
@@ -402,18 +529,22 @@ export function main(argv = process.argv.slice(2)) {
       outside,
       loadErrors,
     } = vitestCases(vitestDoc.json, { repoRoot, testRoot });
-    if (loadErrors.length)
+    const data = dataTestCases(vitestDoc.json, { repoRoot, dataTestRoot });
+    if (loadErrors.length || data.loadErrors.length)
       throw new TraceInputError(
-        `cannot count the tests in a file that did not load: ${loadErrors.join('; ')}`,
+        `cannot count the tests in a file that did not load: ${[...loadErrors, ...data.loadErrors].join('; ')}`,
       );
     const allowPending = (values['allow-pending'] ?? '')
       .split(',')
       .map((s) => s.trim())
       .filter(Boolean);
+    const entries = registryEntries(registryDoc.json);
     const result = trace({
       rules,
-      registry: registryIds(registryDoc.json),
+      registry: entries.map((e) => e.id),
+      registrySpecs: entries,
       unitCases,
+      dataCases: data.cases,
       e2eCases: playwrightDoc ? playwrightCases(playwrightDoc.json, { repoRoot }) : [],
       requireE2e: Boolean(values['require-e2e']),
       allowPending,
@@ -426,6 +557,7 @@ export function main(argv = process.argv.slice(2)) {
         playwright: { file: values.playwright, sha256: playwrightDoc.sha256 },
       }),
       testRoot,
+      dataTestRoot,
       allowPending,
     };
     const out = path.resolve(values.json ?? DEFAULT_OUT);
