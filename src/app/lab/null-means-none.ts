@@ -3,13 +3,7 @@
  * `null` value means the part has none (no integrated graphics, no Wi-Fi), not that the maker
  * doesn't publish it.
  *
- * TODO(build-lead, before the WP-E0 hand-off): wire this to data-lead's Zod-free
- * `nullMeansNone(record)` export. Until then it returns no paths, so every null spec reads as
- * "Not published". The validator's list is deliberately not copied here: one list, data-lead's.
- * This is the lab's only reference to it, so the wiring is one line.
+ * It is data-lead's Zod-free list (`src/data/semantics.ts`), the same function the validator
+ * uses, so the lab and the validator can never disagree. This is the lab's only reference to it.
  */
-import type { SpecRecord } from '../../data/schema';
-
-const NO_PATHS: readonly string[] = [];
-
-export const nullMeansNone: (record: SpecRecord) => readonly string[] = () => NO_PATHS;
+export { nullMeansNone } from '../../data/semantics';
