@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { estimate } from './index';
+import { estimate } from './estimate';
 
 describe('estimate', () => {
   it('returns the range and confidence it was given', () => {
