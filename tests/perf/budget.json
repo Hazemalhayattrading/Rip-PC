@@ -2,7 +2,7 @@
   "$comment": "Single source of truth for the BUILD_PROMPT.md §8 quality-bar numbers and how each is measured. Owner: qa-lead. A gate value changes only with Director approval, logged in docs/qa/test-plan.md (change log). Every gate names its source. Read by tests/perf/bundle-budget.mjs, tests/perf/lhci-config.cjs (lighthouserc*.cjs), tests/perf/web-vitals.spec.ts and tests/perf/fps-probe.mjs.",
   "schemaVersion": 1,
   "owner": "qa-lead",
-  "updated": "2026-09-30",
+  "updated": "2026-10-02",
   "bundle": {
     "distDir": "dist",
     "entryHtml": ["index.html"],
@@ -165,9 +165,11 @@
   "models": {
     "goldenTolerancePct": 5,
     "goldenSource": "BUILD_PROMPT.md §5.3: 'the model must reproduce the published number within ±5%'",
-    "heldOutCount": 5,
+    "heldOutCount": 20,
+    "heldOutPerClassMin": 4,
+    "heldOutClasses": ["gpu-bound", "cpu-bound", "other-publisher", "creator", "interpolated-gpu"],
     "heldOutMaxErrorPct": 10,
-    "heldOutSource": ".claude/agents/data-auditor.md: 'Pick 5 held-out published results ... model error over 10% is a blocker.'"
+    "heldOutSource": "Count and classes: Hazem, 2026-10-02 (docs/reports/phase-1-plan.md §6.3): at least 20 held-out results, 4 for each coverage class of test plan §8, raised from the 5 of .claude/agents/data-auditor.md. Each result counts in one class only. Error: .claude/agents/data-auditor.md, 'model error over 10% is a blocker.'"
   },
   "dataAudit": {
     "sampleFraction": 0.1,
