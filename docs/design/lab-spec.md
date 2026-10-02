@@ -74,7 +74,7 @@ codec (plan §1), so every hand-off can link to an exact case.
 | Fields | `mt-4 grid gap-4`. Two columns from md to lg (`md:grid-cols-2`), one column in the lg side panel |
 | Order and labels | The build codec's category order with the route table's step labels: CPU; Motherboard; Memory (RAM); Graphics card (GPU); Storage; Power supply (PSU); CPU cooling; Case; Case fans |
 | Label | A real `<label for>`, `type-small text-ink-2`, `mb-1.5` |
-| Select | Native `<select>`: `w-full min-h-11 appearance-none text-ellipsis rounded-row border border-ink-3 bg-surface pl-3 pr-10 type-name text-ink`. The chevron is an 18 px icon at `right-3`, `text-ink-3`, `pointer-events-none`, `aria-hidden`. `min-h-11` (44 px) is the touch target (backlog item 4) and leaves room for user text spacing (item 2). A long name ends in an ellipsis in the closed select (measured in the mock: without `text-ellipsis`, Chromium cuts it mid-letter); the open list and the results show it in full |
+| Select | Native `<select>`: `w-full min-h-11 appearance-none text-ellipsis rounded-row border border-ink-3 bg-surface pl-3 pr-10 type-name text-ink`. The chevron is an 18 px icon inside a `<span class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-ink-3" aria-hidden="true">`: the colour sits on the span, never on the `<svg>` (section 3, forced colours). `min-h-11` (44 px) is the touch target (backlog item 4) and leaves room for user text spacing (item 2). A long name ends in an ellipsis in the closed select (measured in the mock: without `text-ellipsis`, Chromium cuts it mid-letter); the open list and the results show it in full |
 | Options | `bg-surface text-ink` on `<option>` too, so Windows dark mode never shows a white list (backlog item 8). First option "None" (value ""). Then parts by display name ([copy-guide.md §4](copy-guide.md#4-part-names)), sorted with `localeCompare('en')` |
 | On change | The URL updates (`replaceState`) and the results change in the same frame: no loading state, no animation, no debounce |
 | Drives | A build holds several drives (`BuildParts.storage`). The first select is labelled "Drive 1"; an "Add a drive" text button (`type-control text-ink`, `min-h-11`) adds "Drive 2", and so on. Each added drive has a "Remove drive 2" button: an 18 px close icon with that text visually hidden. Focus moves to the new select when one is added, and to "Add a drive" when one is removed |
@@ -119,6 +119,11 @@ The engine's status in words, with an icon of its own and its colour. **Never co
   `--ok` and `--warn` fall below 4.5:1 (QA-P0-018, now tokens.md §2.1 rule 2).
 - **Forced colours:** the icon strokes are `currentColor`, so they turn into the system text
   colour with the word. Nothing is drawn with a background.
+- **An icon's colour always sits on a wrapping element, never on the `<svg>`.** In forced
+  colours an `<svg>` keeps a colour set on itself, while one it inherits follows the system
+  colour (the ui-designer measured it in Chromium's emulation, 2026-10-02). So the chip's colour
+  is on its `<span>`, and every other icon here (the select chevron, the steps chevron, the
+  source link's arrow) takes its colour from a wrapper or its parent.
 - **Screen readers** read the word. The icon is `aria-hidden`.
 
 ## 4. The result row
@@ -149,7 +154,7 @@ the list 36rem wide or more                   narrower (390, and Phase 2's rail)
 | Heading | `<h3>` with the rule name ([copy-guide.md §6](copy-guide.md#6-status-words-rule-names-and-the-summary)) in `type-label text-ink`. After it, in the same wrapping row (`flex flex-wrap items-baseline gap-x-2`), the rule id in `type-caption text-ink-3 whitespace-nowrap`, `translate="no"` |
 | Reason | `<p>` in `type-body text-ink-2 max-w-measure`: the reading measure token, about 64 characters a line and 75 at most (backlog item 15; not `65ch`, which sets up to 83). Part names inside it carry `translate="no"` |
 | Action | `<p>` in `type-body text-ink max-w-measure mt-1`. It is the one instruction in the row, so it takes the strongest ink; it needs no label |
-| Steps | A closed `<details>` (`mt-3`). The `<summary>`: `inline-flex min-h-6 items-center gap-1.5 type-control text-ink`, holding three children: an 18 px chevron that turns 90° when open (`transform`, `duration-ui ease-settle`, instant under reduced motion), one `<span>` with the whole text "How to update with BIOS FlashBack" (one span, or the flex gap splits the sentence), and a `<span class="text-ink-3">` "7 steps". Hide the browser's marker. Inside: an `<ol>` in `type-body text-ink-2 max-w-measure`, `list-decimal pl-5 space-y-1 marker:text-ink-3`, then the steps' source link |
+| Steps | A closed `<details>` (`mt-3`). The `<summary>`: `inline-flex min-h-6 items-center gap-1.5 type-control text-ink`, holding three children: an 18 px chevron, in the summary's own colour, that turns 90° when open (`transform`, `duration-ui ease-settle`, instant under reduced motion), one `<span>` with the whole text "How to update with BIOS FlashBack" (one span, or the flex gap splits the sentence), and a `<span class="text-ink-3">` "7 steps". Hide the browser's marker. Inside: an `<ol>` in `type-body text-ink-2 max-w-measure`, `list-decimal pl-5 space-y-1 marker:text-ink-3`, then the steps' source link |
 | Layout | For a result with a `layoutId`, `mt-3`: the label "Layout checked" in `type-caption text-ink-3`, then that layout's `description`, a sentence, in `type-small text-ink-2`: "A 360 mm radiator at the front." The label and the sentence stay apart, so the description never needs recasing |
 | Evidence | Section 5, `mt-3` |
 | Not run | The chip "Not checked" or "Doesn't apply"; the `RuleNotRun` reason in `type-body text-ink-3` ("Pick a case to check the card's length."); no evidence |
@@ -193,9 +198,9 @@ Cooler: memory clearance     Not published
 
 ```html
 <a href="https://…" target="_blank" rel="noopener noreferrer"><span translate="no">SAPPHIRE</span>,
-  product page<span class="sr-only"> (opens in a new tab)</span><svg class="ml-0.5 inline-block
-  size-3.5 align-[-0.125em] text-ink-3" aria-hidden="true">…</svg></a><span class="whitespace-nowrap
-  text-ink-3">, read <time datetime="2026-09-30">30 Sep 2026</time></span>
+  product page<span class="sr-only"> (opens in a new tab)</span><span class="ml-0.5 inline-block
+  align-[-0.125em] text-ink-3" aria-hidden="true"><svg class="size-3.5">…</svg></span></a><span
+  class="whitespace-nowrap text-ink-3">, read <time datetime="2026-09-30">30 Sep 2026</time></span>
 ```
 
 The date part is `whitespace-nowrap`: a date never breaks across lines.

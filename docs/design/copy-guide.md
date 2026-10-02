@@ -79,7 +79,7 @@ The rules of [direction.md §1.1](direction.md#11-numbers-are-the-product) and
 | In a sentence, counts of things from one to nine are words; 10 and up are digits | two 8-pin cables, four modules, three M.2 drives, 12 fans | 2 8-pin cables |
 | In labels, tables and summary lines, counts are digits | 16 of 20 pass, 2 warnings, Fans (3) | sixteen of twenty pass |
 | Resolutions by name | 1080p, 1440p, 4K | 2560x1440 |
-| Money: the ISO code first, as observed, never converted | SAR 1,899, USD 479.99 | 1,899 SAR, $479.99 |
+| Money: the ISO code first, as observed, never converted. `Intl.NumberFormat('en-US', { style: 'currency', currency, currencyDisplay: 'code' })`, with 0 fraction digits for a whole amount and 2 otherwise (its default is always 2: "SAR 9,412.00"). It puts a no-break space after the code | SAR 1,899, USD 479.90 | 1,899 SAR, $479.90, SAR 9,412.00 |
 | Durations: one unit per range. Under 2 min in seconds, then minutes, then hours, one decimal | 85–96 s, 3.2–3.7 min | 3:10–3:40 |
 
 - **Measurements are always digits**, even when small: 5 Gbps, 2.5 slots. Counts in words are for
@@ -627,6 +627,10 @@ export and code compile, s or min; local AI, tokens/s for the named model and si
 
 - **Dates:** "30 Sep 2026", day, short month, year, from `Intl` en-US parts (backlog item 21).
   Times, when a source has one, in UTC: "14:05 UTC".
+  - **Format with `timeZone: 'UTC'`.** A date-only value ("2026-09-30") is midnight UTC, so a
+    local time zone moves it to 29 Sep in the US. And 23:30 UTC on 30 Sep is already 1 Oct in
+    Riyadh. Measured in Node 24.21 (ICU 78.3) by the ui-designer, 2026-10-02.
+  - en-GB is not an option: it prints "30 Sept 2026".
 - **The verbs:** a spec or support list was "read 30 Sep 2026"; a review was "published 6 May
   2026"; a price is "as of 30 Sep 2026".
 - **Document names in source links,** from the source's `docType`: product page, datasheet, user
