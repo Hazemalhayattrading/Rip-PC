@@ -8,6 +8,12 @@
       "label": "Seed catalogue (WP-D0)",
       "windowStart": "2026-09-30",
       "windowEnd": "2026-10-01"
+    },
+    {
+      "id": "2026-10-02-d1-fixtures",
+      "label": "Parts added for the compatibility fixtures (WP-D1 batch 1)",
+      "windowStart": "2026-10-02",
+      "windowEnd": "2026-10-02"
     }
   ],
   "priceBasis": "Buy-box price in SAR as shown on the live Amazon.sa product page for delivery to Riyadh; the pages state \"All prices include VAT.\" Delivery fees are excluded. Offers imported through Amazon.sa's global store show a total that includes estimated import charges; each such observation has a note with the split. Third-party marketplace offers are kept and marked.",
@@ -826,6 +832,59 @@
       "retrievedAt": "2026-09-30",
       "capture": "artifacts/prices/SA/samsung-990-pro-2tb--amazon-sa--2026-09-30.html",
       "captureSha256": "0c551ed6cc60d7bea3cfdd252ffa0a71c2fd813d6510d88b2e3c75879825466e"
+    },
+    {
+      "partId": "noctua-nh-l9i-17xx-chromax-black",
+      "batch": "2026-10-02-d1-fixtures",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 343,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B09HCHYMJM",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "EBRAR SA",
+      "retrievedAt": "2026-10-02",
+      "capture": "artifacts/prices/SA/noctua-nh-l9i-17xx-chromax-black--amazon-sa--2026-10-02.html",
+      "captureSha256": "28dba560def55041ef9c6f37d0cdfcc0f47f8350ef40a0a41d10cb0d5427a988",
+      "notes": [
+        {
+          "field": "seller",
+          "text": "Third-party offer marked \"International Shipping\": the page says it \"Ships from outside the KSA.\" No import charges are shown, and the page says \"All prices include VAT.\""
+        }
+      ]
+    },
+    {
+      "partId": "amd-ryzen-5-3400g",
+      "batch": "2026-10-02-d1-fixtures",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 536.49,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B07SXNDKNM",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "Amazon UK",
+      "retrievedAt": "2026-10-02",
+      "capture": "artifacts/prices/SA/amd-ryzen-5-3400g--amazon-sa--2026-10-02.html",
+      "captureSha256": "4517b64915fae26fd695a82e8271a871757ff68c2daf75104dad5448500a5ec5",
+      "notes": [
+        {
+          "field": "seller",
+          "text": "Sold by Amazon UK through Amazon.sa's global store (imported), so it is recorded as a marketplace offer."
+        },
+        {
+          "field": "amount",
+          "text": "The displayed price includes estimated import charges: item SAR 451.51 plus import charges SAR 84.98 (total SAR 536.49). The page says Amazon uses the import charges \"to cover applicable taxes and duties on import\"; it does not show the \"All prices include VAT.\" line."
+        },
+        {
+          "field": "inStock",
+          "text": "The page says \"Only 4 left in stock - order soon.\""
+        },
+        {
+          "text": "The listing's title reads \"AMD Ryzen 53400G\"; it is AMD's listing (\"Visit the AMD Store\"), style \"3400G 4-core\", Model Number \"Ryzen 5 3400G\", and a bullet says it is \"bundled with the powerful AMD Wraith Spire cooler\"."
+        }
+      ]
     }
   ],
   "gaps": [
@@ -1020,6 +1079,55 @@
         "amazon-sa"
       ],
       "checkedAt": "2026-09-30"
+    },
+    {
+      "partId": "deepcool-pk650d",
+      "batch": "2026-10-02-d1-fixtures",
+      "market": "SA",
+      "reasonCode": "not-listed",
+      "reason": "Amazon.sa: no listing for this exact part; a search for \"DeepCool PK650D\" returned 12 other products and a search for the part number R-PK650D-FA0B returned no results.",
+      "retailersTried": [
+        "amazon-sa"
+      ],
+      "checkedAt": "2026-10-02"
+    },
+    {
+      "partId": "kingston-fury-beast-ddr5-6000-cl40-4x16gb",
+      "batch": "2026-10-02-d1-fixtures",
+      "market": "SA",
+      "reasonCode": "not-listed",
+      "reason": "Amazon.sa: no listing for KF560C40BBK4-64; a search for the part number returned no results and a search for \"Kingston FURY Beast DDR5 6000 64GB 4x16GB CL40\" returned 44 other memory products.",
+      "retailersTried": [
+        "amazon-sa"
+      ],
+      "checkedAt": "2026-10-02",
+      "notes": [
+        {
+          "text": "The nearest listing is B0C34B4L71, the RGB kit KF560C40BBAK4-64 (no price shown), a different part."
+        }
+      ]
+    },
+    {
+      "partId": "deepcool-an600",
+      "batch": "2026-10-02-d1-fixtures",
+      "market": "SA",
+      "reasonCode": "not-listed",
+      "reason": "Amazon.sa: no listing for this exact part; a search for \"DeepCool AN600\" returned 48 other cooling products and a search for the part number R-AN600-BKNNMN-G returned no results.",
+      "retailersTried": [
+        "amazon-sa"
+      ],
+      "checkedAt": "2026-10-02"
+    },
+    {
+      "partId": "intel-arc-b580-limited-edition",
+      "batch": "2026-10-02-d1-fixtures",
+      "market": "SA",
+      "reasonCode": "not-listed",
+      "reason": "Amazon.sa: no listing of Intel's Limited Edition card; a search for \"Intel Arc B580 Limited Edition\" returned no Limited Edition (its B580 cards are the partner cards \"Intel Arc B580 Challenger 12GB OC\" and \"Intel Arc B580 Titan OC ... SB580T-12GOC\") and a search for Intel's code 31P06HB0BA returned no results.",
+      "retailersTried": [
+        "amazon-sa"
+      ],
+      "checkedAt": "2026-10-02"
     }
   ]
 }

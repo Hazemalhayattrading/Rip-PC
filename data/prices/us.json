@@ -8,9 +8,15 @@
       "label": "Seed catalogue (WP-D0)",
       "windowStart": "2026-09-30",
       "windowEnd": "2026-10-01"
+    },
+    {
+      "id": "2026-10-02-d1-fixtures",
+      "label": "Parts added for the compatibility fixtures (WP-D1 batch 1)",
+      "windowStart": "2026-10-02",
+      "windowEnd": "2026-10-02"
     }
   ],
-  "priceBasis": "Buy-box price in USD as shown on the live product page for delivery to Dallas 75201 (Amazon's default for our fetcher) or on Newegg, before sales tax and delivery fees. Third-party marketplace offers are kept and marked.",
+  "priceBasis": "Buy-box price in USD as shown on the live product page for delivery to Dallas 75201 (in the seed batch, Amazon's default for the cloud fetcher; from the 2026-10-02 batch on, set with Amazon's own \"Deliver to\" control, data/tools/pw-price.cjs --us-zip=75201) or on Newegg, before sales tax and delivery fees. Third-party marketplace offers are kept and marked.",
   "observations": [
     {
       "partId": "arctic-p12-pwm-pst-black",
@@ -875,6 +881,30 @@
           "text": "Amazon US lists the Americas model code MZ-V9P2T0B/AM for this drive."
         }
       ]
+    },
+    {
+      "partId": "noctua-nh-l9i-17xx-chromax-black",
+      "batch": "2026-10-02-d1-fixtures",
+      "market": "US",
+      "currency": "USD",
+      "amount": 59.95,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B09HCHYMJM",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "Noctua Cooling Solutions",
+      "retrievedAt": "2026-10-02",
+      "capture": "artifacts/prices/US/noctua-nh-l9i-17xx-chromax-black--amazon-us--2026-10-02--2.html",
+      "captureSha256": "80c8212ba60b8c0eaa593882a2ce78aa420836385d5515c5dbdd5db1e83d2d0f",
+      "notes": [
+        {
+          "field": "seller",
+          "text": "Sold by Noctua Cooling Solutions and shipped by Amazon (\"Ships from Amazon\"), not sold by Amazon.com itself."
+        },
+        {
+          "text": "Read for delivery to Dallas 75201, set with Amazon's own \"Deliver to\" control before the page loaded; the page header shows \"Deliver to Dallas 75201\"."
+        }
+      ]
     }
   ],
   "gaps": [
@@ -997,6 +1027,94 @@
         "newegg"
       ],
       "checkedAt": "2026-09-30"
+    },
+    {
+      "partId": "deepcool-pk650d",
+      "batch": "2026-10-02-d1-fixtures",
+      "market": "US",
+      "reasonCode": "not-listed",
+      "reason": "Amazon.com, searched for delivery to Dallas 75201: no listing for this exact part (\"DeepCool PK650D\" returned 8 other products and \"R-PK650D-FA0B-US\" returned no results), and Newegg answered every attempt with a bot block (HTTP 403, \"unusual traffic from this device\").",
+      "retailersTried": [
+        "amazon-us",
+        "newegg"
+      ],
+      "checkedAt": "2026-10-02",
+      "notes": [
+        {
+          "text": "Earlier the same day, an amazon.com search and DeepCool's amazon.com power-supply store page (DQ650-M and DQ750-M only), both served for delivery to Saudi Arabia, found no PK650D either."
+        },
+        {
+          "text": "Newegg blocked this PC at 13:05Z, 13:14Z and 21:23Z (UTC) with \"Our system have detected unusual traffic from this device\"; it was not worked around."
+        }
+      ]
+    },
+    {
+      "partId": "amd-ryzen-5-3400g",
+      "batch": "2026-10-02-d1-fixtures",
+      "market": "US",
+      "reasonCode": "not-listed",
+      "reason": "Amazon.com, searched for delivery to Dallas 75201: no listing of the YD3400C5FHBOX box with the AMD Wraith Spire (the first results page for \"AMD Ryzen 5 3400G processor\" shows only the YD3400C5FHSBX box, \"YD3400C5FHBOX\" returned no results, and B07SXNDKNM, AMD's listing matched on Amazon.sa, returns \"Page Not Found\"), and Newegg answered with a bot block (HTTP 403, \"unusual traffic from this device\").",
+      "retailersTried": [
+        "amazon-us",
+        "newegg"
+      ],
+      "checkedAt": "2026-10-02",
+      "notes": [
+        {
+          "text": "Rejected listing: B0FQPCWY2C, the YD3400C5FHSBX box (Model Number \"YD3400C5FHSBX\", bullet \"AMD Wraith Stealth Heatsink Included\"), sold by The Superior Mart at $139.98 (buy box read for delivery to Dallas 75201 at 13:09Z; its search card showed $135.00 at 21:25Z). It is a different box from this record's YD3400C5FHBOX with the AMD Wraith Spire."
+        }
+      ]
+    },
+    {
+      "partId": "kingston-fury-beast-ddr5-6000-cl40-4x16gb",
+      "batch": "2026-10-02-d1-fixtures",
+      "market": "US",
+      "reasonCode": "not-listed",
+      "reason": "Amazon.com, searched for delivery to Dallas 75201: no listing for KF560C40BBK4-64 (the part number returned no results and a descriptive search returned 16 other memory products), and Newegg answered with a bot block (HTTP 403, \"unusual traffic from this device\").",
+      "retailersTried": [
+        "amazon-us",
+        "newegg"
+      ],
+      "checkedAt": "2026-10-02",
+      "notes": [
+        {
+          "text": "The nearest listing is B0C34B4L71, the RGB kit KF560C40BBAK4-64, a different part."
+        }
+      ]
+    },
+    {
+      "partId": "deepcool-an600",
+      "batch": "2026-10-02-d1-fixtures",
+      "market": "US",
+      "reasonCode": "not-listed",
+      "reason": "Amazon.com, searched for delivery to Dallas 75201: the only AN600 listing, B0H4V7P881, is filed under the brand \"PXYPXZXLZ\" and does not name DeepCool's part number, a search for R-AN600-BKNNMN-G found no cooler, and Newegg answered with a bot block (HTTP 403, \"unusual traffic from this device\").",
+      "retailersTried": [
+        "amazon-us",
+        "newegg"
+      ],
+      "checkedAt": "2026-10-02",
+      "notes": [
+        {
+          "text": "B0H4V7P881, read for delivery to Dallas 75201: $332.70 from \"taizhoushangjinmaoyiyouxiangongsi\"; its Brand, Manufacturer, Model and Part Number all read \"PXYPXZXLZ\" and \"DeepCool\" does not appear on the page, so under the reseller-brand rule it does not count."
+        }
+      ]
+    },
+    {
+      "partId": "intel-arc-b580-limited-edition",
+      "batch": "2026-10-02-d1-fixtures",
+      "market": "US",
+      "reasonCode": "no-price-shown",
+      "reason": "Amazon.com, read for delivery to Dallas 75201: Intel's own listing B0DPM9923G (Model Number \"INT-31P06HB0BA\") shows no buy-box price, only \"See All Buying Options\" under a \"High price\" notice, the other Limited Edition listing is filed under another brand, and Newegg answered with a bot block (HTTP 403, \"unusual traffic from this device\").",
+      "retailersTried": [
+        "amazon-us",
+        "newegg"
+      ],
+      "checkedAt": "2026-10-02",
+      "notes": [
+        {
+          "text": "Rejected listing: B0GMQ7HHR5, filed under the brand \"TFGAJKKKKK\" (Mfr Part Number \"ggw7096\", no 31P06HB0BA), $851.16 from \"hongxiangshangmaoyouxiang\". Three listings titled \"Graphics Card Fit for, Arc B580 Limited Edition ...\" (B0HKNZXW3M, B0HKP1ZFPN, B0HKP54F6P) were not opened, after the two attempts."
+        }
+      ]
     }
   ]
 }
