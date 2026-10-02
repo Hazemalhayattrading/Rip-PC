@@ -61,6 +61,8 @@ const EXPECTED: Record<string, string> = {
   'z-topbar': '.z-topbar { z-index: var(--z-topbar); }',
   'z-sheet': '.z-sheet { z-index: var(--z-sheet); }',
   'z-toast': '.z-toast { z-index: var(--z-toast); }',
+  // Under a control's own content, inside its `isolate` context only (WP-DS2, backlog item 10).
+  'before:z-under': 'z-index: var(--z-under);',
   'duration-ui': 'transition-duration: var(--dur-ui);',
   'duration-fade': 'transition-duration: var(--dur-fade);',
   'duration-exit': 'transition-duration: var(--dur-exit);',

@@ -1,6 +1,7 @@
 # Design backlog: WP-DS2 (Phase 1)
 
-Owner: design-lead · Opened 2026-10-01 · Status: open
+Owner: design-lead · Opened 2026-10-01 · Status: **every item specified** (WP-DS2 batches 1
+and 2, 2026-10-02 to 2026-10-03). Where each one now lives is in [the status table](#status-where-each-item-lives).
 
 These items come from the skill review of WP-DS1, done on 2026-10-01 and checked against the
 installed packages:
@@ -13,8 +14,9 @@ installed packages:
 They are specification gaps, not defects in shipped tokens. The one defect the review found, the
 `::selection` contrast, was fixed in Phase 0 ([tokens.md §2.1](tokens.md#21-colour), rule 11).
 
-The Director scheduled them as **WP-DS2, in Phase 1**, in parallel with the engine. Nothing here
-is built yet.
+The Director scheduled them as **WP-DS2, in Phase 1**, in parallel with the engine. Most items are
+specs for Phases 2 and 3. Items 5 to 8, 13 and 15, and item 10's token, ship in `src/styles/`
+with tests (the status table at the end).
 
 | # | Area | Gap, and the fix | Skill or rule | Evidence |
 |---|---|---|---|---|
@@ -57,7 +59,7 @@ is built yet.
 | 37 | 3D pipeline | On this PC: gltf-transform 4.5.1 (`simplify`, `meshopt`, `resize`, `webp`) works; there is no Blender and no Python | blender-web-pipeline; brief "This PC" | Checked 2026-10-01 |
 | 38 | 3D pipeline | **KTX2 needs KTX-Software's `toktx`** (gltf-transform `etc1s`, `uastc`). It is not on this PC, and installing it is a system install on Hazem's PC, which the Director is putting to him. **Phase 3 depends on his answer.** Without it, textures ship as WebP, and the 160 MB budget holds about 7 uncompressed 2K maps | CLAUDE.md (Hazem decides installs) | `where toktx` found nothing, 2026-10-01 |
 | 39 | Team | 3d-artist worker prompts include the seven 3D skills | Director's skills note, 2026-10-01 | — |
-| 40 | 3D assets | The paid-asset research did not cover ArtStation or Unity Asset Store licences | studio-3d-brief.md §8 | The 3d-artist worker's report |
+| 40 | 3D assets | The paid-asset research did not cover ArtStation or Unity Asset Store licences | studio-3d-brief.md §9 (the known gaps; §8 before WP-DS2 added the delivery spec) | The 3d-artist worker's report |
 | 41 | Layout | Text zones at every width: the camera's view offset frames the build outside the step heading and its hint, the 3D tools row and their captions, so nothing of the scene sits behind text. Small text on the floor is token-safe since DS0-01 (`--ink-3` 4.61:1 at the floor's near edge) | [tokens.md §2.1](tokens.md#21-colour), rule 4; WCAG 1.4.3 | QA DS0-01 at 768 light: the hint's last word runs into the case top (1.56:1), and the mock label sits over the case (2.38:1). qa-lead's `defects/studio-768-light-text-over-case.png` |
 | 42 | Accessibility | Keyboard selection in the part list (Phase 2): the rows are a single-select radiogroup. One tab stop, arrow keys move, Space selects, and a blocked row announces its reason. The compare checkbox is a separate control, outside the radio | WCAG 2.1.1 (A); qa-lead DS0-02 | The mock's `.part` is `role="option"` with `tabindex=-1`; its only focusable child is the compare checkbox, and there is no select control |
 | 43 | Accessibility | ARIA structure and names: no `role=option` outside a listbox (item 42 removes options), and no control nested inside another. Accessible names come from visible or visually hidden text, never `aria-label` on a span with no role. The confidence word ("Medium confidence") is real text beside its three-step mark | axe `aria-required-parent`, `nested-interactive`, `aria-prohibited-attr`; qa-lead DS0-04 | 6 options with no listbox, a checkbox inside an option, and `aria-label` on the role-less confidence span in the mock |
@@ -75,3 +77,59 @@ is built yet.
 - Android has neither Arial nor Liberation Sans, so text starts in unadjusted Roboto (4.52 %
   narrower). A `local('Roboto')` face at 104.74 % needs a real-device test
   ([tokens.md §7](tokens.md#7-known-gaps)).
+
+## Status: where each item lives
+
+Every item is now a spec in the file and section below, or shipped where the row says. Batch 1 was
+merged as `427d241`. Batch 2 is on `feat/design-ds2`: the ui-designer wrote items 1 to 9, 14, 16
+to 22, the sheet's part of 24, 41 to 43 and 47 to 49; the motion-designer 10 to 13 and 23's motion
+rule; the 3d-artist 23 and 24's 3D parts, 25 to 38, 40 and 46. design-lead reviewed every item.
+
+| # | Status | Where it lives now |
+|---|---|---|
+| 1 | Specified | [tokens.md §2.5](tokens.md#25-layout), "Focus never hides under the chrome"; [specs-view.md §6](specs-view.md#6-keyboard-and-screen-readers) |
+| 2 | Specified | tokens.md §2.5, "Named sizes": `min-h-*` for anything that holds text |
+| 3 | Specified | [tokens.md §2.1](tokens.md#21-colour), rule 12 (forced colours, measured) |
+| 4 | Specified | [components.md §1](components.md#1-hit-areas); [lab-spec.md §9](lab-spec.md#9-accessibility-checklist) (QA-P1-003) |
+| 5 | **Shipped** | `src/styles/base.css` (`56096a8`), tested; tokens.md §3 |
+| 6 | **Shipped** | `src/styles/tokens.css`, the `--safe-*` tokens (`56096a8`), tested; tokens.md §2.5, "Safe areas" |
+| 7 | **Shipped** | `base.css` (`56096a8`), tested; [components.md §8](components.md#8-the-phone-sheets-expand-button); specs-view.md §1 |
+| 8 | **Shipped** | `base.css` (`56096a8`), tested; tokens.md §3 |
+| 9 | Specified | [components.md §2](components.md#2-buttons-and-their-states); tokens.md §2.1, rule 3 |
+| 10 | Specified, token shipped | [motion.md, Studio rules §1](motion.md#studio-rules-for-phase-2); `--z-under` in tokens.css, test first; the `--dur-ui` comment |
+| 11 | Specified | motion.md, Studio rules §2 |
+| 12 | Specified | motion.md, Studio rules §3; `motion.ts` takes `boolean \| null` |
+| 13 | **Shipped** | `src/styles/motion.types.test.ts`, checked by `tsc -b`, with two negative controls; motion.md, Studio rules §4 |
+| 14 | Specified | [specs-view.md §1 and §5](specs-view.md#1-where-it-lives) |
+| 15 | **Shipped** (batch 1) | `max-w-measure` in tokens.css; tokens.md §2.5, "The reading measure" |
+| 16 | Specified | specs-view.md §4, rules 8 and 9: "No CPUs match these filters." |
+| 17 | Specified | specs-view.md §2 and §3 (measured at 15rem and 11rem) |
+| 18 | Specified | specs-view.md §1 and §4, rule 7 |
+| 19 | Specified | specs-view.md §3: no virtualisation until INP asks for it |
+| 20 | Specified | [tokens.md §2.4](tokens.md#24-type), rule 9; lab-spec.md §9 |
+| 21 | Specified | [copy-guide.md §3 and §12](copy-guide.md#3-numbers-and-units); tokens.md §2.4, rule 6 |
+| 22 | Decided | tokens.md §4.2: the Director's decision stands until Phase 2 measures it (QA-P0-006) |
+| 23 | Specified | motion.md, rule 4 and Studio rules §6; [studio-3d-brief.md §4](studio-3d-brief.md#4-performance-limits) |
+| 24 | Specified | studio-3d-brief.md §3.1 (the orbit); components.md §8 (the sheet) |
+| 25 to 28 | Specified | [studio-3d-brief.md §3.2](studio-3d-brief.md#32-light) |
+| 29 to 32 | Specified | studio-3d-brief.md §4 |
+| 33 | Specified | studio-3d-brief.md §3.3 |
+| 34 | Specified | studio-3d-brief.md §4, with §3.3 |
+| 35 | Specified | studio-3d-brief.md §3.1 |
+| 36 | Specified | studio-3d-brief.md §8, the delivery spec (new) |
+| 37 | Specified | studio-3d-brief.md §5, "The pipeline on this PC" |
+| 38 | **Closed** | KTX-Software 4.4.2 is installed (Hazem approved, 2026-10-02): textures ship as KTX2. studio-3d-brief.md §5 and §3.3 |
+| 39 | Done | The 3d-artist's batch 2 prompt named the seven 3D skills |
+| 40 | Specified | studio-3d-brief.md §6 (ArtStation and Unity rows), §9 and §10 |
+| 41 | Specified | [components.md §9](components.md#9-text-zones-in-the-studio-frame); tokens.md §2.1, rule 4 |
+| 42, 43 | Specified | [components.md §7](components.md#7-the-part-list-a-single-select-radiogroup), with §2 |
+| 44 | Specified (batch 1) | [lab-spec.md §6](lab-spec.md#6-the-estimate-readout) |
+| 45 | Specified (batch 1) | tokens.md §2.1, rule 6 |
+| 46 | Specified | studio-3d-brief.md §8, "Credits come before shipping"; data-lead asked for the archive column |
+| 47 | Specified | [components.md §5](components.md#5-the-skip-link) |
+| 48 | Specified | [components.md §3](components.md#3-the-theme-toggle) |
+| 49 | Specified | [components.md §4](components.md#4-standalone-links) |
+| QA-P0-018 | Specified (batch 1); QA to check (WP-Q4) | tokens.md §2.1, rule 2 |
+| QA-P0-019 | Specified (batch 1); QA to check (WP-Q4) | tokens.md §2.1, rule 6 |
+| QA-P1-001 | Specified (the focus rule) | [components.md §6](components.md#6-focus-on-a-page-or-step-change); the fix is build-lead's |
+| QA-P1-003 | Fixed (`fe6b187`); QA verified it | lab-spec.md §9 |

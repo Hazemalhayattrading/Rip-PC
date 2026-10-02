@@ -146,10 +146,13 @@ HDRI as the fallback (section 3.2).
   the worst depth step above, so nothing flickers.
 - **Framing:** the build fills the free area: below the top bar, above the dock, and left of the
   rail from `lg` (`--topbar`, `--dock` and `--rail-width` in [tokens.md §2.5](tokens.md#25-layout)).
-  It stays outside the text zones (components.md): the step heading and its hint, the 3D tools
-  row and their captions, so no text ever sits over the build ([tokens.md §2.1](tokens.md#21-colour),
-  rule 4). Shift the camera's view offset rather than move the camera, so perspective stays true
-  when the rail opens.
+  It stays outside the text zones: the step heading and its hint, the 3D tools row and their
+  captions, so no text ever sits over the build ([tokens.md §2.1](tokens.md#21-colour), rule 4).
+  [components.md §9](components.md#9-text-zones-in-the-studio-frame) gives the zones and the free
+  frame at 1440, 768 and 390, measured live with a `ResizeObserver`. It also covers the frame below
+  the heading from 1100 to about 1280 px, the two candidate frames on phones (the camera takes
+  whichever shows the build larger, per shot), and the 96 px strip. Shift the camera's view offset
+  rather than move the camera, so perspective stays true when the rail opens.
 - **One shot per step.** The first pass is below; it is tuned against the real scene in Phase 2.
 
 | Step | Shot |
@@ -741,8 +744,9 @@ cross-team change, CLAUDE.md).
   formula. The pixel probe on real GPUs is qa-lead's.
 - **Whether GitHub Pages compresses `.wasm`** isn't checked, so the transcoder's gzip figure
   (section 4) holds only if it does.
-- **The orbit pad** (section 3.1) needs its entry in components.md and its button names in
-  copy-guide.md.
+- **The orbit pad: answered** (design-lead, 2026-10-03). Its place in the tools zone is in
+  [components.md §9](components.md#9-text-zones-in-the-studio-frame), and its button names are in
+  [copy-guide.md §5](copy-guide.md#5-words), "Control names".
 - **The camera shot list is a first pass,** to be tuned against the real scene in Phase 2.
 - **The form-factor standards** for board outlines, mounting holes, slot pitch (the 20.32 mm in
   section 1) and PSU sizes still need their sources added to data-lead's source registry before
