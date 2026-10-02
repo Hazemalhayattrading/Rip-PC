@@ -497,6 +497,7 @@ spec page lists no BIOS FlashBack (`asus-prime-b760m-a-wifi-d4`).
 | Reason | The {cpu} needs BIOS {version} or later on the {board}, which can update its BIOS without a CPU, using {flashbackName}. |
 | Action | Before first boot, update the board to BIOS {version} or later with {flashbackName}. |
 | Steps | The maker's procedure, below, with its source |
+| Steps' title (`Steps.title`, a label with no full stop) | How to update with {flashbackName} |
 
 > **Warning.** The AMD Ryzen 7 9850X3D needs BIOS 1066 or later on the ASUS TUF GAMING X870-PLUS
 > WIFI, which can update its BIOS without a CPU, using BIOS FlashBack. Before first boot, update
@@ -585,6 +586,7 @@ The numbers in this table show the format only.
 
 | Case | Figure | Label row | Line under it |
 |---|---|---|---|
+| A part to pick first (`NeedsParts`) | — | Not estimated yet | Pick {the missing parts} to estimate {what}: "Pick a CPU to estimate the frame rate." |
 | No published test | — | No estimate yet | There is no published test of {game} on the {chip}. |
 | No creator source | — | No estimate yet | There is no published source for {workload} on this build. |
 | An incompatible build | — | Not estimated | The build has an incompatible part. |

@@ -7,7 +7,7 @@ Spec: `docs/reports/phase-1-plan.md` §2 WP-DS2, and `docs/reports/phase-1-brief
 |---|---|
 | 1. Branch, verify, commit, push | Done 2026-10-02 |
 | 2. Lab spec and copy guide | **Batch 1, accepted and merged as `427d241`** (design-lead's `502fceb`), 2026-10-02 |
-| 3. Review build-lead's result types | Review sent 2026-10-02 (`15f9b5c`): design's OK waits on M1 (`advice` → `action` + `steps` with their sources). Answers on the BIOS field and the 20 titles sent 2026-10-03. Re-review the revised types when build-lead sends the SHA |
+| 3. Review build-lead's result types | **Done 2026-10-03: design OK at `83aa5ab`** (M1–M3, S1–S4 and the 20 titles checked in the file). Accepted: display names reviewed from the dump (`artifacts/engine/display-names.json`), and each lab component built with its first page |
 | 4. Batch 2: the backlog items, item 38, the WebP update, QA's focus-scroll note | **In progress.** The ui-designer's CSS for items 5–8 is in `56096a8` (committed by the Director at the usage-limit stop) and reviewed: 105 style tests pass, Prettier and ESLint clean, and full verify passes on it (606 unit, 166 e2e, `artifacts/logs/verify-ds2-wip-56096a8.log`). The three workers were resumed on 2026-10-03 (agent ids below) |
 | 5. Wording review after E1, E3 and E5 | Waits for each hand-off's `engine:dump` |
 | 6. Hand-off of batch 2 | Not started |
