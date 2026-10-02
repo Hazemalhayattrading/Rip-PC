@@ -94,8 +94,22 @@ On "continue":
    `C:\Projects\rig-lab-evidence\purge\purge-3-cleanup.sh` (reflog expire and `gc --prune=now`).
    Never run it while any lead may be committing.
 5. **Tidy branches:**
-   - delete merged feature branches, local and on origin;
-   - keep `feat/data-qa-fixes`, which holds 2fa3e32 for Phase 1.
+   - **Done on origin, 2026-10-02.** Deleted, each with a lease and each fully merged into the
+     integration branch: `feat/build-tokens-wiring`, `feat/design-ds0-docs`, `feat/data-audit-ids`,
+     `feat/data-foundations`, `feat/data-qa-fixes-2` and `feat/design-tokens`.
+     - Why now: QA found that the first two still carried the purge map at their tips, with all
+       87 pre-purge IDs, while GitHub still serves the old commits.
+     - Origin now has 5 heads: the integration branch, `main`, `feat/qa-phase0-verification`,
+       `feat/data-qa-fixes` (kept for 2fa3e32), and the old cloud branch
+       `claude/rig-lab-setup-cleanup-sfmg4k`.
+   - **Still to do, at Phase 0 close:** remove the closed leads' worktrees and their local
+     branches, after QA's report is merged.
+   - **Accepted, not fixed:** pre-purge IDs remain in 15 commit messages and in older file versions
+     in history. Hazem's Support request covers every orphaned commit from the one that added
+     the archives onward, all 87.
+   - **Open:** the 10% audit's seed string in `data/audits.json` carries a pre-purge ID. QA routes
+     the wording to data-lead: keep reproducibility through the SHA-256 of `sample-phase-0.json`,
+     and keep the original string locally.
 6. **Report to Hazem,** then open the PR from `claude/keen-lamport-0794zj` to `main`. The
    ruleset's check names match CI as of 2026-10-02. Phase 1 starts only after he has read the
    report.
