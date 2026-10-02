@@ -1,0 +1,1 @@
+const REVISION=`186`;typeof window<`u`&&(window.__THREE__?console.warn(`WARNING: Multiple instances of Three.js being imported.`):window.__THREE__=REVISION);class T{constructor(){this.children=[]}}export{T,REVISION};

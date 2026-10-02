@@ -1,0 +1,960 @@
+{
+  "schemaVersion": 1,
+  "market": "SA",
+  "currency": "SAR",
+  "batch": {
+    "id": "2026-09-30-seed",
+    "windowStart": "2026-09-30",
+    "windowEnd": "2026-10-01"
+  },
+  "priceBasis": "Buy-box price in SAR as shown on the live Amazon.sa product page for delivery to Riyadh; the pages state \"All prices include VAT.\" Delivery fees are excluded. Offers imported through Amazon.sa's global store show a total that includes estimated import charges; each such observation has a note with the split. Third-party marketplace offers are kept and marked.",
+  "observations": [
+    {
+      "partId": "arctic-p12-pwm-pst-black",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 82.75,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B07GJGF56L",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "Amazon US",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/arctic-p12-pwm-pst-black--amazon-sa--2026-09-30.html",
+      "captureSha256": "a195517ff6b0cb8e12534f82b4a53a66978fb19a731d9f1fb19c4ecce212d2eb",
+      "notes": [
+        {
+          "field": "seller",
+          "text": "Sold by Amazon US through Amazon.sa's global store (imported), so it is recorded as a marketplace offer."
+        },
+        {
+          "field": "amount",
+          "text": "The displayed price includes estimated import charges: item SAR 56.96 plus import charges SAR 25.79 (total SAR 82.75)."
+        }
+      ]
+    },
+    {
+      "partId": "fractal-terra-graphite",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 775.15,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B09DKMQ5L1",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "Amazon UK",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/fractal-terra-graphite--amazon-sa--2026-09-30.html",
+      "captureSha256": "e910d514f9a39b95fbc8c3c3e7d0cb04ce47b142fac50652967a8d9403cab5ba",
+      "notes": [
+        {
+          "field": "seller",
+          "text": "Sold by Amazon UK through Amazon.sa's global store (imported), so it is recorded as a marketplace offer."
+        },
+        {
+          "field": "amount",
+          "text": "The displayed price includes estimated import charges: item SAR 658.64 plus import charges SAR 116.51 (total SAR 775.15)."
+        }
+      ]
+    },
+    {
+      "partId": "arctic-liquid-freezer-iii-pro-360",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 596.0,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0DLWGG85P",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "trippodoshop",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/arctic-liquid-freezer-iii-pro-360--amazon-sa--2026-09-30.html",
+      "captureSha256": "ac8a79af37423e3e2a273080cee3c55a4a9b5bb19a3c3d58dcbc0527604fec16"
+    },
+    {
+      "partId": "arctic-liquid-freezer-iii-pro-280",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 416.07,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0DPHRVNGL",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "EBRAR SA",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/arctic-liquid-freezer-iii-pro-280--amazon-sa--2026-09-30.html",
+      "captureSha256": "77f07c5a2344695f45013846c54ed387e0540f628b3ec05fa40344f63e603eb4"
+    },
+    {
+      "partId": "nzxt-kraken-plus-240",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 499.0,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0F5SGK5Q7",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "ALOTHAIBI",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/nzxt-kraken-plus-240--amazon-sa--2026-09-30.html",
+      "captureSha256": "46cfb58c598634e129b90aaff196e89447a980ac9499cdb03e7389742205c89e"
+    },
+    {
+      "partId": "amd-ryzen-7-9850x3d",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 2234.74,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0G8JMLXNQ",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "Nitrosocket (SN RECORDED)",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/amd-ryzen-7-9850x3d--amazon-sa--2026-09-30.html",
+      "captureSha256": "829ce812d4a2520f1fb1b6a8ff51dbad52e804aa0367dde6776e0f1ad615994e"
+    },
+    {
+      "partId": "amd-ryzen-7-9800x3d",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 1916.0,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0DKFMSMYK",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "GamePower SA",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/amd-ryzen-7-9800x3d--amazon-sa--2026-09-30.html",
+      "captureSha256": "817b6fd67352d68609987880cbcdb5595ce0fcb1b4e9b3039b80fc51544bafd6"
+    },
+    {
+      "partId": "amd-ryzen-9-9950x",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 2361.43,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0D6NNRBGP",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "Nitrosocket (SN RECORDED)",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/amd-ryzen-9-9950x--amazon-sa--2026-09-30.html",
+      "captureSha256": "d9fa14491c294c4a1d48040904f7bba196ffd0b21d6daf9b1c62549f7c09c857"
+    },
+    {
+      "partId": "amd-ryzen-7-9700x",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 1398.9,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0D6NMDNNX",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "ALOTHAIBI",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/amd-ryzen-7-9700x--amazon-sa--2026-09-30.html",
+      "captureSha256": "8b96da29ccb8448ef4fda6b4304c1f884bb7a9b61c4e49e477848a5f5226f6c9"
+    },
+    {
+      "partId": "amd-ryzen-5-9600x",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 843.0,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0D6NN6TM7",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "GamePower SA",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/amd-ryzen-5-9600x--amazon-sa--2026-09-30.html",
+      "captureSha256": "9158f1217fd7f9f393080fee423c3e000206ec171d38b0e68a004e87ca3e688f"
+    },
+    {
+      "partId": "amd-ryzen-7-7800x3d",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 1512.0,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0BTZB7F88",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "Build.Byte",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/amd-ryzen-7-7800x3d--amazon-sa--2026-09-30.html",
+      "captureSha256": "18a20dab475a2f3000a13bb44d3b05cc5815f9344949c13043bd287eae4d38b6"
+    },
+    {
+      "partId": "amd-ryzen-5-7600",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 791.93,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0BMQJWBDM",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "Tech Bit Store",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/amd-ryzen-5-7600--amazon-sa--2026-09-30.html",
+      "captureSha256": "acf6fa792a9797cb7bbe7f390e9a4d4dd7e456bc328f2cbac89d71c21dccc772"
+    },
+    {
+      "partId": "amd-ryzen-5-5600",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 608.1,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B09VCHR1VH",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "DIGI_MART",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/amd-ryzen-5-5600--amazon-sa--2026-09-30.html",
+      "captureSha256": "35a29976538d71341c6705813306b08c0bc35d7e7b00de2f09843b690c0e5878",
+      "notes": [
+        {
+          "field": "amount",
+          "text": "The displayed price includes an estimated import fees deposit: item SAR 513.78 plus \"Estimated Import Fees Deposit\" SAR 94.32 (total SAR 608.10)."
+        }
+      ]
+    },
+    {
+      "partId": "intel-core-ultra-9-285k",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 2959.0,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0DMXB5DVP",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "GameBeatz",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/intel-core-ultra-9-285k--amazon-sa--2026-09-30.html",
+      "captureSha256": "f29c3356dfe4ec7ebb1292defa505ce7279e53d2de8e54ad11d4a8ade9b9f652",
+      "notes": [
+        {
+          "text": "Filed under the reseller brand \"Mavark\" (manufacturer: Intel Corp). It counts because the listing names BX80768285K, which Intel's Ordering & Compliance page gives as the boxed 285K's ordering code (Wayback copy of 2026-06-08). Amazon.sa's Intel-brand listing (B0DFKC99VL) showed no buy-box price."
+        }
+      ]
+    },
+    {
+      "partId": "intel-core-ultra-7-270k-plus",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 1553.04,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0GMLJCBBM",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "Amazon UK",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/intel-core-ultra-7-270k-plus--amazon-sa--2026-09-30.html",
+      "captureSha256": "16d98b4a03698fea23940f86b1efd021abc5efbbb287fd0bf6580abc027577b1",
+      "notes": [
+        {
+          "field": "seller",
+          "text": "Sold by Amazon UK through Amazon.sa's global store (imported), so it is recorded as a marketplace offer."
+        },
+        {
+          "field": "amount",
+          "text": "The displayed price includes estimated import charges: item SAR 1,294.38 plus import charges SAR 258.66 (total SAR 1,553.04)."
+        }
+      ]
+    },
+    {
+      "partId": "intel-core-ultra-7-265k",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 1691.0,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0DFK2MH2D",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "Amazon US",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/intel-core-ultra-7-265k--amazon-sa--2026-09-30.html",
+      "captureSha256": "2d62e842fd8a10fbbce616780713974e7c308a34207e4fafa6622e35631b04c7",
+      "notes": [
+        {
+          "field": "seller",
+          "text": "Sold by Amazon US through Amazon.sa's global store (imported), so it is recorded as a marketplace offer."
+        },
+        {
+          "field": "amount",
+          "text": "The displayed price includes estimated import charges: item SAR 1,414.35 plus import charges SAR 276.65 (total SAR 1,691.00)."
+        }
+      ]
+    },
+    {
+      "partId": "intel-core-ultra-5-245k",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 1089.1,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0DFK2P311",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "Nitrosocket (SN RECORDED)",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/intel-core-ultra-5-245k--amazon-sa--2026-09-30.html",
+      "captureSha256": "4b403b20f6ef9d5f60b1796d1d8db04139c2cd315833cc31b28d6a4589d73fd5"
+    },
+    {
+      "partId": "intel-core-i7-14700k",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 1673.35,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0CGJ41C9W",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "Nitrosocket (SN RECORDED)",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/intel-core-i7-14700k--amazon-sa--2026-09-30.html",
+      "captureSha256": "f624b24d2d5c5333448da7d8007081ba30fa28edbdefd5717d253ac67511916f"
+    },
+    {
+      "partId": "intel-core-i5-14600k",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 1316.91,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0CHBGVFHP",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "Amazon Germany",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/intel-core-i5-14600k--amazon-sa--2026-09-30.html",
+      "captureSha256": "3edf3d9b566dc97b16b99500d95c4b380dbc1d4ea8a9cc640b69a1648ad1e760",
+      "notes": [
+        {
+          "field": "seller",
+          "text": "Sold by Amazon Germany through Amazon.sa's global store (imported), so it is recorded as a marketplace offer."
+        },
+        {
+          "field": "amount",
+          "text": "The displayed price includes estimated import charges: item SAR 1,089.05 plus import charges SAR 227.86 (total SAR 1,316.91)."
+        }
+      ]
+    },
+    {
+      "partId": "intel-core-i5-12400f",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 849.87,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B09NPJRDGD",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "Maxideals",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/intel-core-i5-12400f--amazon-sa--2026-09-30.html",
+      "captureSha256": "37db0bd1e55465b17fceb2ee3edbbb8e7a69cc5189a86240e408b782be6f87b6",
+      "notes": [
+        {
+          "field": "amount",
+          "text": "The displayed price includes an estimated import fees deposit: item SAR 724.02 plus \"Estimated Import Fees Deposit\" SAR 125.85 (total SAR 849.87)."
+        }
+      ]
+    },
+    {
+      "partId": "nvidia-geforce-rtx-5080-founders-edition",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 13932.99,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0DYVCGVK4",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "Desertcart SA",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/nvidia-geforce-rtx-5080-founders-edition--amazon-sa--2026-09-30.html",
+      "captureSha256": "5b17b013b9281b5b049aa83c86b516908f434a92aaacf9bcd35539aac3ec2c2f",
+      "notes": [
+        {
+          "text": "Third-party offer; the page says it usually ships in 10 to 11 days."
+        }
+      ]
+    },
+    {
+      "partId": "asus-dual-geforce-rtx-5060-ti-16gb-oc",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 3394.78,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0F4DVKSZ4",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "PRO Tech Solutions",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/asus-dual-geforce-rtx-5060-ti-16gb-oc--amazon-sa--2026-09-30.html",
+      "captureSha256": "07612f97124147cb852266096ecb80d7541f7066f36d5c105bcc351498dd0d58",
+      "notes": [
+        {
+          "text": "Amazon.sa lists ASUS's internal code 90YV0MH0-M0NA00 for this card."
+        }
+      ]
+    },
+    {
+      "partId": "asus-dual-geforce-rtx-5060-8gb-oc",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 2347.89,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0F7HZ9QSZ",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "PRO Tech Solutions",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/asus-dual-geforce-rtx-5060-8gb-oc--amazon-sa--2026-09-30.html",
+      "captureSha256": "19baea41a657391fd9d6377083b90fddbbd410b0f05a0d09b2892f54b38797c9"
+    },
+    {
+      "partId": "asus-dual-geforce-rtx-4060-8gb-oc",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 4150.0,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0C7YPGFFW",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "goldstores_ksa",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/asus-dual-geforce-rtx-4060-8gb-oc--amazon-sa--2026-09-30.html",
+      "captureSha256": "72736cb7489a7f499155d79f927ab88f57411c4bfe455e1964a9486298ca55fb"
+    },
+    {
+      "partId": "sapphire-pulse-radeon-rx-9070-xt-16gb",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 4199.0,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0DTHMPWFR",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "ALOTHAIBI",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/sapphire-pulse-radeon-rx-9070-xt-16gb--amazon-sa--2026-09-30.html",
+      "captureSha256": "3a3e5c1b9b0fb85d27dcbae08a57bc7130c1b71854d506b22c931da6dff7d4e2"
+    },
+    {
+      "partId": "sapphire-pulse-radeon-rx-9070-16gb",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 3499.0,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0DRPSF34T",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "ALOTHAIBI",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/sapphire-pulse-radeon-rx-9070-16gb--amazon-sa--2026-09-30.html",
+      "captureSha256": "71582f6211ccf48f35f1897805c7e6d5f08100782477b50d3abe92d948992edc"
+    },
+    {
+      "partId": "sapphire-pulse-radeon-rx-9060-xt-oc-16gb",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 2999.0,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0F8C6MWSY",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "قصر الحاسبات PCPALACE",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/sapphire-pulse-radeon-rx-9060-xt-oc-16gb--amazon-sa--2026-09-30.html",
+      "captureSha256": "a63dea560b710068415b02e7675f867cdb195dfaf81d6eabb5112059febb8f21"
+    },
+    {
+      "partId": "asus-tuf-gaming-b650-plus-wifi",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 999.0,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0BHN7GGBQ",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "Tech Bit Store",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/asus-tuf-gaming-b650-plus-wifi--amazon-sa--2026-09-30.html",
+      "captureSha256": "9a859446c94f4ffc078e0aaa0af6ee0aeb3764a473f7434fc4a8eb39b398c663"
+    },
+    {
+      "partId": "asus-tuf-gaming-x870-plus-wifi",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 1518.98,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0DGQ9C2TH",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "ALOTHAIBI",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/asus-tuf-gaming-x870-plus-wifi--amazon-sa--2026-09-30.html",
+      "captureSha256": "64f127ba9575a8abf597ebf6ba5d34e2c6fffea86ca5fc9591360652bf7b9ba1"
+    },
+    {
+      "partId": "asus-rog-strix-b650e-i-gaming-wifi",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 1099.0,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0BHHVC3BS",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "KSATechSolutions (SN RECORDED)",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/asus-rog-strix-b650e-i-gaming-wifi--amazon-sa--2026-09-30.html",
+      "captureSha256": "452468841b67fa1b7bd1b1f8f32ab66bc073ae781c87f3c47af38086cb67c314"
+    },
+    {
+      "partId": "asus-tuf-gaming-b650m-plus-wifi",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 759.0,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0FP2ZVRCD",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "PRO Tech Solutions",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/asus-tuf-gaming-b650m-plus-wifi--amazon-sa--2026-09-30.html",
+      "captureSha256": "f8635200870a8d38b9a3d26b5936e69572bea034dc57473f1b38c6ffd7596a8b"
+    },
+    {
+      "partId": "asus-tuf-gaming-b550-plus-wifi-ii",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 686.35,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B09K4QMPL9",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "Amazon US",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/asus-tuf-gaming-b550-plus-wifi-ii--amazon-sa--2026-09-30.html",
+      "captureSha256": "0d9f59e41fd1003223dc04168de98e3b70ef521bc94f619f78b9ced7bc865a82",
+      "notes": [
+        {
+          "field": "seller",
+          "text": "Sold by Amazon US through Amazon.sa's global store (imported), so it is recorded as a marketplace offer."
+        },
+        {
+          "field": "amount",
+          "text": "The displayed price includes estimated import charges: item SAR 581.83 plus import charges SAR 104.52 (total SAR 686.35)."
+        }
+      ]
+    },
+    {
+      "partId": "asus-tuf-gaming-z890-plus-wifi",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 955.65,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0DJDFKV2J",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "Amazon Germany",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/asus-tuf-gaming-z890-plus-wifi--amazon-sa--2026-09-30.html",
+      "captureSha256": "21de1ab2a5a895e95faf7c5266a5fb1ac7359c00fe31abe38894e10b50232e34",
+      "notes": [
+        {
+          "field": "seller",
+          "text": "Sold by Amazon Germany through Amazon.sa's global store (imported), so it is recorded as a marketplace offer."
+        },
+        {
+          "field": "amount",
+          "text": "The displayed price includes estimated import charges: item SAR 816.00 plus import charges SAR 139.65 (total SAR 955.65)."
+        }
+      ]
+    },
+    {
+      "partId": "asus-prime-b760m-a-wifi-d4",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 598.99,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0BNQGQF43",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "قصر الحاسبات PCPALACE",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/asus-prime-b760m-a-wifi-d4--amazon-sa--2026-09-30.html",
+      "captureSha256": "204adeaeaa3d673e075955bfbc205b1486b1ec902d31b13d473b59a66d708e99",
+      "notes": [
+        {
+          "text": "Amazon.sa lists ASUS's internal code 90MB1CX0-M0EAY0 for this board."
+        }
+      ]
+    },
+    {
+      "partId": "nzxt-c850-gold-atx-3-1",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 499.0,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0DHVPZZ77",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "ALOTHAIBI",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/nzxt-c850-gold-atx-3-1--amazon-sa--2026-09-30.html",
+      "captureSha256": "d83012975ca03717c90e3061993b2dd615291e1452307b4d91ef406bccae6dd8",
+      "notes": [
+        {
+          "text": "Amazon.sa sells the UK-plug regional variant PA-8G2BB-UK of the same black unit."
+        }
+      ]
+    },
+    {
+      "partId": "nzxt-c1200-gold-atx-3-1",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 924.47,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0DCNLFHS3",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "Amazon UK",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/nzxt-c1200-gold-atx-3-1--amazon-sa--2026-09-30.html",
+      "captureSha256": "99ceec01c032cdc3acd06c9d97049d0c34cee7edf05e8d197df22985a2728233",
+      "notes": [
+        {
+          "text": "Amazon.sa sells the UK-plug regional variant PA-2G2BB-UK of the same black unit."
+        },
+        {
+          "field": "seller",
+          "text": "Sold by Amazon UK through Amazon.sa's global store (imported), so it is recorded as a marketplace offer."
+        },
+        {
+          "field": "amount",
+          "text": "The displayed price includes estimated import charges: item SAR 788.89 plus import charges SAR 135.58 (total SAR 924.47)."
+        }
+      ]
+    },
+    {
+      "partId": "nzxt-c850-sfx-gold",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 994.0,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0GFVSV779",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "Desertcart SA",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/nzxt-c850-sfx-gold--amazon-sa--2026-09-30.html",
+      "captureSha256": "2a0b29ca13dfe65ae692493c2290c412f4d518e77e0528ef1f68dba469321ddd"
+    },
+    {
+      "partId": "teamgroup-t-force-delta-rgb-ddr5-6000-cl30-2x16gb",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 2731.21,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0B3HHB3Z9",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "Amazon US",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/teamgroup-t-force-delta-rgb-ddr5-6000-cl30-2x16gb--amazon-sa--2026-09-30.html",
+      "captureSha256": "9415a653fa15f67b7f89c60b6404f6c2545d1f233fc5c4151ab512c5df32729e",
+      "notes": [
+        {
+          "field": "seller",
+          "text": "Sold by Amazon US through Amazon.sa's global store (imported), so it is recorded as a marketplace offer."
+        },
+        {
+          "field": "amount",
+          "text": "The displayed price includes estimated import charges: item SAR 2,318.88 plus import charges SAR 412.33 (total SAR 2,731.21)."
+        }
+      ]
+    },
+    {
+      "partId": "gskill-flare-x5-ddr5-6000-cl30-2x16gb",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 2815.36,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0C1TKSDKR",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "Middle East Mall SA",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/gskill-flare-x5-ddr5-6000-cl30-2x16gb--amazon-sa--2026-09-30.html",
+      "captureSha256": "f3c70c6e5d868cd75ee22c45472e7b9a79f39453165c1828f41ddde9cb1d8001"
+    },
+    {
+      "partId": "gskill-trident-z5-neo-rgb-ddr5-6000-cl30-2x16gb",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 2888.48,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0BF8FVLSL",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "EBRAR SA",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/gskill-trident-z5-neo-rgb-ddr5-6000-cl30-2x16gb--amazon-sa--2026-09-30.html",
+      "captureSha256": "346fd788ddc4b6048f4d3569748ea91cfe5a253f8733daf7f4dea80598e91bca"
+    },
+    {
+      "partId": "gskill-trident-z5-ck-ddr5-8200-cl40-2x24gb",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 6678.23,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0DL18BYK6",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "EMRAH SEVINC",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/gskill-trident-z5-ck-ddr5-8200-cl40-2x24gb--amazon-sa--2026-09-30.html",
+      "captureSha256": "7cebf82c204a844590e96aa9aa45d9f80144fbd1a2b7b2dcec4caf9b3217aa3c"
+    },
+    {
+      "partId": "gskill-trident-z-neo-ddr4-3600-cl16-2x16gb",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 1511.0,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B07VRLBXLR",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "MahzuzStores",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/gskill-trident-z-neo-ddr4-3600-cl16-2x16gb--amazon-sa--2026-09-30.html",
+      "captureSha256": "015c9b97d10b0f7238012644679af65ae815762ebeffb6d39b223978659c86fa"
+    },
+    {
+      "partId": "wd-black-sn7100-1tb",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 749.0,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0DN7CYYSD",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "DARAT EST",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/wd-black-sn7100-1tb--amazon-sa--2026-09-30.html",
+      "captureSha256": "bc709c3b10e2e2bb5f711a134b2a841c5ffe77633188942c928992dc6e31bba4"
+    },
+    {
+      "partId": "wd-blue-sa510-2-5-inch-1tb",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 1103.78,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0GR64NJPG",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "Amazon Germany",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/wd-blue-sa510-2-5-inch-1tb--amazon-sa--2026-09-30.html",
+      "captureSha256": "b867c930d9ed528d07272a9eaf4fdc56fac522506fa47214bd3150a5a6099e37",
+      "notes": [
+        {
+          "field": "seller",
+          "text": "Sold by Amazon Germany through Amazon.sa's global store (imported), so it is recorded as a marketplace offer."
+        },
+        {
+          "field": "amount",
+          "text": "The displayed price includes estimated import charges: item SAR 944.81 plus import charges SAR 158.97 (total SAR 1,103.78)."
+        }
+      ]
+    },
+    {
+      "partId": "samsung-990-pro-2tb",
+      "market": "SA",
+      "currency": "SAR",
+      "amount": 1789.0,
+      "retailer": "amazon-sa",
+      "url": "https://www.amazon.sa/-/en/dp/B0B9C4DKKG",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "Valorrex",
+      "retrievedAt": "2026-09-30",
+      "capture": "artifacts/prices/SA/samsung-990-pro-2tb--amazon-sa--2026-09-30.html",
+      "captureSha256": "0c551ed6cc60d7bea3cfdd252ffa0a71c2fd813d6510d88b2e3c75879825466e"
+    }
+  ],
+  "gaps": [
+    {
+      "partId": "arctic-p14-pwm-pst-black",
+      "market": "SA",
+      "reasonCode": "not-listed",
+      "reason": "Amazon.sa: no listing for this exact part in the search results.",
+      "retailersTried": [
+        "amazon-sa"
+      ],
+      "checkedAt": "2026-09-30"
+    },
+    {
+      "partId": "deepcool-fc120-3-in-1",
+      "market": "SA",
+      "reasonCode": "not-listed",
+      "reason": "Amazon.sa: no listing for this exact part in the search results.",
+      "retailersTried": [
+        "amazon-sa"
+      ],
+      "checkedAt": "2026-09-30"
+    },
+    {
+      "partId": "fractal-north-charcoal-black-tg-light",
+      "market": "SA",
+      "reasonCode": "no-price-shown",
+      "reason": "Amazon.sa: the product page shows no buy-box price (only other buying options or none).",
+      "retailersTried": [
+        "amazon-sa"
+      ],
+      "checkedAt": "2026-09-30",
+      "notes": [
+        {
+          "text": "Amazon.sa has priced listings for other North variants (FD-C-NOR1C-01, FD-C-NOR1C-04); they are different SKUs and are not used."
+        }
+      ]
+    },
+    {
+      "partId": "fractal-pop-air-rgb-black-tg-clear-tint",
+      "market": "SA",
+      "reasonCode": "no-price-shown",
+      "reason": "Amazon.sa: the product page shows no buy-box price (only other buying options or none).",
+      "retailersTried": [
+        "amazon-sa"
+      ],
+      "checkedAt": "2026-09-30"
+    },
+    {
+      "partId": "fractal-pop-mini-air-rgb-black-tg-clear-tint",
+      "market": "SA",
+      "reasonCode": "no-price-shown",
+      "reason": "Amazon.sa: the product page shows no buy-box price (only other buying options or none).",
+      "retailersTried": [
+        "amazon-sa"
+      ],
+      "checkedAt": "2026-09-30"
+    },
+    {
+      "partId": "deepcool-ch560",
+      "market": "SA",
+      "reasonCode": "not-listed",
+      "reason": "Amazon.sa: no listing for this exact part in the search results.",
+      "retailersTried": [
+        "amazon-sa"
+      ],
+      "checkedAt": "2026-09-30"
+    },
+    {
+      "partId": "deepcool-ak620",
+      "market": "SA",
+      "reasonCode": "not-listed",
+      "reason": "Amazon.sa: no listing for this exact part in the search results.",
+      "retailersTried": [
+        "amazon-sa"
+      ],
+      "checkedAt": "2026-09-30"
+    },
+    {
+      "partId": "deepcool-an400",
+      "market": "SA",
+      "reasonCode": "not-listed",
+      "reason": "Amazon.sa: no listing for this exact part in the search results.",
+      "retailersTried": [
+        "amazon-sa"
+      ],
+      "checkedAt": "2026-09-30"
+    },
+    {
+      "partId": "amd-ryzen-7-5700x3d",
+      "market": "SA",
+      "reasonCode": "not-listed",
+      "reason": "Amazon.sa: no listing for this exact part in the search results.",
+      "retailersTried": [
+        "amazon-sa"
+      ],
+      "checkedAt": "2026-09-30"
+    },
+    {
+      "partId": "nvidia-geforce-rtx-5090-founders-edition",
+      "market": "SA",
+      "reasonCode": "not-listed",
+      "reason": "Amazon.sa: no listing for this exact part in the search results.",
+      "retailersTried": [
+        "amazon-sa"
+      ],
+      "checkedAt": "2026-09-30"
+    },
+    {
+      "partId": "nvidia-geforce-rtx-5070-founders-edition",
+      "market": "SA",
+      "reasonCode": "not-listed",
+      "reason": "Amazon.sa: no listing for this exact part in the search results.",
+      "retailersTried": [
+        "amazon-sa"
+      ],
+      "checkedAt": "2026-09-30"
+    },
+    {
+      "partId": "asus-tuf-gaming-geforce-rtx-5070-ti-16gb-oc",
+      "market": "SA",
+      "reasonCode": "unavailable",
+      "reason": "Amazon.sa lists the exact card (B0DS6WTXGP, TUF-RTX5070TI-O16G-GAMING) as \"Currently unavailable\"; its other TUF 5070 Ti listings are the White edition and the non-OC TUF-RTX5070TI-16G-GAMING.",
+      "retailersTried": [
+        "amazon-sa"
+      ],
+      "checkedAt": "2026-09-30"
+    },
+    {
+      "partId": "deepcool-pn650m",
+      "market": "SA",
+      "reasonCode": "not-listed",
+      "reason": "Amazon.sa: no listing for this exact part in the search results.",
+      "retailersTried": [
+        "amazon-sa"
+      ],
+      "checkedAt": "2026-09-30"
+    },
+    {
+      "partId": "deepcool-pn850m",
+      "market": "SA",
+      "reasonCode": "not-listed",
+      "reason": "Amazon.sa: no listing for this exact part in the search results.",
+      "retailersTried": [
+        "amazon-sa"
+      ],
+      "checkedAt": "2026-09-30"
+    },
+    {
+      "partId": "teamgroup-t-force-vulcan-z-ddr4-3200-cl16-2x16gb",
+      "market": "SA",
+      "reasonCode": "not-listed",
+      "reason": "Amazon.sa lists only TLZGD432G3200HC16FDC01 (B08NVQZ9XQ), a separate TeamGroup code for the same kit spec, and shows no buy-box price for it.",
+      "retailersTried": [
+        "amazon-sa"
+      ],
+      "checkedAt": "2026-09-30"
+    },
+    {
+      "partId": "wd-black-sn8100-2tb",
+      "market": "SA",
+      "reasonCode": "no-price-shown",
+      "reason": "Amazon.sa: the product page shows no buy-box price (only other buying options or none).",
+      "retailersTried": [
+        "amazon-sa"
+      ],
+      "checkedAt": "2026-09-30"
+    },
+    {
+      "partId": "wd-black-sn850x-2tb",
+      "market": "SA",
+      "reasonCode": "no-price-shown",
+      "reason": "Amazon.sa: the product page shows no buy-box price (only other buying options or none).",
+      "retailersTried": [
+        "amazon-sa"
+      ],
+      "checkedAt": "2026-09-30"
+    }
+  ]
+}

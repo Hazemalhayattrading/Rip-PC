@@ -1,0 +1,80 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Least privilege: nothing by default; each job asks for what it needs.
+permissions: {}
+
+# One deployment at a time. A run in progress is never cancelled, so Pages never ends up
+# half-deployed.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Verify and build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    outputs:
+      base_path: ${{ steps.site.outputs.base_path }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      # The same gate as CI: never deploy a build that fails typecheck, lint, tests or e2e.
+      - run: npm run verify
+
+      - name: Read the base path from the route table
+        id: site
+        run: >-
+          node --input-type=module -e "const { BASE_PATH } = await import('./src/app/routes.ts');
+          console.log('base_path=' + BASE_PATH.replace(/\/$/, ''))" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: pages
+        uses: actions/configure-pages@v6
+
+      - name: Check that Pages serves the site at the base path the build uses
+        env:
+          PAGES_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          BUILD_BASE_PATH: ${{ needs.build.outputs.base_path }}
+        run: |
+          if [ "$PAGES_BASE_PATH" != "$BUILD_BASE_PATH" ]; then
+            echo "::error::Pages serves this site at '$PAGES_BASE_PATH' but the build uses '$BUILD_BASE_PATH' (BASE_PATH in src/app/routes.ts)."
+            exit 1
+          fi
+
+      - id: deployment
+        uses: actions/deploy-pages@v5

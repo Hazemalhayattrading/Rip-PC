@@ -1,0 +1,1825 @@
+{
+  "schemaVersion": 1,
+  "category": "motherboard",
+  "items": [
+    {
+      "id": "asus-tuf-gaming-b650-plus-wifi",
+      "category": "motherboard",
+      "manufacturer": "asus",
+      "brand": "ASUS",
+      "name": "TUF GAMING B650-PLUS WIFI",
+      "socket": "AM5",
+      "chipset": "B650",
+      "formFactor": "ATX",
+      "biosSupport": {
+        "families": [
+          {
+            "family": "ryzen-7000",
+            "minBiosVersion": null,
+            "statement": "CPU support list: Ryzen 7000 models 'Validated since BIOS: all' (Ryzen 7 7800X3D: 1409)."
+          },
+          {
+            "family": "ryzen-9000",
+            "minBiosVersion": "2613",
+            "statement": "BIOS 2613 (2024/04/18): \"Update AGESA version to Combo 1.1.7.0 patch A to support next generation AMD Ryzen processors\"."
+          }
+        ],
+        "cpus": [
+          {
+            "cpuId": "amd-ryzen-7-9850x3d",
+            "listing": "all",
+            "minBiosVersion": null,
+            "asListed": "Ryzen 7 9850X3D (4.7GHz, 120W, 96MB, 8, ): all"
+          },
+          {
+            "cpuId": "amd-ryzen-7-9800x3d",
+            "listing": "since",
+            "minBiosVersion": "2613",
+            "asListed": "Ryzen 7 9800X3D listed twice: all; 2613"
+          },
+          {
+            "cpuId": "amd-ryzen-9-9950x",
+            "listing": "all",
+            "minBiosVersion": null,
+            "asListed": "Ryzen 9 9950X (4.3GHz, 170W, 64MB, 16, ): all"
+          },
+          {
+            "cpuId": "amd-ryzen-7-9700x",
+            "listing": "all",
+            "minBiosVersion": null,
+            "asListed": "Ryzen 7 9700X (3.8GHz, 65W, 32MB, 8, ): all"
+          },
+          {
+            "cpuId": "amd-ryzen-5-9600x",
+            "listing": "all",
+            "minBiosVersion": null,
+            "asListed": "Ryzen 5 9600X (3.9GHz, 65W, 32MB, 6, ): all"
+          },
+          {
+            "cpuId": "amd-ryzen-7-7800x3d",
+            "listing": "since",
+            "minBiosVersion": "1409",
+            "asListed": "Ryzen 7 7800X3D (4.2GHz, 120W, 96MB, 8, B2): 1409"
+          },
+          {
+            "cpuId": "amd-ryzen-5-7600",
+            "listing": "all",
+            "minBiosVersion": null,
+            "asListed": "Ryzen 5 7600 (3.8GHz, 65W, 32MB, 6, B2): all"
+          }
+        ]
+      },
+      "biosFlashback": {
+        "supported": true,
+        "name": "BIOS FlashBack"
+      },
+      "memory": {
+        "type": "DDR5",
+        "slots": 4,
+        "maxCapacityGb": 256,
+        "maxSpeedMtps": 7600,
+        "speedsAsPublished": "4 x DIMM, Max. 256GB, DDR5 7600+(OC)/ 7200(OC)/ 7000(OC)/ 6800(OC)/6600(OC)/ 6400(OC)/ 6200(OC)/ 6000(OC)/ 5800(OC)/ 5600(OC)/ 5400(OC)/ 5200/ 5000/ 4800"
+      },
+      "m2Slots": [
+        {
+          "id": "m2-1",
+          "label": "M.2_1",
+          "pcieGen": 5,
+          "lanes": 4,
+          "source": "cpu",
+          "sizes": [
+            "2242",
+            "2260",
+            "2280"
+          ],
+          "sataSupport": false
+        },
+        {
+          "id": "m2-2",
+          "label": "M.2_2",
+          "pcieGen": 4,
+          "lanes": 4,
+          "source": "cpu",
+          "sizes": [
+            "2242",
+            "2260",
+            "2280",
+            "22110"
+          ],
+          "sataSupport": false
+        },
+        {
+          "id": "m2-3",
+          "label": "M.2_3",
+          "pcieGen": 4,
+          "lanes": 4,
+          "source": "chipset",
+          "sizes": [
+            "2242",
+            "2260",
+            "2280"
+          ],
+          "sataSupport": false
+        }
+      ],
+      "pcieSlots": [
+        {
+          "id": "pcie-1",
+          "label": "PCIEX16_1",
+          "gen": 4,
+          "electricalLanes": 16,
+          "physicalSize": "x16",
+          "source": "cpu"
+        },
+        {
+          "id": "pcie-2",
+          "label": "PCIEX16_2",
+          "gen": 4,
+          "electricalLanes": 4,
+          "physicalSize": "x16",
+          "source": "chipset"
+        },
+        {
+          "id": "pcie-3",
+          "label": "PCIEX1_1",
+          "gen": 4,
+          "electricalLanes": 1,
+          "physicalSize": "x1",
+          "source": "chipset"
+        },
+        {
+          "id": "pcie-4",
+          "label": "PCIEX1_2",
+          "gen": 4,
+          "electricalLanes": 1,
+          "physicalSize": "x1",
+          "source": "chipset"
+        }
+      ],
+      "sataPorts": [
+        {
+          "id": "sata-1",
+          "label": "SATA6G_1"
+        },
+        {
+          "id": "sata-2",
+          "label": "SATA6G_2"
+        },
+        {
+          "id": "sata-3",
+          "label": "SATA6G_3"
+        },
+        {
+          "id": "sata-4",
+          "label": "SATA6G_4"
+        }
+      ],
+      "laneSharing": [
+        {
+          "id": "ls-1",
+          "trigger": {
+            "slot": "m2-3",
+            "deviceType": "any"
+          },
+          "effects": [
+            {
+              "type": "disables",
+              "slots": [
+                "pcie-2"
+              ]
+            }
+          ],
+          "manualPage": "vii",
+          "text": "M.2_3 shares bandwidth with PCIEX16_2. PCIEX16_2 will be suspended once M.2_3 is populated."
+        }
+      ],
+      "rearIo": [
+        "1 x USB 3.2 Gen 2x2 port (1 x USB Type-C)",
+        "3 x USB 3.2 Gen 2 ports (2 x Type-A + 1 x USB Type-C)",
+        "4 x USB 2.0 ports (4 x Type-A)",
+        "1 x DisplayPort",
+        "1 x HDMI port",
+        "1 x Wi-Fi Module",
+        "1 x Realtek 2.5Gb Ethernet port",
+        "5 x Audio jacks",
+        "1 x BIOS FlashBack button"
+      ],
+      "wifi": "Wi-Fi 6",
+      "bluetooth": "5.2",
+      "lan": "Realtek 2.5Gb Ethernet",
+      "headers": {
+        "usbCFront": [
+          {
+            "label": "USB 3.2 Gen 1 connector (supports USB Type-C)",
+            "speedGbps": 5,
+            "count": 1
+          }
+        ],
+        "usb3Gen1": 1,
+        "usb2": 2,
+        "argb5v3pin": 3,
+        "rgb12v4pin": 1,
+        "fans": [
+          {
+            "label": "4-pin CPU Fan header",
+            "count": 1,
+            "role": "cpu"
+          },
+          {
+            "label": "4-pin CPU OPT Fan header",
+            "count": 1,
+            "role": "cpu-opt"
+          },
+          {
+            "label": "4-pin AIO Pump header",
+            "count": 1,
+            "role": "pump"
+          },
+          {
+            "label": "4-pin Chassis Fan header",
+            "count": 4,
+            "role": "chassis"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "url": "https://www.asus.com/motherboards-components/motherboards/tuf-gaming/tuf-gaming-b650-plus-wifi/techspec/",
+          "publisher": "asus",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "title": "TUF GAMING B650-PLUS WIFI - Tech Specs"
+        },
+        {
+          "url": "https://www.asus.com/motherboards-components/motherboards/tuf-gaming/tuf-gaming-b650-plus-wifi/helpdesk_cpu/?model2Name=TUF-GAMING-B650-PLUS-WIFI",
+          "publisher": "asus",
+          "retrievedAt": "2026-09-30",
+          "docType": "cpu-support-list",
+          "fields": [
+            "biosSupport.cpus",
+            "biosSupport.families.0"
+          ],
+          "title": "CPU support list"
+        },
+        {
+          "url": "https://www.asus.com/motherboards-components/motherboards/tuf-gaming/tuf-gaming-b650-plus-wifi/helpdesk_bios/?model2Name=TUF-GAMING-B650-PLUS-WIFI",
+          "publisher": "asus",
+          "retrievedAt": "2026-09-30",
+          "docType": "bios-release-notes",
+          "fields": [
+            "biosSupport.families.1"
+          ],
+          "title": "BIOS & firmware release notes"
+        },
+        {
+          "url": "https://dlcdnets.asus.com/pub/ASUS/mb/Socket%20AM5/TUF%20GAMING%20B650-PLUS%20WIFI/E21902_TUF_GAMING_B650-PLUS_WIFI_UM_V3_WEB.pdf",
+          "publisher": "asus",
+          "retrievedAt": "2026-09-30",
+          "docType": "manual",
+          "fields": [
+            "laneSharing"
+          ],
+          "title": "User's Manual E21902 (V3)",
+          "locator": "p. vii, Storage"
+        }
+      ],
+      "notes": [
+        {
+          "field": "biosSupport.families.1",
+          "text": "The CPU support list shows 'all' for most Ryzen 9000 models, but the BIOS 2613 release note is where ASUS added next-generation Ryzen support; the stricter value is kept."
+        },
+        {
+          "field": "biosSupport.cpus.1",
+          "text": "ASUS lists the Ryzen 7 9800X3D twice ('all' and '2613'); the stricter value is kept."
+        },
+        {
+          "field": "pcieSlots",
+          "text": "With a Ryzen 8000 Series CPU, PCIEX16_1 supports x8/x4 mode and M.2_1 runs at PCIe 4.0 x4 (spec page). The catalogue has no Ryzen 8000 CPU."
+        }
+      ]
+    },
+    {
+      "id": "asus-tuf-gaming-x870-plus-wifi",
+      "category": "motherboard",
+      "manufacturer": "asus",
+      "brand": "ASUS",
+      "name": "TUF GAMING X870-PLUS WIFI",
+      "socket": "AM5",
+      "chipset": "X870",
+      "formFactor": "ATX",
+      "biosSupport": {
+        "families": [
+          {
+            "family": "ryzen-7000",
+            "minBiosVersion": null,
+            "statement": "CPU support list: Ryzen 7000 models 'Validated since BIOS: ALL'."
+          },
+          {
+            "family": "ryzen-9000",
+            "minBiosVersion": null,
+            "statement": "CPU support list: Ryzen 9000 models 'ALL' (Ryzen 7 9850X3D: 1066)."
+          }
+        ],
+        "cpus": [
+          {
+            "cpuId": "amd-ryzen-7-9850x3d",
+            "listing": "since",
+            "minBiosVersion": "1066",
+            "asListed": "Ryzen 7 9850X3D (4.7GHz, 120W, 96MB, 8, ): 1066"
+          },
+          {
+            "cpuId": "amd-ryzen-7-9800x3d",
+            "listing": "all",
+            "minBiosVersion": null,
+            "asListed": "Ryzen 7 9800X3D listed twice: ALL; all"
+          },
+          {
+            "cpuId": "amd-ryzen-9-9950x",
+            "listing": "all",
+            "minBiosVersion": null,
+            "asListed": "Ryzen 9 9950X (4.3GHz, 170W, 64MB, 16, ): ALL"
+          },
+          {
+            "cpuId": "amd-ryzen-7-9700x",
+            "listing": "all",
+            "minBiosVersion": null,
+            "asListed": "Ryzen 7 9700X (3.8GHz, 65W, 32MB, 8, ): ALL"
+          },
+          {
+            "cpuId": "amd-ryzen-5-9600x",
+            "listing": "all",
+            "minBiosVersion": null,
+            "asListed": "Ryzen 5 9600X (3.9GHz, 65W, 32MB, 6, ): ALL"
+          },
+          {
+            "cpuId": "amd-ryzen-7-7800x3d",
+            "listing": "all",
+            "minBiosVersion": null,
+            "asListed": "Ryzen 7 7800X3D (4.2GHz, 120W, 96MB, 8, B2): ALL"
+          },
+          {
+            "cpuId": "amd-ryzen-5-7600",
+            "listing": "all",
+            "minBiosVersion": null,
+            "asListed": "Ryzen 5 7600 (3.8GHz, 65W, 32MB, 6, B2): ALL"
+          }
+        ]
+      },
+      "biosFlashback": {
+        "supported": true,
+        "name": "BIOS FlashBack"
+      },
+      "memory": {
+        "type": "DDR5",
+        "slots": 4,
+        "maxCapacityGb": 256,
+        "maxSpeedMtps": 8000,
+        "speedsAsPublished": "4 x DIMM slots, max. 256GB, DDR5 Supports up to 8000+MT/s(OC) with Ryzen 9000 & 8000 & 7000 Series Processors"
+      },
+      "m2Slots": [
+        {
+          "id": "m2-1",
+          "label": "M.2_1",
+          "pcieGen": 5,
+          "lanes": 4,
+          "source": "cpu",
+          "sizes": [
+            "2280"
+          ],
+          "sataSupport": false
+        },
+        {
+          "id": "m2-2",
+          "label": "M.2_2",
+          "pcieGen": 5,
+          "lanes": 4,
+          "source": "cpu",
+          "sizes": [
+            "2280"
+          ],
+          "sataSupport": false
+        },
+        {
+          "id": "m2-3",
+          "label": "M.2_3",
+          "pcieGen": 4,
+          "lanes": 4,
+          "source": "chipset",
+          "sizes": [
+            "2280"
+          ],
+          "sataSupport": false
+        },
+        {
+          "id": "m2-4",
+          "label": "M.2_4",
+          "pcieGen": 4,
+          "lanes": 4,
+          "source": "chipset",
+          "sizes": [
+            "2242",
+            "2260",
+            "2280",
+            "22110"
+          ],
+          "sataSupport": false
+        }
+      ],
+      "pcieSlots": [
+        {
+          "id": "pcie-1",
+          "label": "PCIEX16(G5)",
+          "gen": 5,
+          "electricalLanes": 16,
+          "physicalSize": "x16",
+          "source": "cpu"
+        },
+        {
+          "id": "pcie-2",
+          "label": "PCIEX16(G4)",
+          "gen": 4,
+          "electricalLanes": 4,
+          "physicalSize": "x16",
+          "source": "chipset"
+        }
+      ],
+      "sataPorts": [
+        {
+          "id": "sata-1",
+          "label": "SATA6G_1"
+        },
+        {
+          "id": "sata-2",
+          "label": "SATA6G_2"
+        }
+      ],
+      "laneSharing": [
+        {
+          "id": "ls-1",
+          "trigger": {
+            "slot": "m2-2",
+            "deviceType": "any"
+          },
+          "effects": [
+            {
+              "type": "reduces",
+              "slot": "pcie-1",
+              "lanes": 8
+            }
+          ],
+          "manualPage": "8, 14",
+          "text": "PCIEX16(G5) shares bandwidth with M.2_2. PCIEX16(G5) will run to x8 mode when M.2_2 runs."
+        },
+        {
+          "id": "ls-2",
+          "trigger": {
+            "slot": "m2-4",
+            "deviceType": "any"
+          },
+          "effects": [
+            {
+              "type": "disables",
+              "slots": [
+                "pcie-2"
+              ]
+            }
+          ],
+          "manualPage": "9, 14",
+          "text": "PCIEX16(G4) shares bandwidth with M.2_4. PCIEX16(G4) will be disabled when M.2_4 runs."
+        }
+      ],
+      "rearIo": [
+        "2 x USB4 (40Gbps) ports (2 x USB Type-C)",
+        "3 x USB 10Gbps ports (3 x Type-A)",
+        "4 x USB 5Gbps ports (4 x Type-A)",
+        "1 x USB 2.0 port (1 x Type-A)",
+        "1 x HDMI port",
+        "1 x Wi-Fi module",
+        "1 x Realtek 2.5Gb Ethernet port",
+        "5 x Audio jacks",
+        "1 x BIOS FlashBack button"
+      ],
+      "wifi": "Wi-Fi 7",
+      "bluetooth": "5.4",
+      "lan": "Realtek 2.5Gb Ethernet",
+      "headers": {
+        "usbCFront": [
+          {
+            "label": "USB 20Gbps connector (supports USB Type-C with up to 30W PD Fast-charge)",
+            "speedGbps": 20,
+            "count": 1
+          }
+        ],
+        "usb3Gen1": 1,
+        "usb2": 2,
+        "argb5v3pin": 3,
+        "rgb12v4pin": 0,
+        "fans": [
+          {
+            "label": "4-pin CPU Fan header",
+            "count": 1,
+            "role": "cpu"
+          },
+          {
+            "label": "4-pin CPU OPT Fan header",
+            "count": 1,
+            "role": "cpu-opt"
+          },
+          {
+            "label": "4-pin AIO Pump header",
+            "count": 1,
+            "role": "pump"
+          },
+          {
+            "label": "4-pin Chassis Fan header",
+            "count": 4,
+            "role": "chassis"
+          },
+          {
+            "label": "W_PUMP+ header",
+            "count": 1,
+            "role": "pump"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "url": "https://www.asus.com/motherboards-components/motherboards/tuf-gaming/tuf-gaming-x870-plus-wifi/techspec/",
+          "publisher": "asus",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "title": "TUF GAMING X870-PLUS WIFI - Tech Specs"
+        },
+        {
+          "url": "https://www.asus.com/motherboards-components/motherboards/tuf-gaming/tuf-gaming-x870-plus-wifi/helpdesk_cpu/?model2Name=tuf-gaming-x870-plus-wifi",
+          "publisher": "asus",
+          "retrievedAt": "2026-09-30",
+          "docType": "cpu-support-list",
+          "fields": [
+            "biosSupport"
+          ],
+          "title": "CPU support list"
+        },
+        {
+          "url": "https://dlcdnets.asus.com/pub/ASUS/mb/SocketAM5/TUF_GAMING_X870-PLUS_WIFI/E25811_TUF_GAMING_X870-PLUS_WIFI_EM_V2_WEB.pdf",
+          "publisher": "asus",
+          "retrievedAt": "2026-09-30",
+          "docType": "manual",
+          "fields": [
+            "laneSharing"
+          ],
+          "title": "User's Manual E25811 (V2)",
+          "locator": "pp. 8-9 specifications summary; p. 14 Connectors with shared bandwidth"
+        }
+      ],
+      "notes": [
+        {
+          "field": "m2Slots",
+          "text": "With a Ryzen 8000 Series CPU, M.2_2 does not work and M.2_1 runs at PCIe 4.0 x4 (manual p. 9). The catalogue has no Ryzen 8000 CPU."
+        }
+      ]
+    },
+    {
+      "id": "asus-rog-strix-b650e-i-gaming-wifi",
+      "category": "motherboard",
+      "manufacturer": "asus",
+      "brand": "ASUS",
+      "name": "ROG STRIX B650E-I GAMING WIFI",
+      "socket": "AM5",
+      "chipset": "B650",
+      "formFactor": "Mini-ITX",
+      "biosSupport": {
+        "families": [
+          {
+            "family": "ryzen-7000",
+            "minBiosVersion": null,
+            "statement": "CPU support list: Ryzen 7000 models 'Validated since BIOS: all' (Ryzen 7 7800X3D: 1409)."
+          },
+          {
+            "family": "ryzen-9000",
+            "minBiosVersion": "2611",
+            "statement": "BIOS 2611 (2024/04/17): \"Update AGESA version to Combo AM5 PI 1.1.7.0 patch A to support next generation AMD Ryzen processors.\""
+          }
+        ],
+        "cpus": [
+          {
+            "cpuId": "amd-ryzen-7-9850x3d",
+            "listing": "all",
+            "minBiosVersion": null,
+            "asListed": "Ryzen 7 9850X3D (4.7GHz, 120W, 96MB, 8, ): all"
+          },
+          {
+            "cpuId": "amd-ryzen-7-9800x3d",
+            "listing": "since",
+            "minBiosVersion": "2611",
+            "asListed": "Ryzen 7 9800X3D listed twice: all; 2611"
+          },
+          {
+            "cpuId": "amd-ryzen-9-9950x",
+            "listing": "all",
+            "minBiosVersion": null,
+            "asListed": "Ryzen 9 9950X (4.3GHz, 170W, 64MB, 16, ): all"
+          },
+          {
+            "cpuId": "amd-ryzen-7-9700x",
+            "listing": "all",
+            "minBiosVersion": null,
+            "asListed": "Ryzen 7 9700X (3.8GHz, 65W, 32MB, 8, ): all"
+          },
+          {
+            "cpuId": "amd-ryzen-5-9600x",
+            "listing": "all",
+            "minBiosVersion": null,
+            "asListed": "Ryzen 5 9600X (3.9GHz, 65W, 32MB, 6, ): all"
+          },
+          {
+            "cpuId": "amd-ryzen-7-7800x3d",
+            "listing": "since",
+            "minBiosVersion": "1409",
+            "asListed": "Ryzen 7 7800X3D (4.2GHz, 120W, 96MB, 8, B2): 1409"
+          },
+          {
+            "cpuId": "amd-ryzen-5-7600",
+            "listing": "all",
+            "minBiosVersion": null,
+            "asListed": "Ryzen 5 7600 (3.8GHz, 65W, 32MB, 6, B2): all"
+          }
+        ]
+      },
+      "biosFlashback": {
+        "supported": true,
+        "name": "BIOS FlashBack"
+      },
+      "memory": {
+        "type": "DDR5",
+        "slots": 2,
+        "maxCapacityGb": 96,
+        "maxSpeedMtps": 8000,
+        "speedsAsPublished": "2 x DIMM, Max. 96GB, DDR5 8000+(OC)/7800(OC)/7600(OC)/7200(OC)/7000(OC)/6800(OC)/6600(OC)/6400(OC)/ 6200(OC)/ 6000(OC)/ 5800(OC)/ 5600(OC)/ 5400(OC)/ 5200/ 5000/ 4800"
+      },
+      "m2Slots": [
+        {
+          "id": "m2-1",
+          "label": "M.2_1",
+          "pcieGen": 5,
+          "lanes": 4,
+          "source": "cpu",
+          "sizes": [
+            "2242",
+            "2260",
+            "2280"
+          ],
+          "sataSupport": false
+        },
+        {
+          "id": "m2-2",
+          "label": "M.2_2",
+          "pcieGen": 4,
+          "lanes": 4,
+          "source": "cpu",
+          "sizes": [
+            "2242",
+            "2260",
+            "2280"
+          ],
+          "sataSupport": false
+        }
+      ],
+      "pcieSlots": [
+        {
+          "id": "pcie-1",
+          "label": "PCIEX16",
+          "gen": 5,
+          "electricalLanes": 16,
+          "physicalSize": "x16",
+          "source": "cpu"
+        }
+      ],
+      "sataPorts": [
+        {
+          "id": "sata-1",
+          "label": "SATA6G_1"
+        },
+        {
+          "id": "sata-2",
+          "label": "SATA6G_2"
+        }
+      ],
+      "laneSharing": [],
+      "rearIo": [
+        "1 x USB 3.2 Gen 2x2 port (1 x USB Type-C)",
+        "5 x USB 3.2 Gen 2 ports (4 x Type-A + 1 x USB Type-C with DP Alt mode)",
+        "2 x USB 2.0 ports (2 x Type-A)",
+        "1 x HDMI port",
+        "1 x Wi-Fi Module",
+        "1 x Intel 2.5Gb Ethernet port",
+        "3 x LED-illuminated audio jacks",
+        "1 x Optical S/PDIF out port",
+        "1 x BIOS FlashBack button",
+        "1 x FlexKey button"
+      ],
+      "wifi": "Wi-Fi 6E",
+      "bluetooth": "5.2",
+      "lan": "Intel 2.5Gb Ethernet",
+      "headers": {
+        "usbCFront": [
+          {
+            "label": "USB 3.2 Gen 2 connector",
+            "speedGbps": 10,
+            "count": 1
+          }
+        ],
+        "usb3Gen1": 1,
+        "usb2": 1,
+        "argb5v3pin": 1,
+        "rgb12v4pin": 1,
+        "fans": [
+          {
+            "label": "4-pin CPU Fan header",
+            "count": 1,
+            "role": "cpu"
+          },
+          {
+            "label": "4-pin AIO Pump header",
+            "count": 1,
+            "role": "pump"
+          },
+          {
+            "label": "4-pin Chassis Fan header",
+            "count": 1,
+            "role": "chassis"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "url": "https://rog.asus.com/motherboards/rog-strix/rog-strix-b650e-i-gaming-wifi-model/spec/",
+          "publisher": "asus",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "title": "ROG STRIX B650E-I GAMING WIFI - Spec"
+        },
+        {
+          "url": "https://rog.asus.com/motherboards/rog-strix/rog-strix-b650e-i-gaming-wifi-model/helpdesk_cpu/?model2Name=rog-strix-b650e-i-gaming-wifi-model",
+          "publisher": "asus",
+          "retrievedAt": "2026-09-30",
+          "docType": "cpu-support-list",
+          "fields": [
+            "biosSupport.cpus",
+            "biosSupport.families.0"
+          ],
+          "title": "CPU support list"
+        },
+        {
+          "url": "https://rog.asus.com/motherboards/rog-strix/rog-strix-b650e-i-gaming-wifi-model/helpdesk_bios/?model2Name=rog-strix-b650e-i-gaming-wifi-model",
+          "publisher": "asus",
+          "retrievedAt": "2026-09-30",
+          "docType": "bios-release-notes",
+          "fields": [
+            "biosSupport.families.1"
+          ],
+          "title": "BIOS & firmware release notes"
+        },
+        {
+          "url": "https://dlcdnets.asus.com/pub/ASUS/mb/Socket%20AM5/ROG_STRIX_B650E-I_GAMING_WIFI/E28634_ROG_STRIX_B650E-I_GAMING_WIFI_EM_V2_WEB.pdf",
+          "publisher": "asus",
+          "retrievedAt": "2026-09-30",
+          "docType": "manual",
+          "fields": [
+            "laneSharing"
+          ],
+          "title": "User's Manual E28634 (V2)",
+          "locator": "p. vii specifications summary; p. 1-8 (M.2 slots)"
+        }
+      ],
+      "notes": [
+        {
+          "field": "chipset",
+          "text": "ASUS lists the chipset as \"AMD B650\" on the spec page and in the manual, although the board's name says B650E."
+        },
+        {
+          "field": "laneSharing",
+          "text": "The manual's specifications summary and M.2 section give no shared-bandwidth footnote for any slot or port on this board."
+        },
+        {
+          "field": "biosSupport.families.1",
+          "text": "The CPU support list shows 'all' for most Ryzen 9000 models, but the BIOS 2611 release note is where ASUS added next-generation Ryzen support; the stricter value is kept."
+        },
+        {
+          "field": "biosSupport.cpus.1",
+          "text": "ASUS lists the Ryzen 7 9800X3D twice ('all' and '2611'); the stricter value is kept."
+        },
+        {
+          "field": "headers.usbCFront",
+          "text": "The spec page lists a \"USB 3.2 Gen 2 connector\" (a front-panel Type-C header) without restating its speed; USB 3.2 Gen 2 is 10Gbps."
+        }
+      ]
+    },
+    {
+      "id": "asus-tuf-gaming-b650m-plus-wifi",
+      "category": "motherboard",
+      "manufacturer": "asus",
+      "brand": "ASUS",
+      "name": "TUF GAMING B650M-PLUS WIFI",
+      "socket": "AM5",
+      "chipset": "B650",
+      "formFactor": "Micro-ATX",
+      "biosSupport": {
+        "families": [
+          {
+            "family": "ryzen-7000",
+            "minBiosVersion": null,
+            "statement": "CPU support list: some Ryzen 7000 models 'Validated since BIOS: all' (Ryzen 5 7600: 0602; Ryzen 7 7800X3D: 1409)."
+          },
+          {
+            "family": "ryzen-9000",
+            "minBiosVersion": "2613",
+            "statement": "CPU support list: every Ryzen 9000 model validated since BIOS 2613 or later (Ryzen 7 9850X3D: 3263)."
+          }
+        ],
+        "cpus": [
+          {
+            "cpuId": "amd-ryzen-7-9850x3d",
+            "listing": "since",
+            "minBiosVersion": "3263",
+            "asListed": "Ryzen 7 9850X3D (4.7GHz, 120W, 96MB, 8, ): 3263"
+          },
+          {
+            "cpuId": "amd-ryzen-7-9800x3d",
+            "listing": "since",
+            "minBiosVersion": "2613",
+            "asListed": "Ryzen 7 9800X3D listed twice: 2613; 2613"
+          },
+          {
+            "cpuId": "amd-ryzen-9-9950x",
+            "listing": "since",
+            "minBiosVersion": "2613",
+            "asListed": "Ryzen 9 9950X (4.3GHz, 170W, 64MB, 16, ): 2613"
+          },
+          {
+            "cpuId": "amd-ryzen-7-9700x",
+            "listing": "since",
+            "minBiosVersion": "2613",
+            "asListed": "Ryzen 7 9700X (3.8GHz, 65W, 32MB, 8, ): 2613"
+          },
+          {
+            "cpuId": "amd-ryzen-5-9600x",
+            "listing": "since",
+            "minBiosVersion": "2613",
+            "asListed": "Ryzen 5 9600X (3.9GHz, 65W, 32MB, 6, ): 2613"
+          },
+          {
+            "cpuId": "amd-ryzen-7-7800x3d",
+            "listing": "since",
+            "minBiosVersion": "1409",
+            "asListed": "Ryzen 7 7800X3D (4.2GHz, 120W, 96MB, 8, B2): 1409"
+          },
+          {
+            "cpuId": "amd-ryzen-5-7600",
+            "listing": "since",
+            "minBiosVersion": "0602",
+            "asListed": "Ryzen 5 7600 (3.8GHz, 65W, 32MB, 6, B2): 0602"
+          }
+        ]
+      },
+      "biosFlashback": {
+        "supported": true,
+        "name": "BIOS FlashBack"
+      },
+      "memory": {
+        "type": "DDR5",
+        "slots": 4,
+        "maxCapacityGb": 256,
+        "maxSpeedMtps": 7600,
+        "speedsAsPublished": "4 x DIMM, Max. 256GB, DDR5 7600+OC)/7200(OC)/7000(OC)/6800(OC)/6600(OC)/6400(OC)/ 6200(OC)/ 6000(OC)/5800(OC)/ 5600(OC)/ 5400(OC)/ 5200/ 5000/ 4800"
+      },
+      "m2Slots": [
+        {
+          "id": "m2-1",
+          "label": "M.2_1",
+          "pcieGen": 5,
+          "lanes": 4,
+          "source": "cpu",
+          "sizes": [
+            "2242",
+            "2260",
+            "2280"
+          ],
+          "sataSupport": false
+        },
+        {
+          "id": "m2-2",
+          "label": "M.2_2",
+          "pcieGen": 4,
+          "lanes": 4,
+          "source": "cpu",
+          "sizes": [
+            "2242",
+            "2260",
+            "2280"
+          ],
+          "sataSupport": false
+        }
+      ],
+      "pcieSlots": [
+        {
+          "id": "pcie-1",
+          "label": "PCIEX16_1",
+          "gen": 4,
+          "electricalLanes": 16,
+          "physicalSize": "x16",
+          "source": "cpu"
+        },
+        {
+          "id": "pcie-2",
+          "label": "PCIEX16_2",
+          "gen": 4,
+          "electricalLanes": 4,
+          "physicalSize": "x16",
+          "source": "chipset"
+        },
+        {
+          "id": "pcie-3",
+          "label": "PCIEX1",
+          "gen": 4,
+          "electricalLanes": 1,
+          "physicalSize": "x1",
+          "source": "chipset"
+        }
+      ],
+      "sataPorts": [
+        {
+          "id": "sata-1",
+          "label": "SATA6G_1"
+        },
+        {
+          "id": "sata-2",
+          "label": "SATA6G_2"
+        },
+        {
+          "id": "sata-3",
+          "label": "SATA6G_3"
+        },
+        {
+          "id": "sata-4",
+          "label": "SATA6G_4"
+        }
+      ],
+      "laneSharing": [],
+      "rearIo": [
+        "1 x USB 3.2 Gen 2x2 port (1 x USB Type-C)",
+        "2 x USB 3.2 Gen 2 ports (2 x Type-A)",
+        "1 x USB 3.2 Gen 1 port (1 x Type-A)",
+        "4 x USB 2.0 ports (4 x Type-A)",
+        "1 x DisplayPort",
+        "1 x HDMI port",
+        "1 x Wi-Fi Module",
+        "1 x Realtek 2.5Gb Ethernet port",
+        "5 x Audio jacks",
+        "1 x BIOS FlashBack button"
+      ],
+      "wifi": "Wi-Fi 6",
+      "bluetooth": "5.2",
+      "lan": "Realtek 2.5Gb Ethernet",
+      "headers": {
+        "usbCFront": [
+          {
+            "label": "USB 3.2 Gen 1 connector (supports USB Type-C)",
+            "speedGbps": 5,
+            "count": 1
+          }
+        ],
+        "usb3Gen1": 1,
+        "usb2": 2,
+        "argb5v3pin": 3,
+        "rgb12v4pin": 1,
+        "fans": [
+          {
+            "label": "4-pin CPU Fan header",
+            "count": 1,
+            "role": "cpu"
+          },
+          {
+            "label": "4-pin CPU OPT Fan header",
+            "count": 1,
+            "role": "cpu-opt"
+          },
+          {
+            "label": "4-pin AIO Pump header",
+            "count": 1,
+            "role": "pump"
+          },
+          {
+            "label": "4-pin Chassis Fan header",
+            "count": 3,
+            "role": "chassis"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "url": "https://www.asus.com/motherboards-components/motherboards/tuf-gaming/tuf-gaming-b650m-plus-wifi/techspec/",
+          "publisher": "asus",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "title": "TUF GAMING B650M-PLUS WIFI - Tech Specs"
+        },
+        {
+          "url": "https://www.asus.com/motherboards-components/motherboards/tuf-gaming/tuf-gaming-b650m-plus-wifi/helpdesk_cpu/?model2Name=tuf-gaming-b650m-plus-wifi",
+          "publisher": "asus",
+          "retrievedAt": "2026-09-30",
+          "docType": "cpu-support-list",
+          "fields": [
+            "biosSupport"
+          ],
+          "title": "CPU support list"
+        },
+        {
+          "url": "https://dlcdnets.asus.com/pub/ASUS/mb/Socket%20AM5/TUF_GAMING_B650M-PLUS_WIFI/E20197_TUF_GAMING_B650M-PLUS_WIFI_UM_WEB.pdf",
+          "publisher": "asus",
+          "retrievedAt": "2026-09-30",
+          "docType": "manual",
+          "fields": [
+            "laneSharing"
+          ],
+          "title": "User's Manual E20197",
+          "locator": "p. vi specifications summary; pp. 1-2 to 1-3 (expansion slots)"
+        }
+      ],
+      "notes": [
+        {
+          "field": "laneSharing",
+          "text": "The manual's specifications summary and expansion-slot pages give no shared-bandwidth footnote for any slot or port on this board."
+        },
+        {
+          "field": "pcieSlots",
+          "text": "With a Ryzen 8000 Series CPU, PCIEX16_1 supports x8/x4 mode and M.2_1 runs at PCIe 4.0 x4 (spec page). The catalogue has no Ryzen 8000 CPU."
+        }
+      ]
+    },
+    {
+      "id": "asus-tuf-gaming-b550-plus-wifi-ii",
+      "category": "motherboard",
+      "manufacturer": "asus",
+      "brand": "ASUS",
+      "name": "TUF GAMING B550-PLUS WIFI II",
+      "socket": "AM4",
+      "chipset": "B550",
+      "formFactor": "ATX",
+      "biosSupport": {
+        "families": [
+          {
+            "family": "ryzen-5000",
+            "minBiosVersion": "0303",
+            "statement": "CPU support list: earliest listed BIOS for Ryzen 5000 models is 0303 (e.g. Ryzen 5 5600: 0303; Ryzen 7 5700X3D: 2803)."
+          }
+        ],
+        "cpus": [
+          {
+            "cpuId": "amd-ryzen-7-5700x3d",
+            "listing": "since",
+            "minBiosVersion": "2803",
+            "asListed": "Ryzen 7 5700X3D (3.0GHz,105W,L3:96M,8C): 2803"
+          },
+          {
+            "cpuId": "amd-ryzen-5-5600",
+            "listing": "since",
+            "minBiosVersion": "0303",
+            "asListed": "Ryzen 5 5600 (3.5GHz,65W,L3:32M,6C): 0303"
+          }
+        ]
+      },
+      "biosFlashback": {
+        "supported": true,
+        "name": "BIOS FlashBack"
+      },
+      "memory": {
+        "type": "DDR4",
+        "slots": 4,
+        "maxCapacityGb": 128,
+        "maxSpeedMtps": 4866,
+        "speedsAsPublished": "4 x DIMM, Max. 128GB, DDR4 4866(OC)/4800(OC)/4600(OC)/4466(OC)/4400(OC)/4333(OC)/4266(OC)/4200(OC)/4133(OC)/4000(OC)/3866(OC)/3733(OC)/3600(OC)/3466(OC)/3400(OC)/3333(OC)/3200/3000/2933/2800/2666/2400/2133 MHz"
+      },
+      "m2Slots": [
+        {
+          "id": "m2-1",
+          "label": "M.2_1",
+          "pcieGen": 4,
+          "lanes": 4,
+          "source": "cpu",
+          "sizes": [
+            "2242",
+            "2260",
+            "2280",
+            "22110"
+          ],
+          "sataSupport": true
+        },
+        {
+          "id": "m2-2",
+          "label": "M.2_2",
+          "pcieGen": 3,
+          "lanes": 4,
+          "source": "chipset",
+          "sizes": [
+            "2242",
+            "2260",
+            "2280",
+            "22110"
+          ],
+          "sataSupport": true
+        }
+      ],
+      "pcieSlots": [
+        {
+          "id": "pcie-1",
+          "label": "PCIEX16_1",
+          "gen": 4,
+          "electricalLanes": 16,
+          "physicalSize": "x16",
+          "source": "cpu"
+        },
+        {
+          "id": "pcie-2",
+          "label": "PCIEX16_2",
+          "gen": 3,
+          "electricalLanes": 4,
+          "physicalSize": "x16",
+          "source": "chipset"
+        },
+        {
+          "id": "pcie-3",
+          "label": "PCIEX1_1",
+          "gen": 3,
+          "electricalLanes": 1,
+          "physicalSize": "x1",
+          "source": "chipset"
+        },
+        {
+          "id": "pcie-4",
+          "label": "PCIEX1_2",
+          "gen": 3,
+          "electricalLanes": 1,
+          "physicalSize": "x1",
+          "source": "chipset"
+        },
+        {
+          "id": "pcie-5",
+          "label": "PCIEX1_3",
+          "gen": 3,
+          "electricalLanes": 1,
+          "physicalSize": "x1",
+          "source": "chipset"
+        }
+      ],
+      "sataPorts": [
+        {
+          "id": "sata-1",
+          "label": "SATA6G_1"
+        },
+        {
+          "id": "sata-2",
+          "label": "SATA6G_2"
+        },
+        {
+          "id": "sata-3",
+          "label": "SATA6G_3"
+        },
+        {
+          "id": "sata-4",
+          "label": "SATA6G_4"
+        },
+        {
+          "id": "sata-5",
+          "label": "SATA6G_5"
+        },
+        {
+          "id": "sata-6",
+          "label": "SATA6G_6"
+        }
+      ],
+      "laneSharing": [
+        {
+          "id": "ls-1",
+          "trigger": {
+            "slot": "m2-2",
+            "deviceType": "any"
+          },
+          "effects": [
+            {
+              "type": "disables",
+              "slots": [
+                "sata-5",
+                "sata-6"
+              ]
+            }
+          ],
+          "manualPage": "vii, x",
+          "text": "M.2_2 shares bandwidth with SATA6G_56. When M.2_2 is populated, SATA6G_56 will be disabled."
+        },
+        {
+          "id": "ls-2",
+          "trigger": {
+            "slot": "pcie-3",
+            "deviceType": "any"
+          },
+          "effects": [
+            {
+              "type": "reduces",
+              "slot": "pcie-2",
+              "lanes": 1
+            }
+          ],
+          "manualPage": "vi, x",
+          "text": "PCIE 3.0 X16_2 runs x1 mode when any of the PCIe 3.0 x1 slots is occupied."
+        },
+        {
+          "id": "ls-3",
+          "trigger": {
+            "slot": "pcie-4",
+            "deviceType": "any"
+          },
+          "effects": [
+            {
+              "type": "reduces",
+              "slot": "pcie-2",
+              "lanes": 1
+            }
+          ],
+          "manualPage": "vi, x",
+          "text": "PCIE 3.0 X16_2 runs x1 mode when any of the PCIe 3.0 x1 slots is occupied."
+        },
+        {
+          "id": "ls-4",
+          "trigger": {
+            "slot": "pcie-5",
+            "deviceType": "any"
+          },
+          "effects": [
+            {
+              "type": "reduces",
+              "slot": "pcie-2",
+              "lanes": 1
+            }
+          ],
+          "manualPage": "vi, x",
+          "text": "PCIE 3.0 X16_2 runs x1 mode when any of the PCIe 3.0 x1 slots is occupied."
+        }
+      ],
+      "rearIo": [
+        "2 x USB 3.2 Gen 2 ports (1 x Type-A + 1 x USB Type-C)",
+        "4 x USB 3.2 Gen 1 ports (4 x Type-A)",
+        "2 x USB 2.0 ports (2 x Type-A)",
+        "1 x DisplayPort",
+        "1 x HDMI port",
+        "1 x ASUS Wi-Fi Module",
+        "1 x Realtek 2.5Gb Ethernet port",
+        "5 x Audio jacks",
+        "1 x Optical S/PDIF out port",
+        "1 x BIOS FlashBack button"
+      ],
+      "wifi": "Wi-Fi 6",
+      "bluetooth": "5.2",
+      "lan": "Realtek 2.5Gb Ethernet",
+      "headers": {
+        "usbCFront": [],
+        "usb3Gen1": 1,
+        "usb2": 2,
+        "argb5v3pin": 2,
+        "rgb12v4pin": 2,
+        "fans": [
+          {
+            "label": "4-pin CPU Fan header",
+            "count": 1,
+            "role": "cpu"
+          },
+          {
+            "label": "4-pin CPU OPT Fan header",
+            "count": 1,
+            "role": "cpu-opt"
+          },
+          {
+            "label": "4-pin AIO Pump header",
+            "count": 1,
+            "role": "pump"
+          },
+          {
+            "label": "4-pin Chassis Fan header",
+            "count": 3,
+            "role": "chassis"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "url": "https://www.asus.com/motherboards-components/motherboards/tuf-gaming/tuf-gaming-b550-plus-wifi-ii/techspec/",
+          "publisher": "asus",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "title": "TUF GAMING B550-PLUS WIFI II - Tech Specs"
+        },
+        {
+          "url": "https://www.asus.com/motherboards-components/motherboards/tuf-gaming/tuf-gaming-b550-plus-wifi-ii/helpdesk_cpu/?model2Name=tuf-gaming-b550-plus-wifi-ii",
+          "publisher": "asus",
+          "retrievedAt": "2026-09-30",
+          "docType": "cpu-support-list",
+          "fields": [
+            "biosSupport"
+          ],
+          "title": "CPU support list"
+        },
+        {
+          "url": "https://dlcdnets.asus.com/pub/ASUS/mb/SocketAM4/TUF_GAMING_B550-PLUS_WIFI_II/E22526_TUF_GAMING_B550-PLUS_WI-FI_II_V2_WEB.pdf",
+          "publisher": "asus",
+          "retrievedAt": "2026-09-30",
+          "docType": "manual",
+          "fields": [
+            "laneSharing"
+          ],
+          "title": "User's Manual E22526 (V2)",
+          "locator": "pp. vi-vii specifications summary; p. x Connectors with shared bandwidth"
+        }
+      ],
+      "notes": [
+        {
+          "field": "headers.usbCFront",
+          "text": "The spec page lists no front-panel USB Type-C header for this board."
+        },
+        {
+          "field": "pcieSlots",
+          "text": "With a Ryzen 5000 G-Series or 4000 G-Series CPU, PCIEX16_1 runs at PCIe 3.0 (spec page). The catalogue has no G-Series CPU."
+        }
+      ]
+    },
+    {
+      "id": "asus-tuf-gaming-z890-plus-wifi",
+      "category": "motherboard",
+      "manufacturer": "asus",
+      "brand": "ASUS",
+      "name": "TUF GAMING Z890-PLUS WIFI",
+      "socket": "LGA1851",
+      "chipset": "Z890",
+      "formFactor": "ATX",
+      "biosSupport": {
+        "families": [
+          {
+            "family": "core-ultra-200s",
+            "minBiosVersion": null,
+            "statement": "CPU support list: every Core Ultra (Series 2) model 'Validated since BIOS: all', including the Ultra 7-270K Plus."
+          }
+        ],
+        "cpus": [
+          {
+            "cpuId": "intel-core-ultra-9-285k",
+            "listing": "all",
+            "minBiosVersion": null,
+            "asListed": "Core Ultra 9 | Ultra 9-285K | 3.7GHz | 125W | 36MB | 24 | B0 | all"
+          },
+          {
+            "cpuId": "intel-core-ultra-7-270k-plus",
+            "listing": "all",
+            "minBiosVersion": null,
+            "asListed": "Core Ultra 7 | Ultra 7-270K Plus | 3.7GHz | 125W | 36MB | 24 | B0 | all"
+          },
+          {
+            "cpuId": "intel-core-ultra-7-265k",
+            "listing": "all",
+            "minBiosVersion": null,
+            "asListed": "Core Ultra 7 | Ultra 7-265K | 3.9GHz | 125W | 30MB | 20 | B0 | all"
+          },
+          {
+            "cpuId": "intel-core-ultra-5-245k",
+            "listing": "all",
+            "minBiosVersion": null,
+            "asListed": "Core Ultra 5 | Ultra 5-245K | 4.2GHz | 125W | 24MB | 14 | B0 | all"
+          }
+        ]
+      },
+      "biosFlashback": {
+        "supported": true,
+        "name": "BIOS FlashBack"
+      },
+      "memory": {
+        "type": "DDR5",
+        "slots": 4,
+        "maxCapacityGb": 256,
+        "maxSpeedMtps": 9066,
+        "speedsAsPublished": "4 x DIMM slots, max. 256GB, DDR5 Support up to 9066+MT/s (OC), Non-ECC, Un-buffered, Clocked Unbuffered DIMM (CUDIMM)"
+      },
+      "m2Slots": [
+        {
+          "id": "m2-1",
+          "label": "M.2_1",
+          "pcieGen": 5,
+          "lanes": 4,
+          "source": "cpu",
+          "sizes": [
+            "2242",
+            "2260",
+            "2280"
+          ],
+          "sataSupport": false
+        },
+        {
+          "id": "m2-2",
+          "label": "M.2_2",
+          "pcieGen": 4,
+          "lanes": 4,
+          "source": "cpu",
+          "sizes": [
+            "2280"
+          ],
+          "sataSupport": false
+        },
+        {
+          "id": "m2-3",
+          "label": "M.2_3",
+          "pcieGen": 4,
+          "lanes": 4,
+          "source": "chipset",
+          "sizes": [
+            "2280",
+            "22110"
+          ],
+          "sataSupport": false
+        },
+        {
+          "id": "m2-4",
+          "label": "M.2_4",
+          "pcieGen": 4,
+          "lanes": 4,
+          "source": "chipset",
+          "sizes": [
+            "2242",
+            "2260",
+            "2280"
+          ],
+          "sataSupport": true
+        }
+      ],
+      "pcieSlots": [
+        {
+          "id": "pcie-1",
+          "label": "PCIEX16(G5)",
+          "gen": 5,
+          "electricalLanes": 16,
+          "physicalSize": "x16",
+          "source": "cpu"
+        },
+        {
+          "id": "pcie-2",
+          "label": "PCIEX16(G4)",
+          "gen": 4,
+          "electricalLanes": 4,
+          "physicalSize": "x16",
+          "source": "chipset"
+        },
+        {
+          "id": "pcie-3",
+          "label": "PCIEX4(G4)",
+          "gen": 4,
+          "electricalLanes": 4,
+          "physicalSize": "x4",
+          "source": "chipset"
+        },
+        {
+          "id": "pcie-4",
+          "label": "PCIEX1(G4)_1",
+          "gen": 4,
+          "electricalLanes": 1,
+          "physicalSize": "x1",
+          "source": "chipset"
+        },
+        {
+          "id": "pcie-5",
+          "label": "PCIEX1(G4)_2",
+          "gen": 4,
+          "electricalLanes": 1,
+          "physicalSize": "x1",
+          "source": "chipset"
+        }
+      ],
+      "sataPorts": [
+        {
+          "id": "sata-1",
+          "label": "SATA6G_1"
+        },
+        {
+          "id": "sata-2",
+          "label": "SATA6G_2"
+        },
+        {
+          "id": "sata-3",
+          "label": "SATA6G_3"
+        },
+        {
+          "id": "sata-4",
+          "label": "SATA6G_4"
+        }
+      ],
+      "laneSharing": [],
+      "rearIo": [
+        "1 x Thunderbolt 4 USB Type-C port",
+        "1 x USB 20Gbps port (1 x USB Type-C with DP Alt mode)",
+        "3 x USB 10Gbps ports (3 x Type-A)",
+        "3 x USB 5Gbps ports (3 x Type-A)",
+        "1 x DisplayPort",
+        "1 x HDMI port",
+        "1 x Wi-Fi module",
+        "1 x Intel 2.5Gb Ethernet port",
+        "5 x Audio jacks",
+        "1 x Optical S/PDIF out port",
+        "1 x BIOS FlashBack button"
+      ],
+      "wifi": "Wi-Fi 7",
+      "bluetooth": "5.4",
+      "lan": "Intel 2.5Gb Ethernet",
+      "headers": {
+        "usbCFront": [
+          {
+            "label": "USB 20Gbps connector (supports USB Type-C)",
+            "speedGbps": 20,
+            "count": 1
+          }
+        ],
+        "usb3Gen1": 1,
+        "usb2": 2,
+        "argb5v3pin": 3,
+        "rgb12v4pin": 0,
+        "fans": [
+          {
+            "label": "4-pin CPU Fan header",
+            "count": 1,
+            "role": "cpu"
+          },
+          {
+            "label": "4-pin CPU OPT Fan header",
+            "count": 1,
+            "role": "cpu-opt"
+          },
+          {
+            "label": "4-pin AIO Pump header",
+            "count": 1,
+            "role": "pump"
+          },
+          {
+            "label": "4-pin Chassis Fan header",
+            "count": 4,
+            "role": "chassis"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "url": "https://www.asus.com/motherboards-components/motherboards/tuf-gaming/tuf-gaming-z890-plus-wifi/techspec/",
+          "publisher": "asus",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "title": "TUF GAMING Z890-PLUS WIFI - Tech Specs"
+        },
+        {
+          "url": "https://www.asus.com/motherboards-components/motherboards/tuf-gaming/tuf-gaming-z890-plus-wifi/helpdesk_qvl_cpu/?model2Name=TUF-GAMING-Z890-PLUS-WIFI",
+          "publisher": "asus",
+          "retrievedAt": "2026-09-30",
+          "docType": "cpu-support-list",
+          "fields": [
+            "biosSupport"
+          ],
+          "title": "CPU / Memory Support: CPU support table"
+        },
+        {
+          "url": "https://dlcdnets.asus.com/pub/ASUS/mb/LGA1851/TUF_GAMING_Z890-PLUS_WIFI/E24160_TUF_GAMING_Z890-PLUS_WIFI_EM_WEB.pdf",
+          "publisher": "asus",
+          "retrievedAt": "2026-09-30",
+          "docType": "manual",
+          "fields": [
+            "laneSharing"
+          ],
+          "title": "User's Manual E24160",
+          "locator": "pp. 8-9 specifications summary; p. 17 (expansion slots)"
+        }
+      ],
+      "notes": [
+        {
+          "field": "laneSharing",
+          "text": "The manual's specifications summary and expansion-slot pages give no shared-bandwidth footnote for any slot or port on this board."
+        }
+      ]
+    },
+    {
+      "id": "asus-prime-b760m-a-wifi-d4",
+      "category": "motherboard",
+      "manufacturer": "asus",
+      "brand": "ASUS",
+      "name": "PRIME B760M-A WIFI D4",
+      "socket": "LGA1700",
+      "chipset": "B760",
+      "formFactor": "Micro-ATX",
+      "biosSupport": {
+        "families": [
+          {
+            "family": "core-12th-gen",
+            "minBiosVersion": "0245",
+            "statement": "CPU support list: 12th Gen models validated since BIOS 0245 (e.g. i5-12400F: 0245)."
+          },
+          {
+            "family": "core-14th-gen",
+            "minBiosVersion": "1205",
+            "statement": "CPU support list: 14th Gen models validated since BIOS 1205 (e.g. i7-14700K, i5-14600K: 1205)."
+          }
+        ],
+        "cpus": [
+          {
+            "cpuId": "intel-core-i7-14700k",
+            "listing": "since",
+            "minBiosVersion": "1205",
+            "asListed": "Core i7 | I7-14700K | 3.4 GHz | 125W | 33MB | 20 | B-0 | 1205"
+          },
+          {
+            "cpuId": "intel-core-i5-14600k",
+            "listing": "since",
+            "minBiosVersion": "1205",
+            "asListed": "Core i5 | I5-14600K | 3.5 GHz | 125W | 24MB | 14 | B-0 | 1205"
+          },
+          {
+            "cpuId": "intel-core-i5-12400f",
+            "listing": "since",
+            "minBiosVersion": "0245",
+            "asListed": "Core i5 | i5-12400F | 2.5GHz | 65W | 18MB | 6 | H-0 | 0245"
+          }
+        ]
+      },
+      "biosFlashback": {
+        "supported": false,
+        "name": null
+      },
+      "memory": {
+        "type": "DDR4",
+        "slots": 4,
+        "maxCapacityGb": 128,
+        "maxSpeedMtps": 5333,
+        "speedsAsPublished": "4 x DIMM, Max. 128GB, DDR4 5333(OC)/5066(OC)/5000(OC)/4800(OC)/4600(OC)/4400(OC)/4266(OC)/4000(OC)/3733(OC)/3600(OC)/3466(OC)/3400(OC)/3333(OC)/3200/3000/2933/2800/2666/2400/2133"
+      },
+      "m2Slots": [
+        {
+          "id": "m2-1",
+          "label": "M.2_1",
+          "pcieGen": 4,
+          "lanes": 4,
+          "source": "cpu",
+          "sizes": [
+            "2242",
+            "2260",
+            "2280"
+          ],
+          "sataSupport": false
+        },
+        {
+          "id": "m2-2",
+          "label": "M.2_2",
+          "pcieGen": 4,
+          "lanes": 4,
+          "source": "chipset",
+          "sizes": [
+            "2242",
+            "2260",
+            "2280"
+          ],
+          "sataSupport": false
+        }
+      ],
+      "pcieSlots": [
+        {
+          "id": "pcie-1",
+          "label": "PCIEX16(G4)_1",
+          "gen": 4,
+          "electricalLanes": 16,
+          "physicalSize": "x16",
+          "source": "cpu"
+        },
+        {
+          "id": "pcie-2",
+          "label": "PCIEX16(G4)_2",
+          "gen": 4,
+          "electricalLanes": 4,
+          "physicalSize": "x16",
+          "source": "chipset"
+        },
+        {
+          "id": "pcie-3",
+          "label": "PCIEX16(G4)_3",
+          "gen": 4,
+          "electricalLanes": 1,
+          "physicalSize": "x16",
+          "source": "chipset"
+        }
+      ],
+      "sataPorts": [
+        {
+          "id": "sata-1",
+          "label": "SATA6G_1"
+        },
+        {
+          "id": "sata-2",
+          "label": "SATA6G_2"
+        },
+        {
+          "id": "sata-3",
+          "label": "SATA6G_3"
+        },
+        {
+          "id": "sata-4",
+          "label": "SATA6G_4"
+        }
+      ],
+      "laneSharing": [],
+      "rearIo": [
+        "2 x USB 3.2 Gen 2 ports (2 x Type-A)",
+        "4 x USB 2.0 ports (4 x Type-A)",
+        "1 x DisplayPort",
+        "2 x HDMI ports",
+        "1 x Wi-Fi Module",
+        "1 x Realtek 2.5Gb Ethernet port",
+        "3 x Audio jacks",
+        "1 x PS/2 Keyboard/Mouse combo port"
+      ],
+      "wifi": "Wi-Fi 6",
+      "bluetooth": "5.2",
+      "lan": "Realtek 2.5Gb Ethernet",
+      "headers": {
+        "usbCFront": [
+          {
+            "label": "USB 3.2 Gen 1 connector (supports USB Type-C)",
+            "speedGbps": 5,
+            "count": 1
+          }
+        ],
+        "usb3Gen1": 2,
+        "usb2": 3,
+        "argb5v3pin": 3,
+        "rgb12v4pin": 1,
+        "fans": [
+          {
+            "label": "4-pin CPU Fan header",
+            "count": 1,
+            "role": "cpu"
+          },
+          {
+            "label": "4-pin CPU OPT Fan header",
+            "count": 1,
+            "role": "cpu-opt"
+          },
+          {
+            "label": "4-pin Chassis Fan header",
+            "count": 2,
+            "role": "chassis"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "url": "https://www.asus.com/motherboards-components/motherboards/prime/prime-b760m-a-wifi-d4/techspec/",
+          "publisher": "asus",
+          "retrievedAt": "2026-09-30",
+          "docType": "spec-page",
+          "title": "PRIME B760M-A WIFI D4 - Tech Specs"
+        },
+        {
+          "url": "https://www.asus.com/motherboards-components/motherboards/prime/prime-b760m-a-wifi-d4/helpdesk_qvl_cpu/?model2Name=PRIME-B760M-A-WIFI-D4",
+          "publisher": "asus",
+          "retrievedAt": "2026-09-30",
+          "docType": "cpu-support-list",
+          "fields": [
+            "biosSupport"
+          ],
+          "title": "CPU / Memory Support: CPU support table (all pages)"
+        },
+        {
+          "url": "https://dlcdnets.asus.com/pub/ASUS/mb/LGA1700/PRIME_B760M-A_WIFI_D4/E20870_PRIME_B760M-A_WIFI_D4_UM_WEB.pdf",
+          "publisher": "asus",
+          "retrievedAt": "2026-09-30",
+          "docType": "manual",
+          "fields": [
+            "laneSharing"
+          ],
+          "title": "User's Manual E20870",
+          "locator": "pp. vi-vii specifications summary; pp. 1-2 to 1-3 (expansion slots)"
+        }
+      ],
+      "notes": [
+        {
+          "field": "laneSharing",
+          "text": "The manual's specifications summary and expansion-slot pages give no shared-bandwidth footnote for any slot or port on this board."
+        },
+        {
+          "field": "biosFlashback",
+          "text": "The spec page lists no BIOS FlashBack button or feature for this board (the other ASUS boards here list one)."
+        },
+        {
+          "field": "headers.usb2",
+          "text": "Two 9-pin USB 2.0 headers (two ports each) plus one USB 2.0 header for a single port, as the spec page lists them."
+        }
+      ]
+    }
+  ]
+}

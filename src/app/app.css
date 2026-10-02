@@ -1,0 +1,20 @@
+/*
+ * Tailwind v4 entry with design-lead's tokens (docs/design/tokens.md §1.1). The order matters:
+ * - tokens.css has no layer: Tailwind refuses its @custom-variant and @utility rules inside one.
+ *   It comes after theme.css, because it removes Tailwind's default palette, type scale, radii,
+ *   shadows, easings and animations, which must exist before they can be removed.
+ * - Preflight (Tailwind's reset) is on. base.css follows it in the same layer and gives back
+ *   underlined links, heading sizes, focus rings and readable placeholders (tokens.md §3).
+ *
+ * source('..') limits class detection to src/. Without it Tailwind scans the whole repository,
+ * including the skill docs under .agents/, and ships utilities the app never uses. Unit tests
+ * are left out for the same reason: tokens.test.ts names every utility, so scanning it shipped
+ * about 70 that no component uses (17.3 KB of CSS instead of the few the app needs).
+ */
+@layer theme, base, components, utilities;
+@import 'tailwindcss/theme.css' layer(theme);
+@import '../styles/tokens.css';
+@import 'tailwindcss/preflight.css' layer(base);
+@import '../styles/base.css' layer(base);
+@import 'tailwindcss/utilities.css' layer(utilities) source('..');
+@source not '../**/*.test.{ts,tsx}';

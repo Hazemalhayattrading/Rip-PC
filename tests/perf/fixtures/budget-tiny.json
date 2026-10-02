@@ -1,0 +1,12 @@
+{
+  "$comment": "Test-only budget: same method as tests/perf/budget.json with a tiny ceiling, so fixture dists can exercise the over-budget path without committing large files.",
+  "schemaVersion": 1,
+  "bundle": {
+    "distDir": "dist",
+    "entryHtml": ["index.html"],
+    "basePath": "/Rip-PC/",
+    "gzip": { "level": 6, "bytesPerKilobyte": 1000 },
+    "initialJs": { "maxGzipBytes": 400, "op": "<", "source": "test fixture only", "warnAtFraction": 0.95 },
+    "forbiddenInInitialGraph": [{ "name": "three.js", "signature": "__THREE__", "source": "test fixture only" }]
+  }
+}

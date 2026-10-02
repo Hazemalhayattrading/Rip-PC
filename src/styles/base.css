@@ -1,0 +1,127 @@
+/*
+ * Rig Lab base styles. Import in the base layer, directly after Tailwind's Preflight:
+ *   @import 'tailwindcss/preflight.css' layer(base);
+ *   @import '../styles/base.css' layer(base);
+ *
+ * Preflight resets the browser's defaults so components start from zero. This file gives back what
+ * must never be lost (docs/design/tokens.md, "Preflight"): underlined links (WCAG 1.4.1), a heading
+ * scale, visible focus rings (2.4.7), readable placeholders (1.4.3), and the page's type and colour.
+ * Utilities come later in the cascade, so a component can still restyle any of these.
+ */
+
+html {
+  background: var(--stage);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  font-size: 0.9375rem;
+  line-height: 1.375rem;
+  /* Every number keeps its width, so values can change without moving anything. */
+  font-variant-numeric: tabular-nums;
+  /* Rig Lab Sans stops at 600; never fake a bolder weight. */
+  font-synthesis-weight: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Headings get the type roles of tokens.css; a component can override with a type-* class. */
+h1 {
+  font-size: 1.875rem;
+  line-height: 2.125rem;
+  font-weight: 300;
+  font-stretch: 125%;
+  letter-spacing: -0.01em;
+}
+
+@media (width >= 48rem) {
+  h1 {
+    font-size: 3rem;
+    line-height: 3.25rem;
+  }
+}
+
+@media (width >= 68.75rem) {
+  h1 {
+    font-size: 3.5rem;
+    line-height: 3.75rem;
+  }
+}
+
+h2 {
+  font-size: 1.0625rem;
+  line-height: 1.375rem;
+  font-weight: 600;
+  font-stretch: 112.5%;
+}
+
+h3,
+h4,
+h5,
+h6 {
+  font-size: 0.9375rem;
+  line-height: 1.25rem;
+  font-weight: 600;
+  font-stretch: 112.5%;
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+b,
+strong {
+  font-weight: 600;
+}
+
+/* Links in text are underlined, so they never rely on colour alone. */
+a {
+  color: inherit;
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--ink-3);
+  text-underline-offset: 0.18em;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+  text-decoration-color: currentColor;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+/* Preflight fades placeholders to half the text colour, below 4.5:1. */
+::placeholder {
+  color: var(--ink-3);
+  opacity: 1;
+}
+
+/*
+ * Selection is solid: --stage text on --ink, 16.75:1 dark and 16.87:1 light on every surface.
+ * A tint keeps each text tier's own colour and fell to 3.06:1 (ink-3 on a raised row); forcing
+ * --ink onto a tint fails on --action surfaces, which are --ink-coloured (1:1).
+ */
+::selection {
+  background: var(--ink);
+  color: var(--stage);
+}
+
+button:not(:disabled),
+[role='button']:not([aria-disabled='true']),
+summary,
+label[for] {
+  cursor: pointer;
+}
+
+:disabled,
+[aria-disabled='true'] {
+  cursor: not-allowed;
+}
