@@ -389,7 +389,7 @@
             "connectors"
           ],
           "title": "PK-D series power supply manual",
-          "locator": "List of parts (printed p. 1, PDF p. 8): PK650D/PK700D \"A ×1 B ×1 D ×1 E ×2 F ×1 G ×1 I ×1 J ×4 K ×1\"; EN legend (p. 2); Specification sheet (p. 6): PK650D-F20 \"Total Output 650W\""
+          "locator": "List of parts (printed p. 1, PDF p. 8): PK650D/PK700D \"A ×1 B ×1 D ×1 E ×2 F ×1 G ×1 I ×1 J ×4 K ×1\"; EN legend (p. 2); Specification sheet (p. 6): the \"Total Output\" row reads \"650W\" for \"PK650D-F20\""
         },
         {
           "url": "https://www.deepcool.com/products/PowerSupplyUnits/index.shtml?filter=true&type=Power",
@@ -423,7 +423,7 @@
         },
         {
           "field": "modularity",
-          "text": "DeepCool's power supply list files the PK650D under \"Modularity: None\" (its list item carries the filter class \"ModularityNone\"); the product page says \"Black direct power cables help blend in with other components.\""
+          "text": "DeepCool's power supply list files the PK650D under the \"Modularity\" filter value \"None\" (its list item carries the filter class \"ModularityNone\"); the product page says \"Black direct power cables help blend in with other components.\""
         },
         {
           "field": "connectors",
@@ -431,7 +431,7 @@
         },
         {
           "field": "wattageW",
-          "text": "From the manual's specification sheet: PK650D-F20 \"Total Output 650W\"."
+          "text": "From the manual's specification sheet: the \"Total Output\" row reads \"650W\" for \"PK650D-F20\"."
         }
       ]
     }

@@ -418,7 +418,7 @@
             "heightMm"
           ],
           "title": "Memory Module Specifications KF560C40BBK4-64 (Document No. 4810813A)",
-          "locator": "p. 1: \"64GB (16GB 2G x 64-Bit x 4 pcs.) DDR5-6000 CL40 288-Pin DIMM Kit\"; Factory Timing Parameters \"XMP Profile #1: DDR5-6000 CL40-40-40 @1.35V\"; Default Features \"Height 1.37\" (34.9mm), w/heatsink\""
+          "locator": "p. 1: \"64GB (16GB 2G x 64-Bit x 4 pcs.) DDR5-6000 CL40 288-Pin DIMM Kit\"; Factory Timing Parameters \"XMP Profile #1: DDR5-6000 CL40-40-40 @1.35V\"; Default Features \"Height 1.37” (34.9mm), w/heatsink\""
         },
         {
           "url": "https://www.kingston.com/en/memory/gaming/kingston-fury-beast-ddr5-memory",
@@ -442,11 +442,11 @@
       "notes": [
         {
           "field": "timings",
-          "text": "Kingston gives the XMP timings as CL40-40-40 (\"XMP Profile #1: DDR5-6000 CL40-40-40 @1.35V\") and no tRAS for the profile; the datasheet's \"Row Active Time (tRASmin) 32ns(min.)\" is the JEDEC default, not the XMP profile."
+          "text": "Kingston gives the XMP timings as CL40-40-40 (\"XMP Profile #1: DDR5-6000 CL40-40-40 @1.35V\") and no tRAS for the profile; the datasheet's \"Row Active Time (tRASmin)\" row, \"32ns(min.)\", is the JEDEC default, not the XMP profile."
         },
         {
           "field": "profiles",
-          "text": "The datasheet says \"Each module kit supports Intel® Extreme Memory Profiles (Intel® XMP) 3.0\" and lists three XMP profiles and no AMD EXPO profile; the product page files this part under \"Profile Type: Intel XMP\", not \"AMD EXPO / Intel XMP\"."
+          "text": "The datasheet says \"Each module kit supports Intel® Extreme Memory Profiles (Intel® XMP) 3.0\" and lists three XMP profiles and no AMD EXPO profile; the product page files this part under the \"Profile Type\" filter value \"Intel XMP\", not \"AMD EXPO / Intel XMP\"."
         },
         {
           "field": "formFactor",

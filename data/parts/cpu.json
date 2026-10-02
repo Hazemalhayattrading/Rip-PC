@@ -942,7 +942,7 @@
         { "field": "power.pptW", "text": "AMD lists \"Default TDP 65W\" and \"AMD Configurable TDP (cTDP) 45-65W\"; the PPT limit is not published there." },
         { "field": "name", "text": "AMD's full name is \"AMD Ryzen™ 5 3400G with Radeon™ RX Vega 11 Graphics\" (Series \"Ryzen 3000 Series\", \"Processor Architecture Zen+\")." },
         { "field": "boxCooler", "text": "AMD's current page (Wayback copy of 2026-06-08) lists no thermal solution and gives the boxed Product ID as \"YD3400C5FHSBX\"; the cooler is from AMD's 2022 page (boxed Product ID \"YD3400C5FHBOX\"): \"Thermal Solution (PIB) AMD Wraith Spire\"." },
-        { "field": "socket", "text": "AMD lists \"Supporting Chipsets X570, X470, X370, B450, B350, A320\" for the 3400G: not B550 or A520." },
+        { "field": "socket", "text": "AMD's \"Supporting Chipsets\" list for the 3400G is X570, X470, X370, B450, B350 and A320: not B550 or A520." },
         { "text": "amd.com did not answer our fetcher on 2026-10-02 (Chromium: net::ERR_HTTP2_PROTOCOL_ERROR; curl: no response in 60 s), so both AMD pages were read from Wayback copies." }
       ]
     }

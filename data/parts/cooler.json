@@ -468,7 +468,7 @@
             "sockets"
           ],
           "title": "AN600 Top Flow Low Profile Cooler manual",
-          "locator": "Section headers \"INTEL LGA1851 · LGA1700 · LGA115X\" (PDF pp. 4-9) and \"AMD AM5 · AM4\" (PDF pp. 10-16)"
+          "locator": "PDF p. 4 section \"INTEL\" (LGA1851, LGA1700, LGA115X); PDF p. 10 section \"AMD\" (AM5, AM4)"
         }
       ],
       "notes": [

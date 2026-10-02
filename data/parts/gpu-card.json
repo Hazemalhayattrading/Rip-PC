@@ -602,6 +602,119 @@
           "text": "Sapphire gives the dimensions as L x W x H; W (card height from the slot) is recorded as heightMm and H (thickness) as thicknessMm."
         }
       ]
+    },
+    {
+      "id": "intel-arc-b580-limited-edition",
+      "category": "gpu-card",
+      "manufacturer": "intel",
+      "brand": "Intel",
+      "name": "Intel Arc B580 Limited Edition Graphics",
+      "chipId": "intel-arc-b580",
+      "partNumber": "31P06HB0BA",
+      "lengthMm": 272,
+      "heightMm": 115,
+      "thicknessMm": null,
+      "slots": 2,
+      "powerConnectors": [
+        {
+          "type": "8-pin",
+          "standard": null,
+          "count": 1
+        }
+      ],
+      "powerAdapter": null,
+      "cardPowerW": 190,
+      "recommendedPsuW": 600,
+      "outputs": [
+        {
+          "type": "DisplayPort 2.1",
+          "count": 3
+        },
+        {
+          "type": "HDMI 2.1",
+          "count": 1
+        }
+      ],
+      "boostClockMhz": null,
+      "ocModeBoostClockMhz": null,
+      "sources": [
+        {
+          "url": "https://www.intel.com/content/www/us/en/products/sku/241598/intel-arc-b580-graphics/specifications.html",
+          "publisher": "intel",
+          "retrievedAt": "2026-10-02",
+          "docType": "spec-page",
+          "fields": [
+            "brand",
+            "lengthMm",
+            "heightMm",
+            "slots",
+            "powerConnectors",
+            "cardPowerW",
+            "recommendedPsuW"
+          ],
+          "title": "Intel® Arc™ B580 Graphics - Product Specifications (ARK)",
+          "locator": "Intel Reference Card Attributes: \"Dimensions (Length x Width)\" \"272 x 115 mm\", \"Slots\" \"2\", \"Minimum Power Supply Unit\" \"600 W\", \"Power Connectors\" \"1 x 8-pin\"; GPU Specifications: \"TBP\" \"190 W\""
+        },
+        {
+          "url": "https://www.intel.com/content/www/us/en/products/sku/241598/intel-arc-b580-graphics/ordering.html",
+          "publisher": "intel",
+          "retrievedAt": "2026-10-02",
+          "docType": "spec-page",
+          "fields": [
+            "brand",
+            "name",
+            "partNumber"
+          ],
+          "title": "Intel® Arc™ B580 Graphics - Ordering & Compliance (ARK)",
+          "locator": "Ordering and Spec Information: \"Intel® Arc™ B580 Limited Edition Graphics, box\", \"Ordering Code\" \"31P06HB0BA\""
+        },
+        {
+          "url": "https://cdrdv2-public.intel.com/839907/Intel%20Arc%20B-Series%20Graphics%20Quick%20Reference%20Guide%20V1.1.pdf",
+          "publisher": "intel",
+          "retrievedAt": "2026-10-02",
+          "docType": "datasheet",
+          "fields": [
+            "outputs",
+            "cardPowerW"
+          ],
+          "title": "Intel Arc B-Series Graphics Quick Reference Guide V1.1 (\"Updated Dec 2024\")",
+          "locator": "p. 1 table, row \"Intel® Arc B580 Graphics\": \"Total Board Power*\" \"190W\", \"Display Connectors\" \"3x DP 2.1\" \"1x HDMI 2.1\"; footnote \"* Based on stock configuration. Partner designs may vary\""
+        }
+      ],
+      "notes": [
+        {
+          "field": "name",
+          "text": "Intel's ordering name is \"Intel® Arc™ B580 Limited Edition Graphics, box\"; ARK lists this card's board data as \"Intel Reference Card Attributes\"."
+        },
+        {
+          "field": "heightMm",
+          "text": "Intel gives \"Dimensions (Length x Width)\" as \"272 x 115 mm\"; the width (card height from the slot) is recorded as heightMm."
+        },
+        {
+          "field": "thicknessMm",
+          "text": "Intel lists the card as \"Slots\" \"2\" but publishes no thickness in millimetres."
+        },
+        {
+          "field": "recommendedPsuW",
+          "text": "Intel publishes a minimum, not a recommendation: \"Minimum Power Supply Unit\" \"600 W\"."
+        },
+        {
+          "field": "cardPowerW",
+          "text": "ARK lists \"TBP\" \"190 W\"; the Quick Reference Guide lists \"Total Board Power*\" \"190W\", with \"* Based on stock configuration. Partner designs may vary\"."
+        },
+        {
+          "field": "outputs",
+          "text": "The Quick Reference Guide lists \"3x DP 2.1\" and \"1x HDMI 2.1\" under \"Display Connectors\" for the B580. ARK gives \"Graphics Output\" as \"HDMI* 2.1, DP2.1 up to UHBR 13.5, DP2.1 up to UHBR 10\", with \"# of Displays Supported\" \"4\"."
+        },
+        {
+          "field": "boostClockMhz",
+          "text": "Intel publishes no boost clock for the card. Its one clock figure is \"Graphics Clock\" \"2670 MHz\", which the chip record holds as the game clock."
+        },
+        {
+          "field": "sources",
+          "text": "The Quick Reference Guide is marked \"Intel Confidential | Public – Not For End Users\" and is hosted on Intel's public document server (cdrdv2-public.intel.com)."
+        }
+      ]
     }
   ]
 }
