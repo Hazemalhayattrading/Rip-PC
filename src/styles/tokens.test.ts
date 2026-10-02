@@ -77,6 +77,8 @@ const EXPECTED: Record<string, string> = {
   'size-control-sm':
     '.size-control-sm { width: var(--spacing-control-sm); height: var(--spacing-control-sm); }',
   'h-chip': '.h-chip { height: var(--spacing-chip); }',
+  // The reading measure: about 64 characters a line, 75 at most, in any type role (WP-DS2).
+  'max-w-measure': '.max-w-measure { max-width: var(--container-measure); }',
   'font-sans': '.font-sans { font-family: var(--font-sans); }',
   'font-light': 'font-weight: var(--font-weight-light);',
   'font-semibold': 'font-weight: var(--font-weight-semibold);',
@@ -192,6 +194,7 @@ describe('design tokens compile with the installed Tailwind (WP-DS1)', () => {
       '--radius-panel: 1.25rem;',
       '--breakpoint-lg: 68.75rem;',
       '--ease-settle: cubic-bezier(0.2, 0.8, 0.2, 1);',
+      '--container-measure: 32em;',
       "--font-sans: 'Rig Lab Sans', 'Rig Lab Sans Fallback', system-ui, sans-serif;",
     ]) {
       expect(css).toContain(variable);
