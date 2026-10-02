@@ -275,8 +275,11 @@ Steps:
 
 **WP-E0, now:**
 1. Branch from the integration tip. Run verify, then commit and push.
-2. **Check the APIs first with Context7:** Vite (JSON and asset output, build-time plugins), Vitest
-   4 (coverage thresholds, generated `test.each` cases), wouter and React 19.
+2. **Check the APIs first with Context7:** Vite 8 (JSON and asset output, build-time plugins),
+   Vitest 5 (coverage thresholds, generated `test.each` cases), wouter 3 and React 19.
+   - Vitest 5 truncates values interpolated into `it.each` titles at 40 characters by default
+     (qa-lead's finding). Golden test titles carry full anchor ids, so build them so they aren't
+     truncated.
 3. **The result types come first.** Write them in `src/engine/`, with doc comments. Send the file
    path to qa-lead and design-lead for review, and copy the Director. WP-E1 waits for both OKs.
 4. **Catalogue loading** (plan WP-E0):
