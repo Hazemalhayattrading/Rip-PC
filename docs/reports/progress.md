@@ -94,10 +94,25 @@ On "continue":
    `C:\Projects\rig-lab-evidence\purge\purge-3-cleanup.sh` (reflog expire and `gc --prune=now`).
    Never run it while any lead may be committing.
 5. **Tidy branches:**
-   - delete merged feature branches, local and on origin;
-   - keep `feat/data-qa-fixes`, which holds 2fa3e32 for Phase 1.
-6. **Report to Hazem.** Ask him to fix the `main` ruleset's check name, then open the PR from
-   `claude/keen-lamport-0794zj` to `main`. Phase 1 starts only after he has read the report.
+   - **Done on origin, 2026-10-02.** Deleted, each with a lease and each fully merged into the
+     integration branch: `feat/build-tokens-wiring`, `feat/design-ds0-docs`, `feat/data-audit-ids`,
+     `feat/data-foundations`, `feat/data-qa-fixes-2` and `feat/design-tokens`.
+     - Why now: QA found that the first two still carried the purge map at their tips, with all
+       87 pre-purge IDs, while GitHub still serves the old commits.
+     - Origin now has 5 heads: the integration branch, `main`, `feat/qa-phase0-verification`,
+       `feat/data-qa-fixes` (kept for 2fa3e32), and the old cloud branch
+       `claude/rig-lab-setup-cleanup-sfmg4k`.
+   - **Still to do, at Phase 0 close:** remove the closed leads' worktrees and their local
+     branches, after QA's report is merged.
+   - **Accepted, not fixed:** pre-purge IDs remain in 15 commit messages and in older file versions
+     in history. Hazem's Support request covers every orphaned commit from the one that added
+     the archives onward, all 87.
+   - **Open:** the 10% audit's seed string in `data/audits.json` carries a pre-purge ID. QA routes
+     the wording to data-lead: keep reproducibility through the SHA-256 of `sample-phase-0.json`,
+     and keep the original string locally.
+6. **Report to Hazem,** then open the PR from `claude/keen-lamport-0794zj` to `main`. The
+   ruleset's check names match CI as of 2026-10-02. Phase 1 starts only after he has read the
+   report.
 
 ## Evidence purge (approved by Hazem, 2026-10-01: purge now, the 2 bundles included). **Done**; stage 3, the local gc, is still to run
 
@@ -132,12 +147,12 @@ On "continue":
 
 ## Open items for Hazem
 
-- **The `main` ruleset's check name doesn't match.** Ruleset "main" (id 24320209, active, default
-  branch only) requires `verify` and `Performance budgets`. CI reports the first job as
-  `npm run verify`, so `verify` never reports and a PR to `main` would stay blocked. Fix: rename
-  the required check to `npm run verify` (source: GitHub Actions), or have build-lead rename the
-  CI job. The Director recommends changing the ruleset. Found by QA (V4, Major); confirmed by the
-  Director through the API. GitHub Pages already deploys from GitHub Actions.
+- **Done 2026-10-02 (Hazem): the `main` ruleset's check names now match CI.** Ruleset "main"
+  (id 24320209, active, default branch only) requires `npm run verify` and `Performance
+  budgets`. Both are tied to the GitHub Actions app (integration id 15368).
+  - The Director confirmed it through the API: CI's check runs on `3966db1` report exactly those
+    two names, from github-actions (app id 15368), both successful.
+  - Found by QA as V4 / QA-P0-007. GitHub Pages already deploys from GitHub Actions.
 - **KTX2 texture tool, decide before Phase 3.** `toktx` (KTX-Software, free, Apache 2.0) is a
   system install, and this PC doesn't have it. Without it, textures ship as WebP, which decodes
   to uncompressed GPU memory (about 22 MB per 2K map). The 160 MB texture budget then holds only
