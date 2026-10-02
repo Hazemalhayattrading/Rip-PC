@@ -150,6 +150,21 @@ function isSpecValue(value: unknown): value is SpecValue {
 }
 
 /**
+ * The condition of a conditional limit, in words: the `condition` beside the value in its row
+ * (`gpuClearance.1.maxLengthMm` reads `gpuClearance.1.condition`). The data writes it as text,
+ * or as a structured condition with the maker's words in `asPublished`. `null` for a value
+ * outside such a row, for an unconditional row, and for the condition's own fields.
+ */
+export function conditionOf(record: unknown, path: string): string | null {
+  const segments = path.split('.');
+  if (segments.length < 2 || segments.includes('condition')) return null;
+  const condition = valueAt(record, [...segments.slice(0, -1), 'condition'].join('.'));
+  if (typeof condition === 'string') return condition;
+  const asPublished = valueAt(condition, 'asPublished');
+  return typeof asPublished === 'string' ? asPublished : null;
+}
+
+/**
  * The evidence for one spec of a record.
  * @param noneOnNull the record's "null means none" paths (data-lead's `nullMeansNone`), so a
  *   null there reads as `none` ("no integrated graphics"), not as `not-published`
@@ -179,6 +194,7 @@ export function evidenceFor(
     value,
     unit: unitOfField(path, record),
     availability,
+    condition: conditionOf(record, path),
     note: noteFor(record, path),
     sources: sourcesFor(record, path),
   };

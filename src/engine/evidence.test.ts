@@ -4,6 +4,7 @@ import { buildCatalogue, readDataFiles } from '../../scripts/catalogue/catalogue
 import type { SourceRef } from '../data/schema';
 import { utcToday } from '../data/validate';
 import {
+  conditionOf,
   evidenceFor,
   noteFor,
   pathCovers,
@@ -228,6 +229,40 @@ describe('evidenceFor, on real catalogue records', () => {
     expect(() => evidenceFor('gpu-card', card, 'powerConnectors.0', [])).toThrow(
       'sapphire-pulse-radeon-rx-9070-xt-16gb has no single value at powerConnectors.0: it is a group of specs.',
     );
+  });
+});
+
+describe('conditionOf (design-lead S2)', () => {
+  const north = catalogue.parts.case.find((c) => c.id === 'fractal-north-charcoal-black-tg-light');
+
+  it('gives a conditional limit the condition of its row, and an unconditional one none', () => {
+    if (north === undefined) throw new Error('The Fractal North is not in the catalogue.');
+    const row = north.gpuClearance.findIndex((c) => c.condition !== null);
+    const free = north.gpuClearance.findIndex((c) => c.condition === null);
+    expect(conditionOf(north, `gpuClearance.${String(row)}.maxLengthMm`)).toBe(
+      'with a 360 mm front radiator',
+    );
+    expect(conditionOf(north, `gpuClearance.${String(free)}.maxLengthMm`)).toBeNull();
+    expect(
+      evidenceFor('case', north, `gpuClearance.${String(row)}.maxLengthMm`, []).condition,
+    ).toBe('with a 360 mm front radiator');
+  });
+
+  it("reads a structured condition's maker wording (WP-D1)", () => {
+    const structured = {
+      gpuClearance: [
+        { maxLengthMm: 300, condition: { kind: 'radiator', asPublished: 'with front radiator' } },
+        { maxLengthMm: 280, condition: { kind: 'radiator' } },
+      ],
+    };
+    expect(conditionOf(structured, 'gpuClearance.0.maxLengthMm')).toBe('with front radiator');
+    expect(conditionOf(structured, 'gpuClearance.1.maxLengthMm')).toBeNull();
+  });
+
+  it('gives none for top-level specs and for the condition itself', () => {
+    if (north === undefined) throw new Error('The Fractal North is not in the catalogue.');
+    expect(conditionOf(north, 'expansionSlots')).toBeNull();
+    expect(conditionOf(north, 'gpuClearance.1.condition')).toBeNull();
   });
 });
 

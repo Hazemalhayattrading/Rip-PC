@@ -104,6 +104,7 @@ export function buildPartsOf(combination: Combination): BuildParts {
     cooler: combination.cooler ?? null,
     case: combination.case ?? null,
     'case-fan': fan === null ? null : { partId: fan, packs: 1 },
+    radiatorPosition: null,
   };
 }
 
