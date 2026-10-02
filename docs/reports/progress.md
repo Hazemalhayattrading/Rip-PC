@@ -93,6 +93,7 @@ Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
 | 2026-10-02 | **Phase 1 plan approved** by Hazem, with three answers. The BIOS warning: warn, naming the BIOS version and telling the buyer to ask the retailer for an updated board. Both extra rules, `cooler-socket` and `display-output`, so 20 in all. At least 20 held-out results. The other defaults stand | Hazem | `docs/reports/phase-1-plan.md` §6 |
 | 2026-10-02 | The integration branch fast-forwarded to `main` (`27dbc6e`), then merged the plan branch. `feat/director-phase-1-plan` deleted | Director | `385493f` |
 | 2026-10-02 | **Phase 1 briefs written,** and the four leads spawned for wave 1 | Director | `docs/reports/phase-1-briefs.md` |
+| 2026-10-02 | **WP-Q3 accepted and merged** (`9d56356`). It holds:<br>• test plan v4, with the audit seed, the golden tests in each anchor's source context, the held-out protocol (20 results, 4 per class), the 20 rules, the corpus and sweep, and mutation tests;<br>• `phase-1-worker-briefs.md`, briefs A to I;<br>• `compat-rules.json`: 10 rules with unknown-data tests, and 10 with validator proofs, 25 distinct test titles;<br>• `compat-trace` and `golden-count`;<br>• `budget.json`: Hazem's held-out values, pinned | qa-lead | QA paths only. The 20 ids equal plan §3 and build-lead's `RULE_IDS`. verify on the merged branch: 695 unit, 166 e2e. 223 tool tests; each tool fails on planted defects; 19 of 19 planted tool bugs were caught; no pre-purge IDs |
 | 2026-10-02 | **WP-DS2 batch 1 accepted and merged** (`427d241`). It holds:<br>• `lab-spec.md`: five shared components;<br>• `copy-guide.md`: patterns for all 20 rules, and the BIOS warning to Hazem's §6;<br>• the `max-w-measure` token, test first;<br>• `tokens.md` rules for QA-P0-018 and 019, and backlog items 15 and 45 | design-lead | verify on the merged branch: 598 unit, 166 e2e. The lab mock has 0 axe violations at 390, 768 and 1440, dark and light. The Director checked the guide's 5 numbers against the catalogue, and 2 on the live maker pages (NZXT C1200 depth 160 mm; Fractal Pop Mini Air PSU max length 150 mm) |
 | 2026-10-02 | data-lead set up both Phase 1 branches, from `c621c15`: `feat/data-engine-data` (D1) and `feat/data-benchmarks` (D2, in the new `worktrees/data-lead-d2`). The parked Intel profile `d4e87e3` is on the D1 branch as `755def5`, so `feat/data-intel-profile` is deleted on origin, with a lease. The local ref is kept | data-lead; Director | identical `git patch-id`; verify 597 unit, 166 e2e in both worktrees; no pre-purge IDs in the new commits |
 | 2026-10-01 | **WP-D0 accepted and merged** (`c04e2a5`): Zod schemas, a validator with 34 rules, 73 seed spec records (all plan 5.3 minimums and mixes), live prices (US 52 + 10 gaps, SA 45 + 17 gaps), 116 game and 27 creator anchors, 15 games, the 20% audit (78 items, 8 findings fixed). The Director's review caught the North cooler limit (145 → 170 mm); data-lead's sweep caught the North PSU limit by tray count (schema: `psu.clearance` list) | data-lead | verify on the merged branch: 454 unit, 112 e2e; initial JS 77.42 KB gzip (no catalogue data in the bundle); 21 new evidence files copied and checked (`docs/reports/evidence/data-lead-evidence-2026-10-01.sha256`) |
@@ -104,7 +105,7 @@ Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
 | WP-D1 Engine data, and WP-D2 Benchmark coverage | data-lead | `feat/data-engine-data` (`86e4e95`) in `worktrees/data-lead`; `feat/data-benchmarks` (`149cde7`) in `worktrees/data-lead-d2` | Wave 1. Step 1 (set-up) is done | D1 batch 1: the fixture table for the 20 rules, and the structured conditions. D2 batch 1 runs in parallel, starting with the 10 games that have no anchors |
 | WP-E0 Engine foundations and the Engine lab | build-lead | `feat/build-engine-foundations` in `worktrees/build-lead` | Wave 1, started 2026-10-02 | Brief E0 steps 1 to 3: branch, check the APIs with Context7, then write the result types first, for review by qa-lead and design-lead |
 | WP-DS2 Design backlog and engine copy | design-lead | `feat/design-ds2` in `worktrees/design-lead` | Batch 1 (the lab spec and the copy guide) merged as `427d241` | Batch 2: the 49 backlog items, closing item 38 and updating `studio-3d-brief.md`'s WebP assumptions, with the ui-designer and motion-designer. Then the wording reviews after E1, E3 and E5. QA checks the specs' AA claims in WP-Q4 |
-| WP-Q3 Test plan v4 and verification tools | qa-lead | `feat/qa-phase1-plan` in `worktrees/qa-lead` | Wave 1, started 2026-10-02 | Brief Q3 steps 1 to 3: branch, review the result types when they arrive, and write test plan v4 (20 rules, at least 20 held-out results) |
+| WP-Q4 Independent verification (Q3 is done) | qa-lead | `feat/qa-phase1-verification` (new) in `worktrees/qa-lead` | Started 2026-10-02 | In order:<br>1. the live-site navigation check (the row below);<br>2. the re-review of build-lead's result types (C1 to C6) when they arrive: it gates E1;<br>3. the AA claims in WP-DS2 batch 1;<br>4. the Q4 tools (mutation check, sweep, corpus runner, per-rule compare, blind anchor keys) as E0 and E1 land |
 | Live-site navigation report (Hazem, 2026-10-02): "Build" and "Start a build" seemed to stay on the home page; a direct load of `/Rip-PC/build/use-case` works | qa-lead after Q3 (part of WP-Q4); build-lead only if confirmed | — | **Director's triage: not reproduced** in headless Chromium against the live site. Both links navigate (URL, title and h1 change, and survive a reload) at Pixel 7 and 390 px by tap, and at 1440 and 1920 px by mouse. The link is the top element at its centre | qa-lead, after Q3's hand-off: test in real browsers (Chrome with the GPU on, Edge, and Firefox and WebKit through Playwright), mouse and touch, on the live site; rule out a stale CDN copy. If real: a defect to build-lead, a test-first fix, and a re-check on the live site after the deploy (plan WP-Q4) |
 
 **Phase 0** is closed, and merged to `main` as `27dbc6e`. Its §5 backlog, QA's 15 open Minors included, is assigned in the Phase 1 plan.
@@ -123,6 +124,9 @@ On "continue":
      - tell the leads who wait on it (plan §5).
 2. **Wave 2 starts when E0 is accepted.** Tell build-lead to start E1 and E2. Tell qa-lead which
    rules are ready for its per-rule checks, as they hand off.
+   - Once E1's first rules exist and data-lead's validator tests have landed, build-lead wires
+     `compat-trace` and `golden-count` into CI, as test plan v4 Appendix C asks. Until then,
+     `compat-trace` fails by design, so it stays out of `npm run verify`.
 3. **Wave 3 starts when E0 and D2's first batch are accepted.** Tell build-lead to start E3 and E4.
 4. **Milestone PRs to `main`,** for Hazem to merge:
    - M1, after E1 and E2 are accepted and QA-checked;
@@ -244,6 +248,15 @@ Branch-tidy record:
     and its test conditions. The model may calibrate per source, from the anchors.
   - Where sources disagree by more than 10%, the range shown without a source context contains
     both values, at medium confidence or lower (plan WP-E3).
+- **2026-10-02, QA's method proposals in test plan v4 (Director, approved).**
+  - The held-out mix: at least 4 anchored configurations, at most 4 results per review, and at
+    least 3 publishers.
+  - A corpus result milder than expected is a Major.
+  - Disabling a Stryker mutant needs a reason of at least 20 characters.
+  - The sweep severities: S1 to S11 and S14 are Blockers, the rest are Majors.
+  - "No estimate" counts as a failed held-out result, but only for an eligible pick: one the
+    engine claims to cover. For a game with no anchors, "no estimate yet" is correct, and such a
+    pick isn't eligible.
 - **2026-10-02, a card for the Arc B580 (Director, on qa-lead's data finding).** The
   `intel-arc-b580` chip has 6 game anchors and a Blender row, but no catalogue card, so no build
   can reach it. One real, sourced B580 card goes into WP-D1. It's a data-integrity fix, not
