@@ -523,4 +523,4 @@ all 5 branches on 2026-10-01. QA checked it independently on 2026-10-01 and agai
 
 ## 12. Sign-off
 
-QA: qa-lead, 2026-10-02. Director: pending.
+QA: qa-lead, 2026-10-02. Director: signed off on 2026-10-02, in `docs/reports/phase-0.md` §7.

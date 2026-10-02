@@ -2,12 +2,10 @@
 
 Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
 
-**Last update:** 2026-10-02, Director. **Resumed after the 2026-10-01 shutdown.**
-- The state checked clean: 4 worktrees clean, and every branch equal to origin.
-- CI is green on `882a79f`.
-- The GitHub Support request is filed (open items).
-- Phase 0 is open. It waits only for QA's report, so qa-lead is re-spawned. Nothing is merged to
-  `main`.
+**Last update:** 2026-10-02, Director. **Phase 0 is closed:**
+- QA's verdict is CLOSED (`docs/qa/report-phase-0.md`).
+- The Director signed off (`docs/reports/phase-0.md` §7).
+- Waiting for Hazem: the PR to `main`. Nothing is merged to `main` yet.
 
 > **Commit IDs** in this file are post-purge IDs. The old-to-new map is kept outside the public repo,
 > at `C:\Projects\rig-lab-evidence\purge\purge-sha-map.txt`, because GitHub still serves pre-purge commits by ID until its garbage collection runs.
@@ -69,50 +67,53 @@ Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
 | 2026-10-01 | WP-DS0 doc fixes from QA's review merged (`d3799da`): the Tesla waiver (DS0-11), KB = 1,000 B with the Bench image re-encoded (DS0-12), the 3D survey's CC BY author details (DS0-13), and backlog items 42–46. design-lead's Phase 0 work is closed | design-lead | verify 486 unit, 112 e2e |
 | 2026-10-01 | **QA data fixes merged** (`1ade3f3`), QA-P0-008 to 012: the ASUS CPU-support URLs; case `size` derived by `deriveCaseSize`, with the new sourced `makerSizeClass`; radiator thickness limits from the Fractal user guides; Intel power profiles on the TPU rows; SA import-fee notes. Deferred to Phase 1 in writing: the North's drive-tray configurations as a structured model (until then the engine must not treat PSU rows as guarantees), and a radiator width field | data-lead | verify 489 unit, 112 e2e; 23 new evidence files checksummed (`docs/reports/evidence/data-lead-evidence-2026-10-01-qa-fixes.sha256`); QA re-verifies |
 | 2026-10-01 | QA data follow-up merged (`cb188d4`): all 7 ASUS boards' CPU-support and BIOS sources checked (only the 2 already fixed were wrong), with a support-tab test; the delivery wording; the audit count (67 null OK). `origin/feat/data-qa-fixes` keeps 3 superseded, unmerged commits; 2fa3e32 (the structured Intel profile) is for Phase 1 | data-lead | verify 499 unit, 112 e2e; 23 more evidence files checksummed |
+| 2026-10-02 | Resumed after the shutdown (rule 12): the state checked clean, and only qa-lead was re-spawned | Director | every branch equal to origin; CI green on `882a79f` |
+| 2026-10-02 | Hazem filed the GitHub Support request, and fixed the `main` ruleset to `npm run verify` and `Performance budgets` (both from GitHub Actions) | Hazem; confirmed by the Director through the API | `3966db1`, `7774491` |
+| 2026-10-02 | **WP-Q2 merged**: the warnings gate, axe in dark and light at every width, the per-route soak, the pinned method values, test plan v3.4 | qa-lead | `9eb3224`; verify 597 unit, 166 e2e |
+| 2026-10-02 | **QA-P0-041 fixed and merged**: the audit seed string no longer embeds a pre-purge ID. The original string is kept in `C:\Projects\rig-lab-evidence\purge\audit-seed-2026-10-01.txt` | data-lead; verified by qa-lead | `2ec4811` |
+| 2026-10-02 | **QA report committed**, verdict CLOSED: 0 Blockers, 0 open Majors, 15 open Minors. The Director committed qa-lead's text unchanged, with Hazem's approval, because the harness refuses report files from teammates | qa-lead (author); Director (commit) | `2361fc9` |
+| 2026-10-02 | **Phase 0 report final; the Director signs off** | Director | `docs/reports/phase-0.md` §7 |
+| 2026-10-02 | 7 merged branches deleted on origin, each with a lease | Director | origin heads: the integration branch, `main`, `feat/data-qa-fixes`, `feat/data-seed-wording`, and the old cloud branch |
 | 2026-10-01 | **WP-D0 accepted and merged** (`c04e2a5`): Zod schemas, a validator with 34 rules, 73 seed spec records (all plan 5.3 minimums and mixes), live prices (US 52 + 10 gaps, SA 45 + 17 gaps), 116 game and 27 creator anchors, 15 games, the 20% audit (78 items, 8 findings fixed). The Director's review caught the North cooler limit (145 → 170 mm); data-lead's sweep caught the North PSU limit by tray count (schema: `psu.clearance` list) | data-lead | verify on the merged branch: 454 unit, 112 e2e; initial JS 77.42 KB gzip (no catalogue data in the bundle); 21 new evidence files copied and checked (`docs/reports/evidence/data-lead-evidence-2026-10-01.sha256`) |
 
 ## In progress
 
 | Task | Who | Branch / worktree | State | Exact next step |
 |---|---|---|---|---|
-| WP-Q2 Independent verification | qa-lead | `feat/qa-phase0-verification` @ `0c2c709` (pushed, not merged) / `.claude/worktrees/qa-lead` | **Stopped mid-step at shutdown.** Its two re-verification workers were stopped; see the next step. **Done:** Part 1 (WP-B0 11/11, QA tooling on Windows, rule 1 at 100%); the seeded 10% audit (43 records, 1,265 fields; 9 findings: QA-P0-008 to 012, all fixed by data-lead in `1ade3f3` and `cb188d4`); an independent check of the purge on origin (0 of 11 blobs); axe in dark and light at every width, plus a 1 s soak per route (QA-P0-005, `5136864`); test plan v3.1 with the Director's approvals and the LCP blind spots (`0c2c709`). Its `docs/qa/WIP-STATUS.md` is **stale**; this row overrides it | **Exact next step:** (1) merge `claude/keen-lamport-0794zj` into your branch. (2) Re-run the two stopped re-verifications with fresh workers: "WP-D0's nine criteria" on the merged data, which includes re-verifying the fixes for QA-P0-008 to 012; and "WP-DS1, WP-B1 wiring and the DS0 fixes", including DS0-01 at 4.61:1. Partial results from the stopped run are in `artifacts/qa/phase-0/wp-d0/` and `wp-ds1/`; reuse what is complete. (3) Finish the QA-P0-001 re-check (`artifacts/qa/phase-0/qa-p0-001-retest/`). (4) The warnings gate: the smoke fails on app warnings, using build-lead's allowlist (Chromium's software-WebGL fallback notice, NVIDIA's "GPU stall due to ReadPixels"). (5) QA's own Minors: the LHCI_PORT test re-run, the 4 unpinned budget values, and the test-plan gaps in §13 and B.4. (6) Persist the audit evidence: copy `C:\Projects\rig-lab-evidence\session-2026-10-01-scratchpad\audit-phase-0\` and `purge-verify\` into `artifacts/qa/phase-0/audit/`, and write a sha256 list of every evidence file the report cites. (7) Write `docs/qa/report-phase-0.md`: cite purged-blob IDs as 8-character prefixes only, and never publish pre-purge commit IDs. Delete `WIP-STATUS.md`, verify, push, and hand off in the §6 format |
-| Phase 0, data | data-lead | `feat/data-qa-fixes-2` @ `c9d4183` (merged) | **Closed.** Everything merged; worktree clean | Nothing until QA's report. If QA reports a data defect, fix it on a new branch from the integration branch. Phase 1 data items are in `docs/reports/phase-0.md` §5 |
-| Phase 0, design | design-lead | `feat/design-ds0-docs` @ `65c9209` (merged) | **Closed.** Everything merged; worktree clean | Nothing until QA's report. Phase 1: WP-DS2 from `docs/design/backlog.md` (49 items), only after Hazem reads the Phase 0 report |
-| Phase 0, build | build-lead | `feat/build-tokens-wiring` @ `ab2c9aa` (merged) | **Closed.** Everything merged; worktree clean | Nothing until QA's report. Phase 1: the engine, only after Hazem reads the Phase 0 report. The Phase 1 requirements recorded so far are in `docs/reports/phase-0.md` §5 |
+| Park 2fa3e32 (the structured Intel profile, for Phase 1) | data-lead | `feat/data-intel-profile` (new) / `.claude/worktrees/data-lead` | Asked on 2026-10-02 | Cherry-pick 2fa3e32 onto the integration tip, run verify, and check for pre-purge IDs. Push it without merging. Then the Director deletes `origin/feat/data-qa-fixes` and `origin/feat/data-seed-wording` |
+| Final scan of origin | qa-lead | — | Waiting for the branch tidy | Scan every origin tip for pre-purge IDs once those two branches are gone |
+| Phase 0 merge to `main` | Hazem | `claude/keen-lamport-0794zj` | **Phase 0 closed**: QA CLOSED, and the Director signed off | Hazem approves the PR; the Director opens it on request. Hazem merges, which deploys GitHub Pages |
+
+**Closed for Phase 0:** WP-D0 (data-lead), WP-DS1 (design-lead), WP-B1 (build-lead) and WP-Q2 (qa-lead). Their Phase 1 work starts only after Hazem has read `docs/reports/phase-0.md`. Phase 1's backlog is in its §5, including QA's 15 open Minors by owner.
 
 ## Next steps (Director)
 
 On "continue":
-1. **Re-spawn qa-lead only** (see "How to continue"). Wait for its hand-off of
-   `docs/qa/report-phase-0.md`.
-2. **Review QA's hand-off.** Then:
-   - merge `feat/qa-phase0-verification` with `--no-ff`, verify and push;
-   - route any defect to its owning lead, re-spawning that lead.
-3. **Finalise `docs/reports/phase-0.md`**: replace the "pending in QA's report" items, and set its
-   status to final if there are no blockers.
-4. **Purge stage 3**, once every lead is idle: run
-   `C:\Projects\rig-lab-evidence\purge\purge-3-cleanup.sh` (reflog expire and `gc --prune=now`).
-   Never run it while any lead may be committing.
-5. **Tidy branches:**
-   - **Done on origin, 2026-10-02.** Deleted, each with a lease and each fully merged into the
-     integration branch: `feat/build-tokens-wiring`, `feat/design-ds0-docs`, `feat/data-audit-ids`,
-     `feat/data-foundations`, `feat/data-qa-fixes-2` and `feat/design-tokens`.
-     - Why now: QA found that the first two still carried the purge map at their tips, with all
-       87 pre-purge IDs, while GitHub still serves the old commits.
-     - Origin now has 5 heads: the integration branch, `main`, `feat/qa-phase0-verification`,
-       `feat/data-qa-fixes` (kept for 2fa3e32), and the old cloud branch
-       `claude/rig-lab-setup-cleanup-sfmg4k`.
-   - **Still to do, at Phase 0 close:** remove the closed leads' worktrees and their local
-     branches, after QA's report is merged.
-   - **Accepted, not fixed:** pre-purge IDs remain in 15 commit messages and in older file versions
-     in history. Hazem's Support request covers every orphaned commit from the one that added
-     the archives onward, all 87.
-   - **Open:** the 10% audit's seed string in `data/audits.json` carries a pre-purge ID. QA routes
-     the wording to data-lead: keep reproducibility through the SHA-256 of `sample-phase-0.json`,
-     and keep the original string locally.
-6. **Report to Hazem,** then open the PR from `claude/keen-lamport-0794zj` to `main`. The
-   ruleset's check names match CI as of 2026-10-02. Phase 1 starts only after he has read the
-   report.
+1. **The parking branch.** If data-lead's branch has arrived:
+   - check it: no pre-purge IDs, and verify passes;
+   - delete `origin/feat/data-qa-fixes` and `origin/feat/data-seed-wording`, each with a lease;
+   - ask qa-lead for the final scan of origin.
+2. **Purge stage 3,** once every lead is idle: run
+   `C:\Projects\rig-lab-evidence\purge\purge-3-cleanup.sh`. Never run it while a lead may be
+   committing.
+3. **The PR to `main`,** when Hazem asks: from `claude/keen-lamport-0794zj`, with the Phase 0
+   summary as its description. Hazem merges.
+4. **After GitHub's reply** to the Support request: check that the old commit answers 404, on the
+   API and on raw URLs, and record the result.
+5. **The Phase 1 plan** (the engine), only after Hazem has read `docs/reports/phase-0.md`.
+
+Branch-tidy record:
+- **Deleted on origin, 2026-10-02,** each with a lease and each fully merged into the integration
+  branch: `feat/build-tokens-wiring`, `feat/design-ds0-docs`, `feat/data-audit-ids`,
+  `feat/data-foundations`, `feat/data-qa-fixes-2`, `feat/design-tokens` and
+  `feat/qa-phase0-verification`.
+  - Why: QA found the purge map, with all 87 pre-purge IDs, at two of their tips, and the old audit
+    line at others, while GitHub still serves the old commits.
+- **Kept for Phase 1:** the worktrees in `.claude/worktrees/`, with their `node_modules`. New
+  branches are cut from the integration branch.
+- **Accepted, not fixed:** pre-purge IDs remain in 15 commit messages and in older file versions
+  in history. Hazem's Support request covers every orphaned commit from the one that added the
+  archives onward, all 87.
 
 ## Evidence purge (approved by Hazem, 2026-10-01: purge now, the 2 bundles included). **Done**; stage 3, the local gc, is still to run
 
