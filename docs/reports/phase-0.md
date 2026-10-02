@@ -5,8 +5,8 @@ Date: 2026-10-01 · Author: Director · **Status: draft, waiting for QA's report
 
 Phase goal (BUILD_PROMPT §2): data schemas and seed data, a design direction with tokens, the
 scaffold with CI, Pages deploy, test harness and empty routes, and QA's test plan with budget checks
-in CI. No product UI yet. Commit IDs below are after the evidence purge;
-`docs/reports/evidence/purge-sha-map.txt` maps the older ones.
+in CI. No product UI yet. Commit IDs below are post-purge IDs. The old-to-new map is kept outside the public repo,
+because GitHub still serves pre-purge commits by ID until its garbage collection runs.
 
 ---
 
@@ -101,7 +101,7 @@ in CI. No product UI yet. Commit IDs below are after the evidence purge;
 - **Windows fixes.**
   - 365 and then 974 CRLF checkouts, left over from a `main` checkout made before `.gitattributes`
     existed. `core.autocrlf=false` is now set for this repo.
-  - A path-separator bug in one QA test (`45c0bae` → `0114261`).
+  - A path-separator bug in one QA test (`0114261`).
   - 45 project-skill symlinks restored, after Hazem turned on Developer Mode.
 - **Evidence purge** (Hazem's decision). The 222 MB of third-party page captures left the public
   repo and the history of all 5 branches: 11 binary files, 87 commits rewritten.
@@ -158,7 +158,12 @@ in CI. No product UI yet. Commit IDs below are after the evidence purge;
   - the North's RAM clearance under a top radiator;
   - a re-price batch before launch;
   - the reseller rule in the validator.
-- **Design:** WP-DS2, 46 backlog items (accessibility, motion, the Specs view, copy, 3D brief).
+- **Design:** WP-DS2, 49 backlog items (accessibility, motion, the Specs view, copy, 3D brief).
+- **Data and engine schema (deferred in writing on 2026-10-01):**
+  - the Fractal North's drive-tray configurations as a structured model, like the Terra's spine. Until then, the engine must not treat the case PSU rows as guarantees;
+  - a radiator width field;
+  - a structured CPU power profile in the benchmark test conditions;
+  - the case size-class redesign: a zod-free `deriveCaseSize` module with `exteriorVolumeLiters`, frozen class ids (they become share-link filter ids), and boundary tests at 20 L and 70 L, missing dimensions, E-ATX and ITX-only, with today's 5 cases pinned.
 - **QA:** QA-P0-006, an LCP check with applied throttling, at Phase 2 entry.
 
 ## 6. Next

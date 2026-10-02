@@ -39,6 +39,8 @@ paths such as `artifacts/prices/...`, relative to a data-lead worktree root.
 | `archives.sha256` | the 9 archive parts and the 2 bundles (the original `SHA256SUMS.txt`) | `C:\Projects\rig-lab-evidence\archives\` |
 | `data-lead-evidence-manifest.sha256.txt` | data-lead's 1,102 cited evidence files; 1,101 are kept, and 1 was excluded by design | a data-lead worktree root |
 | `data-lead-evidence-2026-10-01.sha256` | the 21 files data-lead added on 2026-10-01: audit logs, the case sweep, CH560 manual renders, audit scripts and verify logs | a data-lead worktree root, or `C:\Projects\rig-lab-evidence\data-lead-artifacts\` |
+| `data-lead-evidence-2026-10-01-qa-fixes.sha256` | the 23 files from data-lead's fixes for QA-P0-008 to 012: case user-guide renders and texts, the radiator-limits log, verify logs | a data-lead worktree root, or `C:\Projects\rig-lab-evidence\data-lead-artifacts\` |
+| `data-lead-evidence-2026-10-01-qa-fixes-2.sha256` | the 23 files from data-lead's follow-up: captures of the 7 ASUS CPU-support and BIOS pages, the URL check log, verify logs | a data-lead worktree root, or `C:\Projects\rig-lab-evidence\data-lead-artifacts\` |
 | `EXCLUDED.txt` | what was deliberately not kept, and why | — |
 
 ## Verify
@@ -68,9 +70,9 @@ file it can't find is the page left out by design (see `EXCLUDED.txt`).
   - restored to `C:\Projects\rig-lab-evidence\` and checksum-verified;
   - the manifests moved here, and `docs/reports/phase-0-wip/` was removed from the branch tip;
   - **purged from branch history, on Hazem's go-ahead.** The 11 binary files (9 `.tar.xz` parts
-    and 2 git bundles) were removed from every commit that descends from `63ab40f`, on all 5
-    branches (`git filter-branch --index-filter`, `--ancestry-path ^63ab40f^`). 87 commits got
-    new IDs; `purge-sha-map.txt` maps old to new. Older commits, `main` included, kept their IDs
+    and 2 git bundles) were removed from every commit from the one that added them onward, on all 5 branches
+    (`git filter-branch --index-filter`, limited with `--ancestry-path`). 87 commits got new IDs.
+    The old-to-new map is kept locally, at `C:\Projects\rig-lab-evidence\purge\purge-sha-map.txt`, because GitHub still serves pre-purge commits by ID until its garbage collection runs. Older commits, `main` included, kept their IDs
     and signatures. Every branch tip's content is byte-identical. The pushes used
     `--force-with-lease`.
   - **Verified:** a fresh `git clone --mirror` of GitHub holds 0 of the 11 blobs (a 12 MB pack;

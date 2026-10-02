@@ -404,6 +404,73 @@
               "fixedIn": "dc7a11e"
             }
           ]
+        },
+        {
+          "by": "qa-lead (seeded 10% audit)",
+          "at": "2026-10-01",
+          "scope": "Seed rig-lab-audit:phase-0:98d2be5a843770b8b33b8b5147c77339c1b09e92: 43 of 355 records, 1,265 fields, read against the sources by three independent data-auditor workers; where a pattern repeated, QA swept the whole file. 1,189 fields matched, 67 were null as allowed and 9 were findings; rule 1 passed for every price and benchmark row.",
+          "findings": [
+            {
+              "items": [
+                "asus-tuf-gaming-z890-plus-wifi",
+                "asus-prime-b760m-a-wifi-d4"
+              ],
+              "field": "sources",
+              "found": "QA-P0-008 (Blocker): the CPU-support source pointed at the FAQ tab (helpdesk_knowledge), which has no CPU table. The biosSupport values matched ASUS's list.",
+              "fix": "Both now cite the CPU / Memory Support tab (helpdesk_qvl_cpu), the page the 2026-09-30 captures show; re-fetched 2026-10-01 with the CPU table present. All 9 ASUS BIOS-related URLs were then re-checked live and against the captures; a test (src/data/maker-pages.test.ts, 17ba6b6) checks that each opens its own support tab.",
+              "fixedIn": "25e0549"
+            },
+            {
+              "items": [
+                "fractal-north-charcoal-black-tg-light",
+                "fractal-pop-air-rgb-black-tg-clear-tint",
+                "fractal-pop-mini-air-rgb-black-tg-clear-tint"
+              ],
+              "field": "size",
+              "found": "QA-P0-009 (Blocker): size was derived from the boards and volume, with a note saying the page gives no size class; Fractal publishes one (cases_size \"Regular\").",
+              "fix": "Every case records the maker's words in makerSizeClass (Fractal \"Regular\" or \"Small\", DeepCool \"mid-tower\"), and size is defined as derived by deriveCaseSize (the largest supported board; full-tower only in the maker's words), checked by the validator. The three wrong notes are gone.",
+              "fixedIn": "4f823ff"
+            },
+            {
+              "items": [
+                "fractal-north-charcoal-black-tg-light",
+                "fractal-pop-air-rgb-black-tg-clear-tint",
+                "fractal-pop-mini-air-rgb-black-tg-clear-tint",
+                "fractal-terra-graphite",
+                "deepcool-ch560"
+              ],
+              "field": "radiatorSupport",
+              "found": "QA-P0-010 (Major): every radiator entry was null with \"Radiator thickness limits are not published\"; the North user guide p. 33 publishes them.",
+              "fix": "From the four Fractal user guides: North front 55 mm (120/240/360) and 35 mm (140/280), top 35 mm; Pop Air and Pop Mini Air top 47 mm, plus the 140 mm front radiator the guides show; Terra radiator plus fan 49 to 79 mm per spine setting (new layoutPositions field). The CH560 page and manual give sizes only, so its note now says so. Widths, the North front-360 end-tank rule and drive-tray table are in notes.",
+              "fixedIn": "d97e478"
+            },
+            {
+              "items": [
+                "tpu-9850x3d-baldurs-gate-3-1080p-intel-core-ultra-9-285k",
+                "tpu-9850x3d-baldurs-gate-3-1080p-intel-core-ultra-7-265k",
+                "tpu-9850x3d-battlefield-6-1080p-intel-core-ultra-9-285k",
+                "tpu-9850x3d-battlefield-6-1080p-intel-core-ultra-7-265k",
+                "tpu-9850x3d-counter-strike-2-1080p-intel-core-ultra-9-285k",
+                "tpu-9850x3d-counter-strike-2-1080p-intel-core-ultra-7-265k",
+                "tpu-9850x3d-cyberpunk-2077-1080p-intel-core-ultra-9-285k",
+                "tpu-9850x3d-cyberpunk-2077-1080p-intel-core-ultra-7-265k"
+              ],
+              "field": "testSystem.cpu",
+              "found": "QA-P0-011 (Major): the rows did not carry the profile the review states, \"All Intel Core 200 Series processors (Intel stock power settings/Core 200S Boost enabled)\".",
+              "fix": "A note quotes the stated profile on these 8 rows, and on the other 12 TechPowerUp Intel rows (the 14700K game rows and the Intel Cinebench rows from the 9800X3D review), from their own Test Setup.",
+              "fixedIn": "24f8265"
+            },
+            {
+              "items": [
+                "amd-ryzen-5-5600",
+                "intel-core-i5-12400f"
+              ],
+              "field": "notes",
+              "found": "QA-P0-012 (Major): the SA observations (amazon-sa) are imported offers whose displayed price includes an estimated import fees deposit, but had no note with the split, as priceBasis promises.",
+              "fix": "Notes quote the buy box: SAR 513.78 + 94.32 = 608.10, and SAR 724.02 + 125.85 = 849.87. All 12 SA captures that show an import split now have the note.",
+              "fixedIn": "20b3d24"
+            }
+          ]
         }
       ]
     }

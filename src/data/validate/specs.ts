@@ -1,3 +1,4 @@
+import { deriveCaseSize } from '../schema/case';
 import { CPU_FAMILIES, SOCKET_MEMORY, type Cpu } from '../schema/cpu';
 import { DATA_PATHS, SPEC_CATEGORIES, type SpecCategory, type SpecRecord } from '../schema/files';
 import { CHIPSETS_BY_SOCKET, type Motherboard } from '../schema/motherboard';
@@ -46,7 +47,8 @@ function nullMeansNone(record: SpecRecord): string[] {
 function specPolicy(record: SpecRecord): RecordPolicy {
   return {
     type: 'spec',
-    exempt: SPEC_EXEMPT,
+    // A case's size class is derived from its boards (deriveCaseSize), so no source backs it.
+    exempt: record.category === 'case' ? [...SPEC_EXEMPT, 'size'] : SPEC_EXEMPT,
     nullMeansNone: nullMeansNone(record),
     manufacturer: record.manufacturer,
     ...(record.category === 'motherboard'
@@ -275,6 +277,8 @@ function checkSanity(sink: IssueSink, file: string, r: SpecRecord): void {
       break;
     }
     case 'case': {
+      const size = deriveCaseSize(r.supportedBoards, r.makerSizeClass);
+      if (r.size !== size) bad(`size must be ${size}, from the largest supported board (deriveCaseSize)`, 'size');
       if (r.gpuClearance.filter((c) => c.condition === null).length !== 1) bad('exactly one unconditional GPU clearance row', 'gpuClearance');
       if (r.coolerClearance.filter((c) => c.condition === null).length !== 1) bad('exactly one unconditional cooler clearance row', 'coolerClearance');
       for (const c of r.gpuClearance) if (c.maxLengthMm < 100 || c.maxLengthMm > 600) bad('GPU clearance out of range', 'gpuClearance');
@@ -287,6 +291,8 @@ function checkSanity(sink: IssueSink, file: string, r: SpecRecord): void {
       for (const p of positions) {
         if (p.coolerMaxHeightMm < 20 || p.coolerMaxHeightMm > 250) bad('layout cooler clearance out of range', 'layoutPositions');
         if (p.gpuMaxThicknessMm < 10 || p.gpuMaxThicknessMm > 120) bad('layout GPU thickness out of range', 'layoutPositions');
+        const stack = p.radiatorFanMaxThicknessMm;
+        if (stack !== null && (stack < 20 || stack > 150)) bad('layout radiator-plus-fan limit out of range', 'layoutPositions');
         if (p.tallGpuLimit !== null && p.tallGpuLimit.maxThicknessMm > p.gpuMaxThicknessMm) {
           bad('a tall-GPU thickness limit must not be looser than the normal one', 'layoutPositions');
         }

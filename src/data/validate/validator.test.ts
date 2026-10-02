@@ -131,6 +131,13 @@ describe('sources, archives and coverage', () => {
   it('coverage: a reviewer source does not back a spec', () => {
     expectRule(run((d) => { card(d).sources = [{ url: 'https://bench-a.example/card', publisher: 'bench-a', retrievedAt: TODAY, docType: 'review' }]; }), 'coverage');
   });
+  it('coverage: a case size is derived from its boards, so it needs no source', () => {
+    const allButSize = (d: FixtureData) => {
+      const c = first(d.specs.case);
+      firstSource(c).fields = Object.keys(c).filter((k) => !['id', 'category', 'manufacturer', 'sources', 'notes', 'size'].includes(k));
+    };
+    expectNoRule(run(allButSize), 'coverage');
+  });
   it('null-note: a null value needs a note, unless null means "none"', () => {
     expectRule(run((d) => { Reflect.deleteProperty(cpu(d), 'notes'); }), 'null-note');
     expectClean(run((d) => { cpu(d).igpu = null; cpu(d).boxCooler = null; }));
@@ -207,11 +214,38 @@ describe('sanity', () => {
   it('a case layout position keeps its tall-GPU limit no looser than the normal one', () => {
     const layout = (tallLimit: number) => (d: FixtureData) => {
       first(d.specs.case).layoutPositions = [
-        { position: '1', coolerMaxHeightMm: 77, gpuMaxThicknessMm: 43, tallGpuLimit: { aboveGpuHeightMm: 131, maxThicknessMm: tallLimit } },
+        { position: '1', coolerMaxHeightMm: 77, gpuMaxThicknessMm: 43, tallGpuLimit: { aboveGpuHeightMm: 131, maxThicknessMm: tallLimit }, radiatorFanMaxThicknessMm: 49 },
       ];
     };
     expectRule(run(layout(50)), 'sanity');
     expectClean(run(layout(33)));
+  });
+  it('a case layout position keeps its radiator-plus-fan limit in range', () => {
+    const layout = (stackMm: number) => (d: FixtureData) => {
+      first(d.specs.case).layoutPositions = [
+        { position: '1', coolerMaxHeightMm: 77, gpuMaxThicknessMm: 43, tallGpuLimit: { aboveGpuHeightMm: 131, maxThicknessMm: 33 }, radiatorFanMaxThicknessMm: stackMm },
+      ];
+    };
+    expectRule(run(layout(5)), 'sanity');
+    expectRule(run(layout(200)), 'sanity');
+    expectClean(run(layout(49)));
+  });
+  it('a case size follows its largest supported board, and is full-tower only in the maker\'s words', () => {
+    type Size = 'full-tower' | 'mid-tower' | 'mini-tower' | 'small-form-factor';
+    type Board = 'E-ATX' | 'ATX' | 'Micro-ATX' | 'Mini-ITX';
+    const sized = (size: Size, boards: Board[], makerSizeClass: string | null = 'Mid Tower') => (d: FixtureData) => {
+      const c = first(d.specs.case);
+      c.size = size;
+      c.supportedBoards = boards;
+      c.makerSizeClass = makerSizeClass;
+    };
+    expectClean(run(sized('mid-tower', ['ATX', 'Micro-ATX', 'Mini-ITX'])));
+    expectClean(run(sized('mini-tower', ['Micro-ATX', 'Mini-ITX'], 'Small')));
+    expectClean(run(sized('small-form-factor', ['Mini-ITX'], 'Small')));
+    expectClean(run(sized('full-tower', ['E-ATX', 'ATX'], 'Full Tower')));
+    expectRule(run(sized('mini-tower', ['ATX', 'Micro-ATX', 'Mini-ITX'])), 'sanity');
+    expectRule(run(sized('mid-tower', ['Mini-ITX'])), 'sanity');
+    expectRule(run(sized('full-tower', ['E-ATX', 'ATX'])), 'sanity');
   });
   it('a case gives PSU length limits in range, with at most one unconditional row', () => {
     const psu = (rows: { maxLengthMm: number; condition: string | null }[]) => (d: FixtureData) => {
