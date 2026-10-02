@@ -37,6 +37,17 @@ const SERVED: Readonly<Record<string, Served>> = {
   '/console-warning': {
     body: html('<script>console.warn("guard self-test: console.warn")</script>'),
   },
+  // The exact text the GPU driver logs through ANGLE on the home PC, and a near miss of it.
+  '/gpu-stall-notice': {
+    body: html(
+      '<script>console.warn("[.WebGL-0x202c00194200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels")</script>',
+    ),
+  },
+  '/other-gl-message': {
+    body: html(
+      '<script>console.warn("[.WebGL-0x202c00194200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): Buffer performance warning")</script>',
+    ),
+  },
   '/uncaught': {
     body: html(
       '<script>setTimeout(() => { throw new Error("guard self-test: uncaught") }, 0)</script>',
@@ -122,9 +133,21 @@ test('console.error fails', async ({ page, problemGuard }) => {
   await expect.poll(() => kinds(problemGuard)).toContain('console.error');
 });
 
-test('a console warning is reported and passes', async ({ page }) => {
+test('a console warning fails', async ({ page, problemGuard }) => {
+  test.fail(); // the guard must fail this test; tests/harness/guard.test.ts checks why
   await page.goto('/console-warning');
-  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  await expect.poll(() => kinds(problemGuard)).toContain('console.warning');
+});
+
+test("the GPU driver's ReadPixels notice passes", async ({ page, problemGuard }) => {
+  await page.goto('/gpu-stall-notice');
+  await expect.poll(() => kinds(problemGuard)).toContain('console.warning');
+});
+
+test('any other GL driver message fails', async ({ page, problemGuard }) => {
+  test.fail(); // the guard must fail this test; tests/harness/guard.test.ts checks why
+  await page.goto('/other-gl-message');
+  await expect.poll(() => kinds(problemGuard)).toContain('console.warning');
 });
 
 test('an uncaught error fails', async ({ page, problemGuard }) => {

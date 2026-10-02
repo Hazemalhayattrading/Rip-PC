@@ -148,6 +148,11 @@ describe('budget.json keeps the approved method values', () => {
     expect(budget.webVitals.minObserveMs).toBeGreaterThan(budget.webVitals.gates.lcpMs.value);
   });
 
+  it('console warnings fail the e2e run, like errors (the Director, 2026-10-01)', () => {
+    expect(budget.console.maxConsoleWarnings).toBe(0);
+    expect(budget.console.warningsSource).toMatch(/tests\/e2e\/problems\.ts/);
+  });
+
   it('the smoke watches every route for 1 s more at 1440 px (QA-P0-005)', () => {
     expect(budget.console).toMatchObject({ soakMs: 1000, soakViewports: ['1440'] });
     const widths = budget.visual.viewports.map((v) => v.name);

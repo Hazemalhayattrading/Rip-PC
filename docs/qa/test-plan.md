@@ -1,6 +1,6 @@
 # Rig Lab test plan
 
-Owner: qa-lead · Version 3.1 · 2026-10-01 · Applies to every phase, from Phase 0 to release.
+Owner: qa-lead · Version 3.2 · 2026-10-02 · Applies to every phase, from Phase 0 to release.
 
 This is a working document. Every team follows it. It says how each quality bar in BUILD_PROMPT §8
 and each item of the definition of done in §9 is measured, where, how often, by whom, and what
@@ -78,7 +78,7 @@ scene measured 5.3 fps and then 8.5 fps ten minutes apart on 2026-09-30.
 | P7 | INP < 200 ms | Phases 0–1: TBT as the lab proxy. From Phase 2: scripted interactions measured with web-vitals `onINP` (attribution build) and the Event Timing API, at CPU x1 and x4 (§6.4) | LHCI; web-vitals spec | `lighthouse.gates.totalBlockingTimeMs` 200 ms `<`; `webVitals.gates.inpMs` 200 ms `<`, from Phase 2 | CI | Every PR | perf-tester / build-lead | Yes (TBT now, INP from Phase 2) |
 | P8 | 60 fps on the reference laptop and on desktop; 120 fps on a high-end desktop GPU | The absolute gate: scripted camera path on real hardware, frame-rate limit off, median of 3 (§6.5) | `tests/perf/fps-probe.mjs --mode reference` | `fps.targets.referenceLaptop` and `.desktop` ≥ 60 avg fps; `.highEndDesktop` ≥ 120 | REF-LAPTOP, REF-DESKTOP | Phase 3 and Phase 5 exit, and after any change the Director flags as 3D-heavy | perf-tester writes, Hazem runs / build-lead | Blocks the phase exit. CI cannot run it |
 | P8p | fps regression proxy | Same path in headless Chromium on SwiftShader. Base and PR measured interleaved in one job (§6.5) | `fps-probe.mjs --mode ci` | `fps.ciProxy.maxRegressionPct` 10%, `fps.ciProxy.blocking` false | CI | Every PR from Phase 3 | perf-tester / build-lead | No, until its noise floor is measured and the Director approves |
-| P9 | Zero console errors, zero unhandled rejections | A shared auto fixture on every Playwright test (§13) | `tests/e2e/fixtures.ts` (WP-Q1) | `console.*` all 0 | CI | Every PR | e2e-tester / owner of the failing code | Yes |
+| P9 | Zero console errors, zero unhandled rejections | A shared auto fixture on every Playwright test (§13). App console warnings fail too, since WP-Q2 | `tests/e2e/fixtures.ts` (WP-Q1) | `console.*` all 0 | CI | Every PR | e2e-tester / owner of the failing code | Yes |
 | P10 | Every compatibility rule has a passing positive and negative test | Unit tests named by rule id, plus a traceability check (§9) | Vitest; `tests/audit/compat-trace.mjs` (Phase 1) | `compatibility.minPositiveTestsPerRule`, `.minNegativeTestsPerRule` = 1; unknown data never `ok` | CI | Every PR from Phase 1 | e2e-tester / build-lead | Yes |
 | P11 | WCAG 2.1 AA for all non-3D UI | axe on every route and state, both themes, all three widths; manual keyboard and screen-reader checks (§10) | `@axe-core/playwright` 4.13.0 | `accessibility.axeTags`, `accessibility.maxViolations` 0 | CI (axe), REF (manual) | Every PR (axe), phase exit (manual) | e2e-tester / build-lead, design-lead | Yes (axe). Manual findings become defects |
 | P12 | Full keyboard path through the builder | A keyboard-only Playwright flow through all 12 steps to the Buy Sheet, with focus visible at every stop (§10.2) | Playwright | The path completes with no trap | CI | Every PR from Phase 2 | e2e-tester / build-lead | Yes |
@@ -666,7 +666,7 @@ a message.
   - `publishers.json` is the source registry, not a record set, so it is not sampled. Titles in
     `games.json` → `considered` are not on the list, so they are not sampled either.
   - Any other data file is refused, so a new file cannot drop out of the audit unnoticed.
-  - Dry run on data-lead's `2cedf51` (2026-10-01): 355 records in 15 strata, 43 sampled.
+  - Dry run on data-lead's `18bde24` (2026-10-01): 355 records in 15 strata, 43 sampled.
 - **Sample size.** A sampled record has **every** field checked, so 10% of records is about 10% of
   all numbers (BUILD_PROMPT §2 Phase 1).
 - **Proof of population.** The report states the seed and each stratum's population size and
@@ -1198,6 +1198,7 @@ rejections as page errors.
   new tabs (the Buy Sheet) are covered, and so are workers.
 - It records:
   - `console.error`: every console message of type error, from pages and workers;
+  - `console.warning`: every console message of type warning, the same way (since WP-Q2, below);
   - `pageerror`: an uncaught error in a page or a worker, from the context's `weberror` event;
   - `unhandledrejection`: from our own page-side hook, as defence in depth. Chromium also reports
     each one as a `pageerror`;
@@ -1206,7 +1207,19 @@ rejections as page errors.
   - `http-error`: a same-origin response with status 400 or more;
   - `crash`: a page crash.
 - "Same-origin" means the origin of `use.baseURL`.
-- Console warnings are collected and attached, never failed (§14 rates a warning Minor).
+- **Console warnings fail like errors** (`console.maxConsoleWarnings` 0; the Director,
+  2026-10-01, `progress.md` WP-Q2 step 4). Until WP-Q2 they were only attached. With build-lead's
+  THREE.Clock filter merged (QA-P0-001), the app logs no warning of its own on any route. So an
+  app warning now fails the test, and only the browser's and the GPU driver's own notices are
+  allowed (the allow-list below).
+  - Measured on the home PC, 2026-10-02 at `73005aa`: 166 smoke tests pass. The allow-list let
+    through 48 GPU-stall notices, all on `/build/*` pages, where the 3D preview runs.
+  - Self-tests: an app warning fails, the driver's exact notice passes, and a GL driver message
+    with any other text fails.
+  - **Not covered: Chrome's unused-preload warning** (QA-P0-017). Chrome logs it a few seconds
+    after the load event ("not used within a few seconds from the window's load event"), and only
+    on a repeat load in the same tab. That is later than any smoke test watches, so the gate never
+    sees it. The WP-Q2 visual-tester caught it with a 4.5 s wait.
 - **Coverage window.** The fixture only sees what happens while a test runs, and a smoke test
   ends well under a second after its page loads (WP-Q2 measured a median of 540 ms). An unhandled
   rejection 1 s after start therefore passed all 112 smoke tests (negative control NC-F3,
@@ -1217,9 +1230,8 @@ rejections as page errors.
   Director, 2026-10-01. A problem later than about 1.5 s after navigation is still unseen by the
   smoke run.
 - When the test ends, the fixture lets every open page hand over the events it has already sent,
-  with a 2 s cap. It then classifies each problem, attaches `page-problems.json` (unexpected,
-  allowed with the entry that allowed it, and warnings), and fails the test on anything
-  unexpected.
+  with a 2 s cap. It then classifies each problem, attaches `page-problems.json` (unexpected, and
+  allowed with the entry that allowed it), and fails the test on anything unexpected.
 
 **The API specs use.**
 
@@ -1237,10 +1249,19 @@ an owning team and an `until`: `permanent`, the last day it applies, or an https
 - An empty reason, an unknown owner, a repeated id, a malformed `until` or an expired date stops
   the whole run before any test starts. `npm run test` fails on it too.
 - Every entry is reviewed at each phase exit.
-- Two entries today, both qa-lead's and permanent:
+- Four entries today, all qa-lead's and permanent:
   - `not-found-page-status`: the 404 answer of a page that a test declared it asks for.
   - `not-found-page-console`: Chromium's console error for that same page URL. It moved here
     from build-lead's `isOwnDocument404`.
+  - `software-webgl-notice`: Chromium's warning that WebGL fell back to its software renderer
+    without `--enable-unsafe-swiftshader`. The e2e projects pass that flag, so it should not
+    appear; build-lead saw it from a browser launched without the flag.
+  - `gpu-readpixels-stall-notice`: the GPU driver's "GPU stall due to ReadPixels" note, which
+    ANGLE logs as a warning, in its two exact forms. The app never calls `readPixels`.
+
+  Both warning entries came from build-lead's proposal (2026-10-01). Both match the whole text,
+  and only for `console.warning`. CI's ubuntu runners render with SwiftShader and may log other
+  variants: a new one fails the run, and QA decides whether it is the environment or the app.
 
 **Enforcement and self-tests** (Vitest, so `npm run verify` runs them):
 
@@ -1308,7 +1329,7 @@ an owning team and an `until`: `permanent`, the last day it applies, or an https
 |---|---|---|
 | **Blocker** | The phase stays open and the change cannot merge | **Wrong data:** a spec that disagrees with the manufacturer; a benchmark with the wrong conditions; a price the capture does not show; a converted price shown as an observation; frame-gen mixed into native fps. **Owner's rule 1:** a price from an archive, cache, snippet, tracker or aggregator; a wrong `retrievedAt`; a price with no capture; an archived benchmark missing `url`, `archiveUrl` or `publishedAt`, or with a snapshot before `publishedAt`. **A compatibility false negative:** `ok` for DDR4 on AM5, or for a 360 mm radiator in a 280 mm case. **A crash:** an uncaught error, a white screen, a route that does not load directly with 200, lost WebGL context with no recovery. **A budget miss:** any gate in `budget.json`. **Any** console error or unhandled rejection in a test. A WCAG 2.1 AA failure on non-3D UI. A number on screen with no source. An estimate without its range, confidence or "estimated" label. A golden anchor outside ±5%, or a held-out error over 10% |
 | **Major** | Fix it, or the Director defers it in writing with an owner and a date, before the phase closes | A compatibility false positive (a compatible part blocked); `ok` where `warn` belongs (a missing EXPO note); a spec left null that the source publishes; an unverifiable source with no `archiveUrl`; a flaky test; a visual layout break at one width; performance within budget but more than 10% worse than the last phase; a slow single interaction (≥ 200 ms) while INP still passes; screen-reader output that is confusing but not an AA failure |
-| **Minor** | Fix when convenient; tracked | Cosmetic misalignment below the visual threshold; a typo; a `console.warning`; price drift found on a re-check; a documentation gap |
+| **Minor** | Fix when convenient; tracked | Cosmetic misalignment below the visual threshold; a typo; a console warning that the e2e run cannot see (the run itself fails on any other, §13.2); price drift found on a re-check; a documentation gap |
 
 **Defect record** (in the phase report, and sent to the owning lead):
 
@@ -1345,6 +1366,7 @@ QA re-tests every fix on the integration branch before closing the defect.
 | 2026-09-30 | 2 | WP-Q1 as built: §4, §5, §6.3 finding, §6.4, §10.1, §11, §12.1, §13.2 and Appendix B. Two method changes, with no threshold changed: web vitals also measures at 390 px (`webVitals.viewports`), and the gated CLS counts shifts that Chromium flags as recent input on loads with no input (§6.4) | pending the Director's WP-Q1 review |
 | 2026-10-01 | 3 | WP-Q2, found on the home PC (§6.3, §6.4, §6.5, §7.2, §7.5). Method changes, with no gate value changed: web vitals watches each load for at least `webVitals.minObserveMs` (5 s) of page time, so late LCP and late shifts can fail the gate (§6.4, QA-P0-004); a headless reference fps run is INVALID (§6.5, QA-P0-003); the Lighthouse preview port is derived per checkout (§6.3). New tools: `tests/audit/strata.mjs` (§7.2) and `tests/audit/rule1.mjs` (§7.5) | Approved by: Director, 2026-10-01 (minObserveMs and the headless rule) |
 | 2026-10-01 | 3.1 | WP-Q2: a 1 s soak per route in the dark 1440 smoke project (`console.soakMs`, `console.soakViewports`), so a late error or rejection fails (§13.2, QA-P0-005). Dark and light e2e projects at every width, with axe in all six cells on PR as §5 always planned (§5). `budget.test.mjs` pins the median-of-3 run counts, the per-rule test minimums, `minObserveMs` and the soak. The LCP blind spots documented, and their fix deferred (§6.1, QA-P0-006) | Approved by: Director, 2026-10-01 (the soak; QA-P0-006 deferred to Phase 2 entry, owner qa-lead) |
+| 2026-10-02 | 3.2 | WP-Q2: console warnings fail the e2e run like errors (`console.maxConsoleWarnings` 0, §13.2), with two allow-list entries for the browser's software-WebGL notice and the GPU driver's ReadPixels note, from build-lead's proposal. `budget.test.mjs` pins it. The unused-preload warning the gate cannot see is recorded (QA-P0-017). No §8 number changed | Approved by: Director, 2026-10-01 (`progress.md`, WP-Q2 next step 4) |
 
 ---
 

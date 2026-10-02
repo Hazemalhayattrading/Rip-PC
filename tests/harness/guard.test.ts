@@ -26,21 +26,18 @@ interface Outcome {
   readonly unexpected: readonly ProblemKind[];
   /** The allow-list entries that let problems through, sorted. */
   readonly allowed: readonly string[];
-  readonly warnings: number;
 }
 
 const passes = (extra: Partial<Outcome> = {}): Outcome => ({
   status: 'passed',
   unexpected: [],
   allowed: [],
-  warnings: 0,
   ...extra,
 });
 const failsFor = (unexpected: readonly ProblemKind[], extra: Partial<Outcome> = {}): Outcome => ({
   status: 'failed',
   unexpected,
   allowed: [],
-  warnings: 0,
   ...extra,
 });
 
@@ -50,7 +47,11 @@ const NOT_FOUND_ALLOWED = ['not-found-page-console', 'not-found-page-status'];
 const EXPECTED: Readonly<Record<string, Outcome>> = {
   'a clean page passes': passes(),
   'console.error fails': failsFor(['console.error']),
-  'a console warning is reported and passes': passes({ warnings: 1 }),
+  'a console warning fails': failsFor(['console.warning']),
+  "the GPU driver's ReadPixels notice passes": passes({
+    allowed: ['gpu-readpixels-stall-notice'],
+  }),
+  'any other GL driver message fails': failsFor(['console.warning']),
   'an uncaught error fails': failsFor(['pageerror']),
   'an unhandled rejection fails': failsFor(['pageerror', 'unhandledrejection']),
   'a rejection with a string reason fails': failsFor(['pageerror', 'unhandledrejection']),
@@ -109,7 +110,6 @@ interface Report {
 interface Attached {
   readonly unexpected: readonly Problem[];
   readonly allowed: readonly { readonly allowedBy: string }[];
-  readonly warnings: readonly string[];
 }
 
 const sortedUnique = <T extends string>(values: readonly T[]): T[] => [...new Set(values)].sort();
@@ -152,7 +152,6 @@ function outcomes(report: Report): {
           status: result.status === 'passed' ? 'passed' : 'failed',
           unexpected: sortedUnique((attached?.unexpected ?? []).map((problem) => problem.kind)),
           allowed: sortedUnique((attached?.allowed ?? []).map((entry) => entry.allowedBy)),
-          warnings: attached?.warnings.length ?? 0,
           byFixture: result.errors.some((error) => error.message?.includes(FIXTURE_FAILURE)),
         });
         why.set(title, `status ${result.status}\n${errorText(result.errors)}`);
