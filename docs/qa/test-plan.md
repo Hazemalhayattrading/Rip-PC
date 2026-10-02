@@ -1,6 +1,6 @@
 # Rig Lab test plan
 
-Owner: qa-lead · Version 3.2 · 2026-10-02 · Applies to every phase, from Phase 0 to release.
+Owner: qa-lead · Version 3.3 · 2026-10-02 · Applies to every phase, from Phase 0 to release.
 
 This is a working document. Every team follows it. It says how each quality bar in BUILD_PROMPT §8
 and each item of the definition of done in §9 is measured, where, how often, by whom, and what
@@ -97,7 +97,7 @@ scene measured 5.3 fps and then 8.5 fps ten minutes apart on 2026-09-30.
 | D7 | Leave with a shareable Buy Sheet | e2e: the share URL opened in a fresh context rebuilds the same build; URLs from every earlier codec version still decode (fixtures); print media emulation screenshot | Playwright | Pass | CI | Every PR from Phase 4 | e2e-tester / build-lead | Yes |
 | D8 | Every number on screen links to its source | Provenance check: every number rendered from data sits inside an element that carries its source ids (UI contract in §12.2). The data validator already rejects uncovered values | Playwright; data-lead's validator | 0 unsourced numbers | CI | Every PR from Phase 2 | e2e-tester / build-lead, data-lead | Yes |
 | D9 | QA report is green | qa-lead writes `docs/qa/report-phase-N.md` from the template (Appendix A), with every measurement re-run on the integration commit it names | The report, and every tool behind its numbers | 0 open Blockers; every Major fixed or deferred in writing by the Director; the phase's exit criteria (§15) met | Every environment the report names | Each phase exit | qa-lead | The phase |
-| D10 | Director signs off | The Director reviews the last phase report and the release, then signs `docs/reports/release-v1.md` | `docs/reports/release-v1.md` | A green `docs/qa/report-phase-5.md` | — | Release | Director | — |
+| D10 | Director signs off | The Director reviews the last phase report and the release, then signs `docs/reports/release-v1.md` | `docs/reports/release-v1.md` | A green `docs/qa/report-phase-5.md` | n/a: a sign-off, not a measurement | Release | Director | The release |
 
 ### 3.3 Data rules that QA enforces
 
@@ -1210,12 +1210,17 @@ rejections as page errors.
 - **Console warnings fail like errors** (`console.maxConsoleWarnings` 0; the Director,
   2026-10-01, `progress.md` WP-Q2 step 4). Until WP-Q2 they were only attached. With build-lead's
   THREE.Clock filter merged (QA-P0-001), the app logs no warning of its own on any route. So an
-  app warning now fails the test, and only the browser's and the GPU driver's own notices are
+  app warning now fails the test, and only two notices from the browser's own WebGL stack are
   allowed (the allow-list below).
   - Measured on the home PC, 2026-10-02 at `73005aa`: 166 smoke tests pass. The allow-list let
-    through 48 GPU-stall notices, all on `/build/*` pages, where the 3D preview runs.
-  - Self-tests: an app warning fails, the driver's exact notice passes, and a GL driver message
-    with any other text fails.
+    through 48 ReadPixels notices, all on `/build/*` pages, where the 3D preview runs. ANGLE logs
+    that notice at most 4 times per GPU process, so the count follows browser launches, not
+    pages: 6 projects × 2 workers × 4 = 48 (QA-P0-034).
+  - Self-tests: an app warning fails; ANGLE's exact notice passes when the page itself logs it,
+    and fails from a script file; a GL driver message with any other text fails.
+  - **A limit:** an inline script in the page that logs one of the two notices word for word
+    would pass, because Chromium gives an inline script the page's own URL (QA-P0-033). A script
+    file, the app's bundle included, fails.
   - **Not covered: Chrome's unused-preload warning** (QA-P0-017). Chrome logs it a few seconds
     after the load event ("not used within a few seconds from the window's load event"), and only
     on a repeat load in the same tab. That is later than any smoke test watches, so the gate never
@@ -1254,14 +1259,20 @@ an owning team and an `until`: `permanent`, the last day it applies, or an https
   - `not-found-page-console`: Chromium's console error for that same page URL. It moved here
     from build-lead's `isOwnDocument404`.
   - `software-webgl-notice`: Chromium's warning that WebGL fell back to its software renderer
-    without `--enable-unsafe-swiftshader`. The e2e projects pass that flag, so it should not
-    appear; build-lead saw it from a browser launched without the flag.
-  - `gpu-readpixels-stall-notice`: the GPU driver's "GPU stall due to ReadPixels" note, which
-    ANGLE logs as a warning, in its two exact forms. The app never calls `readPixels`.
+    without `--enable-unsafe-swiftshader`, in the wording of Chromium 141 and of its current
+    source. The e2e projects pass that flag, so it should not appear; build-lead saw it from a
+    browser launched without the flag.
+  - `gpu-readpixels-stall-notice`: ANGLE's "GPU stall due to ReadPixels" performance warning,
+    which Chromium logs as a "GL Driver Message" when it reads a WebGL canvas back on
+    SwiftShader, in its two exact forms. The e2e browsers render WebGL with SwiftShader here as in
+    CI, and a draw-only WebGL page that never calls `readPixels` gets it too.
 
-  Both warning entries came from build-lead's proposal (2026-10-01). Both match the whole text,
-  and only for `console.warning`. CI's ubuntu runners render with SwiftShader and may log other
-  variants: a new one fails the run, and QA decides whether it is the environment or the app.
+  Both warning entries came from build-lead's proposal (2026-10-01), which named the NVIDIA
+  driver; QA's probe showed the renderer is SwiftShader (QA-P0-034). Each matches the whole text,
+  only for `console.warning`, and only when the message's location is the page's own URL, which
+  is how Chromium attributes both notices (48 of 48). CI's ubuntu runners passed with these two
+  entries (run 36973853810, 2026-10-02). A new variant fails the run, and QA decides whether it
+  is the environment or the app.
 
 **Enforcement and self-tests** (Vitest, so `npm run verify` runs them):
 
@@ -1284,7 +1295,10 @@ an owning team and an `until`: `permanent`, the last day it applies, or an https
   |---|---|---|
   | a clean page | passes | none |
   | `console.error` | fails | console.error |
-  | a console warning | passes, warning attached | none |
+  | a console warning | fails | console.warning |
+  | ANGLE's ReadPixels notice, logged by the page itself | passes | none; allowed |
+  | the same notice from a script file | fails | console.warning |
+  | any other GL driver message | fails | console.warning |
   | an uncaught error | fails | pageerror |
   | an unhandled rejection, Error or string reason | fails | pageerror, unhandledrejection |
   | a same-origin 404 image | fails | console.error, http-error |
@@ -1301,9 +1315,12 @@ an owning team and an `until`: `permanent`, the last day it applies, or an https
   | a page crash (its renderer killed with SIGKILL) | fails | crash |
   | a context the test makes itself, watched | fails | console.error |
 
-  Tests the fixture must fail are marked `test.fail()`. A fixture that stops catching a problem
-  therefore makes its test pass unexpectedly, and the run fails. The self-test takes about 3.5 s.
-  When a case ends with the wrong outcome, the checker prints that case's own errors.
+  Tests the fixture must fail are marked `test.fail()`, and each first waits for its own problem
+  to be recorded. A fixture that stops recording a kind therefore still ends that test as an
+  expected failure, because the wait times out. The checker is what catches it: for every case it
+  compares the kinds the fixture reported, and whether the fixture itself failed the test, with
+  the table above (shown by mutation on 2026-10-02, QA-P0-035). When a case ends with the wrong
+  outcome, the checker prints that case's own errors. The 22 cases take about 2 s on the home PC.
 - **How the crash case crashes the page** (fixed 2026-09-30, after it failed on GitHub):
   - It finds the renderer through the browser's DevTools session (`SystemInfo.getProcessInfo`)
     and kills it with SIGKILL, as the out-of-memory killer does.
@@ -1367,6 +1384,7 @@ QA re-tests every fix on the integration branch before closing the defect.
 | 2026-10-01 | 3 | WP-Q2, found on the home PC (§6.3, §6.4, §6.5, §7.2, §7.5). Method changes, with no gate value changed: web vitals watches each load for at least `webVitals.minObserveMs` (5 s) of page time, so late LCP and late shifts can fail the gate (§6.4, QA-P0-004); a headless reference fps run is INVALID (§6.5, QA-P0-003); the Lighthouse preview port is derived per checkout (§6.3). New tools: `tests/audit/strata.mjs` (§7.2) and `tests/audit/rule1.mjs` (§7.5) | Approved by: Director, 2026-10-01 (minObserveMs and the headless rule) |
 | 2026-10-01 | 3.1 | WP-Q2: a 1 s soak per route in the dark 1440 smoke project (`console.soakMs`, `console.soakViewports`), so a late error or rejection fails (§13.2, QA-P0-005). Dark and light e2e projects at every width, with axe in all six cells on PR as §5 always planned (§5). `budget.test.mjs` pins the median-of-3 run counts, the per-rule test minimums, `minObserveMs` and the soak. The LCP blind spots documented, and their fix deferred (§6.1, QA-P0-006) | Approved by: Director, 2026-10-01 (the soak; QA-P0-006 deferred to Phase 2 entry, owner qa-lead) |
 | 2026-10-02 | 3.2 | WP-Q2: console warnings fail the e2e run like errors (`console.maxConsoleWarnings` 0, §13.2), with two allow-list entries for the browser's software-WebGL notice and the GPU driver's ReadPixels note, from build-lead's proposal. `budget.test.mjs` pins it. The unused-preload warning the gate cannot see is recorded (QA-P0-017). No §8 number changed | Approved by: Director, 2026-10-01 (`progress.md`, WP-Q2 next step 4) |
+| 2026-10-02 | 3.3 | WP-Q2: fixes from the independent check of v3.2, QA-P0-032 to 037. Both warning entries match the whole notice and only from the page itself, and the ReadPixels notice is attributed to ANGLE on SwiftShader, not a GPU driver (§13.2). The self-test table and how the checker catches a broken fixture (§13.2). Seven more method values pinned, and the web-vitals spec refuses an empty plan. D10's environment and blocks columns (§3.2). No gate value changed | qa-lead; no approval needed (no gate or method changed) |
 
 ---
 

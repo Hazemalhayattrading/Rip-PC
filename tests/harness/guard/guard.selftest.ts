@@ -37,11 +37,17 @@ const SERVED: Readonly<Record<string, Served>> = {
   '/console-warning': {
     body: html('<script>console.warn("guard self-test: console.warn")</script>'),
   },
-  // The exact text the GPU driver logs through ANGLE on the home PC, and a near miss of it.
+  // The exact text Chromium logs for ANGLE's SwiftShader ReadPixels warning, attributed to the
+  // page; the same text from a script file; and a near miss of it.
   '/gpu-stall-notice': {
     body: html(
       '<script>console.warn("[.WebGL-0x202c00194200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels")</script>',
     ),
+  },
+  '/gpu-stall-from-script': { body: html('<script src="/stall.js"></script>') },
+  '/stall.js': {
+    contentType: 'text/javascript',
+    body: 'console.warn("[.WebGL-0x202c00194200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels");',
   },
   '/other-gl-message': {
     body: html(
@@ -139,8 +145,17 @@ test('a console warning fails', async ({ page, problemGuard }) => {
   await expect.poll(() => kinds(problemGuard)).toContain('console.warning');
 });
 
-test("the GPU driver's ReadPixels notice passes", async ({ page, problemGuard }) => {
+test("ANGLE's ReadPixels notice, logged by the page itself, passes", async ({
+  page,
+  problemGuard,
+}) => {
   await page.goto('/gpu-stall-notice');
+  await expect.poll(() => kinds(problemGuard)).toContain('console.warning');
+});
+
+test('the same notice from a script file fails', async ({ page, problemGuard }) => {
+  test.fail(); // the guard must fail this test; tests/harness/guard.test.ts checks why
+  await page.goto('/gpu-stall-from-script');
   await expect.poll(() => kinds(problemGuard)).toContain('console.warning');
 });
 

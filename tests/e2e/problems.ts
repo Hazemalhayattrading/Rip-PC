@@ -5,7 +5,8 @@
  * by tests/harness/guard.test.ts.
  *
  * BUILD_PROMPT.md §8: "Zero console errors. Zero unhandled promise rejections." Console warnings
- * fail too (the Director, 2026-10-01), except the browser and driver notices allowed below.
+ * fail too (the Director, 2026-10-01), except two notices from the browser's own WebGL stack,
+ * allowed below.
  * tests/perf/budget.json `console`: every count is 0. docs/qa/test-plan.md §13. Owner: qa-lead.
  */
 
@@ -69,19 +70,32 @@ export const CHROMIUM_404_CONSOLE_TEXT =
 
 /**
  * Chromium's notice when WebGL falls back to its software renderer, SwiftShader, without the
- * --enable-unsafe-swiftshader flag (seen by build-lead, 2026-10-01). The bracketed prefix changes
- * per GPU process.
+ * --enable-unsafe-swiftshader flag (seen by build-lead, 2026-10-01). The whole text, in the
+ * wording of Chromium 141 (Playwright 1.56.1's build) and of Chromium's current source, which
+ * drops the about:flags part. The bracketed prefix changes per GPU process. Every e2e project
+ * passes the flag, so this should not appear at all (QA-P0-032).
  */
 export const SOFTWARE_WEBGL_NOTICE =
-  /^(?:\[[^\]]*\])?Automatic fallback to software WebGL has been deprecated\. Please use the --enable-unsafe-swiftshader /;
+  /^(?:\[[^\]]*\])?Automatic fallback to software WebGL has been deprecated\. Please use the --enable-unsafe-swiftshader(?: \(about:flags#enable-unsafe-swiftshader\))? flag to opt in to lower security guarantees for trusted content\.$/;
 
 /**
- * The GPU driver's performance note, which ANGLE logs as a console warning when WebGL reads pixels
- * back (NVIDIA RTX 5080, home PC, 2026-10-01). The address changes per load, and the second form
- * comes once per page. Any other GL driver message does not match.
+ * ANGLE's performance warning, which Chromium logs as a "GL Driver Message", when a WebGL canvas
+ * is read back on SwiftShader. The e2e browsers render WebGL with SwiftShader, on this PC as in
+ * CI, and a draw-only page that never calls readPixels gets it too (QA-P0-034). ANGLE logs it at
+ * most 4 times per GPU process, the 4th time with the "(this message will no longer repeat)"
+ * suffix. The address changes per load. Any other GL driver message does not match.
  */
 export const GPU_READPIXELS_STALL_NOTICE =
   /^\[\.WebGL-0x[0-9a-f]+\]GL Driver Message \(OpenGL, Performance, GL_CLOSE_PATH_NV, High\): GPU stall due to ReadPixels(?: \(this message will no longer repeat\))?$/;
+
+/**
+ * Chromium attributes both notices to the page itself: the message's location is the document's
+ * URL. A script that logs the same text has its own file's URL, so it still fails (QA-P0-033).
+ * An inline script in the page has the page's URL too; that limit is in test plan §13.2.
+ */
+function fromThePageItself(problem: Problem): boolean {
+  return problem.url !== '' && problem.url === problem.documentUrl;
+}
 
 /** A page that answered 404: the main-frame document, not a resource inside it. */
 export function isNotFoundPage(problem: Problem): boolean {
@@ -118,18 +132,22 @@ export const ALLOWED: readonly AllowedProblem[] = [
   {
     id: 'software-webgl-notice',
     matches: (problem) =>
-      problem.kind === 'console.warning' && SOFTWARE_WEBGL_NOTICE.test(problem.text),
+      problem.kind === 'console.warning' &&
+      fromThePageItself(problem) &&
+      SOFTWARE_WEBGL_NOTICE.test(problem.text),
     reason:
-      "Chromium's own notice that WebGL fell back to its software renderer on a machine with no usable GPU. It is about the test browser, not the app (build-lead's allow-list proposal, 2026-10-01). Any other warning still fails.",
+      "Chromium's own notice that WebGL fell back to its software renderer, logged when a browser runs without --enable-unsafe-swiftshader. It is about the test browser, not the app (build-lead's allow-list proposal, 2026-10-01). Only the whole notice, from the page itself; any other warning still fails.",
     owner: 'qa-lead',
     until: 'permanent',
   },
   {
     id: 'gpu-readpixels-stall-notice',
     matches: (problem) =>
-      problem.kind === 'console.warning' && GPU_READPIXELS_STALL_NOTICE.test(problem.text),
+      problem.kind === 'console.warning' &&
+      fromThePageItself(problem) &&
+      GPU_READPIXELS_STALL_NOTICE.test(problem.text),
     reason:
-      "The GPU driver's performance note, which ANGLE logs when WebGL reads pixels back. The app never calls readPixels; it comes from three.js or ANGLE internals, on the 3D preview only (build-lead's allow-list proposal, 2026-10-01). Any other GL driver message still fails.",
+      "ANGLE's performance warning when Chromium reads a WebGL canvas back on SwiftShader, at most 4 times per GPU process. It comes from the browser's software rendering, not the app: a draw-only WebGL page gets it too (build-lead's allow-list proposal, 2026-10-01; QA-P0-034). Only this exact notice, from the page itself; any other GL driver message still fails.",
     owner: 'qa-lead',
     until: 'permanent',
   },

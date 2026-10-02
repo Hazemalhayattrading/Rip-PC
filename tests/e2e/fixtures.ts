@@ -7,8 +7,8 @@
  * popups, new tabs and workers are all covered. It fails the test on any of these, unless an
  * ALLOWED entry in problems.ts covers it:
  * - a console error;
- * - a console warning (the Director, 2026-10-01; the browser's and GPU driver's own notices are
- *   allowed in problems.ts);
+ * - a console warning (the Director, 2026-10-01; two notices from the browser's own WebGL stack
+ *   are allowed in problems.ts);
  * - an uncaught error in a page or worker;
  * - an unhandled promise rejection (Chromium also reports these as page errors; our own hook is
  *   defence in depth, test plan §13.1);

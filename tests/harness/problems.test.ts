@@ -153,12 +153,18 @@ describe('classify', () => {
     ]);
   });
 
-  it("allows the browser's software-WebGL notice and the GPU driver's ReadPixels note", () => {
+  it("allows the browser's software-WebGL notice and ANGLE's ReadPixels notice, from the page", () => {
     const at = { url: `${SITE}/Rip-PC/build/cpu`, documentUrl: `${SITE}/Rip-PC/build/cpu` };
     const notices: Problem[] = [
       {
         kind: 'console.warning',
         text: '[GroupMarkerNotSet(crbug.com/242999)!:A0402700246C0000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader (about:flags#enable-unsafe-swiftshader) flag to opt in to lower security guarantees for trusted content.',
+        ...at,
+      },
+      // The same notice in the wording of Chromium's current source.
+      {
+        kind: 'console.warning',
+        text: 'Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content.',
         ...at,
       },
       {
@@ -176,9 +182,45 @@ describe('classify', () => {
       classify(notices, { expectNotFoundDocument: false }).allowed.map((a) => a.allowedBy),
     ).toEqual([
       'software-webgl-notice',
+      'software-webgl-notice',
       'gpu-readpixels-stall-notice',
       'gpu-readpixels-stall-notice',
     ]);
+  });
+
+  it('fails either notice when a script logs it, or when only its opening words match', () => {
+    const page = `${SITE}/Rip-PC/build/cpu`;
+    const script = `${SITE}/Rip-PC/assets/index-abc123.js`;
+    const copies: Problem[] = [
+      // QA-P0-033: an app or library logging the exact text has its script's URL.
+      {
+        kind: 'console.warning',
+        text: '[.WebGL-0x202c00194200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels',
+        url: script,
+        documentUrl: page,
+      },
+      {
+        kind: 'console.warning',
+        text: 'Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content.',
+        url: script,
+        documentUrl: page,
+      },
+      // QA-P0-032: the notice's opening words with a tail of the app's own.
+      {
+        kind: 'console.warning',
+        text: 'Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag, says the app.',
+        url: page,
+        documentUrl: page,
+      },
+      // A message with no location proves nothing about where it came from.
+      {
+        kind: 'console.warning',
+        text: '[.WebGL-0x202c00194200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels',
+        url: '',
+        documentUrl: '',
+      },
+    ];
+    expect(classify(copies, { expectNotFoundDocument: false }).unexpected).toEqual(copies);
   });
 
   it('fails every other warning, and the same notices logged as errors', () => {

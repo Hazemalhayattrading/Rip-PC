@@ -48,9 +48,10 @@ const EXPECTED: Readonly<Record<string, Outcome>> = {
   'a clean page passes': passes(),
   'console.error fails': failsFor(['console.error']),
   'a console warning fails': failsFor(['console.warning']),
-  "the GPU driver's ReadPixels notice passes": passes({
+  "ANGLE's ReadPixels notice, logged by the page itself, passes": passes({
     allowed: ['gpu-readpixels-stall-notice'],
   }),
+  'the same notice from a script file fails': failsFor(['console.warning']),
   'any other GL driver message fails': failsFor(['console.warning']),
   'an uncaught error fails': failsFor(['pageerror']),
   'an unhandled rejection fails': failsFor(['pageerror', 'unhandledrejection']),

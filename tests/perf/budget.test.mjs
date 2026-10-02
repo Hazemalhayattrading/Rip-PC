@@ -143,6 +143,18 @@ describe('budget.json keeps the approved method values', () => {
     expect(budget.webVitals).toMatchObject({ runs: 3, aggregation: 'median' });
   });
 
+  // QA-P0-036: each of these could shrink what a gate measures without failing anything. With
+  // visual.themes ["dark"] the light projects vanish; with webVitals.routes [] perf:vitals passes
+  // with no samples at all.
+  it('both themes, the web-vitals routes, widths and CPU rates, and the fps runs (QA-P0-036)', () => {
+    expect(budget.visual.themes).toEqual(['dark', 'light']);
+    expect(budget.webVitals.routes).toEqual([{ name: 'landing', path: './' }]);
+    expect(budget.webVitals.viewports).toEqual(['390', '1440']);
+    expect(budget.webVitals.cpuThrottleRates).toEqual([1, 4]);
+    expect(budget.webVitals.settleMs).toBe(1500);
+    expect(budget.fps).toMatchObject({ runs: 3, aggregation: 'median', warmupRuns: 1 });
+  });
+
   it('web vitals watch each load for at least 5 s of page time (QA-P0-004)', () => {
     expect(budget.webVitals.minObserveMs).toBe(5000);
     expect(budget.webVitals.minObserveMs).toBeGreaterThan(budget.webVitals.gates.lcpMs.value);

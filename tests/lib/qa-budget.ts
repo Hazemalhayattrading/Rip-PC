@@ -33,7 +33,7 @@ const QaBudgetSchema = z.object({
     maxPageErrors: z.literal(0),
     maxUnhandledRejections: z.literal(0),
     maxFailedSameOriginRequests: z.literal(0),
-    /** The browser's and GPU driver's own notices are allowed in tests/e2e/problems.ts. */
+    /** Two notices from the browser's own WebGL stack are allowed in tests/e2e/problems.ts. */
     maxConsoleWarnings: z.literal(0),
     /** How long a route's smoke test keeps watching after network idle (QA-P0-005). */
     soakMs: z.number().int().nonnegative(),

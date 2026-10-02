@@ -242,6 +242,17 @@ test('web vitals: LCP and CLS within budget on every route, at every CPU throttl
     visual: VisualBudget;
   };
   const budget = everything.webVitals;
+  // An empty list would make this test pass with no samples at all (QA-P0-036).
+  for (const [key, list] of Object.entries({
+    routes: budget.routes,
+    viewports: budget.viewports,
+    cpuThrottleRates: budget.cpuThrottleRates,
+  })) {
+    if (list.length === 0) {
+      throw new Error(`budget.json webVitals.${key} is empty, so nothing would be measured`);
+    }
+  }
+  if (budget.runs < 1) throw new Error('budget.json webVitals.runs must be at least 1');
   const viewports = budget.viewports.map((name) => {
     const viewport = everything.visual.viewports.find((candidate) => candidate.name === name);
     if (viewport === undefined) {

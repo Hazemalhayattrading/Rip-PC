@@ -132,7 +132,7 @@
     "maxUnhandledRejections": 0,
     "maxFailedSameOriginRequests": 0,
     "maxConsoleWarnings": 0,
-    "warningsSource": "The Director, 2026-10-01 (docs/reports/progress.md, WP-Q2 next step 4): the smoke fails on app warnings. Two environment notices are allowed in tests/e2e/problems.ts, from build-lead's proposal: Chromium's software-WebGL fallback notice and the GPU driver's 'GPU stall due to ReadPixels' note. A method change; no §8 number changed.",
+    "warningsSource": "The Director, 2026-10-01 (docs/reports/progress.md, WP-Q2 next step 4): the smoke fails on app warnings. Two environment notices are allowed in tests/e2e/problems.ts, from build-lead's proposal: Chromium's software-WebGL fallback notice, and ANGLE's 'GPU stall due to ReadPixels' notice when Chromium reads a WebGL canvas back on SwiftShader. A method change; no §8 number changed.",
     "soakMs": 1000,
     "soakViewports": ["1440"],
     "soakSource": "QA-P0-005, approved by the Director 2026-10-01: in the dark e2e project at these widths, each route's smoke test watches the page for this long after network idle, so a console error or unhandled rejection that comes about 1 to 1.5 s after navigation still fails. Without it, a rejection 1 s after start passed all 112 smoke tests (WP-Q2 negative control NC-F3).",
