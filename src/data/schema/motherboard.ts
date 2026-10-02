@@ -140,7 +140,11 @@ export const Motherboard = z.strictObject({
   m2Slots: z.array(M2Slot),
   pcieSlots: z.array(PcieSlot),
   sataPorts: z.array(SataPort),
-  /** Rules from the manual. `[]` only when the manual states the board shares no lanes. */
+  /**
+   * Rules from the manual. `[]` means the manual documents no lane sharing: no page of it has a
+   * shared-bandwidth statement, and the maker documents sharing that way on its boards that have it.
+   * The record's note says what was searched.
+   */
   laneSharing: z.array(LaneSharingRule),
   /** Rear I/O lines as published, e.g. "1 x USB 20Gbps port (1 x USB Type-C)". */
   rearIo: z.array(z.string().min(1)).min(1),

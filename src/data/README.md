@@ -14,10 +14,12 @@ source** (`url`, `publisher`, `retrievedAt`), and a missing value stays missing.
 | `data/benchmarks/game.json` | Game FPS anchors from published reviews. |
 | `data/benchmarks/creator.json` | Creator-app anchors (Cinebench 2024, Blender). |
 | `data/games.json` | The games list, with dated player counts. |
+| `data/compat-fixtures.json` | Real catalogue builds for every compatibility rule's tests: per rule and outcome, a fixture or a gap (see "Compatibility fixtures"). |
 | `data/audits.json` | The data lead's seeded audits: the sample per batch, what each item was read against, findings and fixes (see "Review"). Not catalogue data. |
 | `data/tools/` | Data scripts: the audit sampler (`audit_sample.py`), the price runners (`prices_run.py` for Amazon US and SA, `prices_newegg.py`), their Playwright capture helpers (`pw-price.cjs`, `pw-fetch.cjs`) and `capture-name.mjs`. |
 | `src/data/schema/` | Strict Zod schemas, one per file type. `files.ts` holds `DATA_PATHS`, the single source of truth for the layout. |
 | `src/data/validate/` | The validator. `issues.ts` lists every rule ID (`RULES`). |
+| `src/data/semantics.ts` | What the data means, without Zod, for the engine: `nullMeansNone` and `nullIsNone` (a null that means "none", not "not published"). The validator uses the same functions. |
 | `src/data/dataset.test.ts` | Runs the validator over everything in `data/`. Any error fails CI. |
 | `src/data/seed.test.ts` | Seed minimums, plus the real parts behind each required compatibility case. |
 | `src/data/audits.test.ts` | Checks `data/audits.json`: sample sizes, and that every sampled item and finding points at real data. |
@@ -97,9 +99,9 @@ For some fields the schema documents `null` as "none", so no note is needed (rul
 | cpu | `hybrid`, `igpu`, `boxCooler`, `memory.speeds.*.config` |
 | motherboard | `wifi`, `bluetooth`, `lan`, `biosSupport.families.*.minBiosVersion` (first BIOS already supports it), `biosSupport.cpus.*.minBiosVersion` unless the listing is `since`, `biosFlashback.name` when unsupported |
 | ram | `profiles.xmp` |
-| gpu-card | `ocModeBoostClockMhz`, `powerConnectors.*.standard` on 8-pin and 6-pin plugs |
-| psu | `connectors.pcie16pinStandard` when there is no 16-pin cable |
-| cooler | `nsprRating` (except Noctua, which publishes it) |
+| gpu-card | `ocModeBoostClockMhz`, `powerConnectors.*.standard` on 8-pin and 6-pin plugs, `powerAdapter` on a card without a 16-pin plug |
+| psu | `connectors.pcie16pinStandard` when there is no 16-pin cable, `atxBracketIncluded` on an ATX unit |
+| cooler | `nsprRating` (except Noctua, which publishes it), `singleFanRamClearanceMm` (none published, or one fan) |
 | case | `gpuClearance.*.condition`, `coolerClearance.*.condition` and `psu.clearance.*.condition` (the unconditional limit), `includedFans.*.model`, `gpuMaxHeightMm` (no published height limit) |
 
 ### Fields worth knowing
@@ -111,10 +113,21 @@ For some fields the schema documents `null` as "none", so no note is needed (rul
   are disabled or reduced to N lanes", with the manual page and the manual's words. Slot IDs are local
   to the board (`m2-1`, `pcie-1`, `sata-5`).
 - **Case clearance**: `gpuClearance`, `coolerClearance` and `psu.clearance` have one row per condition
-  the maker publishes; `condition: null` is the default limit (for example the Fractal North: 355 mm, or
-  300 mm "with a 360 mm front radiator"). GPU and cooler limits have exactly one default row. A PSU limit
-  may have none, when the maker only gives per-configuration limits (the North: 255 mm "with 1 HDD
-  tray", 155 mm "with 2 HDD trays").
+  the maker publishes. `condition: null` is the default limit, which always applies; a conditional row
+  tightens it when its condition holds, so a layout's limit is the lowest row that applies. GPU and
+  cooler limits have exactly one default row. A PSU limit may have none, when the maker only gives
+  per-configuration limits (the North: 255 mm with one tray, 155 mm with two).
+- **Structured conditions** (`LayoutCondition` in `schema/case.ts`), with the maker's words kept in
+  `asPublished`:
+  - `{ kind: 'radiator', position, sizesMm }`: a radiator of one of these sizes at this position (the
+    North: 300 mm "with a 360 mm front radiator"; the Terra: 200 mm "if installing a 120 mm radiator").
+    A row covers exactly the sizes it lists: when a case has rows for a radiator at a position, a
+    radiator of another size there has no published limit, so the rule can't verify;
+  - `{ kind: 'drive-trays', count }`: this many drive trays fitted.
+  The validator checks that each condition is possible in that case.
+- **Case `driveTrayLayouts`**: only for a case whose maker publishes limits per drive-tray layout (the
+  North's user guide p. 26): the trays' positions, and the PSU length and largest front radiator each
+  layout leaves room for. A build fits when one layout fits all its parts.
 - **Case size**: `size` is derived, not sourced, so it needs no source. It goes by the largest
   supported board: ATX or E-ATX is `mid-tower` (`full-tower` only when the maker's own class says
   full tower), Micro-ATX is `mini-tower`, and Mini-ITX only is `small-form-factor` (`deriveCaseSize`
@@ -130,11 +143,23 @@ For some fields the schema documents `null` as "none", so no note is needed (rul
   (`radiatorFanMaxThicknessMm`). A build fits when one position fits all its parts. When present it
   supersedes the single cooler and GPU-thickness limits.
 - **Case `radiatorSupport`**: one entry per position and size group, with `maxThicknessMm` as the
-  maker's manual or page states it. When the limit differs by size at one position (the North's front:
+  maker's manual or page states it: the radiator alone, unless the maker says radiator plus fan, as the
+  Terra does in `layoutPositions`. When the limit differs by size at one position (the North's front:
   55 mm for 120/240/360, 35 mm for 140/280), use one entry per group. Read the manual's radiator page,
   not only the product page. Radiator width limits have no field yet; quote them in a note.
 - **GPU power**: `powerConnectors[].type` is `16-pin`, `8-pin` or `6-pin`. For 16-pin, `standard` is
-  `12V-2x6` or `12VHPWR` only when the maker names it; otherwise `null` with a note.
+  `12V-2x6` or `12VHPWR` only when the maker names it; otherwise `null` with a note. A 16-pin card's
+  `powerAdapter` is the adapter in the box: `pcie8pinInputs`, and `separateCables` when the maker wants
+  one PSU cable per plug (NVIDIA's Quick Start Guides: "independent dedicated cables").
+- **PSU cables**: `connectors.pcie8pin` counts PCIe 8-pin (6+2) connectors, and `pcie8pinCables` the
+  cables that carry them (a daisy-chained cable carries two). An SFX unit says whether an SFX-to-ATX
+  bracket is in the box (`atxBracketIncluded`).
+- **Board memory**: `memory.officialMaxSpeedMtps` is the highest speed the spec page lists without
+  "(OC)", or `null` with a note when it lists overclocked speeds only.
+- **Lane sharing `[]`**: the manual documents no sharing: no page has a shared-bandwidth statement, and
+  the maker states sharing that way on its boards that have it. The note says what was searched.
+- **Air cooler `singleFanRamClearanceMm`**: a dual-fan cooler's RAM clearance with one fan, when the
+  maker publishes it (the AK620: "59mm in single fan configurations").
 - **Storage `cache`**: `dram`, `hmb` (DRAM-less, uses host memory), `dram-less` (host memory use not
   stated), or `null` with a note when the maker says nothing.
 - **Case fan `noise`**: `{ value, unit }` with unit `dBA` or `sone`, as the maker publishes it. Never
@@ -143,18 +168,21 @@ For some fields the schema documents `null` as "none", so no note is needed (rul
 
 ## Prices (Owner's rule 1)
 
-One file per market, one batch per file:
+One file per market, with its batches:
 
 ```json
 {
   "schemaVersion": 1, "market": "US", "currency": "USD",
-  "batch": { "id": "2026-09-30-seed", "windowStart": "2026-09-30", "windowEnd": "2026-10-01" },
+  "batches": [{ "id": "2026-09-30-seed", "label": "Seed catalogue (WP-D0)", "windowStart": "2026-09-30", "windowEnd": "2026-10-01" }],
   "priceBasis": "Buy-box price in USD as shown on the live product page ...",
   "observations": [ ... ], "gaps": [ ... ]
 }
 ```
 
-- **Observation**: `partId`, `market`, `currency`, `amount` (exactly as displayed), `retailer`, `url`
+Every observation and gap names its `batch`, and its date falls inside that batch's window. Parts
+added later get a batch of their own, so no price is ever dated outside its window.
+
+- **Observation**: `partId`, `batch`, `market`, `currency`, `amount` (exactly as displayed), `retailer`, `url`
   (the live product page), `inStock`, `isMarketplace` (a third-party seller, not the retailer itself),
   `seller`, `retrievedAt`, `capture`, `captureSha256`, optional `notes`.
 - **Live pages only.** The page is fetched during the batch; `retrievedAt` is the UTC date of that
@@ -176,7 +204,10 @@ One file per market, one batch per file:
 - **Delivery location**: Amazon prices follow the delivery location. From Hazem's PC in Saudi Arabia,
   amazon.com shows SAR prices with delivery to Saudi Arabia (QA, 2026-10-01). Before a US batch, set a
   US delivery location the normal way on the page (its own delivery-location control), never by
-  evasion. Then check that every US capture shows USD with US delivery.
+  evasion: `node data/tools/pw-price.cjs <amazon.com url> <outBase> amazon --us-zip=75201` opens
+  amazon.com, answers Amazon's own "Visiting from KSA?" prompt with "Stay on Amazon.com", sets the ZIP
+  with "Deliver to", then loads the page (a product or a search page). Then check that every US capture
+  shows USD with US delivery.
 - **Gap**: every purchasable part without a price gets one gap record per market:
   `{ partId, market, reasonCode, reason, retailersTried, checkedAt }`. `reasonCode` is `not-listed`,
   `blocked` (a bot challenge, which we never work around), `no-price-shown` or `unavailable`. The UI
@@ -192,6 +223,21 @@ One file per market, one batch per file:
   it, the listing is rejected, and the part gets a gap if no other listing qualifies. Say in a note
   which brand the listing is filed under and where the part number comes from. The maker's own brands
   count as the maker (WD_BLACK and WD Blue are Sandisk's, T-FORCE is TeamGroup's).
+
+## Compatibility fixtures
+
+`data/compat-fixtures.json` holds real catalogue builds for every compatibility rule's tests (WP-D1):
+for each of the 20 rules (`COMPAT_RULE_IDS`) and each outcome (`ok`, `warn`, `block`, `cant-verify`),
+a fixture or a gap, never both.
+
+- A **fixture** names its build (`parts` by category; `"gpu-card": null` is a build with no graphics
+  card), the outcome, a one-sentence `reason` with numbers and units, and the `facts` it rests on:
+  `{ part, path, value }`. The validator checks that each fact's part is in the build, that the value is
+  the catalogue's (so a fixture can't drift from the data), and that a maker source backs it (a null
+  needs the record's note). Fixture IDs start with the rule ID.
+- A **gap** says why an outcome has no fixture: `not-applicable` (the rule can't give it),
+  `no-real-product` (none found after 2 tries) or `pending` (a later batch). The Director rules on each.
+- A part a rule needs is added the usual way, then its fixture. Never an invented product.
 
 ## Benchmarks
 

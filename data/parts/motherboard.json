@@ -839,7 +839,7 @@
         },
         {
           "field": "laneSharing",
-          "text": "The manual's specifications summary and M.2 section give no shared-bandwidth footnote for any slot or port on this board."
+          "text": "No page of the manual (81 pages, full text searched on 2026-10-02 for \"shares bandwidth\", \"shared bandwidth\", \"will be disabled\", \"will be suspended\" and \"runs x… mode\") has a shared-bandwidth statement. ASUS states sharing as specifications-summary footnotes on its boards that have it (the TUF GAMING B550-PLUS WIFI II, B650-PLUS WIFI and X870-PLUS WIFI here)."
         },
         {
           "field": "biosSupport.families.1",
@@ -1101,7 +1101,7 @@
       "notes": [
         {
           "field": "laneSharing",
-          "text": "The manual's specifications summary and expansion-slot pages give no shared-bandwidth footnote for any slot or port on this board."
+          "text": "No page of the manual (40 pages, full text searched on 2026-10-02 for \"shares bandwidth\", \"shared bandwidth\", \"will be disabled\", \"will be suspended\" and \"runs x… mode\") has a shared-bandwidth statement. ASUS states sharing as specifications-summary footnotes on its boards that have it (the TUF GAMING B550-PLUS WIFI II, B650-PLUS WIFI and X870-PLUS WIFI here)."
         },
         {
           "field": "pcieSlots",
@@ -1716,7 +1716,7 @@
       "notes": [
         {
           "field": "laneSharing",
-          "text": "The manual's specifications summary and expansion-slot pages give no shared-bandwidth footnote for any slot or port on this board."
+          "text": "No page of the manual (70 pages, full text searched on 2026-10-02 for \"shares bandwidth\", \"shared bandwidth\", \"will be disabled\", \"will be suspended\" and \"runs x… mode\") has a shared-bandwidth statement. ASUS states sharing as specifications-summary footnotes on its boards that have it (the TUF GAMING B550-PLUS WIFI II, B650-PLUS WIFI and X870-PLUS WIFI here)."
         },
         {
           "field": "memory.officialMaxSpeedMtps",
@@ -1928,7 +1928,7 @@
       "notes": [
         {
           "field": "laneSharing",
-          "text": "The manual's specifications summary and expansion-slot pages give no shared-bandwidth footnote for any slot or port on this board."
+          "text": "No page of the manual (40 pages, full text searched on 2026-10-02 for \"shares bandwidth\", \"shared bandwidth\", \"will be disabled\", \"will be suspended\" and \"runs x… mode\") has a shared-bandwidth statement. ASUS states sharing as specifications-summary footnotes on its boards that have it (the TUF GAMING B550-PLUS WIFI II, B650-PLUS WIFI and X870-PLUS WIFI here)."
         },
         {
           "field": "biosFlashback",
