@@ -667,11 +667,20 @@ export interface PowerEstimate {
   readonly transient: TransientHeadroom | null;
   readonly recommended: PsuRange;
   /**
-   * The card maker's recommended power supply, shown next to the range for comparison (plan
-   * WP-E2: the range should include it, or the hand-off explains why not). `null` without a
-   * card, or when the maker publishes none.
+   * The card maker's power supply figure, shown next to the range for comparison (plan WP-E2:
+   * the range should include it, or the hand-off explains why not). `null` without a card, or
+   * when the maker publishes none.
    */
-  readonly makerRecommendation: { readonly watts: number; readonly evidence: SpecEvidence } | null;
+  readonly makerRecommendation: {
+    readonly watts: number;
+    /**
+     * What the maker calls the figure (data-lead's `recommendedPsuKind`), which the explanation
+     * words: ASUS "Recommended PSU", NVIDIA "Required System Power", Sapphire and Intel a
+     * minimum ("at or above Sapphire's minimum of 750 W").
+     */
+    readonly kind: 'recommended' | 'required' | 'minimum';
+    readonly evidence: SpecEvidence;
+  } | null;
   /**
    * Parts the estimate could not count: not picked, or a power spec not published. When this
    * isn't empty, the totals are a lower bound and the lab says so.
