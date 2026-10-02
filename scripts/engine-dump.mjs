@@ -1,6 +1,7 @@
 /**
  * `npm run engine:dump` (plan WP-E0): writes every compatibility rule's dump and a summary to
- * artifacts/engine/. The work is in scripts/engine-dump.ts.
+ * artifacts/engine/, or with `-- --input <file> --out <file>`, the engine's answers for the
+ * builds of a query file. The work is in scripts/engine-dump.ts.
  *
  * Node's own type stripping can't load the engine and data modules, which use extensionless
  * imports, so this launcher loads the TypeScript through Vite's module runner (`runnerImport`).
@@ -15,4 +16,4 @@ const { module: engineDump } = await runnerImport(resolve(root, 'scripts/engine-
   root,
   logLevel: 'error',
 });
-process.exitCode = engineDump.main({ root });
+process.exitCode = engineDump.main({ root, argv: process.argv.slice(2) });

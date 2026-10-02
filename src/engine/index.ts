@@ -11,14 +11,35 @@
 export * from './types';
 export { estimate } from './estimate';
 export { RULE_SPECS, ruleSpec } from './rules';
+export { systemOf } from './system';
 export {
-  buildPartsOf,
-  combinationsOf,
+  parseQueryInput,
+  runQueries,
+  type ParsedQueryInput,
+  type QueryAnswer,
+  type QueryBuild,
+  type QueryInput,
+  type QueryOutput,
+} from './query';
+export {
+  COMPAT_RULES,
+  checkCompatibility,
+  type CompatRule,
+  type RuleEvaluator,
+} from './compat/check';
+export {
+  dumpColumns,
   dumpRule,
   dumpSummary,
-  type Combination,
-  type DumpedCombination,
+  partsOfRow,
+  sweepRows,
+  type DumpCell,
+  type DumpColumn,
+  type DumpOptions,
+  type DumpRow,
   type EngineDumpSummary,
+  type PartExtremes,
+  type PowerExtremes,
   type RuleDump,
-  type RuleEvaluator,
+  type SweptRows,
 } from './dump';

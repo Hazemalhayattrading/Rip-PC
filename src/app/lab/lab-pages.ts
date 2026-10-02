@@ -6,7 +6,7 @@
 import type { LabPage } from '../routes';
 
 export const LAB_PAGE_LABELS: Readonly<Record<LabPage, string>> = {
-  index: 'Lab home',
+  index: 'Overview',
   parts: 'Parts',
   accuracy: 'Accuracy',
 };

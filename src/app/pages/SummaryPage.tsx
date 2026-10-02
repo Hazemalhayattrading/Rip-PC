@@ -9,7 +9,7 @@ export function SummaryPage({ route }: SummaryPageProps) {
   const meta = metaOf(route);
   return (
     <>
-      <h1>{meta.heading}</h1>
+      <h1 tabIndex={-1}>{meta.heading}</h1>
       <p>{meta.description}</p>
       <p>Placeholder: this page arrives in Phase 4.</p>
     </>

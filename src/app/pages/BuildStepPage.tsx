@@ -23,7 +23,7 @@ export function BuildStepPage({ step }: BuildStepPageProps) {
 
   return (
     <>
-      <h1>{meta.heading}</h1>
+      <h1 tabIndex={-1}>{meta.heading}</h1>
       <p>Placeholder: the parts for this step arrive in Phase 2.</p>
       <GarageSlot />
       <nav aria-label="Previous and next step">

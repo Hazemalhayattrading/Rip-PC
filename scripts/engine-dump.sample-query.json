@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "builds": [
+    {
+      "id": "rx-9070-xt-in-the-north-with-a-front-360",
+      "parts": {
+        "cpu": "amd-ryzen-7-9800x3d",
+        "motherboard": "asus-tuf-gaming-x870-plus-wifi",
+        "ram": "gskill-trident-z5-neo-rgb-ddr5-6000-cl30-2x16gb",
+        "gpu-card": "sapphire-pulse-radeon-rx-9070-xt-16gb",
+        "storage": ["wd-black-sn850x-2tb"],
+        "psu": "deepcool-pn850m",
+        "cooler": "arctic-liquid-freezer-iii-pro-360",
+        "case": "fractal-north-charcoal-black-tg-light",
+        "radiatorPosition": "front"
+      }
+    },
+    {
+      "id": "core-i5-12400f-without-a-graphics-card",
+      "parts": {
+        "cpu": "intel-core-i5-12400f",
+        "motherboard": "asus-prime-b760m-a-wifi-d4",
+        "ram": "teamgroup-t-force-vulcan-z-ddr4-3200-cl16-2x16gb",
+        "storage": ["wd-blue-sa510-2-5-inch-1tb"],
+        "psu": "deepcool-pn650m",
+        "cooler": "deepcool-an400",
+        "case": "fractal-pop-mini-air-rgb-black-tg-clear-tint",
+        "case-fan": { "partId": "arctic-p12-pwm-pst-black", "packs": 1 }
+      }
+    }
+  ]
+}

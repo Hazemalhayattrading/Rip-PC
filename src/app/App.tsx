@@ -8,15 +8,11 @@ import { SummaryPage } from './pages/SummaryPage';
 import { syncRobotsMeta } from './robots-meta';
 import { matchPath, metaOf, type LabPage, type RouteMatch } from './routes';
 import { SiteLayout } from './SiteLayout';
+import { usePageArrival } from './use-page-arrival';
 
-// The only door into src/app/lab. Vite makes this dynamic import its own chunk, so the lab, the
-// engine helpers and the catalogue loader never reach the product pages' initial JS (plan §1).
+// The only door into src/app/lab: the whole Engine lab, its frame included, is this lazy chunk,
+// so no lab UI, engine helper or catalogue loader reaches the product pages' initial JS (plan §1).
 const EngineLab = lazy(() => import('./lab/EngineLab'));
-
-/** A thrown value as words, for an error message. */
-function errorMessage(error: unknown): string {
-  return error instanceof Error ? error.message : String(error);
-}
 
 /** Wouter takes the base without its trailing slash: `/Rip-PC`. */
 const ROUTER_BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -49,18 +45,28 @@ function Pages({ onNavigate }: AppProps) {
     syncRobotsMeta<HTMLMetaElement>(document, indexable);
   }, [indexable]);
 
+  usePageArrival(location);
+
   useEffect(() => {
     onNavigate();
   }, [location, search, onNavigate]);
 
-  return (
-    <SiteLayout match={match} location={location}>
+  return match.name === 'lab' ? (
+    <LabRoute page={match.page} />
+  ) : (
+    <SiteLayout match={match}>
       <Page match={match} location={location} />
     </SiteLayout>
   );
 }
 
-function Page({ match, location }: { readonly match: RouteMatch; readonly location: string }) {
+function Page({
+  match,
+  location,
+}: {
+  readonly match: Exclude<RouteMatch, { name: 'lab' }>;
+  readonly location: string;
+}) {
   switch (match.name) {
     case 'home':
       return <HomePage />;
@@ -71,39 +77,28 @@ function Page({ match, location }: { readonly match: RouteMatch; readonly locati
     case 'buy':
     case 'sources':
       return <SummaryPage route={match} />;
-    case 'lab':
-      return <LabFrame page={match.page} />;
     case 'not-found':
       return <NotFoundPage path={location} />;
   }
 }
 
 /**
- * A lab page's frame. The heading is static route meta, so it renders at once; everything else
- * is in the lazy lab chunk. While the chunk loads, the box below the heading holds a screen's
- * height, so the footer never jumps into view and back (no layout shift).
+ * A lab page. While the lab chunk loads, nothing is drawn, so nothing can move when the whole
+ * frame appears at once (CLS 0). If the chunk fails to download, a bare page says so.
  */
-function LabFrame({ page }: { readonly page: LabPage }) {
+function LabRoute({ page }: { readonly page: LabPage }) {
   return (
-    <div className="px-inset pb-12">
-      <h1>{metaOf({ name: 'lab', page }).heading}</h1>
-      <ErrorBoundary
-        fallback={(error) => (
-          <p role="alert" className="mt-6 max-w-prose">
-            The Engine lab could not load ({errorMessage(error)}). Reload the page to try again.
-          </p>
-        )}
-      >
-        <Suspense
-          fallback={
-            <div className="min-h-screen">
-              <p className="mt-6 text-ink-2">Loading the Engine lab…</p>
-            </div>
-          }
-        >
-          <EngineLab page={page} />
-        </Suspense>
-      </ErrorBoundary>
-    </div>
+    <ErrorBoundary
+      fallback={() => (
+        <main id="main" tabIndex={-1}>
+          <h1 tabIndex={-1}>{metaOf({ name: 'lab', page }).heading}</h1>
+          <p role="alert">The Engine lab didn’t load. Reload the page to try again.</p>
+        </main>
+      )}
+    >
+      <Suspense fallback={null}>
+        <EngineLab page={page} />
+      </Suspense>
+    </ErrorBoundary>
   );
 }

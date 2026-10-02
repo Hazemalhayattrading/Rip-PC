@@ -1,4 +1,4 @@
-import { useEffect, useRef, type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { ThemeToggle } from '../components/theme/ThemeToggle';
 import { AppLink } from './AppLink';
 import { useBuild } from './build-hooks';
@@ -18,13 +18,6 @@ const SITE_LINKS: readonly SiteLink[] = [
   { label: 'Sources', route: { name: 'sources' } },
 ];
 
-const SITE_FOOTER =
-  'Rig Lab is in development: there are no parts, prices or estimates on this site yet.';
-
-/** The lab shows the catalogue, so the site's line about having no parts would be false there. */
-const LAB_FOOTER =
-  'Engine lab: an internal preview of the catalogue and the engine. The builder does not use them yet.';
-
 /** `page` for the exact page, `true` for the section it belongs to (any build step). */
 function currentness(link: Route, match: RouteMatch): 'page' | 'true' | undefined {
   if (match.name === 'not-found' || link.name !== match.name) return undefined;
@@ -33,28 +26,17 @@ function currentness(link: Route, match: RouteMatch): 'page' | 'true' | undefine
 
 export interface SiteLayoutProps {
   readonly match: RouteMatch;
-  /** The current path, used to move focus to the new page after in-app navigation. */
-  readonly location: string;
   readonly children: ReactNode;
 }
 
 /**
- * The frame around every page: skip link, site navigation, the theme toggle, one `<main>` and a
- * footer. Semantic HTML on the tokens' base styles only; Studio's frame arrives in Phase 2.
+ * The frame around every product page: skip link, site navigation, the theme toggle, one
+ * `<main>` and a footer. Semantic HTML on the tokens' base styles only; Studio's frame arrives in
+ * Phase 2. The Engine lab has a frame of its own, in its lazy chunk (src/app/lab/EngineLab.tsx).
+ * After in-app navigation, `usePageArrival` in App.tsx settles focus and scroll.
  */
-export function SiteLayout({ match, location, children }: SiteLayoutProps) {
+export function SiteLayout({ match, children }: SiteLayoutProps) {
   const decodeError = useBuild((state) => state.decodeError);
-  const main = useRef<HTMLElement>(null);
-  const shownLocation = useRef(location);
-
-  // After in-app navigation, move focus to the new page so keyboard and screen reader users
-  // start at its content, as they would after a full page load.
-  useEffect(() => {
-    if (shownLocation.current === location) return;
-    shownLocation.current = location;
-    main.current?.focus();
-  }, [location]);
-
   return (
     <>
       <a href="#main">Skip to main content</a>
@@ -72,7 +54,7 @@ export function SiteLayout({ match, location, children }: SiteLayoutProps) {
         </nav>
         <ThemeToggle />
       </header>
-      <main id="main" ref={main} tabIndex={-1}>
+      <main id="main" tabIndex={-1}>
         {decodeError === null ? null : (
           <p role="status">
             The build in this link could not be read, so you are starting with an empty build.
@@ -81,7 +63,7 @@ export function SiteLayout({ match, location, children }: SiteLayoutProps) {
         {children}
       </main>
       <footer>
-        <p>{match.name === 'lab' ? LAB_FOOTER : SITE_FOOTER}</p>
+        <p>Rig Lab is in development: there are no parts, prices or estimates on this site yet.</p>
       </footer>
     </>
   );

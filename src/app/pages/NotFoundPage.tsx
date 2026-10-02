@@ -11,7 +11,7 @@ export function NotFoundPage({ path }: NotFoundPageProps) {
   const suggestion = suggestRoute(path);
   return (
     <>
-      <h1>{meta.heading}</h1>
+      <h1 tabIndex={-1}>{meta.heading}</h1>
       <p>{meta.description}</p>
       {suggestion === null ? null : (
         <p>

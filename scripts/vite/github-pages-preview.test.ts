@@ -3,7 +3,12 @@ import type { IncomingMessage, ServerResponse } from 'node:http';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
-import { githubPagesPreview, notFoundLikeGithubPages } from './github-pages-preview';
+import {
+  folderIndexPaths,
+  folderRedirects,
+  githubPagesPreview,
+  notFoundLikeGithubPages,
+} from './github-pages-preview';
 
 let root: string;
 let dist: string;
@@ -141,5 +146,63 @@ describe('githubPagesPreview plugin', () => {
   it('refuses to start without a build', () => {
     const { call } = hookFor('missing-dist');
     expect(call).toThrow(/Run `npm run build` before/);
+  });
+});
+
+/** Runs the dev redirect middleware on one URL. */
+function runDev(url: string, base = '/Rip-PC/') {
+  const headers: Record<string, string> = {};
+  const res = {
+    statusCode: 200,
+    setHeader: (name: string, value: string) => (headers[name.toLowerCase()] = value),
+    end: vi.fn(),
+  };
+  const next = vi.fn();
+  folderRedirects(base)({ url } as IncomingMessage, res as unknown as ServerResponse, next);
+  return { res, headers, next };
+}
+
+describe('folderIndexPaths', () => {
+  it('lists the route table’s folder indexes other than home, without their slash', () => {
+    expect(folderIndexPaths()).toEqual(['/lab']);
+  });
+});
+
+describe('folderRedirects, for the dev server', () => {
+  it.each([
+    ['/Rip-PC/lab', '/Rip-PC/lab/'],
+    ['/Rip-PC/lab?b=v1.c_amd-ryzen-7-9800x3d', '/Rip-PC/lab/?b=v1.c_amd-ryzen-7-9800x3d'],
+  ])('answers %s with a 301 to %s, as GitHub Pages does', (url, location) => {
+    const { res, headers, next } = runDev(url);
+    expect(next).not.toHaveBeenCalled();
+    expect(res.statusCode).toBe(301);
+    expect(headers.location).toBe(location);
+    expect(res.end).toHaveBeenCalledOnce();
+  });
+
+  it.each(['/Rip-PC/lab/', '/Rip-PC/lab/parts', '/Rip-PC/build', '/Rip-PC/', '/lab', '/Rip-PC/labs'])(
+    'passes %s on to Vite',
+    (url) => {
+      const { res, next } = runDev(url);
+      expect(next).toHaveBeenCalledOnce();
+      expect(res.statusCode).toBe(200);
+    },
+  );
+
+  it('puts the base in front, whatever the base is', () => {
+    expect(runDev('/lab', '/').headers.location).toBe('/lab/');
+  });
+
+  it('is installed before Vite’s own dev middlewares, which still see the base', () => {
+    const use = vi.fn<(middleware: ReturnType<typeof folderRedirects>) => void>();
+    const server = { config: { base: '/Rip-PC/' }, middlewares: { use } };
+    const hook = githubPagesPreview().configureServer as unknown as (s: unknown) => unknown;
+    expect(hook(server)).toBeUndefined();
+    expect(use).toHaveBeenCalledOnce();
+    const headers: Record<string, string> = {};
+    const res = { statusCode: 0, setHeader: (n: string, v: string) => (headers[n.toLowerCase()] = v), end: () => undefined };
+    use.mock.calls[0]?.[0]({ url: '/Rip-PC/lab' } as IncomingMessage, res as unknown as ServerResponse, vi.fn());
+    expect(res.statusCode).toBe(301);
+    expect(headers.location).toBe('/Rip-PC/lab/');
   });
 });

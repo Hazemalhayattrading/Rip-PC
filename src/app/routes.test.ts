@@ -114,16 +114,34 @@ describe('matchPath', () => {
     '/build/nope',
     '/results/',
     '/Results',
-    '/index.html',
     '',
     '//',
     '/build/cpu/extra',
     '/lab',
     '/lab/index',
-    '/lab/index.html',
     '/lab/parts/',
     '/lab/compat',
   ])('treats %j as not found', (path) => {
+    expect(matchPath(path)).toEqual({ name: 'not-found' });
+  });
+
+  // QA-P1-002: GitHub Pages serves a folder's index.html at its own address too.
+  it('renders a folder route at its index.html, which GitHub Pages also serves', () => {
+    expect(matchPath('/index.html')).toEqual({ name: 'home' });
+    expect(matchPath('/lab/index.html')).toEqual({ name: 'lab', page: 'index' });
+  });
+
+  it.each([
+    '/build/index.html',
+    '/build/cpu/index.html',
+    '/results/index.html',
+    '/lab/parts/index.html',
+    '/INDEX.html',
+    '/lab/Index.html',
+    '/Lab/index.html',
+    '/lab/index.htm',
+    '//index.html',
+  ])('keeps %j not found, because no folder route answers there', (path) => {
     expect(matchPath(path)).toEqual({ name: 'not-found' });
   });
 });

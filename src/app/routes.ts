@@ -152,13 +152,22 @@ const ROUTES_BY_PATH: ReadonlyMap<string, Route> = new Map(
 
 const NOT_FOUND: RouteMatch = { name: 'not-found' };
 
+const INDEX_HTML = 'index.html';
+
 /**
  * Matches a path (relative to the base, without query or hash) against the route table.
  * Matching is exact and case-sensitive, the same rule GitHub Pages applies to the files the
  * build writes, so the app renders a known route exactly when the server has a file for it.
+ * GitHub Pages also serves a folder's `index.html` at its own address, so `/index.html` is home
+ * and `/lab/index.html` the lab home (QA-P1-002). No other route ends in a slash, so
+ * `/build/index.html` stays not found.
  */
 export function matchPath(pathname: string): RouteMatch {
-  return ROUTES_BY_PATH.get(pathname) ?? NOT_FOUND;
+  const exact = ROUTES_BY_PATH.get(pathname);
+  if (exact !== undefined) return exact;
+  // `/lab/index.html` is the folder `/lab/`.
+  const folder = pathname.endsWith(`/${INDEX_HTML}`) ? pathname.slice(0, -INDEX_HTML.length) : null;
+  return (folder === null ? undefined : ROUTES_BY_PATH.get(folder)) ?? NOT_FOUND;
 }
 
 /**
