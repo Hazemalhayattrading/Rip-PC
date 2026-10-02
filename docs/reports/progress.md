@@ -2,11 +2,12 @@
 
 Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
 
-**Last update:** 2026-10-01, about 20:20 UTC, Director. **The session is stopped for the day: Hazem
-shut the PC down.**
-- All teammates were stopped at a safe point. Every branch is committed and pushed: 4 worktrees
-  clean, and the integration branch and all 10 local branches equal to origin.
-- Phase 0 is open. It waits only for QA's report. Nothing is merged to `main`.
+**Last update:** 2026-10-02, Director. **Resumed after the 2026-10-01 shutdown.**
+- The state checked clean: 4 worktrees clean, and every branch equal to origin.
+- CI is green on `882a79f`.
+- The GitHub Support request is filed (open items).
+- Phase 0 is open. It waits only for QA's report, so qa-lead is re-spawned. Nothing is merged to
+  `main`.
 
 > **Commit IDs** in this file are post-purge IDs. The old-to-new map is kept outside the public repo,
 > at `C:\Projects\rig-lab-evidence\purge\purge-sha-map.txt`, because GitHub still serves pre-purge commits by ID until its garbage collection runs.
@@ -126,7 +127,8 @@ On "continue":
 - **Still to do:**
   - run stage 3;
   - qa-lead's independent purge check in `report-phase-0.md`;
-  - Hazem's GitHub Support request (open items).
+  - GitHub's reply to Hazem's Support request (filed 2026-10-02), then the 404 re-check (open
+    items).
 
 ## Open items for Hazem
 
@@ -142,15 +144,20 @@ On "continue":
   about 7 maps. BUILD_PROMPT §7 asks for KTX2. Installing it needs Hazem's OK.
 - **Done 2026-10-01 (Hazem's decision):** the 222 MB of third-party page captures are out of the
   public repo and its branch history. They are kept in `C:\Projects\rig-lab-evidence` and listed by
-  checksum in `docs/reports/evidence/`. Left for Hazem: the GitHub Support request (below), and
-  optionally a private backup of `C:\Projects\rig-lab-evidence`, which is now the only full copy.
+  checksum in `docs/reports/evidence/`. The GitHub Support request is filed (below). Left for
+  Hazem, optionally: a private backup of `C:\Projects\rig-lab-evidence`, which is now the only
+  full copy.
 - **3D assets, paid options** (`docs/design/studio-3d-brief.md` §7). Design-lead recommends A now (USD 0, parametric models and CC BY), deciding B before Phase 3 (a commissioned hero set, about USD 1,440, an estimate, not a quote), and skipping C. Its three questions: may we ask ARCTIC and ASUS for permission, and who sends the requests? Who downloads the CC BY files, with what account? Is a budget of about USD 1,500 for B open for Phase 3?
-- **GitHub Support request, urgent.** QA confirmed on 2026-10-01 that GitHub still serves the
-  purged archives through old commit IDs: a raw download URL answers 200 with the file. Only
-  the repo owner can ask GitHub to remove the orphaned commits and cached views. The ready-to-send
-  text, with the full commit ID, is kept outside the public repo at
-  `C:\Projects\rig-lab-evidence\purge\github-support-request.md`. Until GitHub acts, don't
-  publish pre-purge commit IDs.
+- **GitHub Support request: done, waiting for GitHub's reply.** Hazem filed it on 2026-10-02
+  through GitHub's Virtual Assistant. It covers the cached pre-purge commits, from the one that
+  added the archives onward.
+  - **Why:** QA confirmed on 2026-10-01 that GitHub still served the purged archives through old
+    commit IDs (a raw download URL answered 200 with the file). On 2026-10-02 the old commit
+    still answers 200 on the API.
+  - **Open:** GitHub's reply. After it, the Director re-checks that the old commit ID (it's in
+    `C:\Projects\rig-lab-evidence\purge\github-support-request.md`, outside the repo) answers 404
+    on the API and on raw URLs, then records the result here.
+  - Until GitHub has acted, don't publish pre-purge commit IDs.
 - **Rotate the Context7 API key.** The Director's check printed it in this session's transcript,
   because a masking bug missed values inside JSON arrays. It was never in the repo. Put the new
   key in the user-level config only.
