@@ -6,6 +6,7 @@ import { describe, expect, it } from 'vitest';
 import {
   ALLOWED,
   CHROMIUM_404_CONSOLE_TEXT,
+  FIREFOX_VIEWPORT_RECT_TEXT,
   HTTP2_404_CONSOLE_TEXT,
   allowListErrors,
   assertValidAllowList,
@@ -333,5 +334,44 @@ describe('same-origin and failure rules', () => {
 
   it('dates in UTC', () => {
     expect(utcDate(new Date('2026-09-30T23:59:59-05:00'))).toBe('2026-10-01');
+  });
+});
+
+// Firefox's two WebGL notices, triaged by build-lead on 2026-10-03 (the live five-browser run).
+describe("Firefox's WebGL notices", () => {
+  const live = 'https://hazemalhayattrading.github.io';
+  const garage = `${live}/Rip-PC/assets/Garage-FzRe3B7r.js`;
+  const contextLost = (file: string, url = file): Problem => ({
+    kind: 'console.warning',
+    text: `[JavaScript Warning: "WebGL context was lost." {file: "${file}" line: 4220}]`,
+    url,
+    documentUrl: `${live}/Rip-PC/results`,
+  });
+  const viewportRect: Problem = {
+    kind: 'console.warning',
+    text: FIREFOX_VIEWPORT_RECT_TEXT,
+    url: '',
+    documentUrl: `${live}/Rip-PC/build/use-case`,
+  };
+  const verdict = (problem: Problem) => classify([problem], { expectNotFoundDocument: false });
+
+  it('allows the lost context only when the lazy 3D chunk names itself', () => {
+    expect(verdict(contextLost(garage)).allowed).toEqual([
+      { problem: contextLost(garage), allowedBy: 'firefox-webgl-context-lost' },
+    ]);
+    const mainBundle = `${live}/Rip-PC/assets/index-CcdjpUeV.js`;
+    expect(verdict(contextLost(mainBundle)).unexpected).toHaveLength(1);
+    expect(verdict(contextLost(garage, mainBundle)).unexpected).toHaveLength(1);
+    expect(verdict({ ...contextLost(garage), kind: 'console.error' }).unexpected).toHaveLength(1);
+  });
+
+  it('allows the viewport note only word for word, with no source location', () => {
+    expect(verdict(viewportRect).allowed).toEqual([
+      { problem: viewportRect, allowedBy: 'firefox-webgl-viewport-rect' },
+    ]);
+    expect(verdict({ ...viewportRect, url: garage }).unexpected).toHaveLength(1);
+    expect(verdict({ ...viewportRect, text: `${viewportRect.text} ` }).unexpected).toHaveLength(1);
+    const otherNote = viewportRect.text.replace('drawElementsInstanced', 'drawArrays');
+    expect(verdict({ ...viewportRect, text: otherNote }).unexpected).toHaveLength(1);
   });
 });

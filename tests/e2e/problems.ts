@@ -162,7 +162,47 @@ export const ALLOWED: readonly AllowedProblem[] = [
     owner: 'qa-lead',
     until: 'permanent',
   },
+  {
+    id: 'firefox-webgl-context-lost',
+    matches: (problem) => {
+      if (problem.kind !== 'console.warning') return false;
+      const m = FIREFOX_CONTEXT_LOST.exec(problem.text);
+      return m !== null && m[1] === problem.url && isGarageChunk(problem.url);
+    },
+    reason:
+      "Firefox's warning when a WebGL context is lost on purpose: React Three Fiber's renderer disposal calls gl.forceContextLoss() when the 3D preview unmounts, because browsers cap live WebGL contexts (@react-three/fiber 9.8.1; build-lead's triage, 2026-10-03). Firefox logs it; Chromium and WebKit don't. Only this exact text, naming the lazy 3D chunk, from that chunk; a context lost anywhere else still fails.",
+    owner: 'qa-lead',
+    until: 'permanent',
+  },
+  {
+    id: 'firefox-webgl-viewport-rect',
+    matches: (problem) =>
+      problem.kind === 'console.warning' &&
+      problem.url === '' &&
+      problem.text === FIREFOX_VIEWPORT_RECT_TEXT,
+    reason:
+      "Firefox's one-time WebGL note when the viewport is 1 px larger than the canvas: three.js r186 floors the canvas size (setSize) but rounds the viewport (setViewport), so a fractional CSS width leaves 1 px clipped, harmlessly (build-lead's triage, 2026-10-03). Phase 3's garage keeps its canvas at whole pixels, which ends it: review this entry then. Only this exact text, with no source location.",
+    owner: 'qa-lead',
+    until: 'permanent',
+  },
 ];
+
+/** Firefox's text for a lost WebGL context; the group is the file that lost it. */
+const FIREFOX_CONTEXT_LOST =
+  /^\[JavaScript Warning: "WebGL context was lost\." \{file: "([^"]+)" line: \d+\}\]$/;
+
+/** Firefox's text when the viewport exceeds the canvas by a rounding pixel (given once per context). */
+export const FIREFOX_VIEWPORT_RECT_TEXT =
+  '[JavaScript Warning: "WebGL warning: drawElementsInstanced: Drawing to a destination rect smaller than the viewport rect. (This warning will only be given once)"]';
+
+/** The lazy 3D chunk, as Vite names it: assets/Garage-<hash>.js. */
+function isGarageChunk(url: string): boolean {
+  try {
+    return /\/assets\/Garage-[A-Za-z0-9_-]+\.js$/.test(new URL(url).pathname);
+  } catch {
+    return false;
+  }
+}
 
 /** The verdict on one test's problems. */
 export interface Verdict {

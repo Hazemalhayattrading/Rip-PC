@@ -1,6 +1,6 @@
 # Rig Lab test plan
 
-Owner: qa-lead · Version 4.3 · 2026-10-03 · Applies to every phase, from Phase 0 to release.
+Owner: qa-lead · Version 4.4 · 2026-10-03 · Applies to every phase, from Phase 0 to release.
 
 **What v4 adds (Phase 1, the engine):** the 20 compatibility rule ids agreed with build-lead and how
 each is traced (§9); the held-out protocol of at least 20 results, 4 per coverage class (§8.2);
@@ -623,6 +623,31 @@ a message.
 - A single run is never a result.
 - CPU x4 approximates a slower machine's main thread. It does not approximate the GPU, heat, or an
   iGPU's memory bandwidth, which is why P8 needs REF-LAPTOP.
+
+### 6.7 3D asset checks (from Phases 2 and 3)
+
+design-lead's `docs/design/studio-3d-brief.md` (WP-DS2 batch 2) adds four checks, each for when
+its subject exists:
+
+1. **The stage pixel** (brief §3.2): the canvas background equals the CSS stage behind it, within
+   ±1 per channel, in both themes and at every rung of the performance ladder, so tone mapping
+   never tints the stage. A pixel probe reads both.
+2. **The reference laptop's texture formats** (brief §4): REF-LAPTOP's reference run logs WebGL's
+   compressed-texture extensions (ETC, ASTC, BC7, S3TC) on the Core Ultra 7 155H. three's
+   KTX2Loader may transcode ETC1S to BC7 (5.6 MB per 2K map, against 2.8 MB as ETC), so the
+   texture budget assumes the worse case until QA reports them. `fps-probe.mjs` records the list
+   with its run.
+3. **No 3D request to another host** (brief §4): Draco, the Basis transcoder and the environment
+   map are served under `/Rip-PC/`; drei's defaults would load them from gstatic.com, jsdelivr.net
+   and raw.githack.com. The smoke already fails any request outside the site under `/Rip-PC/`
+   (§12.1); Phase 3 extends it to every garage asset.
+4. **Whether GitHub Pages compresses `.wasm`** (brief §4): the Basis transcoder is 0.58 MB raw and
+   0.26 MB gzip, and the first-build 6 MB budget counts whichever is served. QA reads the live
+   response's `content-encoding` once the transcoder is deployed.
+
+Also for the zero-warnings gate (§13.2): a bare `<Canvas shadows>` in three 0.186.1 logs
+"WebGLShadowMap: PCFSoftShadowMap has been removed", so the brief asks for `shadows="percentage"`,
+and the console fixture fails the bare form.
 
 ## 7. Data audit protocol
 
@@ -1507,6 +1532,12 @@ WP-Q1 added, all done on 2026-09-30 except the last item:
       every width; "Build" from the home page lands at scrollY 90 at 768 px and 178 at 1440, with
       the header and the site nav off screen at 1440. Back already restores the scroll position.
   - Proof: a planted `AppLink` that swallows its click fails the spec at the URL check.
+- **`index.html` paths** (QA-P1-002, build-lead, WP-E0): the host serves `/index.html` and
+  `/lab/index.html` with a 200, so the app renders their directory's route. The smoke loads each
+  and expects a 200 with no redirect and that route's heading; `/build/index.html` stays not found.
+  The first two run once the route table shows the fix (and the lab index route), so the smoke
+  stays green whichever lands first. A stand-in fix ran them green on 2026-10-03; QA checks that
+  they ran when it verifies the fix.
 - **The same spec on the live site** (PAGES), after each milestone deploy and on any navigation
   report: `npx playwright test --config tests/e2e/live/playwright.config.ts`. It runs in five
   browsers (Playwright's Chromium, the installed Chrome and Edge, Playwright's Firefox and WebKit)
@@ -1638,7 +1669,7 @@ an owning team and an `until`: `permanent`, the last day it applies, or an https
 - An empty reason, an unknown owner, a repeated id, a malformed `until` or an expired date stops
   the whole run before any test starts. `npm run test` fails on it too.
 - Every entry is reviewed at each phase exit.
-- Four entries today, all qa-lead's and permanent:
+- Six entries today, all qa-lead's and permanent:
   - `not-found-page-status`: the 404 answer of a page that a test declared it asks for.
   - `not-found-page-console`: Chromium's console error for that same page URL. It moved here
     from build-lead's `isOwnDocument404`. It takes the exact text in two forms: "404 (Not Found)"
@@ -1659,6 +1690,18 @@ an owning team and an `until`: `permanent`, the last day it applies, or an https
   is how Chromium attributes both notices (48 of 48). CI's ubuntu runners passed with these two
   entries (run 36973853810, 2026-10-02). A new variant fails the run, and QA decides whether it
   is the environment or the app.
+
+  Two entries for Firefox, from the live five-browser run (§12.1), triaged by build-lead on
+  2026-10-03. Firefox logs both; Chromium and WebKit don't.
+  - `firefox-webgl-context-lost`: "WebGL context was lost." when the 3D preview unmounts, because
+    React Three Fiber's renderer disposal calls `gl.forceContextLoss()` on purpose (browsers cap
+    live WebGL contexts). Only that exact text, naming the lazy 3D chunk (`assets/Garage-<hash>.js`)
+    as its file, from that file.
+  - `firefox-webgl-viewport-rect`: the one-time "drawElementsInstanced: Drawing to a destination
+    rect smaller than the viewport rect" note. three.js r186 floors the canvas size but rounds the
+    viewport, so a fractional CSS width clips 1 px, harmlessly. Only that exact text, with no source
+    location. Phase 3's garage keeps its canvas at whole pixels, which ends it: the entry is
+    reviewed then.
 
 **Enforcement and self-tests** (Vitest, so `npm run verify` runs them):
 
@@ -1776,6 +1819,7 @@ QA re-tests every fix on the integration branch before closing the defect.
 | 2026-10-02 | 4.1 | The Director's acceptance of WP-Q3 (`9d56356`): QA's v4 method proposals approved as written (the held-out mix rules, a corpus result milder than expected as a Major, Stryker reasons of at least 20 characters, the sweep severities). "No estimate" fails a held-out result only on an eligible pick, so §8.2's rule 4 now says outright that a pick for a game or workload without anchors there is ineligible | Approved by: Director, 2026-10-02 (`7f3382f`) |
 | 2026-10-03 | 4.2 | WP-Q4, Hazem's navigation report: the in-app navigation spec, run by `verify` at 390, 768 and 1440 px (`@nav` joins the 768 px project's grep), and its live-site config in five browsers (§12.1, §5). Hazem's report closed as an automated click made before the app rendered its links (§12.1). Found on the way: QA-P1-001 (Major, the new heading off screen after an in-app navigation at 1440 px) and QA-P1-002 (Minor, `/index.html` shows the 404 view), both with build-lead. The declared-404 allow-list entry takes the HTTP/2 form of the notice (§13.2). No gate value changed | qa-lead; the live-site check and the closing rule are the Director's (2026-10-02, 2026-10-03) |
 | 2026-10-03 | 4.3 | QA's re-review of the engine contract (`83aa5ab`, OK for WP-E1): §8.1 says which field each golden row is read from (C2) and that QA builds the golden queries itself through the dump's query mode; §8.2 maps a held-out pick's upscaling the same way; §8.3 moves Phase 1's no-frame-generation rule from the type to checks; §9.4 lets a corpus entry fix the radiator position and counts S15 by sweep kind; Appendix C drops `golden-estimates.json`. compat-trace also compares `RuleSpec.unknownData`. No gate value changed | qa-lead |
+| 2026-10-03 | 4.4 | Two Firefox allow-list entries from the live run, as build-lead triaged them: the deliberate WebGL context loss when the 3D preview unmounts, and three.js r186's 1 px viewport rounding note (§13.2). The `index.html` smoke tests for QA-P1-002, which run once the fix and the lab index are in (§12.1). design-lead's four 3D checks for Phases 2 and 3, and the shadows warning (§6.7). No gate value changed | qa-lead |
 
 ## 17. Phase 1 independent checks
 
