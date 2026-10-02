@@ -93,13 +93,14 @@ Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
 | 2026-10-02 | **Phase 1 plan approved** by Hazem, with three answers. The BIOS warning: warn, naming the BIOS version and telling the buyer to ask the retailer for an updated board. Both extra rules, `cooler-socket` and `display-output`, so 20 in all. At least 20 held-out results. The other defaults stand | Hazem | `docs/reports/phase-1-plan.md` §6 |
 | 2026-10-02 | The integration branch fast-forwarded to `main` (`27dbc6e`), then merged the plan branch. `feat/director-phase-1-plan` deleted | Director | `385493f` |
 | 2026-10-02 | **Phase 1 briefs written,** and the four leads spawned for wave 1 | Director | `docs/reports/phase-1-briefs.md` |
+| 2026-10-02 | data-lead set up both Phase 1 branches, from `c621c15`: `feat/data-engine-data` (D1) and `feat/data-benchmarks` (D2, in the new `worktrees/data-lead-d2`). The parked Intel profile `d4e87e3` is on the D1 branch as `755def5`, so `feat/data-intel-profile` is deleted on origin, with a lease. The local ref is kept | data-lead; Director | identical `git patch-id`; verify 597 unit, 166 e2e in both worktrees; no pre-purge IDs in the new commits |
 | 2026-10-01 | **WP-D0 accepted and merged** (`c04e2a5`): Zod schemas, a validator with 34 rules, 73 seed spec records (all plan 5.3 minimums and mixes), live prices (US 52 + 10 gaps, SA 45 + 17 gaps), 116 game and 27 creator anchors, 15 games, the 20% audit (78 items, 8 findings fixed). The Director's review caught the North cooler limit (145 → 170 mm); data-lead's sweep caught the North PSU limit by tray count (schema: `psu.clearance` list) | data-lead | verify on the merged branch: 454 unit, 112 e2e; initial JS 77.42 KB gzip (no catalogue data in the bundle); 21 new evidence files copied and checked (`docs/reports/evidence/data-lead-evidence-2026-10-01.sha256`) |
 
 ## In progress
 
 | Task | Who | Branch / worktree | State | Exact next step |
 |---|---|---|---|---|
-| WP-D1 Engine data, and WP-D2 Benchmark coverage | data-lead | `feat/data-engine-data` in `worktrees/data-lead`; `feat/data-benchmarks` in `worktrees/data-lead-d2` (new) | Wave 1, started 2026-10-02 | Brief steps 1 and 2: set up both branches and cherry-pick `d4e87e3`. Then D1 batch 1: the fixture table for the 20 rules, and the structured conditions. D2 runs in parallel, starting with the 10 games that have no anchors |
+| WP-D1 Engine data, and WP-D2 Benchmark coverage | data-lead | `feat/data-engine-data` (`86e4e95`) in `worktrees/data-lead`; `feat/data-benchmarks` (`149cde7`) in `worktrees/data-lead-d2` | Wave 1. Step 1 (set-up) is done | D1 batch 1: the fixture table for the 20 rules, and the structured conditions. D2 batch 1 runs in parallel, starting with the 10 games that have no anchors |
 | WP-E0 Engine foundations and the Engine lab | build-lead | `feat/build-engine-foundations` in `worktrees/build-lead` | Wave 1, started 2026-10-02 | Brief E0 steps 1 to 3: branch, check the APIs with Context7, then write the result types first, for review by qa-lead and design-lead |
 | WP-DS2 Design backlog and engine copy | design-lead | `feat/design-ds2` in `worktrees/design-lead` | Wave 1, started 2026-10-02 | Brief step 2 first: the lab spec, and the copy guide with the BIOS warning, for build-lead |
 | WP-Q3 Test plan v4 and verification tools | qa-lead | `feat/qa-phase1-plan` in `worktrees/qa-lead` | Wave 1, started 2026-10-02 | Brief Q3 steps 1 to 3: branch, review the result types when they arrive, and write test plan v4 (20 rules, at least 20 held-out results) |
@@ -127,9 +128,7 @@ On "continue":
    - M3, at the phase exit.
 5. **The engine freeze,** when E3 and E4 are accepted: record the engine commit here, and tell
    qa-lead to start the held-out run.
-6. **Delete `feat/data-intel-profile`** on origin once data-lead reports that `d4e87e3` is on
-   `feat/data-engine-data`.
-7. **After GitHub's reply** to the Support request: check that the old commit answers 404, on the
+6. **After GitHub's reply** to the Support request: check that the old commit answers 404, on the
    API and on raw URLs, and record the result. Its ID is in
    `C:\Projects\rig-lab-evidence\purge\github-support-request.md`.
 
