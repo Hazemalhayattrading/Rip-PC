@@ -79,7 +79,7 @@ The rules of [direction.md §1.1](direction.md#11-numbers-are-the-product) and
 | In a sentence, counts of things from one to nine are words; 10 and up are digits | two 8-pin cables, four modules, three M.2 drives, 12 fans | 2 8-pin cables |
 | In labels, tables and summary lines, counts are digits | 16 of 20 pass, 2 warnings, Fans (3) | sixteen of twenty pass |
 | Resolutions by name | 1080p, 1440p, 4K | 2560x1440 |
-| Money: the ISO code first, as observed, never converted | SAR 1,899, USD 479.99 | 1,899 SAR, $479.99 |
+| Money: the ISO code first, as observed, never converted. `Intl.NumberFormat('en-US', { style: 'currency', currency, currencyDisplay: 'code' })`, with 0 fraction digits for a whole amount and 2 otherwise (its default is always 2: "SAR 9,412.00"). It puts a no-break space after the code | SAR 1,899, USD 479.90 | 1,899 SAR, $479.90, SAR 9,412.00 |
 | Durations: one unit per range. Under 2 min in seconds, then minutes, then hours, one decimal | 85–96 s, 3.2–3.7 min | 3:10–3:40 |
 
 - **Measurements are always digits**, even when small: 5 Gbps, 2.5 slots. Counts in words are for
@@ -91,8 +91,22 @@ The rules of [direction.md §1.1](direction.md#11-numbers-are-the-product) and
 - **At a numeric limit,** the reason says what happens exactly there (test plan §9.1): "The {card}
   is 355 mm long, exactly the 355 mm the {case} takes, so it fits with no room to spare." Whether
   that passes or warns is the rule's call; the wording says it either way.
-- **Data text shown inside a sentence** (a case's clearance `condition`, such as "with a 360 mm
-  front radiator") follows these rules too. data-lead writes it lowercase, starting with "with".
+- **A clearance's condition is built from its fields,** never copied from the maker's words.
+  data-lead structures each condition (`LayoutCondition` in `src/data/schema/case.ts`) and keeps
+  the maker's own words in `asPublished`, verbatim, for audit. The engine writes the phrase; it
+  goes after the limit, with a space: "takes cards up to 300 mm with a 360 mm front radiator".
+
+  | `kind` | Phrase | Examples |
+  |---|---|---|
+  | `radiator` | "with a {sizes} mm {position} radiator". Several sizes join with "or", and the unit appears once. Positions are the words front, top, rear, side and bottom | "with a 360 mm front radiator" (the North); "with a 120 mm side radiator" (the Terra); "with a 280 or 360 mm front radiator" |
+  | `drive-trays` | "with {count} HDD tray(s)": the count in words up to nine, "tray" for one, "trays" for more | "with one HDD tray", "with two HDD trays" (the North) |
+
+  - Every radiator size (120 to 420 mm) takes "a": "a 120 mm", never "an".
+  - A new `kind` needs its phrase here before a rule may show it. Until then, the rule shows the
+    limit with no condition phrase, and the evidence carries `asPublished`.
+- **The evidence shows both:** the value cell holds the limit and the phrase ("300 mm with a 360 mm
+  front radiator"), and under it, in quotes, the maker's own words: “up to 300 mm with a 360 mm
+  front radiator” (lab-spec.md §5).
 
 ## 4. Part names
 
@@ -147,6 +161,25 @@ punctuation stay exactly as the catalogue has them.
 
 **Spelling:** US English in the product: "color", "gray", "license". Product names keep their own
 spelling.
+
+**Control names.** A toggle button keeps one name, the state it turns on, and says whether that
+state is on with `aria-pressed`, never by renaming itself: "Light theme" (tokens.md §1.3). Every
+other button names its action, starting with a verb.
+
+| Control | Name | Where it's specified |
+|---|---|---|
+| The 3D tools row (toggles) | "Exploded view", "Open side panel", "Interior light", "Spin fans" | studio-3d-brief.md §3.1; motion.md, Studio rules §6 (the fans) |
+| The 3D tools row (buttons) | "Orbit" (opens the orbit pad), "Reset view" | studio-3d-brief.md §3.1 |
+| The orbit pad | "Turn left", "Turn right", "Tilt up", "Tilt down", "Zoom in", "Zoom out" | studio-3d-brief.md §3.1 (backlog item 24) |
+| The theme | "Light theme" | tokens.md §1.3 |
+| The lab's picker | "Add a drive", "Remove drive {n}" | lab-spec.md §2 |
+| The lab's load error | "Reload" | lab-spec.md §7 |
+| The Specs view | the "View" group with "List" and "Specs"; "Clear filters" | specs-view.md (backlog items 14, 16) |
+
+- **"Spin fans"** shows only when the build has a fan. It is never stored, and it doesn't appear
+  under reduced motion, when the fans never spin (motion.md, Studio rules §6).
+- An icon-only button carries its name as visually hidden text, never as `aria-label` on a span
+  (backlog item 43).
 
 ## 6. Status words, rule names and the summary
 
@@ -368,8 +401,9 @@ Section 8 has the full wording, Hazem's requirement included.
   RGB Black TG Clear Tint takes power supplies up to 150 mm."
 - The North, by its drive trays: "The NZXT C1200 Gold ATX 3.1 is 160 mm long, and the Fractal
   Design North Charcoal Black TG Light takes power supplies up to 255 mm with one HDD tray." With
-  two trays it is Incompatible: "… up to 155 mm with two HDD trays." Layout: "Layout checked:
-  one HDD tray." (The data says "with 1 HDD tray" today; section 3 asks for "one".)
+  two trays it is Incompatible: "… up to 155 mm with two HDD trays." Layout: "One HDD tray
+  fitted." The phrases are built from the structured condition (section 3); the maker's words,
+  "1 HDD tray: 255 mm max", stay in the evidence.
 
 ### 14. `psu-wattage` — Power supply wattage (needs WP-E2)
 
@@ -497,6 +531,7 @@ spec page lists no BIOS FlashBack (`asus-prime-b760m-a-wifi-d4`).
 | Reason | The {cpu} needs BIOS {version} or later on the {board}, which can update its BIOS without a CPU, using {flashbackName}. |
 | Action | Before first boot, update the board to BIOS {version} or later with {flashbackName}. |
 | Steps | The maker's procedure, below, with its source |
+| Steps' title (`Steps.title`, a label with no full stop) | How to update with {flashbackName} |
 
 > **Warning.** The AMD Ryzen 7 9850X3D needs BIOS 1066 or later on the ASUS TUF GAMING X870-PLUS
 > WIFI, which can update its BIOS without a CPU, using BIOS FlashBack. Before first boot, update
@@ -510,7 +545,7 @@ https://www.asus.com/support/faq/1038568/, last updated 9 Apr 2026, read by desi
 2. Run BIOSRenamer from the download, which gives the BIOS file the name BIOS FlashBack needs.
 3. Copy the renamed .CAP file to the top folder of a USB drive formatted as FAT32.
 4. Shut the PC down, but leave the power supply plugged in and switched on.
-5. Plug the USB drive into the USB port marked BIOS FlashBack.
+5. Plug the USB drive into the board's BIOS FlashBack USB port; the board's manual shows where it is.
 6. Press the BIOS FlashBack button for 3 seconds, until its light blinks three times.
 7. Leave everything plugged in until the light goes out, which means the update is done.
 
@@ -585,6 +620,7 @@ The numbers in this table show the format only.
 
 | Case | Figure | Label row | Line under it |
 |---|---|---|---|
+| A part to pick first (`NeedsParts`) | — | Not estimated yet | Pick {the missing parts} to estimate {what}: "Pick a CPU to estimate the frame rate." |
 | No published test | — | No estimate yet | There is no published test of {game} on the {chip}. |
 | No creator source | — | No estimate yet | There is no published source for {workload} on this build. |
 | An incompatible build | — | Not estimated | The build has an incompatible part. |
@@ -627,6 +663,10 @@ export and code compile, s or min; local AI, tokens/s for the named model and si
 
 - **Dates:** "30 Sep 2026", day, short month, year, from `Intl` en-US parts (backlog item 21).
   Times, when a source has one, in UTC: "14:05 UTC".
+  - **Format with `timeZone: 'UTC'`.** A date-only value ("2026-09-30") is midnight UTC, so a
+    local time zone moves it to 29 Sep in the US. And 23:30 UTC on 30 Sep is already 1 Oct in
+    Riyadh. Measured in Node 24.21 (ICU 78.3) by the ui-designer, 2026-10-02.
+  - en-GB is not an option: it prints "30 Sept 2026".
 - **The verbs:** a spec or support list was "read 30 Sep 2026"; a review was "published 6 May
   2026"; a price is "as of 30 Sep 2026".
 - **Document names in source links,** from the source's `docType`: product page, datasheet, user
@@ -648,12 +688,13 @@ After each E1, E3 and E5 hand-off (brief step 5):
   (`BuildParts.storage`, `15f9b5c`), and the case fans as one model in packs. The v1 share-link
   codec still holds one part per category (`src/state/categories.ts`); carrying the list in the
   URL is build-lead's, in WP-E0.
-- **The FlashBack steps need their source in the data.** For data-lead: add the ASUS FAQ above as
-  a source the `bios-version` result can cite, or the board manuals' BIOS FlashBack pages.
 - **Long names.** Two display names can make a 160-character reason: three lines at the reading
   measure (`max-w-measure`, about 64 characters a line, backlog item 15). The mock measured it.
   That is accepted. If Phase 2 needs shorter names, data-lead adds a sourced short name; the engine
   never makes one up.
-- **Condition texts** ("with 1 HDD tray") appear verbatim in reasons, so they follow section 3:
-  "with one HDD tray". For data-lead, low priority.
+- **Condition texts: answered.** data-lead structured the conditions (`feat/data-engine-data` @
+  `4337e09`) and keeps the maker's words verbatim in `asPublished`. Section 3 has the phrase
+  rules that build the reason's wording from the fields.
+- **The FlashBack steps' source: answered.** data-lead cites ASUS FAQ 1038568 on the 6 boards
+  with BIOS FlashBack (`4337e09`). It lands with D1 batch 1.
 - **Preset names** wait for D2's map (plan WP-D2).
