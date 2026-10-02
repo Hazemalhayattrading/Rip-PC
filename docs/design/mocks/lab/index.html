@@ -29,6 +29,7 @@
         <symbol id="i-unverified" viewBox="0 0 18 18"><path d="M9 2l7 7-7 7-7-7z" /><path d="M7.4 7.6a1.65 1.65 0 1 1 2.35 1.5c-.45.22-.75.55-.75 1.05v.25M9 12.7v.1" /></symbol>
         <symbol id="i-block" viewBox="0 0 18 18"><circle cx="9" cy="9" r="7" /><path d="M4.1 13.9l9.8-9.8" /></symbol>
         <symbol id="i-none" viewBox="0 0 18 18"><circle cx="9" cy="9" r="7" /></symbol>
+        <symbol id="i-na" viewBox="0 0 18 18"><circle cx="9" cy="9" r="7" /><path d="M6 9h6" /></symbol>
         <symbol id="i-out" viewBox="0 0 18 18"><path d="M7.5 4.5h6v6" /><path d="M13.5 4.5l-9 9" /></symbol>
         <symbol id="i-chevron-down" viewBox="0 0 18 18"><path d="M5 7l4 4 4-4" /></symbol>
         <symbol id="i-chevron-right" viewBox="0 0 18 18"><path d="M7 5l4 4-4 4" /></symbol>
@@ -60,7 +61,7 @@
     <main id="main" tabindex="-1" class="px-inset pt-8 pb-16">
       <h1>Compatibility</h1>
       <p class="mt-2 max-w-measure type-body text-ink-2">One row per rule: its result, its reason and the specs it used, with their sources.</p>
-      <p class="mt-1 max-w-measure type-small text-ink-3">Mock: real parts, specs and sources from the catalogue. The results are illustrative, because the rules are not built yet, and 6 of the 20 rows are drawn.</p>
+      <p class="mt-1 max-w-measure type-small text-ink-3">Mock: real parts, specs and sources from the catalogue. The results are illustrative, because the rules are not built yet, and 7 of the 20 rows are drawn.</p>
 
       <div class="mt-8 grid items-start gap-8 lg:grid-cols-[22rem_minmax(0,1fr)]">
         <!-- The part picker -->
@@ -166,7 +167,7 @@
         <!-- The results -->
         <section aria-labelledby="checks-h">
           <h2 id="checks-h" class="sr-only">Checks</h2>
-          <p role="status" class="type-heading text-ink">14 of 19 pass, 1 incompatible, 2 can't verify, 2 warnings.</p>
+          <p role="status" class="type-heading text-ink">12 of 17 pass, 1 incompatible, 2 can't verify, 2 warnings.</p>
           <p class="mt-1 type-body text-ink-2">1 not checked yet.</p>
 
           <ol role="list" class="@container mt-4 rounded-panel border border-line bg-surface">
@@ -296,6 +297,20 @@
               </div>
             </li>
 
+            <!-- 11. radiator-fit: Doesn't apply (an air cooler) -->
+            <li class="grid border-line px-5 py-4 not-first:border-t @xl:grid-cols-[9.5rem_minmax(0,1fr)] @xl:gap-x-6">
+              <div class="flex flex-wrap items-baseline gap-x-2 @xl:col-start-2 @xl:row-start-1">
+                <h3>Radiator fit</h3>
+                <span class="type-caption whitespace-nowrap text-ink-3" translate="no">radiator-fit</span>
+              </div>
+              <p class="mt-1 @xl:col-start-1 @xl:row-span-2 @xl:row-start-1 @xl:mt-px">
+                <span class="inline-flex items-center gap-1.5 type-small whitespace-nowrap text-ink-3"><svg class="size-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-na" /></svg>Doesn't apply</span>
+              </p>
+              <div class="@container mt-2 @xl:col-start-2 @xl:row-start-2 @xl:mt-1">
+                <p class="max-w-measure type-body text-ink-3">The <span translate="no">DeepCool AN400</span> is an air cooler, so it has no radiator.</p>
+              </div>
+            </li>
+
             <!-- 13. psu-length: Incompatible -->
             <li class="grid border-line px-5 py-4 not-first:border-t @xl:grid-cols-[9.5rem_minmax(0,1fr)] @xl:gap-x-6">
               <div class="flex flex-wrap items-baseline gap-x-2 @xl:col-start-2 @xl:row-start-1">
@@ -335,7 +350,7 @@
                 <span class="inline-flex items-center gap-1.5 type-small whitespace-nowrap text-ink-3"><svg class="size-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-none" /></svg>Not checked</span>
               </p>
               <div class="@container mt-2 @xl:col-start-2 @xl:row-start-2 @xl:mt-1">
-                <p class="max-w-measure type-body text-ink-3">Needs a drive.</p>
+                <p class="max-w-measure type-body text-ink-3">Pick a drive to check the M.2 slots.</p>
               </div>
             </li>
           </ol>

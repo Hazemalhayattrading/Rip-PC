@@ -134,7 +134,7 @@ for (const s of SHOTS) {
   await context.close();
 }
 
-// A 4x close-up of the five status chips and the three confidence marks, in both themes.
+// A 4x close-up of the six status chips and the three confidence marks, in both themes.
 for (const theme of ['dark', 'light']) {
   const { context, page } = await open({ w: 760, h: 320, theme, dpr: 4 });
   await page.evaluate(() => {
@@ -142,7 +142,7 @@ for (const theme of ['dark', 'light']) {
     const mark = (n) => `<span class="inline-flex items-center gap-1.5 type-small text-ink-2"><svg class="h-1 w-10" viewBox="0 0 40 4" aria-hidden="true">${[0, 14, 28].map((x, i) => (i < n ? `<rect x="${x}" y="0" width="12" height="4" rx="2" fill="currentColor"/>` : `<rect x="${x + 0.5}" y="0.5" width="11" height="3" rx="1.5" fill="none" stroke="currentColor" stroke-width="1"/>`)).join('')}</svg>${['', 'Low', 'Medium', 'High'][n]} confidence</span>`;
     const main = document.querySelector('main');
     main.innerHTML = `<div id="sheet" class="rounded-panel border border-line bg-surface p-5" style="display:inline-grid;gap:16px">
-      <div style="display:flex;flex-wrap:wrap;gap:24px">${chip('text-ok', 'i-ok', 'Passes')}${chip('text-warn', 'i-warn', 'Warning')}${chip('text-warn', 'i-unverified', "Can't verify")}${chip('text-block', 'i-block', 'Incompatible')}${chip('text-ink-3', 'i-none', 'Not checked')}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:24px">${chip('text-ok', 'i-ok', 'Passes')}${chip('text-warn', 'i-warn', 'Warning')}${chip('text-warn', 'i-unverified', "Can't verify")}${chip('text-block', 'i-block', 'Incompatible')}${chip('text-ink-3', 'i-none', 'Not checked')}${chip('text-ink-3', 'i-na', "Doesn't apply")}</div>
       <div style="display:flex;flex-wrap:wrap;gap:24px">${mark(3)}${mark(2)}${mark(1)}</div></div>`;
     document.querySelector('header').remove();
   });

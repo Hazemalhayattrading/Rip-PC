@@ -16,20 +16,23 @@ numbers in square brackets are placeholders, not data.
 
 ## 1. What an engine message holds
 
-The UI needs these parts of every compatibility result. build-lead's result types decide the
-shape; design-lead reviews them against this list (brief step 3).
+The UI needs these parts of every compatibility result. build-lead's result types
+(`src/engine/types.ts`, `15f9b5c` on `feat/build-engine-foundations`) decide the shape; the field
+column names them. Design-lead's review of the types (brief step 3) asks for the two marked
+"proposed".
 
-| Part | What it is | When |
-|---|---|---|
-| Status | ok, warn or block, and whether a warn means "can't verify" (missing data) | Always |
-| Reason | One sentence: what is true, with its numbers and units | Always, ok included |
-| Action | One sentence: what the buyer should do | Only for warn, block and can't verify, and only when there is something to do beyond picking another part (section 2, rule 9) |
-| Steps | An ordered list of short instructions from a maker's own procedure, with that source | Only for a procedure: today, BIOS FlashBack (section 8) |
-| Layout | Which case layout the check assumed: radiator position, drive trays, the Terra's spine | Only for rules that check a case layout (plan WP-E1) |
-| Evidence | Every spec value the rule used: which part, which spec, the value and unit, and its source | Always. Never written into the sentence |
-| Parts | The id and display name of every part the sentence names | Always, so the UI can mark names `translate="no"` (backlog item 20) |
+| Part | Field | What it is | When |
+|---|---|---|---|
+| Status | `status`, `cantVerify` | ok, warn or block, and whether a warn means "can't verify" (missing data) | Always |
+| Reason | `reason` | One sentence: what is true, with its numbers and units | Always, ok included |
+| Action | `action` (proposed; `advice` today) | One sentence: what the buyer should do | Only for warn, block and can't verify, and only when there is something to do beyond picking another part (section 2, rule 9) |
+| Steps | `steps` (proposed; inside `advice` today) | A maker's procedure, condensed: its title, its ordered items, and its own sources | Only for a procedure: today, BIOS FlashBack (section 8) |
+| Layout | `layoutId`, and that layout's `description` | Which case layout the check assumed: radiator position, drive trays, the Terra's spine | Only for rules that check a case layout (plan WP-E1) |
+| Evidence | `evidence` | Every spec value the rule used: which part, which spec, the value and unit, its note and its sources | Always. Never written into the sentence |
+| Parts | `parts` | The parts the result is about. The UI finds their display names (section 4) in the sentence and marks them `translate="no"` (backlog item 20) | Always |
 
-A rule whose parts are not all picked has no result. The lab shows it as "Not checked" (section 6).
+A rule that didn't run is a `RuleNotRun`: "Not checked" when a part it needs isn't picked, "Doesn't
+apply" when the build has nothing for it to check (section 6).
 
 ## 2. Ten rules
 
@@ -83,6 +86,11 @@ The rules of [direction.md §1.1](direction.md#11-numbers-are-the-product) and
   counted things inside a sentence only.
 - **Units:** mm, W, GHz, MHz, MT/s, GB, TB, Gbps, fps, tokens/s, points, s, min, h, %. Spell them
   this way; never in capitals ("MM") or with a full stop.
+- **Lists in a sentence:** "A and B", "A, B and C", with no serial comma. Build them with
+  `new Intl.ListFormat('en-GB', { type: 'conjunction' })`: the en-US format adds the serial comma.
+- **At a numeric limit,** the reason says what happens exactly there (test plan §9.1): "The {card}
+  is 355 mm long, exactly the 355 mm the {case} takes, so it fits with no room to spare." Whether
+  that passes or warns is the rule's call; the wording says it either way.
 - **Data text shown inside a sentence** (a case's clearance `condition`, such as "with a 360 mm
   front radiator") follows these rules too. data-lead writes it lowercase, starting with "with".
 
@@ -148,12 +156,17 @@ spelling.
 | warn | **Warning** | Triangle with an exclamation mark | `--warn` |
 | warn, missing data | **Can't verify** | Diamond with a question mark | `--warn` |
 | block | **Incompatible** | Circle with a slash | `--block` |
-| (no result: parts missing) | **Not checked** | Empty circle | `--ink-3` |
+| not run: a part to check isn't picked (`needs-parts`) | **Not checked** | Empty circle | `--ink-3` |
+| not run: nothing in the build to check (`not-applicable`) | **Doesn't apply** | Circle with a dash | `--ink-3` |
 
 - "Passes" is for one check. Phase 2's part rows keep Studio's words for a whole part: "Fits your
   build", "Fits, with a warning" and "Incompatible" ([direction.md §4](direction.md#key-components-2)).
-- **Not checked** says what is missing: "Needs a CPU and a motherboard." It is not an engine status
-  and never counts as a pass.
+- **Not checked** says what to pick: "Pick {the missing parts} to check {what}." For example: "Pick
+  a case to check the card's length." "Pick a CPU and a motherboard to check the socket." (The
+  pattern is build-lead's, from the result types.)
+- **Doesn't apply** says why: "The DeepCool AN400 is an air cooler, so it has no radiator."
+- Neither is an engine status, and neither counts as a pass. A rule never uses "doesn't apply"
+  to hide a case it can't judge: that is "Can't verify".
 
 **Rule names,** shown with the rule id (plan §3 order):
 
@@ -172,11 +185,11 @@ spelling.
 
 QA's test plan v4 sets the final rule ids (plan WP-Q3). If an id changes, its name here stays.
 
-**The summary line** counts the checked rules: "{passes} of {checked} pass, {n} incompatible,
-{n} can't verify, {n} warning(s)." Leave out a count that is zero. Then, if any rule has no
-result: "{n} not checked yet."
+**The summary line** counts the rules that ran: "{passes} of {checked} pass, {n} incompatible,
+{n} can't verify, {n} warning(s)." Leave out a count that is zero. Then, if any rule waits for a
+part: "{n} not checked yet." Rules that don't apply are not counted.
 - "16 of 20 pass, 1 incompatible, 1 can't verify, 2 warnings."
-- "20 of 20 pass."
+- "18 of 18 pass." (Two rules don't apply.)
 - "9 of 10 pass, 1 warning. 10 not checked yet."
 
 ## 7. The rules: patterns and examples
@@ -291,7 +304,7 @@ Section 8 has the full wording, Hazem's requirement included.
 | Outcome | Reason |
 |---|---|
 | Passes | The {cooler} is {coolerHeight} tall, and the {case} takes coolers up to {caseMax}{condition}. |
-| Passes: a liquid cooler | The {cooler} is a liquid cooler, so the case's cooler height limit doesn't apply. |
+| Doesn't apply: a liquid cooler | The {cooler} is a liquid cooler, so the case's cooler height limit doesn't apply. |
 | Incompatible | The {cooler} is {coolerHeight} tall, but the {case} takes coolers up to {caseMax}{condition}. |
 | Can't verify | {maker} doesn't publish the height of the {cooler}. |
 
@@ -305,7 +318,7 @@ Section 8 has the full wording, Hazem's requirement included.
 | Outcome | Reason | Action |
 |---|---|---|
 | Passes | The {ram} is {ramHeight} tall, and the {cooler} leaves {clearance} for memory. | — |
-| Passes: a liquid cooler | The {cooler} is a liquid cooler, so nothing overhangs the memory. | — |
+| Doesn't apply: a liquid cooler | The {cooler} is a liquid cooler, so nothing overhangs the memory. | — |
 | Incompatible | The {ram} is {ramHeight} tall, but the {cooler} leaves only {clearance} for memory. | — |
 | Warning: the fan can move up | The {ram} is {ramHeight} tall, so the front fan of the {cooler} must sit higher, which makes the cooler {raisedHeight} tall. (Needs D1.) | — |
 | Can't verify | {maker} doesn't publish how much room the {cooler} leaves for memory. | Ask {maker} or the retailer whether memory {ramHeight} tall fits under the {cooler}. |
@@ -320,7 +333,7 @@ Section 8 has the full wording, Hazem's requirement included.
 | Outcome | Reason |
 |---|---|
 | Passes | The {case} takes the {radiatorSize} radiator of the {cooler} at the {position}. |
-| Passes: an air cooler | The {cooler} is an air cooler, so it has no radiator. |
+| Doesn't apply: an air cooler | The {cooler} is an air cooler, so it has no radiator. |
 | Incompatible: size | The {cooler} has a {radiatorSize} radiator, but the {case} takes radiators up to {caseMax}. |
 | Incompatible: thickness | With its fans, the radiator of the {cooler} is {thickness} thick, but the {case} takes up to {maxThickness} at the {position}. |
 | Can't verify | {maker} doesn't publish the radiator thickness limit at the {position} of the {case}. |
@@ -422,7 +435,7 @@ Section 8 has the full wording, Hazem's requirement included.
 | Outcome | Reason |
 |---|---|
 | Passes | The {board} has the USB-C header that the front USB-C port of the {case} needs. |
-| Passes: no port | The {case} has no front USB-C port, so it needs no USB-C header. |
+| Doesn't apply: no port | The {case} has no front USB-C port, so it needs no USB-C header. |
 | Warning: no header | The {case} has a front USB-C port, but the {board} has no USB-C header, so that port won't work. |
 | Warning: a slower header | The front USB-C port of the {case} is {caseSpeed}, but the USB-C header of the {board} is {headerSpeed}, so the port runs at {headerSpeed}. |
 
@@ -523,10 +536,13 @@ https://www.asus.com/support/faq/1038568/, last updated 9 Apr 2026, read by desi
 | Column headers | "Part"; "Gaming (W)"; "Worst case (W)"; "Source" |
 | A spec term, where the row needs it | In brackets after the plain words: "Card power (TBP)", "Package power limit (PPT)" |
 | Totals | Estimated gaming load: 520 W. Estimated worst-case load: 610 W. |
-| Headroom | Headroom for short power spikes: 30%, for this class of graphics card. |
+| Headroom | Headroom for short power spikes: 150 W, for graphics cards rated 300 W and up. |
 | Recommendation | Recommended power supply: 850–1,000 W. |
+| A part the estimate can't count | The totals leave out the {component}: {reason}. So they are a lower bound. |
 
 The numbers in this table show the format only.
+- **A line's label is its component,** as above, and the part's display name is shown beside it
+  (copy guide §4): never a shortened name such as "Ryzen 7 9800X3D, PPT".
 
 ## 10. Estimates (WP-E3, WP-E4)
 
@@ -537,7 +553,8 @@ The numbers in this table show the format only.
 | Figure | 142–158 fps |
 | Label | Estimated |
 | Confidence | "High confidence", "Medium confidence" or "Low confidence" |
-| Conditions, full | Cyberpunk 2077 at 1440p, High preset, ray tracing off, no upscaling |
+| Conditions, full | Cyberpunk 2077 at 1440p, High preset, ray tracing off, no upscaling. Ray tracing reads "ray tracing off", "ray tracing on" or "path tracing" |
+| 1% lows, when the anchors publish them | 1% lows: 120–131 fps |
 | Conditions, short (Phase 2 dock at 390 only) | Cyberpunk 2077, 1440p High, native |
 | Upscaling, its own readout | With DLSS Quality upscaling |
 | Frame generation, its own readout, never mixed into native | With DLSS frame generation (2×). Its caption: "Counts generated frames as well as rendered ones." |
@@ -589,8 +606,8 @@ export and code compile, s or min; local AI, tokens/s for the named model and si
 
 | Part | Pattern |
 |---|---|
-| Verdict | At {resolution} {preset} in {game}, the {graphics card / CPU} is the limit. |
-| What would help | One tier up, the {cpu2} would add about {x}%, and the {card2} about {y}%. |
+| Verdict (its own field) | At {resolution} {preset} in {game}, the {graphics card / CPU} is the limit. |
+| What would help (its own field) | One tier up, the {cpu2} would add about {x}%, and the {card2} about {y}%. |
 | Balanced | At {resolution} {preset} in {game}, neither part holds the build back: the CPU and graphics card limits are within {x}% of each other. |
 | No part one tier up | No faster {CPU / graphics card} has a price in {market}. |
 
@@ -598,6 +615,9 @@ export and code compile, s or min; local AI, tokens/s for the named model and si
 - What would help: "One tier up, the [AMD Ryzen 7 9850X3D] would add about [2%], and the [NVIDIA
   GeForce RTX 5080 Founders Edition] about [28%]." The parts are E5's "one tier up" picks; every
   percentage comes from the model, pinned by a test (plan WP-E5).
+- **"About {x}%" is the midpoint of the gain's range, rounded to a whole number** (the gain is an
+  `Estimate`). The sentence stays plain; the lab shows the range and its confidence beside it,
+  as "+25–31%, medium confidence".
 - **A rebalanced build:** its title "Same price, about {x}% faster at {resolution} {preset} in
   {game}"; its changes "Swap the {from} for the {to}."; its price "{currency} {total}, prices as
   of {date}"; its checks, the summary line of section 6.
@@ -624,9 +644,10 @@ After each E1, E3 and E5 hand-off (brief step 5):
 
 ## 14. Known gaps and questions
 
-- **Three M.2 drives.** The `m2-lanes` example needs a build with three drives, but the v1 build
-  codec holds one part per category (`src/state/categories.ts`). For build-lead: how will the
-  engine's build model and the lab hold several drives?
+- **Three M.2 drives: answered.** build-lead's result types hold the drives as a list
+  (`BuildParts.storage`, `15f9b5c`), and the case fans as one model in packs. The v1 share-link
+  codec still holds one part per category (`src/state/categories.ts`); carrying the list in the
+  URL is build-lead's, in WP-E0.
 - **The FlashBack steps need their source in the data.** For data-lead: add the ASUS FAQ above as
   a source the `bios-version` result can cite, or the board manuals' BIOS FlashBack pages.
 - **Long names.** Two display names can make a 160-character reason: three lines at the reading

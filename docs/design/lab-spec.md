@@ -77,7 +77,8 @@ codec (plan §1), so every hand-off can link to an exact case.
 | Select | Native `<select>`: `w-full min-h-11 appearance-none text-ellipsis rounded-row border border-ink-3 bg-surface pl-3 pr-10 type-name text-ink`. The chevron is an 18 px icon at `right-3`, `text-ink-3`, `pointer-events-none`, `aria-hidden`. `min-h-11` (44 px) is the touch target (backlog item 4) and leaves room for user text spacing (item 2). A long name ends in an ellipsis in the closed select (measured in the mock: without `text-ellipsis`, Chromium cuts it mid-letter); the open list and the results show it in full |
 | Options | `bg-surface text-ink` on `<option>` too, so Windows dark mode never shows a white list (backlog item 8). First option "None" (value ""). Then parts by display name ([copy-guide.md §4](copy-guide.md#4-part-names)), sorted with `localeCompare('en')` |
 | On change | The URL updates (`replaceState`) and the results change in the same frame: no loading state, no animation, no debounce |
-| Several drives | If the build model holds more than one drive (copy-guide.md §14): the label becomes "Drive 1", and an "Add a drive" text button (`type-control text-ink`, `min-h-11`) adds "Drive 2", and so on. Each added drive has a "Remove drive 2" button: an 18 px close icon with that text visually hidden |
+| Drives | A build holds several drives (`BuildParts.storage`). The first select is labelled "Drive 1"; an "Add a drive" text button (`type-control text-ink`, `min-h-11`) adds "Drive 2", and so on. Each added drive has a "Remove drive 2" button: an 18 px close icon with that text visually hidden. Focus moves to the new select when one is added, and to "Add a drive" when one is removed |
+| Case fans | One fan model in retail packs (`BuildParts['case-fan']`): the model select, then a "Packs" select (1 to 4) beside it once a model is picked |
 | Page inputs | Pages that need more than parts, such as /lab/games (game, resolution, preset, upscaling) and /lab/bottleneck (market), add a second group under the parts, headed "Test" (`type-label`), with the same field style |
 
 ## 3. The status chip
@@ -99,7 +100,8 @@ The engine's status in words, with an icon of its own and its colour. **Never co
 | warn | Warning | `<path d="M9 2.5l7 12.3H2z"/><path d="M9 7.2v3.4M9 12.9v.1"/>` | `text-warn` |
 | warn, missing data | Can't verify | `<path d="M9 2l7 7-7 7-7-7z"/><path d="M7.4 7.6a1.65 1.65 0 1 1 2.35 1.5c-.45.22-.75.55-.75 1.05v.25M9 12.7v.1"/>` | `text-warn` |
 | block | Incompatible | `<circle cx="9" cy="9" r="7"/><path d="M4.1 13.9l9.8-9.8"/>` | `text-block` |
-| no result | Not checked | `<circle cx="9" cy="9" r="7"/>` | `text-ink-3` |
+| not run, a part to pick (`needs-parts`) | Not checked | `<circle cx="9" cy="9" r="7"/>` | `text-ink-3` |
+| not run, nothing to check (`not-applicable`) | Doesn't apply | `<circle cx="9" cy="9" r="7"/><path d="M6 9h6"/>` | `text-ink-3` |
 
 - **Every state that needs attention has a silhouette of its own:** the warning's triangle and
   the can't-verify diamond stand out among the circles, in colour or not. The ok, warn and block
@@ -148,9 +150,14 @@ the list 36rem wide or more                   narrower (390, and Phase 2's rail)
 | Reason | `<p>` in `type-body text-ink-2 max-w-measure`: the reading measure token, about 64 characters a line and 75 at most (backlog item 15; not `65ch`, which sets up to 83). Part names inside it carry `translate="no"` |
 | Action | `<p>` in `type-body text-ink max-w-measure mt-1`. It is the one instruction in the row, so it takes the strongest ink; it needs no label |
 | Steps | A closed `<details>` (`mt-3`). The `<summary>`: `inline-flex min-h-6 items-center gap-1.5 type-control text-ink`, holding three children: an 18 px chevron that turns 90° when open (`transform`, `duration-ui ease-settle`, instant under reduced motion), one `<span>` with the whole text "How to update with BIOS FlashBack" (one span, or the flex gap splits the sentence), and a `<span class="text-ink-3">` "7 steps". Hide the browser's marker. Inside: an `<ol>` in `type-body text-ink-2 max-w-measure`, `list-decimal pl-5 space-y-1 marker:text-ink-3`, then the steps' source link |
-| Layout | `<p>` in `type-small text-ink-3 mt-2`: "Layout checked: a 360 mm radiator at the front." |
+| Layout | For a result with a `layoutId`, `mt-3`: the label "Layout checked" in `type-caption text-ink-3`, then that layout's `description`, a sentence, in `type-small text-ink-2`: "A 360 mm radiator at the front." The label and the sentence stay apart, so the description never needs recasing |
 | Evidence | Section 5, `mt-3` |
-| Not checked | The chip "Not checked"; the reason says what is missing ("Needs a CPU and a motherboard.") in `type-body text-ink-3`; no evidence |
+| Not run | The chip "Not checked" or "Doesn't apply"; the `RuleNotRun` reason in `type-body text-ink-3` ("Pick a case to check the card's length."); no evidence |
+
+**The layout search,** once per page, under the summary, when a case is picked: "Layout: {the
+description}" and, when other layouts also fit, "1 of 3 layouts that fit." in `type-body
+text-ink-2`. When none fits, its one-sentence reason, and a closed `<details>` "Layouts tried
+({n})" listing each one.
 
 **The summary** sits above the panel: `<p role="status">` in `type-heading text-ink`, with the
 sentence of [copy-guide.md §6](copy-guide.md#6-status-words-rule-names-and-the-summary). The "not
@@ -226,6 +233,7 @@ Cyberpunk 2077 at 1440p, High preset, ray tracing off, no upscaling   type-small
 | Label row | `<p class="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 type-small text-ink-2">`: "Estimated", then the mark and the confidence word. A gap separates them, not a middle dot (backlog item 14) |
 | Confidence mark | `<svg viewBox="0 0 40 4" class="h-1 w-10" aria-hidden="true">` in `currentColor` (`--ink-2`): three 12 × 4 bars, 2 px apart. A filled bar is `fill="currentColor"`; an empty one is `fill="none" stroke="currentColor" stroke-width="1"`, inset by 0.5. High fills three, Medium two, Low one. Outlined empties keep the count readable in forced colours, where backgrounds disappear (backlog item 3). The word carries the meaning; the mark repeats it |
 | Conditions | `<p class="type-small text-ink-3">`, the full form of [copy-guide.md §10](copy-guide.md#10-estimates-wp-e3-wp-e4). The Phase 2 dock at 390 uses the short form; it never drops them |
+| 1% lows | When the anchors publish them (`onePercentLow`): `type-small text-ink-2`, under the conditions: "1% lows: 120–131 fps" |
 | Limiter (lab) | `type-small text-ink`: "Limited by the graphics card." Then `type-small text-ink-2`: "Graphics card limit: 142–158 fps. CPU limit: 210–240 fps." |
 | VRAM flag | A status chip "Warning" with its sentence in `type-small text-ink-2`, under the conditions |
 | Explanation | When sources disagree, or a per-source calibration was used: one sentence in `type-small text-ink-2 max-w-measure`, under the conditions ([copy-guide.md §10](copy-guide.md#10-estimates-wp-e3-wp-e4), the explanation line) |
@@ -339,10 +347,12 @@ Chromium 141 (Playwright 1.56.1), in the design-lead worktree
 
 ## 12. Known gaps
 
-- **The mock is static.** It shows the frame, the picker, six result rows and a readout with real
+- **The mock is static.** It shows the frame, the picker, seven result rows and a readout with real
   catalogue values. The rows' outcomes and the readout's numbers are illustrative, and the page
   says so.
-- **Several drives** depend on build-lead's answer on the build model (copy-guide.md §14).
+- **The share link and several drives.** The result types hold the drives as a list
+  (`BuildParts.storage`). Carrying that list in the URL is build-lead's, in WP-E0, because the v1
+  codec holds one part per category.
 - **The field label map** for `/lab/parts` and the evidence list is build-lead's to write and
   design-lead's to review, with the engine strings.
 - **The Phase 2 dock** reuses the readout at a smaller size. Its spec is Phase 2 work, with
