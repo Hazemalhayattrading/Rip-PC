@@ -1,6 +1,6 @@
 # Rig Lab test plan
 
-Owner: qa-lead · Version 4 · 2026-10-02 · Applies to every phase, from Phase 0 to release.
+Owner: qa-lead · Version 4.1 · 2026-10-02 · Applies to every phase, from Phase 0 to release.
 
 **What v4 adds (Phase 1, the engine):** the 20 compatibility rule ids agreed with build-lead and how
 each is traced (§9); the held-out protocol of at least 20 results, 4 per coverage class (§8.2);
@@ -899,8 +899,13 @@ Captures QA makes go to `artifacts/audit/<phase>/` (git-ignored).
      in `data/**` or `src/data/**` at the frozen commit, checked by grep.
   3. It carries the full test conditions of §7.3 and a `publishedAt`, as an anchor must, and frame
      generation is off.
-  4. The model claims to cover it: the game has at least one anchor at that resolution and preset,
-     and the chip or CPU is in the catalogue at the frozen commit.
+  4. The model claims to cover it, checked from the data at the frozen commit:
+     - for a game result, the game has at least one anchor at that resolution and preset;
+     - for a creator result, the workload and its named test have at least one anchor;
+     - and the chip or CPU is in the catalogue.
+
+     A pick outside that is ineligible: for a game or workload with no anchors there, "no estimate
+     yet" is the right answer, not a failure (the Director, 2026-10-02).
   5. The value is printed in the source, or read from a chart by §7.3's rule (±1% or ±1 unit) and
      marked as read from a chart.
 - **The procedure** (blind; phase-1-plan §4, "Held-out results"):
@@ -922,8 +927,8 @@ Captures QA makes go to `artifacts/audit/<phase>/` (git-ignored).
 - **Gates:**
   - Error = |midpoint − published| / published. Each result is within `heldOutMaxErrorPct` 10%.
     Over 10% is a Blocker.
-  - "No estimate" on an eligible pick fails like an error over 10%, since eligibility already
-    requires a configuration the model claims to cover.
+  - "No estimate" on an eligible pick fails like an error over 10%, since eligibility (rule 4)
+    already requires a configuration the model claims to cover.
   - **Calibration:** of the results the model labels `high`, at least half have the published value
     inside the range (plan WP-E3, "Done means"). Otherwise the confidence labels are wrong: a Major,
     and WP-E3 isn't done.
@@ -1709,6 +1714,7 @@ QA re-tests every fix on the integration branch before closing the defect.
 | 2026-10-02 | 3.3 | WP-Q2: fixes from the independent check of v3.2, QA-P0-032 to 037. Both warning entries match the whole notice and only from the page itself, and the ReadPixels notice is attributed to ANGLE on SwiftShader, not a GPU driver (§13.2). The self-test table and how the checker catches a broken fixture (§13.2). Seven more method values pinned, and the web-vitals spec refuses an empty plan. D10's environment and blocks columns (§3.2). No gate value changed | qa-lead; no approval needed (no gate or method changed) |
 | 2026-10-02 | 3.4 | WP-Q2: from the re-test of v3.3, QA-P0-038 to 040. The software-WebGL entry takes only the two prefixes Chromium's GPU logger writes, and §13.2 states the page-URL limit exactly: inline scripts and inline event handlers, even ones a script file sets. The remaining approved method values pinned (visual thresholds, viewport sizes and flags, scale, gzip level and bytes per KB, the 95% warning, fps spread and calibration, the CI proxy, INP spread and rates, the model, D1 and audit values). Two §13.2 slips | qa-lead; no approval needed (no gate or method changed) |
 | 2026-10-02 | 4 | WP-Q3, Phase 1. The 20 rule ids agreed with build-lead, with their outcomes and their numeric and unknown-data flags (§9.1, §9.2), and their trace: compat-trace with `compat-rules.json`, the validator proofs of the unknown-data ruling, and the check of the engine's `RuleSpec` (§9.3). Golden tests in each anchor's own source context, the golden-count check and the conflicting-pairs check (§8.1). The held-out protocol: at least 20 results, 4 per class, blind picks committed before one run, the eligibility and mix rules, and the calibration check (§8.2); `models.heldOutCount` 20, with `heldOutPerClassMin` 4 and `heldOutClasses`, pinned. The corpus format and the sweep invariants (§9.4). The mutation-test check (§9.5). The Phase 1 audit seed (§7.2). The independent checks of phase-1-plan §4 (§17 and `docs/qa/phase-1-worker-briefs.md`). The Phase 1 wiring (Appendix C). `rule1.mjs` reads WP-D1's per-batch price windows (§7.5) | The held-out count and classes: Hazem, 2026-10-02 (phase-1-plan §6.3). The unknown-data ruling and the golden source context: the Director, 2026-10-02 (`9f47477`). The rest: pending the Director's review of WP-Q3 |
+| 2026-10-02 | 4.1 | The Director's acceptance of WP-Q3 (`9d56356`): QA's v4 method proposals approved as written (the held-out mix rules, a corpus result milder than expected as a Major, Stryker reasons of at least 20 characters, the sweep severities). "No estimate" fails a held-out result only on an eligible pick, so §8.2's rule 4 now says outright that a pick for a game or workload without anchors there is ineligible | Approved by: Director, 2026-10-02 (`7f3382f`) |
 
 ## 17. Phase 1 independent checks
 
