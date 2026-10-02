@@ -6,6 +6,7 @@ import { describe, expect, it } from 'vitest';
 import {
   ALLOWED,
   CHROMIUM_404_CONSOLE_TEXT,
+  HTTP2_404_CONSOLE_TEXT,
   allowListErrors,
   assertValidAllowList,
   classify,
@@ -123,6 +124,25 @@ describe('classify', () => {
         { problem: notFoundPageConsole, allowedBy: 'not-found-page-console' },
       ],
     });
+  });
+
+  it('allows the HTTP/2 form of the notice (GitHub Pages) for that page only', () => {
+    const http2Console: Problem = { ...notFoundPageConsole, text: HTTP2_404_CONSOLE_TEXT };
+    expect(classify([notFoundPage, http2Console], { expectNotFoundDocument: true })).toEqual({
+      unexpected: [],
+      allowed: [
+        { problem: notFoundPage, allowedBy: 'not-found-page-status' },
+        { problem: http2Console, allowedBy: 'not-found-page-console' },
+      ],
+    });
+    const http2Image: Problem = { ...missingImageConsole, text: HTTP2_404_CONSOLE_TEXT };
+    expect(
+      classify([notFoundPage, http2Image], { expectNotFoundDocument: true }).unexpected,
+    ).toEqual([http2Image]);
+    const other: Problem = { ...notFoundPageConsole, text: `${HTTP2_404_CONSOLE_TEXT} extra` };
+    expect(classify([notFoundPage, other], { expectNotFoundDocument: true }).unexpected).toEqual([
+      other,
+    ]);
   });
 
   it('still fails a missing image on a page that answers 404 on purpose', () => {

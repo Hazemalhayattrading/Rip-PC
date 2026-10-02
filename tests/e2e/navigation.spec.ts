@@ -28,8 +28,9 @@ const NOT_FOUND_START: Start = { name: 'the 404 page', path: '/Build/CPU' };
 /**
  * QA-P1-001 (open, build-lead, Major): after an in-app navigation the page keeps its scroll
  * position, so at 1440 px a link low on a build step leaves the new page scrolled past its
- * heading, and the screen looks unchanged. Where it applies, the test checks that it still
- * reproduces. When the fix lands that check fails, and the entry comes off this list.
+ * heading, and the screen looks unchanged. Where it applies, the test records what it saw as an
+ * annotation instead of failing, so build-lead's fix can land without touching this file. QA
+ * removes the entry when it verifies the fix; every other check here stays in force.
  */
 const KNOWN_OFF_SCREEN = {
   defect: 'QA-P1-001',
@@ -118,12 +119,10 @@ async function walkEveryLink(page: Page, start: Start, testInfo: TestInfo): Prom
   if (known) {
     testInfo.annotations.push({
       type: 'known defect',
-      description: `${KNOWN_OFF_SCREEN.defect}: heading off screen after ${offScreen.join(', ')}`,
+      description: offScreen.length
+        ? `${KNOWN_OFF_SCREEN.defect}: the heading was off screen after ${offScreen.join(', ')}`
+        : `${KNOWN_OFF_SCREEN.defect} did not reproduce here: QA can take this start off the list`,
     });
-    expect(
-      offScreen.length,
-      `${KNOWN_OFF_SCREEN.defect} no longer reproduces: take this start off KNOWN_OFF_SCREEN`,
-    ).toBeGreaterThan(0);
   } else {
     expect(offScreen, "links after which the new page's heading is off screen").toEqual([]);
   }
