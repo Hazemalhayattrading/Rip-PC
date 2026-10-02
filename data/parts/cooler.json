@@ -321,6 +321,182 @@
           "text": "Black version, \"RL-KN240-B2 (Black)\"."
         }
       ]
+    },
+    {
+      "id": "noctua-nh-l9i-17xx-chromax-black",
+      "category": "cooler",
+      "manufacturer": "noctua",
+      "brand": "Noctua",
+      "name": "NH-L9i-17xx chromax.black",
+      "partNumber": "NH-L9i-17xx chromax.black",
+      "type": "air",
+      "sockets": [
+        "LGA1851",
+        "LGA1700"
+      ],
+      "fanSizeMm": 92,
+      "fanCount": 1,
+      "tdpW": null,
+      "nsprRating": 59,
+      "rgb": false,
+      "heightMm": 37,
+      "ramClearanceMm": null,
+      "singleFanRamClearanceMm": null,
+      "sources": [
+        {
+          "url": "https://www.noctua.at/en/products/nh-l9i-17xx-chromax-black/specifications",
+          "publisher": "noctua",
+          "retrievedAt": "2026-10-02",
+          "docType": "spec-page",
+          "fields": [
+            "brand",
+            "name",
+            "partNumber",
+            "type",
+            "sockets",
+            "fanSizeMm",
+            "fanCount",
+            "nsprRating",
+            "rgb",
+            "heightMm"
+          ],
+          "title": "NH-L9i-17xx chromax.black: Specifications | Noctua",
+          "locator": "Key specifications: \"Socket compatibility LGA1700, LGA1851, LGA1954\", \"Fan configuration 1x 92x92x14mm\", \"NSPR 59\", \"Colour Black\"; Mechanical specifications: \"Height with fan(s) 37 mm\""
+        },
+        {
+          "url": "https://www.noctua.at/en/products/nh-l9i-17xx-chromax-black/compatibility/cpus?vendorId=2&socketId=37",
+          "publisher": "noctua",
+          "retrievedAt": "2026-10-02",
+          "docType": "cpu-support-list",
+          "fields": [
+            "sockets"
+          ],
+          "title": "CPU compatibility | NH-L9i-17xx chromax.black",
+          "locator": "Manufacturer \"AMD\", Socket \"AM5\": all 63 CPUs listed (e.g. \"AMD Ryzen 7 9800X3D\") have the mounting mark \"incompatible\""
+        },
+        {
+          "url": "https://www.noctua.at/en/products/nh-l9i-17xx-chromax-black/compatibility/cpus?vendorId=2&socketId=25",
+          "publisher": "noctua",
+          "retrievedAt": "2026-10-02",
+          "docType": "cpu-support-list",
+          "fields": [
+            "sockets"
+          ],
+          "title": "CPU compatibility | NH-L9i-17xx chromax.black",
+          "locator": "Manufacturer \"AMD\", Socket \"AM4\": every CPU shown (101, \"Not all results shown.\", e.g. \"AMD Ryzen 5 3400G\") has the mounting mark \"incompatible\""
+        },
+        {
+          "url": "https://www.noctua.at/en/products/nh-l9i-17xx-chromax-black/compatibility/ram?socketGroupIds=12",
+          "publisher": "noctua",
+          "retrievedAt": "2026-10-02",
+          "docType": "product-page",
+          "fields": [
+            "ramClearanceMm"
+          ],
+          "title": "RAM compatibility | NH-L9i-17xx chromax.black",
+          "locator": "Socket group \"LGA1851 / LGA1700\": every module shown (101, \"Not all results shown.\") has the mounting mark \"compatible\""
+        }
+      ],
+      "notes": [
+        {
+          "field": "sockets",
+          "text": "Noctua lists \"Socket compatibility LGA1700, LGA1851, LGA1954\" (\"LOW PROFILE COOLER FOR INTEL LGA1851/1700\"); LGA1954 is not a catalogue socket. Its CPU compatibility list marks AMD AM5 and AM4 CPUs \"incompatible\"; the page's variant selector points to separate AM4 and AM5 models."
+        },
+        {
+          "field": "tdpW",
+          "text": "Noctua publishes NSPR (\"NSPR 59\"), not a TDP rating."
+        },
+        {
+          "field": "ramClearanceMm",
+          "text": "Noctua publishes no RAM clearance figure: the spec page says \"37mm total height, 100% RAM- and PCIe-compatibility\", and its RAM compatibility list for socket group \"LGA1851 / LGA1700\" marks every module it shows \"compatible\"."
+        },
+        {
+          "field": "heightMm",
+          "text": "From \"Height with fan(s) 37 mm\" (\"Height without fan(s) 23 mm\")."
+        },
+        {
+          "field": "fanCount",
+          "text": "From \"Fan configuration 1x 92x92x14mm\" (an NF-A9x14 HS-PWM chromax.black fan)."
+        },
+        {
+          "field": "partNumber",
+          "text": "Noctua names the product by its model name and publishes no other part number; the spec page gives EAN 9010018000283 and UPC 841501100284."
+        },
+        {
+          "field": "rgb",
+          "text": "Noctua lists no lighting: \"Colour Black\", a black coated heatsink and a chromax.black fan."
+        }
+      ]
+    },
+    {
+      "id": "deepcool-an600",
+      "category": "cooler",
+      "manufacturer": "deepcool",
+      "brand": "DeepCool",
+      "name": "AN600",
+      "partNumber": "R-AN600-BKNNMN-G",
+      "type": "air",
+      "sockets": [
+        "AM5",
+        "AM4",
+        "LGA1851",
+        "LGA1700"
+      ],
+      "fanSizeMm": 120,
+      "fanCount": 1,
+      "tdpW": 180,
+      "nsprRating": null,
+      "rgb": false,
+      "heightMm": 67,
+      "ramClearanceMm": 40,
+      "singleFanRamClearanceMm": null,
+      "sources": [
+        {
+          "url": "https://www.deepcool.com/products/Cooling/cpuaircoolers/AN600-Top-Flow-Low-Profile-Cooler-1851-1700-AM5/2023/16837.shtml",
+          "publisher": "deepcool",
+          "retrievedAt": "2026-10-02",
+          "docType": "product-page",
+          "title": "AN600 - DeepCool",
+          "locator": "Overview text; \"Application For\"; Technical Spec (\"Product Dimensions\", \"Fan Dimensions\", \"LED Type\", \"P/N\")"
+        },
+        {
+          "url": "https://www.deepcool.com/download/pdf/AN600.pdf",
+          "publisher": "deepcool",
+          "retrievedAt": "2026-10-02",
+          "docType": "manual",
+          "fields": [
+            "sockets"
+          ],
+          "title": "AN600 Top Flow Low Profile Cooler manual",
+          "locator": "Section headers \"INTEL LGA1851 · LGA1700 · LGA115X\" (PDF pp. 4-9) and \"AMD AM5 · AM4\" (PDF pp. 10-16)"
+        }
+      ],
+      "notes": [
+        {
+          "field": "sockets",
+          "text": "DeepCool lists \"Intel LGA1851/1700/1200/1151/1150/1155\" and \"AMD AM5/AM4\". Only the catalogue's sockets are listed; the maker also lists older ones."
+        },
+        {
+          "field": "tdpW",
+          "text": "From \"provides 180W of cooling to the CPU\"."
+        },
+        {
+          "field": "heightMm",
+          "text": "From \"Product Dimensions 122×120×67 mm(L×W×H)\" (\"Heatsink Dimensions 121×120×52 mm\")."
+        },
+        {
+          "field": "ramClearanceMm",
+          "text": "From \"Making full use of a 120mm high airflow fan and an overhanging design, the AN600 actively cools RAM modules up to 40mm tall\". DeepCool publishes no other RAM figure for the AN600 (one top-flow fan, no alternative fan position)."
+        },
+        {
+          "field": "fanCount",
+          "text": "One fan: \"a 120mm high airflow fan\" (\"Fan Dimensions 120×120×15 mm\")."
+        },
+        {
+          "field": "rgb",
+          "text": "The fan has a white LED (\"LED Type White LED\"), not RGB lighting."
+        }
+      ]
     }
   ]
 }

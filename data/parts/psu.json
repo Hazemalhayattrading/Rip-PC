@@ -334,6 +334,106 @@
           "text": "NZXT's FAQ on the product page: \"We do not include a SFX to ATX bracket.\""
         }
       ]
+    },
+    {
+      "id": "deepcool-pk650d",
+      "category": "psu",
+      "manufacturer": "deepcool",
+      "brand": "DeepCool",
+      "name": "PK650D",
+      "partNumber": "R-PK650D-FA0B-US",
+      "wattageW": 650,
+      "efficiency80Plus": "Bronze",
+      "cybenetics": null,
+      "atxVersion": "2.4",
+      "formFactor": "ATX",
+      "lengthMm": 140,
+      "atxBracketIncluded": null,
+      "modularity": "none",
+      "fanSizeMm": 120,
+      "connectors": {
+        "pcie16pin": 0,
+        "pcie16pinStandard": null,
+        "pcie8pin": 4,
+        "pcie8pinCables": 2,
+        "eps8pin": 2,
+        "sata": 7,
+        "molex": 4
+      },
+      "sources": [
+        {
+          "url": "https://www.deepcool.com/products/PowerSupplyUnits/powersupplyunits/PK650D-80-PLUS-Bronze-Power-Supply/2022/15619.shtml",
+          "publisher": "deepcool",
+          "retrievedAt": "2026-10-02",
+          "docType": "product-page",
+          "fields": [
+            "brand",
+            "name",
+            "partNumber",
+            "efficiency80Plus",
+            "atxVersion",
+            "lengthMm",
+            "fanSizeMm",
+            "connectors"
+          ],
+          "title": "PK650D - DeepCool",
+          "locator": "Technical Spec (\"Type ATX12V V2.4\", \"80PLUS Certifications Bronze\", \"EAN P/N\"); Overview cable list (\"PCI-E (6+2)Pin x2\" with \"X2\")"
+        },
+        {
+          "url": "https://www.deepcool.com/download/pdf/PK_D.pdf",
+          "publisher": "deepcool",
+          "retrievedAt": "2026-10-02",
+          "docType": "manual",
+          "fields": [
+            "wattageW",
+            "connectors"
+          ],
+          "title": "PK-D series power supply manual",
+          "locator": "List of parts (printed p. 1, PDF p. 8): PK650D/PK700D \"A ×1 B ×1 D ×1 E ×2 F ×1 G ×1 I ×1 J ×4 K ×1\"; EN legend (p. 2); Specification sheet (p. 6): PK650D-F20 \"Total Output 650W\""
+        },
+        {
+          "url": "https://www.deepcool.com/products/PowerSupplyUnits/index.shtml?filter=true&type=Power",
+          "publisher": "deepcool",
+          "retrievedAt": "2026-10-02",
+          "docType": "product-page",
+          "fields": [
+            "modularity",
+            "formFactor"
+          ],
+          "title": "Power Supply Units - Products -DeepCool",
+          "locator": "Filter \"Modularity\" (Full / Semi / None) and \"Form Factor\" (ATX / SFX): the PK650D list item (id \"producthiddenlocationlist_PK650D\") carries \"ModularityNone FormFactorATX\""
+        }
+      ],
+      "notes": [
+        {
+          "field": "partNumber",
+          "text": "DeepCool lists regional variants of the same unit (R-PK650D-FA0B-CN, -AU, -EU, -JP, -UK, -US, -AR, -BR, -WO, -BP, -BE); the US one is recorded."
+        },
+        {
+          "field": "cybenetics",
+          "text": "DeepCool gives no Cybenetics rating for the PK650D; the page lists \"80PLUS Certifications Bronze\" only."
+        },
+        {
+          "field": "atxVersion",
+          "text": "From \"Type ATX12V V2.4\"."
+        },
+        {
+          "field": "lengthMm",
+          "text": "From \"Product Dimensions 150×140×86mm (W x L x H)\"."
+        },
+        {
+          "field": "modularity",
+          "text": "DeepCool's power supply list files the PK650D under \"Modularity: None\" (its list item carries the filter class \"ModularityNone\"); the product page says \"Black direct power cables help blend in with other components.\""
+        },
+        {
+          "field": "connectors",
+          "text": "DeepCool lists connectors per cable and the cable count: \"Main Power Connector 24 (20+4)Pin x1\" X1, \"EPS 12V Connector 8 (4+4)Pin x2\" X1, \"PCI-E (6+2)Pin x2\" X2, \"SATA x3\" X1, \"SATA x4\" X1, \"4Pin Peripheral x4\" X1. So 4 PCIe (6+2) connectors on 2 cables (two per cable), 2 CPU (4+4) connectors on 1 cable, 7 SATA and 4 peripheral, and no 12V-2x6 or 12VHPWR cable. The manual's parts list agrees: PK650D/PK700D \"D ×1 E ×2 F ×1 G ×1 I ×1\", with \"D CPU(4+4)Pin x 2\", \"E EPCI-E(6+2)Pin x 2\", \"F SATA x 3\", \"G SATA x 4\", \"I 4Pin Peripheral x 4\"."
+        },
+        {
+          "field": "wattageW",
+          "text": "From the manual's specification sheet: PK650D-F20 \"Total Output 650W\"."
+        }
+      ]
     }
   ]
 }

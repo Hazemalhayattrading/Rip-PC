@@ -1080,6 +1080,11 @@
             "family": "ryzen-5000",
             "minBiosVersion": "0303",
             "statement": "CPU support list: earliest listed BIOS for Ryzen 5000 models is 0303 (e.g. Ryzen 5 5600: 0303; Ryzen 7 5700X3D: 2803)."
+          },
+          {
+            "family": "ryzen-3000",
+            "minBiosVersion": null,
+            "statement": "CPU support list (\"Validated since BIOS\"), every Ryzen 3000 model it lists: Ryzen 3 3100 (3.6GHz, 65W, L3:16M,4C): 0303; Ryzen 3 3300X (3.8GHz, 65W, L3:16M,4C): 0303; Ryzen 5 3500 (3.6Ghz,65W,L3:16M,6C): 0303; Ryzen 5 3500X (3.5Ghz,65W,L3:32M,6C): 0303; Ryzen 5 3600 (3.6GHz,65W,L3:32M,6C,B0): 0303; Ryzen 5 3600X (3.8GHz,95W,L3:32M,6C,B0): 0303; Ryzen 5 3600XT (3.8GHz, 95W,L3:32M,6C): 0303; Ryzen 5 PRO 3600 (3.6GHz,65W,L3:32M,6C): 0303; Ryzen 7 3700X (3.6GHz,65W,L3:32M,8C,B0): 0303; Ryzen 7 3800X (3.9GHz,105W,L3:32M,8C,B0): 0303; Ryzen 7 3800XT (3.9GHz, 105W,L3:32M,8C): 0303; Ryzen 7 PRO 3700 (3.6GHz,65W,L3:32M,8C): 0303; Ryzen 9 3900 (3.1GHz,65W,L3:64M,12C): 0303; Ryzen 9 3900X (3.8GHz,105W,L3:64M,12C,B0): 0303; Ryzen 9 3900XT (3.8GHz, 105W,L3:64M,12C): 0303; Ryzen 9 3950X (3.5GHz,105W,L3:64M,16C): 0303; Ryzen 9 PRO 3900 (3.1GHz,65W,L3:64M,12C): 0303. BIOS page: \"TUF GAMING B550-PLUS WIFI II BIOS 0303 Version 0303 20.2 MB 2021/10/21 First Release\"."
           }
         ],
         "cpus": [
@@ -1094,6 +1099,12 @@
             "listing": "since",
             "minBiosVersion": "0303",
             "asListed": "Ryzen 5 5600 (3.5GHz,65W,L3:32M,6C): 0303"
+          },
+          {
+            "cpuId": "amd-ryzen-5-3400g",
+            "listing": "not-listed",
+            "minBiosVersion": null,
+            "asListed": "(not listed)"
           }
         ]
       },
@@ -1330,7 +1341,7 @@
         {
           "url": "https://www.asus.com/motherboards-components/motherboards/tuf-gaming/tuf-gaming-b550-plus-wifi-ii/helpdesk_cpu/?model2Name=tuf-gaming-b550-plus-wifi-ii",
           "publisher": "asus",
-          "retrievedAt": "2026-09-30",
+          "retrievedAt": "2026-10-02",
           "docType": "cpu-support-list",
           "fields": [
             "biosSupport"
@@ -1347,6 +1358,29 @@
           ],
           "title": "User's Manual E22526 (V2)",
           "locator": "pp. vi-vii specifications summary; p. x Connectors with shared bandwidth"
+        },
+        {
+          "url": "https://www.asus.com/motherboards-components/motherboards/tuf-gaming/tuf-gaming-b550-plus-wifi-ii/helpdesk_bios/?model2Name=tuf-gaming-b550-plus-wifi-ii",
+          "publisher": "asus",
+          "retrievedAt": "2026-10-02",
+          "docType": "bios-release-notes",
+          "fields": [
+            "biosSupport.families.1"
+          ],
+          "title": "BIOS & FIRMWARE (all versions shown)",
+          "locator": "Last entry: \"TUF GAMING B550-PLUS WIFI II BIOS 0303 Version 0303 20.2 MB 2021/10/21 First Release\""
+        },
+        {
+          "url": "https://www.amd.com/en/products/processors/chipsets/am4.html",
+          "publisher": "amd",
+          "retrievedAt": "2026-10-02",
+          "docType": "product-page",
+          "archiveUrl": "https://web.archive.org/web/20260821195804/https://www.amd.com/en/products/processors/chipsets/am4.html",
+          "fields": [
+            "biosSupport.cpus.2"
+          ],
+          "title": "AMD Socket AM4 Chipsets | Specs & CPU Compatibility",
+          "locator": "Table \"AMD Socket AM4 Motherboard Chipset Solutions\": row \"B550\", column \"AMD Ryzen™ 3000 Series Processors with Radeon™ Graphics\": \"X\""
         }
       ],
       "notes": [
@@ -1357,6 +1391,10 @@
         {
           "field": "pcieSlots",
           "text": "With a Ryzen 5000 G-Series or 4000 G-Series CPU, PCIEX16_1 runs at PCIe 3.0 (spec page). The catalogue has no G-Series CPU."
+        },
+        {
+          "field": "biosSupport.cpus.2",
+          "text": "Not on ASUS's CPU support list, checked 2026-10-02. The list has 76 CPUs: 17 Ryzen 3000, 19 Ryzen 4000 and 40 Ryzen 5000 models. Its Ryzen 3000 rows are the Ryzen 3 3100 and 3300X, Ryzen 5 3500, 3500X, 3600, 3600X, 3600XT and PRO 3600, Ryzen 7 3700X, 3800X, 3800XT and PRO 3700, and Ryzen 9 3900, 3900X, 3900XT, 3950X and PRO 3900, all \"Validated since BIOS\" 0303; no Ryzen 3000 G-Series APU (3400G, 3200G) is listed. AMD's Socket AM4 chipset page marks B550 \"X\" for \"AMD Ryzen™ 3000 Series Processors with Radeon™ Graphics\", and AMD's 3400G page lists \"Supporting Chipsets X570, X470, X370, B450, B350, A320\". ASUS's tech spec page has no CPU exclusion: its CPU row says \"*Refer to www.asus.com for CPU support list.\", and its slot and storage rows name \"AMD Ryzen™ 5000 Series/ 3000 Series\" and \"AMD Ryzen™ 5000 G-Series/ 4000 G-Series Desktop Processors\" only."
         }
       ]
     },

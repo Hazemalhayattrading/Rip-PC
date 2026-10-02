@@ -15,6 +15,8 @@
     { "id": "nzxt", "name": "NZXT", "kind": "manufacturer", "domains": ["nzxt.com"] },
     { "id": "arctic", "name": "ARCTIC", "kind": "manufacturer", "domains": ["arctic.de"] },
     { "id": "fractal", "name": "Fractal Design", "kind": "manufacturer", "domains": ["fractal-design.com"] },
+    { "id": "kingston", "name": "Kingston Technology", "kind": "manufacturer", "domains": ["kingston.com"] },
+    { "id": "noctua", "name": "Noctua", "kind": "manufacturer", "domains": ["noctua.at"] },
     { "id": "steam", "name": "Steam (Valve)", "kind": "platform", "domains": ["steampowered.com"] },
     { "id": "steamcharts", "name": "Steam Charts", "kind": "tracker", "domains": ["steamcharts.com"] },
     { "id": "riot-games", "name": "Riot Games", "kind": "game-publisher", "domains": ["playvalorant.com", "riotgames.com"] },

@@ -373,6 +373,97 @@
           "text": "The feature list (\"Simple design\", \"Aluminum heat spreader\", \"Supports XMP2.0\") names no lighting."
         }
       ]
+    },
+    {
+      "id": "kingston-fury-beast-ddr5-6000-cl40-4x16gb",
+      "category": "ram",
+      "manufacturer": "kingston",
+      "brand": "Kingston FURY",
+      "name": "FURY Beast DDR5-6000 CL40 64GB (4x16GB) Black",
+      "partNumber": "KF560C40BBK4-64",
+      "series": "Kingston FURY Beast DDR5",
+      "type": "DDR5",
+      "formFactor": "UDIMM",
+      "moduleCapacityGb": 16,
+      "moduleCount": 4,
+      "speedMtps": 6000,
+      "timings": {
+        "cl": 40,
+        "trcd": 40,
+        "trp": 40,
+        "tras": null
+      },
+      "voltageV": 1.35,
+      "profiles": {
+        "xmp": "3.0",
+        "expo": false
+      },
+      "heightMm": 34.9,
+      "rgb": false,
+      "sources": [
+        {
+          "url": "https://www.kingston.com/datasheets/KF560C40BBK4-64.pdf",
+          "publisher": "kingston",
+          "retrievedAt": "2026-10-02",
+          "docType": "datasheet",
+          "fields": [
+            "partNumber",
+            "type",
+            "moduleCapacityGb",
+            "moduleCount",
+            "speedMtps",
+            "timings",
+            "voltageV",
+            "profiles",
+            "heightMm"
+          ],
+          "title": "Memory Module Specifications KF560C40BBK4-64 (Document No. 4810813A)",
+          "locator": "p. 1: \"64GB (16GB 2G x 64-Bit x 4 pcs.) DDR5-6000 CL40 288-Pin DIMM Kit\"; Factory Timing Parameters \"XMP Profile #1: DDR5-6000 CL40-40-40 @1.35V\"; Default Features \"Height 1.37\" (34.9mm), w/heatsink\""
+        },
+        {
+          "url": "https://www.kingston.com/en/memory/gaming/kingston-fury-beast-ddr5-memory",
+          "publisher": "kingston",
+          "retrievedAt": "2026-10-02",
+          "docType": "product-page",
+          "archiveUrl": "https://web.archive.org/web/20260713011547/https://www.kingston.com/en/memory/gaming/kingston-fury-beast-ddr5-memory",
+          "fields": [
+            "brand",
+            "name",
+            "series",
+            "formFactor",
+            "moduleCount",
+            "heightMm",
+            "rgb"
+          ],
+          "title": "Kingston FURY™ Beast DDR5 Memory",
+          "locator": "Specifications \"Kits of 4: 64GB, 128GB\"; comparison table, Beast DDR5: \"Module Type UDIMM\", \"Height 34.9mm\"; filters listing KF560C40BBK4-64 under \"6000MT/s\", \"64GB\", \"Kit of 4\", \"40\", \"Intel XMP\", \"Black\""
+        }
+      ],
+      "notes": [
+        {
+          "field": "timings",
+          "text": "Kingston gives the XMP timings as CL40-40-40 (\"XMP Profile #1: DDR5-6000 CL40-40-40 @1.35V\") and no tRAS for the profile; the datasheet's \"Row Active Time (tRASmin) 32ns(min.)\" is the JEDEC default, not the XMP profile."
+        },
+        {
+          "field": "profiles",
+          "text": "The datasheet says \"Each module kit supports Intel® Extreme Memory Profiles (Intel® XMP) 3.0\" and lists three XMP profiles and no AMD EXPO profile; the product page files this part under \"Profile Type: Intel XMP\", not \"AMD EXPO / Intel XMP\"."
+        },
+        {
+          "field": "formFactor",
+          "text": "The product page's comparison table lists Beast DDR5 as \"Module Type UDIMM\" (Renegade Pro is the RDIMM line); the datasheet calls the kit a \"288-Pin DIMM Kit\"."
+        },
+        {
+          "field": "name",
+          "text": "The colour is from the product page's colour filter (\"Black\"); Kingston also sells the kit in white (KF560C40BWK4-64)."
+        },
+        {
+          "field": "rgb",
+          "text": "Beast DDR5 has a \"Low-profile heat spreader design in black or white\" with no lighting; Kingston sells the lit version as a separate line, Beast DDR5 RGB."
+        },
+        {
+          "text": "kingston.com answered our fetcher with a Cloudflare challenge on 2026-10-02 (HTTP 403, \"Just a moment...\"), so the product page was read from its Wayback copy of 2026-07-13; the datasheet PDF loaded directly."
+        }
+      ]
     }
   ]
 }

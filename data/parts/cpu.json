@@ -861,6 +861,90 @@
         { "field": "igpu", "text": "F suffix: requires discrete graphics. ARK lists no processor graphics for this SKU." },
         { "field": "hybrid", "text": "ARK lists 6 Performance-cores and 0 Efficient-cores, so the core layout is uniform." }
       ]
+    },
+    {
+      "id": "amd-ryzen-5-3400g",
+      "category": "cpu",
+      "manufacturer": "amd",
+      "brand": "AMD",
+      "name": "AMD Ryzen 5 3400G",
+      "family": "ryzen-3000",
+      "codename": "Picasso",
+      "socket": "AM4",
+      "cores": 4,
+      "threads": 8,
+      "hybrid": null,
+      "baseClockMhz": 3700,
+      "boostClockMhz": 4200,
+      "l2CacheMb": 2,
+      "l3CacheMb": 4,
+      "has3dVCache": false,
+      "power": { "scheme": "amd", "tdpW": 65, "pptW": null },
+      "memory": {
+        "types": ["DDR4"],
+        "speeds": [
+          { "type": "DDR4", "speedMtps": 2933, "config": "2x1R" },
+          { "type": "DDR4", "speedMtps": 2667, "config": "2x2R" },
+          { "type": "DDR4", "speedMtps": 2133, "config": "4x1R" },
+          { "type": "DDR4", "speedMtps": 1866, "config": "4x2R" }
+        ],
+        "asPublished": "2x1R DDR4-2933, 2x2R DDR4-2667, 4x1R DDR4-2133, 4x2R DDR4-1866",
+        "maxCapacityGb": 64,
+        "channels": 2
+      },
+      "igpu": { "model": "Radeon RX Vega 11 Graphics" },
+      "pcie": { "maxGen": 3, "usableLanes": 16, "asPublished": "PCIe 3.0; Native PCIe Lanes (Total/Usable): 20 / 16" },
+      "launchDate": "2019-07-07",
+      "unlocked": true,
+      "boxCooler": "AMD Wraith Spire",
+      "sources": [
+        {
+          "url": "https://www.amd.com/en/support/downloads/drivers.html/processors/ryzen/ryzen-3000-series/amd-ryzen-5-3400g.html",
+          "publisher": "amd",
+          "retrievedAt": "2026-10-02",
+          "docType": "spec-page",
+          "archiveUrl": "https://web.archive.org/web/20260608182649/https://www.amd.com/en/support/downloads/drivers.html/processors/ryzen/ryzen-3000-series/amd-ryzen-5-3400g.html",
+          "fields": [
+            "brand",
+            "name",
+            "family",
+            "codename",
+            "socket",
+            "cores",
+            "threads",
+            "baseClockMhz",
+            "boostClockMhz",
+            "l2CacheMb",
+            "l3CacheMb",
+            "has3dVCache",
+            "power",
+            "memory",
+            "igpu",
+            "pcie",
+            "launchDate",
+            "unlocked"
+          ],
+          "title": "AMD Ryzen 5 3400G Drivers and Downloads (Specifications)",
+          "locator": "Specifications: General Specifications, Connectivity, Graphics Capabilities, Product IDs"
+        },
+        {
+          "url": "https://www.amd.com/en/products/apu/amd-ryzen-5-3400g",
+          "publisher": "amd",
+          "retrievedAt": "2026-10-02",
+          "docType": "spec-page",
+          "archiveUrl": "https://web.archive.org/web/20220817145209/https://www.amd.com/en/products/apu/amd-ryzen-5-3400g",
+          "fields": ["boxCooler"],
+          "title": "Ryzen 5 3400G | Radeon RX Vega 11 Graphics | AMD",
+          "locator": "General Specifications: \"Thermal Solution (PIB) AMD Wraith Spire\""
+        }
+      ],
+      "notes": [
+        { "field": "power.pptW", "text": "AMD lists \"Default TDP 65W\" and \"AMD Configurable TDP (cTDP) 45-65W\"; the PPT limit is not published there." },
+        { "field": "name", "text": "AMD's full name is \"AMD Ryzen™ 5 3400G with Radeon™ RX Vega 11 Graphics\" (Series \"Ryzen 3000 Series\", \"Processor Architecture Zen+\")." },
+        { "field": "boxCooler", "text": "AMD's current page (Wayback copy of 2026-06-08) lists no thermal solution and gives the boxed Product ID as \"YD3400C5FHSBX\"; the cooler is from AMD's 2022 page (boxed Product ID \"YD3400C5FHBOX\"): \"Thermal Solution (PIB) AMD Wraith Spire\"." },
+        { "field": "socket", "text": "AMD lists \"Supporting Chipsets X570, X470, X370, B450, B350, A320\" for the 3400G: not B550 or A520." },
+        { "text": "amd.com did not answer our fetcher on 2026-10-02 (Chromium: net::ERR_HTTP2_PROTOCOL_ERROR; curl: no response in 60 s), so both AMD pages were read from Wayback copies." }
+      ]
     }
   ]
 }
