@@ -212,6 +212,14 @@ Branch-tidy record:
 
 ## Decisions
 
+- **2026-10-02, WP-E0's bundle criterion (Director, on build-lead's question).** The build codec
+  keeps `zod/mini`, about 5.1 KB gzip, which was accepted in WP-B0. Phase 2's URL parameters will
+  use it, and rewriting a share-link parser is outside E0.
+  - "No Zod" means no catalogue data, no data schemas and no classic `zod` on the product pages.
+  - The lab index is `/lab/` (`lab/index.html`), because GitHub Pages redirects `/lab` there once
+    `lab/` is a folder.
+  - The plan and the briefs now say this.
+
 - **2026-10-01, agent teams: they work on this PC.**
   - `data-lead` spawned as an in-process teammate. `ListAgents` lists it under "Teammates", and
     the team file is `~/.claude/teams/session-a9ce993b/config.json`.

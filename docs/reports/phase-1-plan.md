@@ -36,7 +36,7 @@ engine's result next to the sources it used.
 
 | Page | What it shows | Arrives with |
 |---|---|---|
-| `/lab` | What each page does, and how many parts, prices and anchors loaded | WP-E0 |
+| `/lab/` | What each page does, and how many parts, prices and anchors loaded | WP-E0 |
 | `/lab/parts` | Every catalogue part and spec, each with its source and date | WP-E0 |
 | `/lab/accuracy` | Every benchmark anchor with its source, and a coverage grid (games × GPUs, games × CPUs). WP-E3 adds the model's number and the error for each anchor | WP-E0, filled by WP-D2 |
 | `/lab/compat` | One row per compatibility rule: ok, warn or block, with the reason, the rule id and the sources | WP-E1 |
@@ -85,12 +85,14 @@ Owner: build-lead (engine-engineer, frontend-engineer) · Needs: nothing · Wave
   - The parts, prices and anchors reach the browser as one content-hashed JSON file, validated
     at build time by the same Zod schemas.
   - The engine takes the catalogue as an argument, so it stays pure.
-  - Neither the data nor Zod reaches the product pages.
+  - Neither the catalogue data nor the data schemas reach the product pages, and nor does
+    classic `zod`. The build codec's `zod/mini`, accepted in WP-B0, stays (Director, 2026-10-02).
 - **An engine dump script.** It writes every rule's result, for every catalogue combination, to
   JSON. QA's sweep and its per-rule workers use it.
 - **An ESLint rule** that stops `src/**` from importing `tests/**`. QA asked for it in test plan §8.
-- **The lab shell:** `/lab`, `/lab/parts` and `/lab/accuracy` (the anchors and the coverage
-  grid), with one shared part picker.
+- **The lab shell:** `/lab/`, `/lab/parts` and `/lab/accuracy` (the anchors and the coverage
+  grid), with one shared part picker. The index is `/lab/` (`lab/index.html`), because GitHub
+  Pages redirects `/lab` there once `lab/` is a folder.
 
 **In the browser**
 - Open `/lab/parts` and pick any part. Each spec shows its value, its unit and its source:

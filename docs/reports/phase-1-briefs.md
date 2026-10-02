@@ -285,13 +285,15 @@ Steps:
    - passed to the engine as an argument.
 
    Prove with `npm run perf:bundle` that the product pages' initial JS stays within 2 KB of
-   77.92 KB gzip, with no catalogue data and no Zod in it.
+   77.92 KB gzip, with no catalogue data, no data schemas and no classic `zod` in it. The build
+   codec's `zod/mini` stays (Director, 2026-10-02).
 5. **The engine dump script,** `npm run engine:dump`. It writes every rule's result for every
    catalogue combination as JSON, under `artifacts/engine/`, and it runs in CI. Until E1 adds
    rules, it writes the catalogue combinations only.
 6. **The ESLint rule:** `src/**` can't import `tests/**`. Prove it with a planted import as a
    negative control.
-7. **The lab shell:** `/lab`, `/lab/parts` and `/lab/accuracy`, in the route table.
+7. **The lab shell:** `/lab/` (the index, `lab/index.html`), `/lab/parts` and `/lab/accuracy`,
+   in the route table.
    - Mark it "Engine lab: internal preview", with `<meta name="robots" content="noindex">`, and
      keep it out of the site nav.
    - One shared part picker, with the parts in the URL through the existing build codec.
