@@ -2,33 +2,35 @@
 
 Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
 
-**Last update:** 2026-10-02, Director. **Phase 0 is closed:**
-- QA's verdict is CLOSED (`docs/qa/report-phase-0.md`).
-- The Director signed off (`docs/reports/phase-0.md` §7).
-- The branch tidy, the final scan of origin and purge stage 3 are done. Every teammate is stopped.
-- **PR #1 to `main` is open** at `53f52dd`: green and mergeable. Waiting for Hazem to merge it.
-- **The Phase 1 plan is drafted** for Hazem's review: `docs/reports/phase-1-plan.md`, on
-  `feat/director-phase-1-plan`, kept off the PR branch so PR #1 stays as reviewed. No Phase 1
-  work starts, and no lead is spawned, before Hazem approves the plan.
+**Last update:** 2026-10-02, Director. **Phase 1 (the engine) has started:**
+- **The plan is approved.** Hazem approved `docs/reports/phase-1-plan.md` on 2026-10-02, with
+  three answers in its §6:
+  - the BIOS warning: warn, not block. It names the version needed, and tells the buyer to ask the
+    retailer for an updated board.
+  - both extra rules, so 20 in all;
+  - at least 20 held-out results.
+- **Phase 0 is merged to `main`.** Hazem merged PR #1 as `27dbc6e`. The Pages deploy passed, and
+  the live site serves all 17 routes, with a 404 for unknown paths.
+- **Wave 1 is running** (plan §5). The four leads work from `docs/reports/phase-1-briefs.md`, and
+  their tasks are under "In progress" below.
 
 > **Commit IDs** in this file are post-purge IDs. The old-to-new map is kept outside the public repo,
 > at `C:\Projects\rig-lab-evidence\purge\purge-sha-map.txt`, because GitHub still serves pre-purge commits by ID until its garbage collection runs.
 
 ## How to continue after a stop
 
-1. Read `CLAUDE.md`, `BUILD_PROMPT.md`, this file and `docs/reports/phase-0-briefs.md`.
-2. Run `git worktree list` and `git branch -vv`. Each lead's latest state is its `WIP-STATUS.md`,
-   on its branch, in its worktree (table below).
-3. Re-spawn only the leads marked *in progress* in the table below. On 2026-10-02 **none is**:
-   Phase 0 is closed, and Phase 1 starts only after Hazem approves `docs/reports/phase-1-plan.md`.
-   Phase 1 leads then get `docs/reports/phase-1-briefs.md` in place of the Phase 0 briefs.
+1. Read `CLAUDE.md`, `BUILD_PROMPT.md`, this file, `docs/reports/phase-1-plan.md` and
+   `docs/reports/phase-1-briefs.md`.
+2. Run `git worktree list` and `git branch -vv`. Each lead's latest state is in its status file,
+   on its branch, in its worktree. The briefs name each one.
+3. Re-spawn only the leads marked *in progress* in the table below. On 2026-10-02 all four are.
    - Use the `Agent` tool with `name` and `subagent_type` both set to the lead's name, and model
      `opus`.
    - The prompt: "You are <lead>, a teammate in the Rig Lab agent team. Read
-     `C:\Projects\Rip-PC\docs\reports\phase-0-briefs.md`, sections 'All leads' and '<lead>', then
+     `C:\Projects\Rip-PC\docs\reports\phase-1-briefs.md`, sections 'All leads' and '<lead>', then
      the '<lead>' row of 'In progress' in `C:\Projects\Rip-PC\docs\reports\progress.md`. That row
-     overrides your `WIP-STATUS.md`, which may be stale. Carry on from the exact next step it
-     names. Don't redo finished steps. Report to `team-lead`."
+     overrides your status file, which may be stale. Carry on from the exact next step it names.
+     Don't redo finished steps. Report to `team-lead`."
    - The worktrees, their `node_modules` and their git-ignored `artifacts/` survive a restart, so
      no set-up is needed. Check `git -C <worktree> status` first.
 4. Leads reach the Director at `team-lead`. Worker hand-backs reach the Director by mistake (a
@@ -38,8 +40,8 @@ Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
 
 | Item | State |
 |---|---|
-| Checkout | `C:\Projects\Rip-PC`, branch `claude/keen-lamport-0794zj` (integration). Until PR #1 merges, the checkout is on `feat/director-phase-1-plan`, so the PR branch doesn't move |
-| Worktrees | `C:\Projects\Rip-PC\.claude\worktrees\<lead>` (git-ignored) |
+| Checkout | `C:\Projects\Rip-PC`, branch `claude/keen-lamport-0794zj` (integration) |
+| Worktrees | `C:\Projects\Rip-PC\.claude\worktrees\<lead>` (git-ignored). Phase 1 adds `data-lead-d2`, and later `build-lead-perf` |
 | Restored evidence | `C:\Projects\rig-lab-evidence\`: 6 extracted folders and `archives\`. Listed by SHA-256 in `docs/reports/evidence/` (2,243 files); `sha256sum -c` passes |
 | Toolchain | Node 24.21.0, npm 11.19.0 (the project asks for ^22.13.0; npm only warns); Playwright 1.56.1 Chromium installed; KTX-Software 4.4.2 (`toktx`, `ktx`) in `C:\Program Files\KTX-Software\bin`, on the user PATH |
 | Git, local repo config | `core.symlinks=true` and `core.autocrlf=false` (the system git config has `autocrlf=true`, which broke LF on older branches) |
@@ -87,27 +89,47 @@ Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
 | 2026-10-02 | **KTX-Software 4.4.2 installed**, with Hazem's approval: the official Khronos release, signature checked. gltf-transform's `etc1s` and `uastc` both write `KHR_texture_basisu`, and `ktx validate` passes | Director | a test GLB went from 8.75 KB to 2.53 KB (ETC1S) and 2.57 KB (UASTC) |
 | 2026-10-02 | Hazem: paid 3D assets are decided later, before Phase 3 | Hazem | — |
 | 2026-10-02 | **Phase 1 plan drafted** for Hazem's review | Director | `docs/reports/phase-1-plan.md` on `feat/director-phase-1-plan` |
+| 2026-10-02 | **PR #1 merged by Hazem** with "Create a merge commit": `main` is `27dbc6e`. CI and the Pages deploy passed. The live site serves all 17 routes, an unknown path gets the 404 page, and the JS, CSS and font assets load | Hazem; checked by the Director | runs 37004293021 (CI) and 37004293041 (deploy) |
+| 2026-10-02 | **Phase 1 plan approved** by Hazem, with three answers. The BIOS warning: warn, naming the BIOS version and telling the buyer to ask the retailer for an updated board. Both extra rules, `cooler-socket` and `display-output`, so 20 in all. At least 20 held-out results. The other defaults stand | Hazem | `docs/reports/phase-1-plan.md` §6 |
+| 2026-10-02 | The integration branch fast-forwarded to `main` (`27dbc6e`), then merged the plan branch. `feat/director-phase-1-plan` deleted | Director | `385493f` |
+| 2026-10-02 | **Phase 1 briefs written,** and the four leads spawned for wave 1 | Director | `docs/reports/phase-1-briefs.md` |
 | 2026-10-01 | **WP-D0 accepted and merged** (`c04e2a5`): Zod schemas, a validator with 34 rules, 73 seed spec records (all plan 5.3 minimums and mixes), live prices (US 52 + 10 gaps, SA 45 + 17 gaps), 116 game and 27 creator anchors, 15 games, the 20% audit (78 items, 8 findings fixed). The Director's review caught the North cooler limit (145 → 170 mm); data-lead's sweep caught the North PSU limit by tray count (schema: `psu.clearance` list) | data-lead | verify on the merged branch: 454 unit, 112 e2e; initial JS 77.42 KB gzip (no catalogue data in the bundle); 21 new evidence files copied and checked (`docs/reports/evidence/data-lead-evidence-2026-10-01.sha256`) |
 
 ## In progress
 
 | Task | Who | Branch / worktree | State | Exact next step |
 |---|---|---|---|---|
-| Phase 0 merge to `main` | Hazem | [PR #1](https://github.com/Hazemalhayattrading/Rip-PC/pull/1), from `claude/keen-lamport-0794zj` | **Open**: both checks green, mergeable, at `53f52dd` | Hazem merges with **"Create a merge commit"**. Squash or rebase would give the commits new IDs, and the reports cite these. The merge deploys GitHub Pages |
-| Phase 1 plan review | Hazem | `feat/director-phase-1-plan` | Drafted, waiting for Hazem | Hazem approves it or asks for changes, and answers its §6 decisions. Then the Director writes `docs/reports/phase-1-briefs.md` and spawns the four leads |
+| WP-D1 Engine data, and WP-D2 Benchmark coverage | data-lead | `feat/data-engine-data` in `worktrees/data-lead`; `feat/data-benchmarks` in `worktrees/data-lead-d2` (new) | Wave 1, started 2026-10-02 | Brief steps 1 and 2: set up both branches and cherry-pick `d4e87e3`. Then D1 batch 1: the fixture table for the 20 rules, and the structured conditions. D2 runs in parallel, starting with the 10 games that have no anchors |
+| WP-E0 Engine foundations and the Engine lab | build-lead | `feat/build-engine-foundations` in `worktrees/build-lead` | Wave 1, started 2026-10-02 | Brief E0 steps 1 to 3: branch, check the APIs with Context7, then write the result types first, for review by qa-lead and design-lead |
+| WP-DS2 Design backlog and engine copy | design-lead | `feat/design-ds2` in `worktrees/design-lead` | Wave 1, started 2026-10-02 | Brief step 2 first: the lab spec, and the copy guide with the BIOS warning, for build-lead |
+| WP-Q3 Test plan v4 and verification tools | qa-lead | `feat/qa-phase1-plan` in `worktrees/qa-lead` | Wave 1, started 2026-10-02 | Brief Q3 steps 1 to 3: branch, review the result types when they arrive, and write test plan v4 (20 rules, at least 20 held-out results) |
 
-**Closed for Phase 0:** WP-D0 (data-lead), WP-DS1 (design-lead), WP-B1 (build-lead) and WP-Q2 (qa-lead). Their Phase 1 work starts only after Hazem approves `docs/reports/phase-1-plan.md`, which takes in the Phase 0 report's §5 backlog, QA's 15 open Minors included.
+**Phase 0** is closed, and merged to `main` as `27dbc6e`. Its §5 backlog, QA's 15 open Minors included, is assigned in the Phase 1 plan.
 
 ## Next steps (Director)
 
 On "continue":
-1. **After Hazem merges PR #1:** check the Pages deploy run and the live site (every route
-   answers 200, and an unknown path gets the 404 page). Then merge `feat/director-phase-1-plan`
-   into the integration branch and switch the main checkout back to the integration branch.
-2. **After Hazem's decision on the Phase 1 plan:** apply his changes, write
-   `docs/reports/phase-1-briefs.md` from the plan, re-spawn the four leads, and start wave 1
-   (plan §5). The parking branch `feat/data-intel-profile` holds 2fa3e32 for WP-D1.
-3. **After GitHub's reply** to the Support request: check that the old commit answers 404, on the
+1. **Review each hand-off** against plan §2: "Done, for every WP", and the WP's own "Done means".
+   - Re-run verify, open the lab links, and re-check at least 2 rules or 5 numbers against their
+     sources. Accept, or send it back with exact reasons.
+   - On acceptance:
+     - merge it `--no-ff` into the integration branch;
+     - copy any new captures to `C:\Projects\rig-lab-evidence\`, and commit their manifest under
+       `docs/reports/evidence/`;
+     - update this file;
+     - tell the leads who wait on it (plan §5).
+2. **Wave 2 starts when E0 is accepted.** Tell build-lead to start E1 and E2. Tell qa-lead which
+   rules are ready for its per-rule checks, as they hand off.
+3. **Wave 3 starts when E0 and D2's first batch are accepted.** Tell build-lead to start E3 and E4.
+4. **Milestone PRs to `main`,** for Hazem to merge:
+   - M1, after E1 and E2 are accepted and QA-checked;
+   - M2, after E3 and E4;
+   - M3, at the phase exit.
+5. **The engine freeze,** when E3 and E4 are accepted: record the engine commit here, and tell
+   qa-lead to start the held-out run.
+6. **Delete `feat/data-intel-profile`** on origin once data-lead reports that `d4e87e3` is on
+   `feat/data-engine-data`.
+7. **After GitHub's reply** to the Support request: check that the old commit answers 404, on the
    API and on raw URLs, and record the result. Its ID is in
    `C:\Projects\rig-lab-evidence\purge\github-support-request.md`.
 

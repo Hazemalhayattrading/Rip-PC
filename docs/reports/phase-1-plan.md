@@ -1,7 +1,7 @@
 # Phase 1 — The engine: plan
 
-Date: 2026-10-02 · Author: Director · **Status: draft for Hazem's review.** No Phase 1 work starts,
-and no lead is spawned, until Hazem approves it.
+Date: 2026-10-02 · Author: Director · **Status: approved by Hazem on 2026-10-02,** with his answers
+in §6. Phase 1 started the same day; the team briefs are in `docs/reports/phase-1-briefs.md`.
 
 Phase goal (BUILD_PROMPT §2):
 - the compatibility engine (§5.1), the power estimator (§5.2), the performance model (§5.3) and
@@ -18,7 +18,8 @@ Phase goal (BUILD_PROMPT §2):
   in Phase 2.
 - **Independent checks fan out:** one fresh QA worker per compatibility rule and one per
   benchmark source. So every rule and every anchor is checked, not a sample (§4).
-- **Two decisions for you** (§6). Everything else has a default you can override.
+- **Hazem's decisions** are in §6: the BIOS warning, both extra rules, and at least 20 held-out
+  results. He accepted the other defaults.
 
 Built from:
 - BUILD_PROMPT §2–§5 and §8;
@@ -117,7 +118,7 @@ it · Wave 1
    - `gpu-power-connector`: all 5 PSUs have a native 12V-2x6 and three 8-pin cables. A PSU
      without a native 12V-2x6 is needed, and a real case of too few cables.
    - `cpu-chipset`: every catalogue CPU is on the support list of every board with its socket.
-   - `cooler-socket`, if you approve it (§6): all 5 coolers list all 4 sockets.
+   - `cooler-socket` (added by Hazem, §6): all 5 coolers list all 4 sockets.
    - If no real product exists after 2 tries (rule 11), data-lead records the gap, and the
      Director decides.
 2. **Structured conditions.** Today the conditional clearances are free text. Each becomes
@@ -202,13 +203,18 @@ Owner: build-lead (engine-engineer) · Needs: WP-E0; WP-D1 for the rules marked 
 `psu-wattage` · Wave 2
 
 **Deliverable**
-- **`COMPAT_RULES`:** the 18 rule ids from test plan §9.2, or 20 with the two in §6. Each rule is
-  a pure function that returns:
+- **`COMPAT_RULES`:** the 18 rule ids from test plan §9.2, plus the two Hazem added (§6): 20
+  rules. Each rule is a pure function that returns:
   - ok, warn or block;
   - a one-sentence reason, with the numbers and their units;
   - the rule id;
   - the sources of the specs it used.
 - **Missing data** gives warn ("can't verify: … not published"), never ok.
+- **The BIOS warning** for a board without BIOS FlashBack (Hazem, §6) tells the buyer exactly
+  what to do, and names the BIOS version needed. For example: "The Core i5-14600K needs BIOS 1205
+  or later on the Prime B760M-A WiFi D4, and this board can't update without a supported CPU. Ask
+  the retailer for a board already updated to BIOS 1205 or later." design-lead sets the final
+  wording (WP-DS2). Where the board has BIOS FlashBack, the warning gives the update steps.
 - **Each case layout is checked as a whole.** The engine looks for one layout that meets every
   constraint at once: the drive trays, the Terra's spine position, where the radiator goes. It
   says which layout it assumed, or why none works.
@@ -277,7 +283,7 @@ Owner: build-lead (a second engine-engineer, in its own folder) · Needs: WP-E0.
 - **The golden test** is generated from the anchor files, with one case per row (143 today). Every
   case passes within ±5%.
 - **The held-out results:**
-  - at least 10, chosen blind by QA after the engine is frozen;
+  - at least 20 (Hazem, §6), chosen blind by QA after the engine is frozen;
   - each within 10%;
   - at high confidence, at least half of the published numbers fall inside the range (test
     plan §8).
@@ -304,7 +310,7 @@ Owner: build-lead (engine-engineer) · Needs: WP-E0, and WP-D2's creator data ·
 
 **Done means**
 - Every creator anchor passes the golden test within ±5%.
-- At least 2 held-out creator results are within 10%.
+- At least 4 held-out creator results are within 10%.
 
 ### WP-E5 · Bottleneck analyser
 Owner: build-lead (engine-engineer) · Needs: WP-E1, WP-E3, WP-E4 · Wave 4
@@ -334,7 +340,8 @@ Owner: qa-lead · Needs: WP-E0's result types · Wave 1
 **Deliverable**
 - **Test plan v4.** It sets:
   - the final rule ids, agreed with build-lead;
-  - the held-out protocol: at least 10 results, 2 for each coverage class in §8;
+  - the held-out protocol: at least 20 results (Hazem, §6), 4 for each coverage class in test
+    plan §8, with `models.heldOutCount` raised to match;
   - the format of the known-incompatibility corpus;
   - the mutation-test check;
   - the Phase 1 audit seed;
@@ -385,14 +392,14 @@ Owner: design-lead (ui-designer, motion-designer) · Needs: nothing · Wave 1
 
 ## 3. Compatibility rules
 
-These are the 18 ids from test plan §9.2, plus the two proposed in §6. "Try it" uses real
+These are the 18 ids from test plan §9.2, plus the two Hazem added (§6). "Try it" uses real
 catalogue parts.
 
 | # | Rule id | Checks | Try it in the lab | Data |
 |---|---|---|---|---|
 | 1 | `cpu-socket` | The CPU socket matches the board | Ryzen 7 9800X3D on the ASUS TUF Gaming Z890-Plus WiFi: block, "Needs AM5 — your board is LGA1851" | ready |
 | 2 | `cpu-chipset` | The board's CPU support list includes the CPU | No real negative case in the catalogue yet | needs D1 |
-| 3 | `bios-version` | Whether the CPU needs a newer BIOS, and whether the board has BIOS FlashBack | Ryzen 7 9850X3D on the TUF Gaming X870-Plus WiFi (BIOS 1066 or later; has FlashBack): warn, with the update steps. Core i5-14600K on the Prime B760M-A WiFi D4 (1205 or later; no FlashBack): your call, §6 | ready; the dates need D1 |
+| 3 | `bios-version` | Whether the CPU needs a newer BIOS, and whether the board has BIOS FlashBack | Ryzen 7 9850X3D on the TUF Gaming X870-Plus WiFi (BIOS 1066 or later; has FlashBack): warn, with the update steps. Core i5-14600K on the Prime B760M-A WiFi D4 (1205 or later; no FlashBack): warn, naming BIOS 1205 and telling the buyer to ask the retailer for a board already updated to it (§6) | ready; the dates need D1 |
 | 4 | `ram-type` | DDR4 or DDR5 matches the board | G.Skill Trident Z Neo DDR4-3600 on the TUF Gaming B650-Plus WiFi: block | ready |
 | 5 | `ram-slots` | The modules fit the DIMM slots | Needs a 4-module kit | needs D1 |
 | 6 | `ram-speed` | The kit's speed against the board's and the CPU's official speeds | G.Skill Trident Z5 CK DDR5-8200 with the Core Ultra 9 285K on the TUF Gaming Z890-Plus WiFi: warn, naming the official speed and explaining XMP | ready |
@@ -408,8 +415,8 @@ catalogue parts.
 | 16 | `m2-lanes` | M.2 count, and lane-sharing side effects | Three NVMe drives on the ROG Strix B650E-I (2 slots): block. A drive in a shared slot on the TUF Gaming B550-Plus WiFi II: warn, quoting the manual | ready |
 | 17 | `board-form-factor` | The board's form factor against the case | TUF Gaming B650-Plus WiFi (ATX) in the Pop Mini Air: block | ready |
 | 18 | `usb-c-header` | A front USB-C port needs a header on the board | Fractal North with the TUF Gaming B550-Plus WiFi II (no header): warn | ready |
-| 19 | `cooler-socket` (proposed) | The cooler's mounting kit fits the CPU socket | Needs a cooler that doesn't fit every socket | needs D1 |
-| 20 | `display-output` (proposed) | A build with no graphics card needs a CPU with integrated graphics | Core i5-12400F with no graphics card: block | ready |
+| 19 | `cooler-socket` (added, §6) | The cooler's mounting kit fits the CPU socket | Needs a cooler that doesn't fit every socket | needs D1 |
+| 20 | `display-output` (added, §6) | A build with no graphics card needs a CPU with integrated graphics | Core i5-12400F with no graphics card: block | ready |
 
 ## 4. Independent verification: where it fans out
 
@@ -425,11 +432,11 @@ catalogue parts.
 
 | What | Fan-out | Workers | When | Passes when |
 |---|---|---|---|---|
-| **Every compatibility rule** | 1 worker per rule | 18, or 20 with §6 | As each rule hands off, 4 at a time | Each real combination it tried matches its expected result. The reason names the right parts, numbers and units, and the source links open the right page. The boundary and unknown-data cases behave as specified |
+| **Every compatibility rule** | 1 worker per rule | 20 | As each rule hands off, 4 at a time | Each real combination it tried matches its expected result. The reason names the right parts, numbers and units, and the source links open the right page. The boundary and unknown-data cases behave as specified |
 | Known incompatibilities, and the sweep | 1 worker | 1 | After WP-E1 | No ok for any real combination known not to work (from manuals, support lists and case pages). The catalogue-wide sweep holds |
 | **Every benchmark anchor: the data** | 1 worker per source review. A source with more than about 50 rows is split | 5 for today's 143 rows, plus 1 for each review WP-D2 adds | After each WP-D2 batch the Director accepts | Every row's value and conditions match the source: resolution, preset, ray tracing, upscaling, frame generation, test CPU and GPU, driver and date |
 | **Every benchmark anchor: the model** | The golden test, generated with 1 case per row | None: it runs in CI | Every PR | Every case is within ±5%, and QA checks that the number of cases equals the number of rows |
-| Held-out results | 1 worker picks them; a second checks the picks | 2 | After WP-E3 and WP-E4 are frozen | At least 10 results, chosen blind and absent from the data, each within 10% |
+| Held-out results | 1–2 workers pick them; another checks the picks | 2–3 | After WP-E3 and WP-E4 are frozen | At least 20 results, 4 per coverage class, chosen blind and absent from the data, each within 10% |
 | Power constants | 1 worker | 1 | After WP-E2 | Every constant matches its source, and the PSU range is checked against every card maker's recommendation |
 | Bottleneck verdicts | 1 worker | 1 | After WP-E5 | For 20 builds that QA picks, each sentence matches the model's numbers, and each rebalanced build passes the rules and the price limit |
 | 10% of all numbers (BUILD_PROMPT §2) | A seeded sample, by category | 2–3 | Wave 4 | As in test plan §7. The anchors are already checked at 100% |
@@ -457,41 +464,40 @@ catalogue parts.
 | 3 | E0 and D2's first batch are accepted | E3 and E4. QA's per-source anchor checks run on each D2 batch |
 | 4 | E1, E3 and E4 are accepted | E5; the engine freeze, then the held-out set; the 10% spot-check; QA's report; the phase report |
 
-**Milestone PRs to `main`** (the default; say if you'd rather have one per WP):
+**Milestone PRs to `main`** (agreed with Hazem on 2026-10-02):
 - **M1,** after E1 and E2: compatibility and power go live on the site.
 - **M2,** after E3 and E4: games and creator workloads.
 - **M3,** at the phase exit.
 
-Merge each with "Create a merge commit", so that the commit IDs the reports cite stay valid.
+Hazem merges each with "Create a merge commit", so that the commit IDs the reports cite stay
+valid.
 
-**The team.** After you approve, the Director writes `docs/reports/phase-1-briefs.md` from this
-plan and re-spawns the four leads, reusing their worktrees. The Phase 0 working rules stay:
+**The team.** The Director turns this plan into `docs/reports/phase-1-briefs.md` and re-spawns
+the four leads, reusing their worktrees. The Phase 0 working rules stay:
 - workers report by message;
 - QA's report text goes through the Director;
 - a rule 12 checkpoint follows every accepted task.
 
-## 6. Decisions for you
+## 6. Decisions (Hazem, 2026-10-02)
 
-1. **BIOS without FlashBack.** Some CPUs need a newer BIOS than older boards shipped with. In
-   today's catalogue, the Prime B760M-A WiFi D4 has no BIOS FlashBack, and it needs BIOS 1205 or
-   later for the 14th-gen Core CPUs. Should the rule warn or block?
-   - **I recommend warn.** Boards made after that BIOS came out usually ship with it, and we can't
-     know which board a shop sends.
-   - The warning says the PC may not start until the BIOS is updated, and that this board can
-     update only with a supported CPU in it. It tells the buyer to ask the seller.
-   - A block would hide builds that work for most buyers.
-2. **Two rules beyond BUILD_PROMPT §5.1:**
+1. **BIOS without FlashBack: warn, not block.** Some CPUs need a newer BIOS than older boards
+   shipped with. In today's catalogue, the Prime B760M-A WiFi D4 has no BIOS FlashBack, and the
+   14th-gen Core CPUs need BIOS 1205 or later on it.
+   - The message must tell the buyer exactly what to do: ask the retailer for a board that's
+     already updated. It must also name the BIOS version that's needed.
+   - The Director's reasons for warn, which Hazem accepted: boards made after that BIOS came out
+     usually ship with it, and we can't know which board a shop sends. A block would hide builds
+     that work for most buyers.
+2. **Both extra rules are added,** beyond BUILD_PROMPT §5.1:
    - `cooler-socket`: the cooler's mounting kit must fit the CPU socket.
    - `display-output`: a build without a graphics card needs a CPU with integrated graphics. The
      Core i5-12400F, Ryzen 5 5600 and Ryzen 7 5700X3D have none.
-   - **I recommend adding both.** Each is a hard incompatibility that §5.1 doesn't list. They cost
-     2 more rules with their tests, and 2 more QA workers.
-
-**Defaults, unless you say otherwise**
-- The lab is on the live site, marked internal (§1). It can be local-only instead.
-- Three milestone PRs (§5).
-- At least 10 held-out results, twice QA's Phase 0 minimum.
-- Rebalanced builds are within 5% of the build's price.
+3. **At least 20 held-out results,** raised from the proposed 10: 4 per coverage class of test
+   plan §8.
+4. **The other defaults stand:**
+   - the lab is on the live site, marked internal (§1);
+   - three milestone PRs (§5);
+   - rebalanced builds are within 5% of the build's price.
 
 ## 7. Not in Phase 1
 
@@ -502,7 +508,7 @@ plan and re-spawns the four leads, reusing their worktrees. The Phase 0 working 
   - more SA retailers, and Newegg's seller selector: Phase 4, with the Buy Sheet;
   - the re-price batch: before launch.
   The rebalanced builds use today's prices and show their dates.
-- **3D** is Phase 3. You decide on paid 3D assets before then. KTX2 is installed.
+- **3D** is Phase 3. Hazem decides on paid 3D assets before then. KTX2 is installed.
 - **Deferred QA items:** QA-P0-006 (LCP under applied throttling) at Phase 2 entry, and QA-P0-016
   and 017 (build-lead) in Phase 2.
 
@@ -515,7 +521,7 @@ plan and re-spawns the four leads, reusing their worktrees. The Phase 0 working 
 2. **Some sources are thin.** EA SPORTS FC 27 is new, and Minecraft with shaders is rarely tested.
    Where no reputable test exists, the game shows "no estimate yet".
 3. **±5% is easy at the anchors themselves,** because the model reads them directly. The real
-   proof of accuracy is the held-out set, which is why it has at least 10 results.
+   proof of accuracy is the held-out set, which is why it has at least 20 results.
 4. **Blender times.** Open Data publishes samples per minute. A render time also needs the scene's
    sample count, from a published source. Without one, the lab shows samples per minute.
 5. **Usage limits.** The fan-out is the costliest part of the phase. It runs in batches, with a
@@ -535,4 +541,4 @@ plan and re-spawns the four leads, reusing their worktrees. The Phase 0 working 
   - there are no console errors or warnings;
   - axe AA passes;
   - every page, the lab included, is within the JS budget.
-- **Wrap-up:** `docs/reports/phase-1.md` with the Director's sign-off, and the M3 PR for you.
+- **Wrap-up:** `docs/reports/phase-1.md` with the Director's sign-off, and the M3 PR for Hazem.
