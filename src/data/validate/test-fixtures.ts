@@ -210,6 +210,7 @@ export function fixtureData(): FixtureData {
         powerAdapter: null,
         cardPowerW: 160,
         recommendedPsuW: 550,
+        recommendedPsuKind: 'recommended',
         outputs: [{ type: 'HDMI 2.1b', count: 1 }],
         boostClockMhz: 2550,
         ocModeBoostClockMhz: null,

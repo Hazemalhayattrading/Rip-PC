@@ -27,6 +27,7 @@
       },
       "cardPowerW": 575,
       "recommendedPsuW": 1000,
+      "recommendedPsuKind": "required",
       "outputs": [
         {
           "type": "DisplayPort 2.1b",
@@ -79,6 +80,10 @@
         {
           "field": "powerAdapter",
           "text": "The spec page lists \"4x PCIe 8-pin cables (adapter in box)\"; the Quick Start Guide says \"Connect at least four independent dedicated cables with 8-pin PCI Express plugs from the system power supply to the NVIDIA power connector adapter.\""
+        },
+        {
+          "field": "recommendedPsuW",
+          "text": "NVIDIA lists \"Required System Power (W)\" 1000 for the GPU."
         }
       ]
     },
@@ -107,6 +112,7 @@
       },
       "cardPowerW": 360,
       "recommendedPsuW": 850,
+      "recommendedPsuKind": "required",
       "outputs": [
         {
           "type": "DisplayPort 2.1b",
@@ -159,6 +165,10 @@
         {
           "field": "powerAdapter",
           "text": "The spec page lists \"3x PCIe 8-pin cables (adapter in box)\"; the Quick Start Guide says \"Connect at least three independent dedicated cables with 8-pin PCI Express plugs from the system power supply to the NVIDIA power connector adapter.\""
+        },
+        {
+          "field": "recommendedPsuW",
+          "text": "NVIDIA lists \"Required System Power (W)\" 850 for the GPU."
         }
       ]
     },
@@ -187,6 +197,7 @@
       },
       "cardPowerW": 250,
       "recommendedPsuW": 650,
+      "recommendedPsuKind": "required",
       "outputs": [
         {
           "type": "DisplayPort 2.1b",
@@ -239,6 +250,10 @@
         {
           "field": "powerAdapter",
           "text": "The spec page lists \"2x PCIe 8-pin cables (adapter in box)\"; the Quick Start Guide says \"Connect at least two independent dedicated cables with 8-pin PCI Express plugs from the system power supply to the NVIDIA power connector adapter.\""
+        },
+        {
+          "field": "recommendedPsuW",
+          "text": "NVIDIA lists \"Required System Power (W)\" 650 for the GPU."
         }
       ]
     },
@@ -267,6 +282,7 @@
       },
       "cardPowerW": null,
       "recommendedPsuW": 850,
+      "recommendedPsuKind": "recommended",
       "outputs": [
         {
           "type": "HDMI 2.1b",
@@ -325,6 +341,7 @@
       "powerAdapter": null,
       "cardPowerW": null,
       "recommendedPsuW": 550,
+      "recommendedPsuKind": "recommended",
       "outputs": [
         {
           "type": "HDMI 2.1b",
@@ -375,6 +392,7 @@
       "powerAdapter": null,
       "cardPowerW": null,
       "recommendedPsuW": 550,
+      "recommendedPsuKind": "recommended",
       "outputs": [
         {
           "type": "HDMI 2.1b",
@@ -425,6 +443,7 @@
       "powerAdapter": null,
       "cardPowerW": null,
       "recommendedPsuW": 550,
+      "recommendedPsuKind": "recommended",
       "outputs": [
         {
           "type": "HDMI 2.1a",
@@ -475,6 +494,7 @@
       "powerAdapter": null,
       "cardPowerW": 304,
       "recommendedPsuW": 750,
+      "recommendedPsuKind": "minimum",
       "outputs": [
         {
           "type": "HDMI",
@@ -500,6 +520,10 @@
         {
           "field": "heightMm",
           "text": "Sapphire gives the dimensions as L x W x H; W (card height from the slot) is recorded as heightMm and H (thickness) as thicknessMm."
+        },
+        {
+          "field": "recommendedPsuW",
+          "text": "Sapphire lists \"System Requirement\" \"Minimum 750 Watt Power Supply\"."
         }
       ]
     },
@@ -525,6 +549,7 @@
       "powerAdapter": null,
       "cardPowerW": 220,
       "recommendedPsuW": 650,
+      "recommendedPsuKind": "minimum",
       "outputs": [
         {
           "type": "HDMI",
@@ -550,6 +575,10 @@
         {
           "field": "heightMm",
           "text": "Sapphire gives the dimensions as L x W x H; W (card height from the slot) is recorded as heightMm and H (thickness) as thicknessMm."
+        },
+        {
+          "field": "recommendedPsuW",
+          "text": "Sapphire lists \"System Requirement\" \"Minimum 650 Watt Power Supply\"."
         }
       ]
     },
@@ -575,6 +604,7 @@
       "powerAdapter": null,
       "cardPowerW": 170,
       "recommendedPsuW": 450,
+      "recommendedPsuKind": "minimum",
       "outputs": [
         {
           "type": "HDMI",
@@ -600,6 +630,10 @@
         {
           "field": "heightMm",
           "text": "Sapphire gives the dimensions as L x W x H; W (card height from the slot) is recorded as heightMm and H (thickness) as thicknessMm."
+        },
+        {
+          "field": "recommendedPsuW",
+          "text": "Sapphire lists \"System Requirement\" \"Minimum 450 Watt Power Supply\"."
         }
       ]
     },
@@ -625,6 +659,7 @@
       "powerAdapter": null,
       "cardPowerW": 190,
       "recommendedPsuW": 600,
+      "recommendedPsuKind": "minimum",
       "outputs": [
         {
           "type": "DisplayPort 2.1",
@@ -650,7 +685,8 @@
             "slots",
             "powerConnectors",
             "cardPowerW",
-            "recommendedPsuW"
+            "recommendedPsuW",
+            "recommendedPsuKind"
           ],
           "title": "Intel® Arc™ B580 Graphics - Product Specifications (ARK)",
           "locator": "Intel Reference Card Attributes: \"Dimensions (Length x Width)\" \"272 x 115 mm\", \"Slots\" \"2\", \"Minimum Power Supply Unit\" \"600 W\", \"Power Connectors\" \"1 x 8-pin\"; GPU Specifications: \"TBP\" \"190 W\""
@@ -674,11 +710,21 @@
           "retrievedAt": "2026-10-02",
           "docType": "datasheet",
           "fields": [
-            "outputs",
-            "cardPowerW"
+            "outputs"
           ],
           "title": "Intel Arc B-Series Graphics Quick Reference Guide V1.1 (\"Updated Dec 2024\")",
-          "locator": "p. 1 table, row \"Intel® Arc B580 Graphics\": \"Total Board Power*\" \"190W\", \"Display Connectors\" \"3x DP 2.1\" \"1x HDMI 2.1\"; footnote \"* Based on stock configuration. Partner designs may vary\""
+          "locator": "p. 1 table, row \"Intel® Arc B580 Graphics\": \"Display Connectors\" \"3x DP 2.1\" \"1x HDMI 2.1\""
+        },
+        {
+          "url": "https://www.intel.com/content/www/us/en/support/articles/000091128/graphics/intel-arc-dedicated-graphics-family.html",
+          "publisher": "intel",
+          "retrievedAt": "2026-10-02",
+          "docType": "support-article",
+          "fields": [
+            "outputs"
+          ],
+          "title": "Intel® Arc™ Graphics – Desktop Quick Start Guide",
+          "locator": "Article ID 000091128, \"Last Reviewed: 12/02/2025\": \"What's in the box\" (\"Intel B580 Limited Edition Graphics Card, ...\"); \"Display Configuration\" table: \"DisplayPort (DP) with black outline – Primary port\" \"DP 2.1\", \"DisplayPort (DP)\" \"DP 2.1\", \"HDMI®\" \"HDMI 2.1a\""
         }
       ],
       "notes": [
@@ -700,11 +746,11 @@
         },
         {
           "field": "cardPowerW",
-          "text": "ARK lists \"TBP\" \"190 W\"; the Quick Reference Guide lists \"Total Board Power*\" \"190W\", with \"* Based on stock configuration. Partner designs may vary\"."
+          "text": "ARK lists \"TBP\" \"190 W\" (the Quick Reference Guide agrees: \"Total Board Power*\" \"190W\", \"* Based on stock configuration\")."
         },
         {
           "field": "outputs",
-          "text": "The Quick Reference Guide lists \"3x DP 2.1\" and \"1x HDMI 2.1\" under \"Display Connectors\" for the B580. ARK gives \"Graphics Output\" as \"HDMI* 2.1, DP2.1 up to UHBR 13.5, DP2.1 up to UHBR 10\", with \"# of Displays Supported\" \"4\"."
+          "text": "Intel's public pages give the output types, not their counts: ARK lists \"Graphics Output\" \"HDMI* 2.1, DP2.1 up to UHBR 13.5, DP2.1 up to UHBR 10\" and \"# of Displays Supported\" \"4\", and the Desktop Quick Start Guide (support article 000091128) lists DP 2.1 and \"HDMI 2.1a\" ports. The counts, \"3x DP 2.1\" and \"1x HDMI 2.1\", are from the Quick Reference Guide."
         },
         {
           "field": "boostClockMhz",
@@ -712,7 +758,7 @@
         },
         {
           "field": "sources",
-          "text": "The Quick Reference Guide is marked \"Intel Confidential | Public – Not For End Users\" and is hosted on Intel's public document server (cdrdv2-public.intel.com)."
+          "text": "The Quick Reference Guide is marked \"Intel Confidential | Public – Not For End Users\" and is hosted on Intel's public document server (cdrdv2-public.intel.com). It backs only the output counts, which no public Intel page gives."
         }
       ]
     }

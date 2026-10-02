@@ -252,6 +252,7 @@ function checkSanity(sink: IssueSink, file: string, r: SpecRecord): void {
       });
       if (r.cardPowerW !== null && r.recommendedPsuW !== null && r.recommendedPsuW < r.cardPowerW) bad('PSU recommendation < card power', 'recommendedPsuW');
       if (r.powerAdapter !== null && !r.powerConnectors.some((c) => c.type === '16-pin')) bad('only a card with a 16-pin plug has a 16-pin adapter', 'powerAdapter');
+      if ((r.recommendedPsuW === null) !== (r.recommendedPsuKind === null)) bad('recommendedPsuKind is set exactly when there is a PSU figure', 'recommendedPsuKind');
       break;
     }
     case 'storage': {

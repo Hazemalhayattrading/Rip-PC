@@ -301,6 +301,11 @@ describe('sanity', () => {
     expectClean(run((d) => { sixteen(d); card(d).powerAdapter = adapter; }));
     expectRule(run(sixteen), 'null-note');
   });
+  it('a card names what kind of PSU figure it gives, exactly when it gives one', () => {
+    expectRule(run((d) => { card(d).recommendedPsuKind = null; }), 'sanity');
+    expectRule(run((d) => { card(d).recommendedPsuW = null; card(d).notes = [{ field: 'recommendedPsuW', text: 'Not published.' }]; }), 'sanity');
+    expectClean(run((d) => { card(d).recommendedPsuW = null; card(d).recommendedPsuKind = null; card(d).notes = [{ field: 'recommendedPsuW', text: 'Not published.' }]; }));
+  });
   it('a single-fan RAM clearance needs two fans and is no lower than the clearance as sold', () => {
     const air = (d: FixtureData) => {
       const c = first(d.specs.cooler);

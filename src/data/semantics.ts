@@ -32,6 +32,7 @@ export function nullMeansNone(record: SpecRecord): string[] {
         'ocModeBoostClockMhz',
         ...record.powerConnectors.flatMap((c, i) => (c.type === '16-pin' ? [] : [`powerConnectors.${String(i)}.standard`])),
         ...(record.powerConnectors.some((c) => c.type === '16-pin') ? [] : ['powerAdapter']),
+        ...(record.recommendedPsuW === null ? ['recommendedPsuKind'] : []),
       ];
     case 'psu':
       return [

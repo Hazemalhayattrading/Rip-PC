@@ -51,7 +51,14 @@ export const GpuCard = z.strictObject({
   powerAdapter: GpuPowerAdapter.nullable(),
   /** Card power as the maker lists it. `null` plus a note when not published. */
   cardPowerW: PosInt.nullable(),
+  /** The maker's power supply figure for the card; `recommendedPsuKind` says which kind it is. */
   recommendedPsuW: PosInt.nullable(),
+  /**
+   * What the maker calls that figure: `recommended` ("Recommended PSU", ASUS), `required` ("Required
+   * System Power", NVIDIA) or `minimum` ("Minimum 750 Watt Power Supply", Sapphire; "Minimum Power
+   * Supply Unit", Intel). `null` exactly when there is no figure.
+   */
+  recommendedPsuKind: z.enum(['recommended', 'required', 'minimum']).nullable(),
   /** Display outputs as published, e.g. { type: "DisplayPort 2.1b", count: 3 }. */
   outputs: z.array(z.strictObject({ type: z.string().min(1), count: PosInt })).min(1),
   /** Factory boost clock in the card's default mode. */
