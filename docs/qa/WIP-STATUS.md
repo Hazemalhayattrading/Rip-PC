@@ -47,6 +47,11 @@ Owner: qa-lead. Spec: `docs/reports/phase-1-plan.md` §2 (WP-Q4) and §4; test p
    compat-trace compares `RuleSpec.unknownData` too, and v4.3 follows the contract (`81d18e5`).
 8. data-lead's 23 validator tests are ready on `feat/data-engine-data` @ `4337e09`, landing with
    WP-D1 batch 1. The laneSharing `[]` reason follows data-lead's manual search.
+9. 2026-10-03 (`4008625`): Firefox's two WebGL notices allow-listed as build-lead triaged them
+   (the deliberate context loss on unmount; three.js r186's 1 px viewport rounding), with
+   self-tests. The `index.html` smoke tests for QA-P1-002 are in, and run once the fix and the lab
+   index land. design-lead's four 3D checks are in test plan v4.4 §6.7. verify: 699 unit, 192 e2e
+   (4 skipped), exit 0.
 
 ## In progress
 - Waiting: build-lead's answers to follow-ups 2 and 3; the dump's query mode and `rules.json`
@@ -63,10 +68,8 @@ Owner: qa-lead. Spec: `docs/reports/phase-1-plan.md` §2 (WP-Q4) and §4; test p
    - QA-P1-003: the fix is verified on `feat/design-ds2` @ `fe6b187` (a 44 x 44 hit area on a
      coarse pointer, 36 px with a mouse; `artifacts/qa/phase-1/ds2-aa/retest-p1-003/`). Close it
      after WP-DS2 batch 2 merges, with one re-run on the integration branch.
-3. Triage, with build-lead, the two Firefox WebGL warnings the live run shows on the build steps:
-   "WebGL context was lost" (likely R3F's forceContextLoss on unmount) and "drawElementsInstanced:
-   Drawing to a destination rect smaller than the viewport rect". Then allow-list them with reasons,
-   or file them.
+3. QA-P1-002: when build-lead's fix lands, check that the two gated `index.html` smoke tests ran
+   (not skipped) at 390 and 1440 px, then re-run the live config after the deploy.
 4. The other Q4 tools, as E0 and E1 land: `mutation-check.mjs` (the first Stryker report), the
    blind anchor key list; `strata.mjs` for WP-D1's new data files.
 5. The §4 fan-out, as each WP hands off (the briefs file).
