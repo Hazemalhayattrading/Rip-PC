@@ -93,16 +93,18 @@ Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
 | 2026-10-02 | **Phase 1 plan approved** by Hazem, with three answers. The BIOS warning: warn, naming the BIOS version and telling the buyer to ask the retailer for an updated board. Both extra rules, `cooler-socket` and `display-output`, so 20 in all. At least 20 held-out results. The other defaults stand | Hazem | `docs/reports/phase-1-plan.md` §6 |
 | 2026-10-02 | The integration branch fast-forwarded to `main` (`27dbc6e`), then merged the plan branch. `feat/director-phase-1-plan` deleted | Director | `385493f` |
 | 2026-10-02 | **Phase 1 briefs written,** and the four leads spawned for wave 1 | Director | `docs/reports/phase-1-briefs.md` |
+| 2026-10-02 | data-lead set up both Phase 1 branches, from `c621c15`: `feat/data-engine-data` (D1) and `feat/data-benchmarks` (D2, in the new `worktrees/data-lead-d2`). The parked Intel profile `d4e87e3` is on the D1 branch as `755def5`, so `feat/data-intel-profile` is deleted on origin, with a lease. The local ref is kept | data-lead; Director | identical `git patch-id`; verify 597 unit, 166 e2e in both worktrees; no pre-purge IDs in the new commits |
 | 2026-10-01 | **WP-D0 accepted and merged** (`c04e2a5`): Zod schemas, a validator with 34 rules, 73 seed spec records (all plan 5.3 minimums and mixes), live prices (US 52 + 10 gaps, SA 45 + 17 gaps), 116 game and 27 creator anchors, 15 games, the 20% audit (78 items, 8 findings fixed). The Director's review caught the North cooler limit (145 → 170 mm); data-lead's sweep caught the North PSU limit by tray count (schema: `psu.clearance` list) | data-lead | verify on the merged branch: 454 unit, 112 e2e; initial JS 77.42 KB gzip (no catalogue data in the bundle); 21 new evidence files copied and checked (`docs/reports/evidence/data-lead-evidence-2026-10-01.sha256`) |
 
 ## In progress
 
 | Task | Who | Branch / worktree | State | Exact next step |
 |---|---|---|---|---|
-| WP-D1 Engine data, and WP-D2 Benchmark coverage | data-lead | `feat/data-engine-data` in `worktrees/data-lead`; `feat/data-benchmarks` in `worktrees/data-lead-d2` (new) | Wave 1, started 2026-10-02 | Brief steps 1 and 2: set up both branches and cherry-pick `d4e87e3`. Then D1 batch 1: the fixture table for the 20 rules, and the structured conditions. D2 runs in parallel, starting with the 10 games that have no anchors |
+| WP-D1 Engine data, and WP-D2 Benchmark coverage | data-lead | `feat/data-engine-data` (`86e4e95`) in `worktrees/data-lead`; `feat/data-benchmarks` (`149cde7`) in `worktrees/data-lead-d2` | Wave 1. Step 1 (set-up) is done | D1 batch 1: the fixture table for the 20 rules, and the structured conditions. D2 batch 1 runs in parallel, starting with the 10 games that have no anchors |
 | WP-E0 Engine foundations and the Engine lab | build-lead | `feat/build-engine-foundations` in `worktrees/build-lead` | Wave 1, started 2026-10-02 | Brief E0 steps 1 to 3: branch, check the APIs with Context7, then write the result types first, for review by qa-lead and design-lead |
 | WP-DS2 Design backlog and engine copy | design-lead | `feat/design-ds2` in `worktrees/design-lead` | Wave 1, started 2026-10-02 | Brief step 2 first: the lab spec, and the copy guide with the BIOS warning, for build-lead |
 | WP-Q3 Test plan v4 and verification tools | qa-lead | `feat/qa-phase1-plan` in `worktrees/qa-lead` | Wave 1, started 2026-10-02 | Brief Q3 steps 1 to 3: branch, review the result types when they arrive, and write test plan v4 (20 rules, at least 20 held-out results) |
+| Live-site navigation report (Hazem, 2026-10-02): "Build" and "Start a build" seemed to stay on the home page; a direct load of `/Rip-PC/build/use-case` works | qa-lead after Q3 (part of WP-Q4); build-lead only if confirmed | — | **Director's triage: not reproduced** in headless Chromium against the live site. Both links navigate (URL, title and h1 change, and survive a reload) at Pixel 7 and 390 px by tap, and at 1440 and 1920 px by mouse. The link is the top element at its centre | qa-lead, after Q3's hand-off: test in real browsers (Chrome with the GPU on, Edge, and Firefox and WebKit through Playwright), mouse and touch, on the live site; rule out a stale CDN copy. If real: a defect to build-lead, a test-first fix, and a re-check on the live site after the deploy (plan WP-Q4) |
 
 **Phase 0** is closed, and merged to `main` as `27dbc6e`. Its §5 backlog, QA's 15 open Minors included, is assigned in the Phase 1 plan.
 
@@ -127,9 +129,7 @@ On "continue":
    - M3, at the phase exit.
 5. **The engine freeze,** when E3 and E4 are accepted: record the engine commit here, and tell
    qa-lead to start the held-out run.
-6. **Delete `feat/data-intel-profile`** on origin once data-lead reports that `d4e87e3` is on
-   `feat/data-engine-data`.
-7. **After GitHub's reply** to the Support request: check that the old commit answers 404, on the
+6. **After GitHub's reply** to the Support request: check that the old commit answers 404, on the
    API and on raw URLs, and record the result. Its ID is in
    `C:\Projects\rig-lab-evidence\purge\github-support-request.md`.
 
@@ -212,6 +212,44 @@ Branch-tidy record:
   (Phase 2).
 
 ## Decisions
+
+- **2026-10-02, WP-E0's bundle criterion (Director, on build-lead's question).** The build codec
+  keeps `zod/mini`, about 5.1 KB gzip, which was accepted in WP-B0. Phase 2's URL parameters will
+  use it, and rewriting a share-link parser is outside E0.
+  - "No Zod" means no catalogue data, no data schemas and no classic `zod` on the product pages.
+  - The lab index is `/lab/` (`lab/index.html`), because GitHub Pages redirects `/lab` there once
+    `lab/` is a folder.
+  - The plan and the briefs now say this.
+- **2026-10-02, unknown-data tests (Director, on qa-lead's finding).**
+  - 12 of the 20 rules read only fields that the schema or the validator require, so valid data
+    can't be "not published" there. They need no unknown-data test.
+  - Instead, the validator's negative tests must prove that a null in each such field is
+    rejected, and QA's rule list names those tests.
+  - The 8 rules that can meet an unpublished value keep their unknown-data tests. Such a value is
+    one of these:
+    - a field that is null with a note;
+    - a nullable list;
+    - a fact the schema doesn't hold, such as RAM rank.
+    An empty list means "none", which is a real answer.
+  - The first 8 were `bios-version`, `ram-speed`, `gpu-thickness`, `ram-cooler-clearance`,
+    `radiator-fit`, `psu-length`, `psu-wattage` and `gpu-power-connector`.
+  - After WP-D1's batch 1, `gpu-length` and `psu-form-factor` joined them, so 10 have the test
+    and 10 have validator proofs (23 new validator tests, plus `bios-coverage`).
+  - QA's `tests/audit/compat-rules.json` is the record.
+  - The list is checked again whenever a rule starts to read a new field (plan WP-E1). QA's
+    wording fix was applied on 2026-10-02.
+- **2026-10-02, golden tests with conflicting sources (Director, on qa-lead's question).**
+  - The ±5% of BUILD_PROMPT §5.3 holds for every anchor, in its own source context: its publisher
+    and its test conditions. The model may calibrate per source, from the anchors.
+  - Where sources disagree by more than 10%, the range shown without a source context contains
+    both values, at medium confidence or lower (plan WP-E3).
+- **2026-10-02, a card for the Arc B580 (Director, on qa-lead's data finding).** The
+  `intel-arc-b580` chip has 6 game anchors and a Blender row, but no catalogue card, so no build
+  can reach it. One real, sourced B580 card goes into WP-D1. It's a data-integrity fix, not
+  catalogue growth (plan WP-D1 and §7).
+- **2026-10-02, the dump's query mode (qa-lead's request, accepted).** Given a file of builds and
+  queries, it writes exactly those results, so QA never reads the engine's code. E0 fixes the
+  input format, and each later WP adds its entry point (plan WP-E0).
 
 - **2026-10-01, agent teams: they work on this PC.**
   - `data-lead` spawned as an in-process teammate. `ListAgents` lists it under "Teammates", and
