@@ -152,8 +152,12 @@ it · Wave 1
    - AMD's PPT;
    - the structured Intel power profile, parked on `feat/data-intel-profile` (`d4e87e3`, a
      cherry-pick of 2fa3e32).
-7. **The CUDIMM question.** Data-lead checks whether the G.Skill Trident Z5 CK kit needs a
-   module-kind field (CUDIMM or UDIMM) for the RAM rules.
+7. **RAM details for the RAM rules.**
+   - The schema already has a module form factor (UDIMM, CUDIMM or SO-DIMM). Data-lead checks the
+     G.Skill Trident Z5 CK kit's value.
+   - For `ram-speed`: the modules' rank, and each CPU's official speed per configuration
+     (modules per channel, and rank), wherever the makers publish them. With 4 modules, the
+     official speed depends on them. Where they aren't published, the rule says "can't verify".
 8. **The case size-class redesign:**
    - a zod-free `deriveCaseSize`, with `exteriorVolumeLiters`;
    - frozen class ids;
@@ -238,11 +242,18 @@ Owner: build-lead (engine-engineer) · Needs: WP-E0; WP-D1 for the rules marked 
 - Each rule has positive and negative tests, plus boundary tests for numeric rules, named as in
   test plan §9.3.
 - **Unknown-data tests** (Director's ruling on QA's finding, 2026-10-02):
-  - Every rule that reads a field which can be unpublished has one. Such a field is null with a
-    note, or a list that can be empty.
+  - Every rule that reads a value which can be unpublished has one. Such a value is one of
+    these:
+    - a field that is null with a note;
+    - a nullable list, such as a case's `psu.clearance`;
+    - a fact the schema doesn't hold, such as a RAM kit's rank.
+  - An empty list is a real answer ("none"), not an unpublished one.
   - For a rule whose fields the schema or the validator require, the validator's negative tests
-    must prove that a null there is rejected. QA's rule list names those tests.
-  - The list is checked again whenever a rule starts to read a new field.
+    must prove that a null there is rejected. QA's rule list names those tests, and
+    `compat-trace` requires each one to pass.
+  - The list is checked again whenever a rule starts to read a new field. Today 8 rules need
+    the test: `bios-version`, `ram-speed`, `gpu-thickness`, `ram-cooler-clearance`,
+    `radiator-fit`, `psu-length`, `psu-wattage` and `gpu-power-connector`.
 - QA's `compat-trace` check exits 0.
 - The known-incompatibility corpus gives no ok, and the catalogue-wide sweep holds.
 - Mutation tests (StrykerJS) run on the rules. Every surviving mutant is killed by a new test, or

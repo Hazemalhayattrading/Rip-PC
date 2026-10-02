@@ -224,8 +224,16 @@ Branch-tidy record:
     can't be "not published" there. They need no unknown-data test.
   - Instead, the validator's negative tests must prove that a null in each such field is
     rejected, and QA's rule list names those tests.
-  - The 8 rules that read nullable fields keep their unknown-data tests.
-  - The list is checked again whenever a rule starts to read a new field (plan WP-E1).
+  - The 8 rules that can meet an unpublished value keep their unknown-data tests. Such a value is
+    one of these:
+    - a field that is null with a note;
+    - a nullable list;
+    - a fact the schema doesn't hold, such as RAM rank.
+    An empty list means "none", which is a real answer. The 8 are `bios-version`, `ram-speed`,
+    `gpu-thickness`, `ram-cooler-clearance`, `radiator-fit`, `psu-length`, `psu-wattage` and
+    `gpu-power-connector`.
+  - The list is checked again whenever a rule starts to read a new field (plan WP-E1). QA's
+    wording fix was applied on 2026-10-02.
 - **2026-10-02, golden tests with conflicting sources (Director, on qa-lead's question).**
   - The ±5% of BUILD_PROMPT §5.3 holds for every anchor, in its own source context: its publisher
     and its test conditions. The model may calibrate per source, from the anchors.
