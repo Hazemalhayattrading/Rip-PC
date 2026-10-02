@@ -229,9 +229,12 @@ Branch-tidy record:
     - a field that is null with a note;
     - a nullable list;
     - a fact the schema doesn't hold, such as RAM rank.
-    An empty list means "none", which is a real answer. The 8 are `bios-version`, `ram-speed`,
-    `gpu-thickness`, `ram-cooler-clearance`, `radiator-fit`, `psu-length`, `psu-wattage` and
-    `gpu-power-connector`.
+    An empty list means "none", which is a real answer.
+  - The first 8 were `bios-version`, `ram-speed`, `gpu-thickness`, `ram-cooler-clearance`,
+    `radiator-fit`, `psu-length`, `psu-wattage` and `gpu-power-connector`.
+  - After WP-D1's batch 1, `gpu-length` and `psu-form-factor` joined them, so 10 have the test
+    and 10 have validator proofs (23 new validator tests, plus `bios-coverage`).
+  - QA's `tests/audit/compat-rules.json` is the record.
   - The list is checked again whenever a rule starts to read a new field (plan WP-E1). QA's
     wording fix was applied on 2026-10-02.
 - **2026-10-02, golden tests with conflicting sources (Director, on qa-lead's question).**

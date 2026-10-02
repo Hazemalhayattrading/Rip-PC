@@ -251,9 +251,10 @@ Owner: build-lead (engine-engineer) · Needs: WP-E0; WP-D1 for the rules marked 
   - For a rule whose fields the schema or the validator require, the validator's negative tests
     must prove that a null there is rejected. QA's rule list names those tests, and
     `compat-trace` requires each one to pass.
-  - The list is checked again whenever a rule starts to read a new field. Today 8 rules need
-    the test: `bios-version`, `ram-speed`, `gpu-thickness`, `ram-cooler-clearance`,
-    `radiator-fit`, `psu-length`, `psu-wattage` and `gpu-power-connector`.
+  - The list is checked again whenever a rule starts to read a new field. QA's rule list,
+    `tests/audit/compat-rules.json`, is the record.
+  - After WP-D1's batch 1, 10 rules need the test and 10 have validator proofs. `gpu-length` and
+    `psu-form-factor` joined the first 8, because D1 added values that can be unpublished.
 - QA's `compat-trace` check exits 0.
 - The known-incompatibility corpus gives no ok, and the catalogue-wide sweep holds.
 - Mutation tests (StrykerJS) run on the rules. Every surviving mutant is killed by a new test, or
