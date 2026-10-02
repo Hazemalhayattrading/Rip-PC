@@ -219,6 +219,21 @@ Branch-tidy record:
   - The lab index is `/lab/` (`lab/index.html`), because GitHub Pages redirects `/lab` there once
     `lab/` is a folder.
   - The plan and the briefs now say this.
+- **2026-10-02, unknown-data tests (Director, on qa-lead's finding).**
+  - 12 of the 20 rules read only fields that the schema or the validator require, so valid data
+    can't be "not published" there. They need no unknown-data test.
+  - Instead, the validator's negative tests must prove that a null in each such field is
+    rejected, and QA's rule list names those tests.
+  - The 8 rules that read nullable fields keep their unknown-data tests.
+  - The list is checked again whenever a rule starts to read a new field (plan WP-E1).
+- **2026-10-02, golden tests with conflicting sources (Director, on qa-lead's question).**
+  - The ±5% of BUILD_PROMPT §5.3 holds for every anchor, in its own source context: its publisher
+    and its test conditions. The model may calibrate per source, from the anchors.
+  - Where sources disagree by more than 10%, the range shown without a source context contains
+    both values, at medium confidence or lower (plan WP-E3).
+- **2026-10-02, the dump's query mode (qa-lead's request, accepted).** Given a file of builds and
+  queries, it writes exactly those results, so QA never reads the engine's code. E0 fixes the
+  input format, and each later WP adds its entry point (plan WP-E0).
 
 - **2026-10-01, agent teams: they work on this PC.**
   - `data-lead` spawned as an in-process teammate. `ListAgents` lists it under "Teammates", and

@@ -290,6 +290,10 @@ Steps:
 5. **The engine dump script,** `npm run engine:dump`. It writes every rule's result for every
    catalogue combination as JSON, under `artifacts/engine/`, and it runs in CI. Until E1 adds
    rules, it writes the catalogue combinations only.
+   - It also has a **query mode**, for qa-lead: given a file of builds and queries, it writes the
+     results for exactly those.
+   - E0 fixes the input format and covers compatibility. E2 to E5 each add their entry point
+     (plan WP-E0).
 6. **The ESLint rule:** `src/**` can't import `tests/**`. Prove it with a planted import as a
    negative control.
 7. **The lab shell:** `/lab/` (the index, `lab/index.html`), `/lab/parts` and `/lab/accuracy`,
@@ -314,6 +318,10 @@ Steps:
 - A second engine-engineer, in `build-lead-perf`, in its own folders: `src/engine/perf/**` and
   `src/engine/creator/**`.
 - The golden test is generated from the anchor files, one case per row.
+  - Each case is evaluated in the anchor's own source context: its publisher and its test
+    conditions.
+  - Where sources disagree, the range shown without a source context contains both values, at
+    medium confidence or lower (plan WP-E3).
 - Plan §8, risk 1: scale the CPU limits against each source's own reference CPU.
 
 **WP-E5,** once E1, E3 and E4 are accepted.
@@ -390,6 +398,8 @@ Steps:
    - the held-out protocol: **at least 20 results, 4 per coverage class** (Hazem, 2026-10-02).
      Raise `models.heldOutCount` in `budget.json`, and its pin test, to 20;
    - the corpus format;
+   - the unknown-data rule, and the check for conflicting anchors (plan WP-E1 and WP-E3, the
+     Director's rulings of 2026-10-02);
    - the mutation-test check;
    - the Phase 1 audit seed;
    - a brief for every row in plan §4.

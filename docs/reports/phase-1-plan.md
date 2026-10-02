@@ -89,6 +89,11 @@ Owner: build-lead (engine-engineer, frontend-engineer) · Needs: nothing · Wave
     classic `zod`. The build codec's `zod/mini`, accepted in WP-B0, stays (Director, 2026-10-02).
 - **An engine dump script.** It writes every rule's result, for every catalogue combination, to
   JSON. QA's sweep and its per-rule workers use it.
+  - **A query mode** (QA's request, accepted on 2026-10-02): given a file of builds and queries,
+    it writes the engine's results for exactly those.
+  - QA's corpus, per-rule workers, held-out run and bottleneck checks use it, so QA never reads
+    the engine's code.
+  - E0 fixes the input format and covers compatibility. Each later WP adds its own entry point.
 - **An ESLint rule** that stops `src/**` from importing `tests/**`. QA asked for it in test plan §8.
 - **The lab shell:** `/lab/`, `/lab/parts` and `/lab/accuracy` (the anchors and the coverage
   grid), with one shared part picker. The index is `/lab/` (`lab/index.html`), because GitHub
@@ -227,8 +232,14 @@ Owner: build-lead (engine-engineer) · Needs: WP-E0; WP-D1 for the rules marked 
   The §3 examples open from links in the hand-off.
 
 **Done means**
-- Each rule has positive, negative, boundary (for numeric rules) and unknown-data tests, named as
-  in test plan §9.3.
+- Each rule has positive and negative tests, plus boundary tests for numeric rules, named as in
+  test plan §9.3.
+- **Unknown-data tests** (Director's ruling on QA's finding, 2026-10-02):
+  - Every rule that reads a field which can be unpublished has one. Such a field is null with a
+    note, or a list that can be empty.
+  - For a rule whose fields the schema or the validator require, the validator's negative tests
+    must prove that a null there is rejected. QA's rule list names those tests.
+  - The list is checked again whenever a rule starts to read a new field.
 - QA's `compat-trace` check exits 0.
 - The known-incompatibility corpus gives no ok, and the catalogue-wide sweep holds.
 - Mutation tests (StrykerJS) run on the rules. Every surviving mutant is killed by a new test, or
@@ -282,8 +293,14 @@ Owner: build-lead (a second engine-engineer, in its own folder) · Needs: WP-E0.
 - `/lab/accuracy` gains the model's number and the error for every anchor.
 
 **Done means**
-- **The golden test** is generated from the anchor files, with one case per row (143 today). Every
-  case passes within ±5%.
+- **The golden test** is generated from the anchor files, with one case per row (143 today).
+  - Every case passes within ±5%, in the anchor's own source context: its publisher and its test
+    conditions.
+  - The model may calibrate per source, for example with a scene factor per publisher and game.
+    The calibration comes from the anchors, and the result's explanation names it.
+- **Where reputable sources disagree** by more than 10% on the same configuration
+  (`conflictsWith`): the estimate shown without a source context has a range that contains every
+  published value of the pair, at medium confidence or lower (Director's ruling, 2026-10-02).
 - **The held-out results:**
   - at least 20 (Hazem, §6), chosen blind by QA after the engine is frozen;
   - each within 10%;
@@ -437,7 +454,7 @@ catalogue parts.
 | **Every compatibility rule** | 1 worker per rule | 20 | As each rule hands off, 4 at a time | Each real combination it tried matches its expected result. The reason names the right parts, numbers and units, and the source links open the right page. The boundary and unknown-data cases behave as specified |
 | Known incompatibilities, and the sweep | 1 worker | 1 | After WP-E1 | No ok for any real combination known not to work (from manuals, support lists and case pages). The catalogue-wide sweep holds |
 | **Every benchmark anchor: the data** | 1 worker per source review. A source with more than about 50 rows is split | 5 for today's 143 rows, plus 1 for each review WP-D2 adds | After each WP-D2 batch the Director accepts | Every row's value and conditions match the source: resolution, preset, ray tracing, upscaling, frame generation, test CPU and GPU, driver and date |
-| **Every benchmark anchor: the model** | The golden test, generated with 1 case per row | None: it runs in CI | Every PR | Every case is within ±5%, and QA checks that the number of cases equals the number of rows |
+| **Every benchmark anchor: the model** | The golden test, generated with 1 case per row | None: it runs in CI | Every PR | Every case is within ±5% in its own source context, and QA checks that the number of cases equals the number of rows. For each conflicting pair, the range shown contains both values |
 | Held-out results | 1–2 workers pick them; another checks the picks | 2–3 | After WP-E3 and WP-E4 are frozen | At least 20 results, 4 per coverage class, chosen blind and absent from the data, each within 10% |
 | Power constants | 1 worker | 1 | After WP-E2 | Every constant matches its source, and the PSU range is checked against every card maker's recommendation |
 | Bottleneck verdicts | 1 worker | 1 | After WP-E5 | For 20 builds that QA picks, each sentence matches the model's numbers, and each rebalanced build passes the rules and the price limit |
