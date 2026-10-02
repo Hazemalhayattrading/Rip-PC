@@ -1292,8 +1292,12 @@ evidence are in §17 and `docs/qa/phase-1-worker-briefs.md`.
   - The order is logical (2.4.3).
   - There is no trap (2.1.2).
   - Every action is available by keyboard (2.1.1).
-  - A step change moves focus to the new step's heading or `main`. build-lead's smoke already
-    checks this for "Next".
+  - A step change moves focus to the new step's h1 (design-lead's focus rules, 2026-10-03; §12.1
+    measures rules 1 to 3 now). build-lead's smoke already checks a focus move for "Next".
+  - The h1's ring follows `:focus-visible` (design-lead's focus rule 5): after Enter on a link,
+    the new page's h1 shows the 2 px `--focus` ring at a 3 px offset; after a mouse click or a tap,
+    no ring. In both themes; the ring clears 3:1 on the stage (`contrast.mjs`: `--focus` on
+    `--stage`, 18.43:1 dark and 16.87:1 light).
 
 ### 10.3 Visible focus and reduced motion
 

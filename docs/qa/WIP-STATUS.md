@@ -45,9 +45,13 @@ Owner: qa-lead. Spec: `docs/reports/phase-1-plan.md` §2 (WP-Q4) and §4; test p
 ## Next steps, in order
 1. When build-lead's revised types arrive: re-review C1 to C6 in the next turn, and reply OK or a
    numbered list of changes, copying team-lead.
-2. Re-test QA-P1-001, QA-P1-002 and QA-P1-003 when their owners report fixes. For QA-P1-001: set
-   `FOCUS_RULES.enforced` to true and empty `KNOWN_OFF_SCREEN` in the navigation spec, run it at
-   all three widths, then run the live config after the deploy.
+2. Re-test QA-P1-001, QA-P1-002 and QA-P1-003 when their owners report fixes.
+   - QA-P1-001: when build-lead's fix lands, the navigation spec goes back to hard assertions (the
+     Director, 2026-10-03): set `FOCUS_RULES.enforced` to true and empty `KNOWN_OFF_SCREEN`, run it
+     at all three widths, then run the live config after the deploy.
+   - QA-P1-003: the fix is verified on `feat/design-ds2` @ `fe6b187` (a 44 x 44 hit area on a
+     coarse pointer, 36 px with a mouse; `artifacts/qa/phase-1/ds2-aa/retest-p1-003/`). Close it
+     after WP-DS2 batch 2 merges, with one re-run on the integration branch.
 3. Triage, with build-lead, the two Firefox WebGL warnings the live run shows on the build steps:
    "WebGL context was lost" (likely R3F's forceContextLoss on unmount) and "drawElementsInstanced:
    Drawing to a destination rect smaller than the viewport rect". Then allow-list them with reasons,
