@@ -23,7 +23,14 @@
         },
         {
           "maxLengthMm": 300,
-          "condition": "with a 360 mm front radiator"
+          "condition": {
+            "kind": "radiator",
+            "position": "front",
+            "sizesMm": [
+              360
+            ],
+            "asPublished": "up to 300 mm with a 360 mm front radiator"
+          }
         }
       ],
       "gpuMaxThicknessMm": null,
@@ -32,6 +39,93 @@
         {
           "maxHeightMm": 170,
           "condition": null
+        }
+      ],
+      "driveTrayLayouts": [
+        {
+          "label": "A+D",
+          "trays": [
+            "A",
+            "D"
+          ],
+          "psuMaxLengthMm": 140,
+          "frontRadiatorMaxMm": 280
+        },
+        {
+          "label": "A+E",
+          "trays": [
+            "A",
+            "E"
+          ],
+          "psuMaxLengthMm": 155,
+          "frontRadiatorMaxMm": 280
+        },
+        {
+          "label": "A",
+          "trays": [
+            "A"
+          ],
+          "psuMaxLengthMm": 255,
+          "frontRadiatorMaxMm": 280
+        },
+        {
+          "label": "B+E",
+          "trays": [
+            "B",
+            "E"
+          ],
+          "psuMaxLengthMm": 155,
+          "frontRadiatorMaxMm": 360
+        },
+        {
+          "label": "B",
+          "trays": [
+            "B"
+          ],
+          "psuMaxLengthMm": 215,
+          "frontRadiatorMaxMm": 360
+        },
+        {
+          "label": "C+E",
+          "trays": [
+            "C",
+            "E"
+          ],
+          "psuMaxLengthMm": 155,
+          "frontRadiatorMaxMm": 360
+        },
+        {
+          "label": "C",
+          "trays": [
+            "C"
+          ],
+          "psuMaxLengthMm": 180,
+          "frontRadiatorMaxMm": 360
+        },
+        {
+          "label": "D+E",
+          "trays": [
+            "D",
+            "E"
+          ],
+          "psuMaxLengthMm": 140,
+          "frontRadiatorMaxMm": 360
+        },
+        {
+          "label": "D",
+          "trays": [
+            "D"
+          ],
+          "psuMaxLengthMm": 140,
+          "frontRadiatorMaxMm": 360
+        },
+        {
+          "label": "E",
+          "trays": [
+            "E"
+          ],
+          "psuMaxLengthMm": 155,
+          "frontRadiatorMaxMm": 360
         }
       ],
       "radiatorSupport": [
@@ -110,11 +204,19 @@
         "clearance": [
           {
             "maxLengthMm": 255,
-            "condition": "with 1 HDD tray"
+            "condition": {
+              "kind": "drive-trays",
+              "count": 1,
+              "asPublished": "1 HDD tray: 255 mm max"
+            }
           },
           {
             "maxLengthMm": 155,
-            "condition": "with 2 HDD trays"
+            "condition": {
+              "kind": "drive-trays",
+              "count": 2,
+              "asPublished": "2 HDD tray: 155 mm max"
+            }
           }
         ]
       },
@@ -165,10 +267,11 @@
           "docType": "manual",
           "fields": [
             "radiatorSupport",
-            "psu.clearance"
+            "psu.clearance",
+            "driveTrayLayouts"
           ],
           "title": "North User Guide",
-          "locator": "p. 26 PSU length per drive-tray position; p. 33 Water Cooling Radiator Options; p. 34 Front 360 Radiator Limitation"
+          "locator": "p. 7 All-in-one Water Cooling Build; p. 26 PSU length per drive-tray position; p. 33 Water Cooling Radiator Options; p. 34 Front 360 Radiator Limitation"
         }
       ],
       "notes": [
@@ -178,7 +281,7 @@
         },
         {
           "field": "gpuClearance",
-          "text": "From \"Choose a GPU up to 355 mm, or up to 300 mm with a 360 mm front radiator.\""
+          "text": "From \"Choose a GPU up to 355 mm, or up to 300 mm with a 360 mm front radiator.\" The user guide's sample AIO build (p. 7) shows a 360 x 120 mm front radiator with \"GPU Length: 267 mm (up to 325 mm possible)\"; the product page's stricter 300 mm is kept. Fractal gives no GPU limit with a 120, 140, 240 or 280 mm front radiator."
         },
         {
           "field": "coolerClearance",
@@ -186,7 +289,7 @@
         },
         {
           "field": "psu.clearance",
-          "text": "From Fractal's note \"1 HDD tray: 255 mm max; 2 HDD tray: 155 mm max\". The page does not say how many trays are fitted as shipped, so neither limit is recorded as unconditional. The user guide p. 26 gives the limit per drive-tray position: one tray at A 255 mm, B 215, C 180, D 140, E 155; two trays 140 or 155 mm."
+          "text": "From Fractal's note \"1 HDD tray: 255 mm max; 2 HDD tray: 155 mm max\" (the user guide p. 4 says the same). The page does not say how many trays are fitted as shipped, so neither limit is unconditional. They are the best cases: the limit for each tray position is in driveTrayLayouts."
         },
         {
           "field": "gpuMaxThicknessMm",
@@ -215,6 +318,10 @@
         {
           "field": "frontIo",
           "text": "From \"2x USB Type-A 5Gbps, 1x USB Type-C 20Gbps, 1x Audio Jack\" and \"one USB 3.2 Gen 2×2 Type-C\"."
+        },
+        {
+          "field": "driveTrayLayouts",
+          "text": "The user guide p. 26 table, \"PSU Length\" and \"Front Radiator\" per tray layout: one tray at A 255 mm (front radiator up to 280 mm), B 215, C 180, D 140, E 155 (360 mm); two trays A+D 140, A+E 155 (280 mm), B+E, C+E 155, D+E 140 (360 mm). The table's middle column, \"3.5 + 2.5\" (a tick or a cross), is not explained in the guide and is not recorded. The guide gives no PSU limit with no tray fitted."
         }
       ]
     },
@@ -607,7 +714,14 @@
         },
         {
           "maxLengthMm": 200,
-          "condition": "with a 120 mm radiator installed"
+          "condition": {
+            "kind": "radiator",
+            "position": "side",
+            "sizesMm": [
+              120
+            ],
+            "asPublished": "200 mm if installing a 120 mm radiator"
+          }
         }
       ],
       "gpuMaxThicknessMm": 72,

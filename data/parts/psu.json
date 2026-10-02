@@ -18,12 +18,14 @@
       "atxVersion": "3.1",
       "formFactor": "ATX",
       "lengthMm": 140,
+      "atxBracketIncluded": null,
       "modularity": "full",
       "fanSizeMm": 120,
       "connectors": {
         "pcie16pin": 1,
         "pcie16pinStandard": "12V-2x6",
         "pcie8pin": 3,
+        "pcie8pinCables": 3,
         "eps8pin": 2,
         "sata": 8,
         "molex": 2
@@ -101,12 +103,14 @@
       "atxVersion": "3.1",
       "formFactor": "ATX",
       "lengthMm": 140,
+      "atxBracketIncluded": null,
       "modularity": "full",
       "fanSizeMm": 120,
       "connectors": {
         "pcie16pin": 1,
         "pcie16pinStandard": "12V-2x6",
         "pcie8pin": 3,
+        "pcie8pinCables": 3,
         "eps8pin": 2,
         "sata": 8,
         "molex": 2
@@ -184,12 +188,14 @@
       "atxVersion": "3.1",
       "formFactor": "ATX",
       "lengthMm": 160,
+      "atxBracketIncluded": null,
       "modularity": "full",
       "fanSizeMm": 135,
       "connectors": {
         "pcie16pin": 1,
         "pcie16pinStandard": "12V-2x6",
         "pcie8pin": 3,
+        "pcie8pinCables": 3,
         "eps8pin": 2,
         "sata": 12,
         "molex": 4
@@ -215,7 +221,7 @@
         },
         {
           "field": "connectors",
-          "text": "Counts are the connector quantities in NZXT's \"Cable Length & Connector Quantity\" table: one 4+4-pin and one 8-pin CPU cable, three 6+2-pin PCIe, one 16-pin (12+4) 12V-2x6, 12 SATA, 4 peripheral."
+          "text": "Counts are the connector quantities in NZXT's \"Cable Length & Connector Quantity\" table: one 4+4-pin and one 8-pin CPU cable, three 6+2-pin PCIe (\"6+2-pin PCIe Power Cable x3\" in the box, so one connector per cable), one 16-pin (12+4) 12V-2x6, 12 SATA, 4 peripheral."
         }
       ]
     },
@@ -235,12 +241,14 @@
       "atxVersion": "3.1",
       "formFactor": "ATX",
       "lengthMm": 160,
+      "atxBracketIncluded": null,
       "modularity": "full",
       "fanSizeMm": 135,
       "connectors": {
         "pcie16pin": 1,
         "pcie16pinStandard": "12V-2x6",
         "pcie8pin": 3,
+        "pcie8pinCables": 3,
         "eps8pin": 2,
         "sata": 12,
         "molex": 4
@@ -266,7 +274,7 @@
         },
         {
           "field": "connectors",
-          "text": "Counts are the connector quantities in NZXT's \"Cable Length & Connector Quantity\" table: one 4+4-pin and one 8-pin CPU cable, three 6+2-pin PCIe, one 16-pin (12+4) 12V-2x6, 12 SATA, 4 peripheral."
+          "text": "Counts are the connector quantities in NZXT's \"Cable Length & Connector Quantity\" table: one 4+4-pin and one 8-pin CPU cable, three 6+2-pin PCIe (\"6+2-pin PCIe Power Cable x3\" in the box, so one connector per cable), one 16-pin (12+4) 12V-2x6, 12 SATA, 4 peripheral."
         }
       ]
     },
@@ -286,12 +294,14 @@
       "atxVersion": "3.1",
       "formFactor": "SFX",
       "lengthMm": 100,
+      "atxBracketIncluded": false,
       "modularity": "full",
       "fanSizeMm": 92,
       "connectors": {
         "pcie16pin": 1,
         "pcie16pinStandard": "12V-2x6",
         "pcie8pin": 3,
+        "pcie8pinCables": 2,
         "eps8pin": 1,
         "sata": 6,
         "molex": 3
@@ -317,7 +327,11 @@
         },
         {
           "field": "connectors",
-          "text": "PCIe 8-pin: one 6+2-pin cable plus one \"16-pin (PSU) to dual 8-pin (6+2)\" cable, so 3 connectors. One 4+4-pin CPU cable. SATA and peripheral counts are NZXT's connector quantities (6 and 3)."
+          "text": "PCIe 8-pin: one 6+2-pin cable plus one \"16-pin (PSU) to dual 8-pin (6+2)\" cable, so 3 connectors on 2 cables (NZXT: \"1x 8-pin (6+2) PCIe\", \"2x 16-pin to dual 8-pin PCIe\"). One 4+4-pin CPU cable. SATA and peripheral counts are NZXT's connector quantities (6 and 3)."
+        },
+        {
+          "field": "atxBracketIncluded",
+          "text": "NZXT's FAQ on the product page: \"We do not include a SFX to ATX bracket.\""
         }
       ]
     }

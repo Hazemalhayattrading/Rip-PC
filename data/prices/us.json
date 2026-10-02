@@ -2,15 +2,19 @@
   "schemaVersion": 1,
   "market": "US",
   "currency": "USD",
-  "batch": {
-    "id": "2026-09-30-seed",
-    "windowStart": "2026-09-30",
-    "windowEnd": "2026-10-01"
-  },
+  "batches": [
+    {
+      "id": "2026-09-30-seed",
+      "label": "Seed catalogue (WP-D0)",
+      "windowStart": "2026-09-30",
+      "windowEnd": "2026-10-01"
+    }
+  ],
   "priceBasis": "Buy-box price in USD as shown on the live product page for delivery to Dallas 75201 (Amazon's default for our fetcher) or on Newegg, before sales tax and delivery fees. Third-party marketplace offers are kept and marked.",
   "observations": [
     {
       "partId": "arctic-p12-pwm-pst-black",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 11.99,
@@ -25,6 +29,7 @@
     },
     {
       "partId": "arctic-p14-pwm-pst-black",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 27.79,
@@ -47,6 +52,7 @@
     },
     {
       "partId": "fractal-north-charcoal-black-tg-light",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 154.97,
@@ -61,6 +67,7 @@
     },
     {
       "partId": "fractal-pop-air-rgb-black-tg-clear-tint",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 99.99,
@@ -75,6 +82,7 @@
     },
     {
       "partId": "fractal-pop-mini-air-rgb-black-tg-clear-tint",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 99.99,
@@ -89,6 +97,7 @@
     },
     {
       "partId": "fractal-terra-graphite",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 199.99,
@@ -109,6 +118,7 @@
     },
     {
       "partId": "arctic-liquid-freezer-iii-pro-360",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 69.89,
@@ -123,6 +133,7 @@
     },
     {
       "partId": "arctic-liquid-freezer-iii-pro-280",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 63.69,
@@ -137,6 +148,7 @@
     },
     {
       "partId": "nzxt-kraken-plus-240",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 151.99,
@@ -151,9 +163,10 @@
     },
     {
       "partId": "amd-ryzen-7-9850x3d",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
-      "amount": 484.0,
+      "amount": 484,
       "retailer": "amazon-us",
       "url": "https://www.amazon.com/dp/B0G8JMLXNQ",
       "inStock": true,
@@ -165,9 +178,10 @@
     },
     {
       "partId": "amd-ryzen-7-9800x3d",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
-      "amount": 449.0,
+      "amount": 449,
       "retailer": "amazon-us",
       "url": "https://www.amazon.com/dp/B0DKFMSMYK",
       "inStock": true,
@@ -179,6 +193,7 @@
     },
     {
       "partId": "amd-ryzen-9-9950x",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 499.99,
@@ -193,9 +208,10 @@
     },
     {
       "partId": "amd-ryzen-7-9700x",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
-      "amount": 339.0,
+      "amount": 339,
       "retailer": "amazon-us",
       "url": "https://www.amazon.com/dp/B0D6NMDNNX",
       "inStock": true,
@@ -207,9 +223,10 @@
     },
     {
       "partId": "amd-ryzen-5-9600x",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
-      "amount": 174.0,
+      "amount": 174,
       "retailer": "amazon-us",
       "url": "https://www.amazon.com/dp/B0D6NN6TM7",
       "inStock": true,
@@ -221,6 +238,7 @@
     },
     {
       "partId": "amd-ryzen-7-7800x3d",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 327.49,
@@ -240,6 +258,7 @@
     },
     {
       "partId": "amd-ryzen-5-7600",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 208.99,
@@ -254,6 +273,7 @@
     },
     {
       "partId": "amd-ryzen-7-5700x3d",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 523.69,
@@ -280,6 +300,7 @@
     },
     {
       "partId": "amd-ryzen-5-5600",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 140.99,
@@ -299,6 +320,7 @@
     },
     {
       "partId": "intel-core-ultra-9-285k",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 509.99,
@@ -313,9 +335,10 @@
     },
     {
       "partId": "intel-core-ultra-7-270k-plus",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
-      "amount": 330.0,
+      "amount": 330,
       "retailer": "newegg",
       "url": "https://www.newegg.com/intel-core-ultra-7-270k-plus-core-ultra-7-series-2-arrow-lake-refresh-lga-1851-desktop-cpu-processor/p/N82E16819118628",
       "inStock": true,
@@ -327,6 +350,7 @@
     },
     {
       "partId": "intel-core-ultra-7-265k",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 337.19,
@@ -341,6 +365,7 @@
     },
     {
       "partId": "intel-core-ultra-5-245k",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 189.99,
@@ -355,6 +380,7 @@
     },
     {
       "partId": "intel-core-i7-14700k",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 379.99,
@@ -369,6 +395,7 @@
     },
     {
       "partId": "intel-core-i5-14600k",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 249.97,
@@ -383,6 +410,7 @@
     },
     {
       "partId": "intel-core-i5-12400f",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 165.65,
@@ -397,9 +425,10 @@
     },
     {
       "partId": "nvidia-geforce-rtx-5080-founders-edition",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
-      "amount": 2399.0,
+      "amount": 2399,
       "retailer": "amazon-us",
       "url": "https://www.amazon.com/dp/B0DYVCGVK4",
       "inStock": true,
@@ -411,9 +440,10 @@
     },
     {
       "partId": "asus-tuf-gaming-geforce-rtx-5070-ti-16gb-oc",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
-      "amount": 1699.0,
+      "amount": 1699,
       "retailer": "amazon-us",
       "url": "https://www.amazon.com/dp/B0DS6WTXGP",
       "inStock": true,
@@ -425,6 +455,7 @@
     },
     {
       "partId": "asus-dual-geforce-rtx-5060-ti-16gb-oc",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 794.99,
@@ -439,6 +470,7 @@
     },
     {
       "partId": "asus-dual-geforce-rtx-5060-8gb-oc",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 469.99,
@@ -453,6 +485,7 @@
     },
     {
       "partId": "asus-dual-geforce-rtx-4060-8gb-oc",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 583.35,
@@ -480,6 +513,7 @@
     },
     {
       "partId": "sapphire-pulse-radeon-rx-9070-xt-16gb",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 874.72,
@@ -494,6 +528,7 @@
     },
     {
       "partId": "sapphire-pulse-radeon-rx-9070-16gb",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 849.99,
@@ -508,6 +543,7 @@
     },
     {
       "partId": "sapphire-pulse-radeon-rx-9060-xt-oc-16gb",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 519.99,
@@ -522,6 +558,7 @@
     },
     {
       "partId": "asus-tuf-gaming-b650-plus-wifi",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 169.99,
@@ -536,6 +573,7 @@
     },
     {
       "partId": "asus-tuf-gaming-x870-plus-wifi",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 234.99,
@@ -550,9 +588,10 @@
     },
     {
       "partId": "asus-rog-strix-b650e-i-gaming-wifi",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
-      "amount": 380.0,
+      "amount": 380,
       "retailer": "amazon-us",
       "url": "https://www.amazon.com/dp/B0BHHVC3BS",
       "inStock": true,
@@ -564,6 +603,7 @@
     },
     {
       "partId": "asus-tuf-gaming-b650m-plus-wifi",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 221.54,
@@ -583,6 +623,7 @@
     },
     {
       "partId": "asus-tuf-gaming-b550-plus-wifi-ii",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 121.12,
@@ -597,6 +638,7 @@
     },
     {
       "partId": "asus-tuf-gaming-z890-plus-wifi",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 242.02,
@@ -611,6 +653,7 @@
     },
     {
       "partId": "asus-prime-b760m-a-wifi-d4",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 248.49,
@@ -634,6 +677,7 @@
     },
     {
       "partId": "nzxt-c850-gold-atx-3-1",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 119.99,
@@ -648,6 +692,7 @@
     },
     {
       "partId": "nzxt-c1200-gold-atx-3-1",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 124.99,
@@ -662,6 +707,7 @@
     },
     {
       "partId": "nzxt-c850-sfx-gold",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 149.99,
@@ -676,6 +722,7 @@
     },
     {
       "partId": "teamgroup-t-force-delta-rgb-ddr5-6000-cl30-2x16gb",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 599.99,
@@ -690,6 +737,7 @@
     },
     {
       "partId": "gskill-flare-x5-ddr5-6000-cl30-2x16gb",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 579.99,
@@ -704,6 +752,7 @@
     },
     {
       "partId": "gskill-trident-z5-neo-rgb-ddr5-6000-cl30-2x16gb",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 599.99,
@@ -718,6 +767,7 @@
     },
     {
       "partId": "gskill-trident-z5-ck-ddr5-8200-cl40-2x24gb",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 999.99,
@@ -732,6 +782,7 @@
     },
     {
       "partId": "gskill-trident-z-neo-ddr4-3600-cl16-2x16gb",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 269.99,
@@ -752,6 +803,7 @@
     },
     {
       "partId": "wd-black-sn8100-2tb",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 479.99,
@@ -771,6 +823,7 @@
     },
     {
       "partId": "wd-black-sn850x-2tb",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 419.88,
@@ -790,9 +843,10 @@
     },
     {
       "partId": "wd-black-sn7100-1tb",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
-      "amount": 199.0,
+      "amount": 199,
       "retailer": "amazon-us",
       "url": "https://www.amazon.com/dp/B0DN7CYYSD",
       "inStock": true,
@@ -804,6 +858,7 @@
     },
     {
       "partId": "samsung-990-pro-2tb",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "currency": "USD",
       "amount": 389.99,
@@ -825,6 +880,7 @@
   "gaps": [
     {
       "partId": "deepcool-fc120-3-in-1",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "reasonCode": "not-listed",
       "reason": "Amazon.com: no listing for this exact part in the search results. Newegg: no listing for this exact part in the search results.",
@@ -836,6 +892,7 @@
     },
     {
       "partId": "deepcool-ch560",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "reasonCode": "not-listed",
       "reason": "Amazon.com: no listing for this exact part in the search results. Newegg: no listing for this exact part in the search results.",
@@ -847,6 +904,7 @@
     },
     {
       "partId": "deepcool-ak620",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "reasonCode": "not-listed",
       "reason": "Amazon.com: no listing for this exact part in the search results. Newegg: no listing for this exact part in the search results.",
@@ -858,6 +916,7 @@
     },
     {
       "partId": "deepcool-an400",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "reasonCode": "not-listed",
       "reason": "Amazon.com: no listing for this exact part in the search results. Newegg: no listing for this exact part in the search results.",
@@ -869,6 +928,7 @@
     },
     {
       "partId": "nvidia-geforce-rtx-5090-founders-edition",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "reasonCode": "not-listed",
       "reason": "Amazon.com: no listing for this exact part in the search results. Newegg: no listing for this exact part in the search results.",
@@ -880,6 +940,7 @@
     },
     {
       "partId": "nvidia-geforce-rtx-5070-founders-edition",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "reasonCode": "not-listed",
       "reason": "Amazon.com: no listing for this exact part in the search results. Newegg: no listing for this exact part in the search results.",
@@ -891,6 +952,7 @@
     },
     {
       "partId": "deepcool-pn650m",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "reasonCode": "not-listed",
       "reason": "Amazon.com: no listing for this exact part in the search results. Newegg: no listing for this exact part in the search results.",
@@ -902,6 +964,7 @@
     },
     {
       "partId": "deepcool-pn850m",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "reasonCode": "not-listed",
       "reason": "Amazon.com: no listing for this exact part in the search results. Newegg: no listing for this exact part in the search results.",
@@ -913,6 +976,7 @@
     },
     {
       "partId": "teamgroup-t-force-vulcan-z-ddr4-3200-cl16-2x16gb",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "reasonCode": "not-listed",
       "reason": "Amazon US lists only TLZGD432G3200HC16FDC01 (B08NVQZ9XQ), a separate TeamGroup code for the same kit spec, and shows no buy-box price for it. Newegg: no listing for this exact part in the search results.",
@@ -924,6 +988,7 @@
     },
     {
       "partId": "wd-blue-sa510-2-5-inch-1tb",
+      "batch": "2026-09-30-seed",
       "market": "US",
       "reasonCode": "unavailable",
       "reason": "Amazon US lists the current WDS100T5B0A (B0GR64NJPG) as \"Currently unavailable\" with no price; its other SA510 listings are the earlier revision WDS100T3B0A. Newegg: no listing for this exact part in the search results.",

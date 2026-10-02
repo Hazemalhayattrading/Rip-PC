@@ -23,6 +23,7 @@
       "rgb": false,
       "heightMm": 160,
       "ramClearanceMm": 43,
+      "singleFanRamClearanceMm": 59,
       "sources": [
         {
           "url": "https://www.deepcool.com/products/Cooling/cpuaircoolers/AK620-High-Performance-CPU-Cooler-1700-AM5/2021/13067.shtml",
@@ -40,7 +41,8 @@
             "rgb",
             "heightMm",
             "ramClearanceMm",
-            "sockets"
+            "sockets",
+            "singleFanRamClearanceMm"
           ],
           "title": "AK620 - DeepCool"
         },
@@ -67,7 +69,7 @@
         },
         {
           "field": "ramClearanceMm",
-          "text": "From \"43mm RAM height clearance (59mm in single fan configurations)\"; 43 mm is the cooler as sold, with both fans."
+          "text": "From \"43mm RAM height clearance (59mm in single fan configurations)\"; 43 mm is the cooler as sold, with both fans, and 59 mm is recorded as singleFanRamClearanceMm."
         },
         {
           "field": "rgb",
@@ -96,6 +98,7 @@
       "rgb": false,
       "heightMm": 52.5,
       "ramClearanceMm": null,
+      "singleFanRamClearanceMm": null,
       "sources": [
         {
           "url": "https://www.deepcool.com/products/Cooling/cpuaircoolers/AN400-Top-Flow-Low-Profile-Cooler-1851-1700-AM5/2023/16838.shtml",

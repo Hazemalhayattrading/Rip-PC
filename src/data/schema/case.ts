@@ -16,13 +16,52 @@ export const RadiatorSize = z.union([
 ]);
 
 /**
- * A clearance limit and the condition it applies under, as the maker words it
- * (e.g. "with front radiator"). `condition: null` is the default, unconditional limit.
+ * When a conditional limit applies, in a form the engine can test against a build's layout. The
+ * maker's own words stay in `asPublished`.
  */
-export const GpuClearance = z.strictObject({ maxLengthMm: PosNum, condition: z.string().min(1).nullable() });
-export const CoolerClearance = z.strictObject({ maxHeightMm: PosNum, condition: z.string().min(1).nullable() });
-/** A PSU length limit and the configuration it applies under (e.g. "with 2 HDD trays"). */
-export const PsuClearance = z.strictObject({ maxLengthMm: PosNum, condition: z.string().min(1).nullable() });
+export const LayoutCondition = z.discriminatedUnion('kind', [
+  /**
+   * A radiator of one of `sizesMm` is mounted at `position` (the Fractal North: "with a 360 mm front
+   * radiator"). A row covers exactly the sizes it lists: when a case has rows for a radiator at a
+   * position, a radiator of another size there has no published limit (can't verify).
+   */
+  z.strictObject({
+    kind: z.literal('radiator'),
+    position: MountPosition,
+    sizesMm: z.array(RadiatorSize).min(1),
+    asPublished: z.string().min(1),
+  }),
+  /** This many drive trays are fitted (the Fractal North: "2 x HDD tray"). */
+  z.strictObject({ kind: z.literal('drive-trays'), count: PosInt, asPublished: z.string().min(1) }),
+]);
+export type LayoutCondition = z.infer<typeof LayoutCondition>;
+
+/**
+ * A clearance limit and the condition it applies under. `condition: null` is the default limit,
+ * which always applies; a conditional row tightens it when its condition holds. The limit for a
+ * layout is the lowest of the rows that apply.
+ */
+export const GpuClearance = z.strictObject({ maxLengthMm: PosNum, condition: LayoutCondition.nullable() });
+export const CoolerClearance = z.strictObject({ maxHeightMm: PosNum, condition: LayoutCondition.nullable() });
+/** A PSU length limit and the configuration it applies under (e.g. 2 drive trays fitted). */
+export const PsuClearance = z.strictObject({ maxLengthMm: PosNum, condition: LayoutCondition.nullable() });
+
+/**
+ * One drive-tray layout from the maker's table (the Fractal North's user guide p. 26): where the
+ * trays sit, and the PSU length and front radiator size that leaves room for. When present, a build
+ * fits when one layout fits all its parts; the per-tray-count rows in `psu.clearance` are the
+ * product page's best cases and still apply.
+ */
+export const DriveTrayLayout = z.strictObject({
+  /** The layout as the table labels it, e.g. "A+D". */
+  label: z.string().min(1),
+  /** The tray positions in use, lettered as the maker letters them. Each tray holds one drive. */
+  trays: z.array(z.string().min(1)).min(1),
+  psuMaxLengthMm: PosNum,
+  /** The largest front radiator this layout leaves room for, by nominal size. */
+  frontRadiatorMaxMm: RadiatorSize,
+});
+export type DriveTrayLayout = z.infer<typeof DriveTrayLayout>;
 
 /**
  * One published position of a movable motherboard plate ("spine"). Each position trades CPU cooler
@@ -84,6 +123,8 @@ export const Case = z.strictObject({
    * cooler-height and GPU-thickness limits above for fit checks.
    */
   layoutPositions: z.array(LayoutPosition).min(1).optional(),
+  /** Only for cases whose maker publishes limits per drive-tray layout (see `DriveTrayLayout`). */
+  driveTrayLayouts: z.array(DriveTrayLayout).min(1).optional(),
   radiatorSupport: z.array(
     z.strictObject({
       position: MountPosition,

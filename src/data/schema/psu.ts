@@ -22,6 +22,11 @@ export const Psu = z.strictObject({
   atxVersion: z.string().regex(/^[23]\.\d{1,2}$/).nullable(),
   formFactor: PsuFormFactor,
   lengthMm: PosNum,
+  /**
+   * SFX and SFX-L units: whether an SFX-to-ATX mounting bracket is in the box, as the maker says.
+   * `null` on an ATX unit (it needs none); on an SFX unit, `null` plus a note when the maker doesn't say.
+   */
+  atxBracketIncluded: z.boolean().nullable(),
   modularity: z.enum(['full', 'semi', 'none']),
   fanSizeMm: PosInt.nullable(),
   connectors: z.strictObject({
@@ -31,6 +36,11 @@ export const Psu = z.strictObject({
     pcie16pinStandard: z.enum(['12V-2x6', '12VHPWR']).nullable(),
     /** PCIe 8-pin (6+2) connectors. */
     pcie8pin: Count,
+    /**
+     * Separate cables that carry those connectors: a daisy-chained cable carries two. NVIDIA's 16-pin
+     * adapters want one cable per plug. `null` plus a note when the maker doesn't say.
+     */
+    pcie8pinCables: Count.nullable(),
     /** CPU EPS 8-pin (4+4) connectors. */
     eps8pin: Count,
     sata: Count,

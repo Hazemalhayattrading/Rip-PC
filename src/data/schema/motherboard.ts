@@ -129,6 +129,11 @@ export const Motherboard = z.strictObject({
     maxCapacityGb: PosInt,
     /** Highest speed the spec page lists, including overclocked speeds. */
     maxSpeedMtps: PosInt,
+    /**
+     * Highest speed the spec page lists without an overclocking mark ("(OC)"): the board's official
+     * speed. `null` plus a note when the page lists overclocked speeds only.
+     */
+    officialMaxSpeedMtps: PosInt.nullable(),
     /** The spec page's memory-speed text, verbatim. */
     speedsAsPublished: z.string().min(1),
   }),

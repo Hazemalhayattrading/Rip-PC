@@ -2,15 +2,19 @@
   "schemaVersion": 1,
   "market": "SA",
   "currency": "SAR",
-  "batch": {
-    "id": "2026-09-30-seed",
-    "windowStart": "2026-09-30",
-    "windowEnd": "2026-10-01"
-  },
+  "batches": [
+    {
+      "id": "2026-09-30-seed",
+      "label": "Seed catalogue (WP-D0)",
+      "windowStart": "2026-09-30",
+      "windowEnd": "2026-10-01"
+    }
+  ],
   "priceBasis": "Buy-box price in SAR as shown on the live Amazon.sa product page for delivery to Riyadh; the pages state \"All prices include VAT.\" Delivery fees are excluded. Offers imported through Amazon.sa's global store show a total that includes estimated import charges; each such observation has a note with the split. Third-party marketplace offers are kept and marked.",
   "observations": [
     {
       "partId": "arctic-p12-pwm-pst-black",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
       "amount": 82.75,
@@ -35,6 +39,7 @@
     },
     {
       "partId": "fractal-terra-graphite",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
       "amount": 775.15,
@@ -59,9 +64,10 @@
     },
     {
       "partId": "arctic-liquid-freezer-iii-pro-360",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
-      "amount": 596.0,
+      "amount": 596,
       "retailer": "amazon-sa",
       "url": "https://www.amazon.sa/-/en/dp/B0DLWGG85P",
       "inStock": true,
@@ -73,6 +79,7 @@
     },
     {
       "partId": "arctic-liquid-freezer-iii-pro-280",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
       "amount": 416.07,
@@ -87,9 +94,10 @@
     },
     {
       "partId": "nzxt-kraken-plus-240",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
-      "amount": 499.0,
+      "amount": 499,
       "retailer": "amazon-sa",
       "url": "https://www.amazon.sa/-/en/dp/B0F5SGK5Q7",
       "inStock": true,
@@ -101,6 +109,7 @@
     },
     {
       "partId": "amd-ryzen-7-9850x3d",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
       "amount": 2234.74,
@@ -115,9 +124,10 @@
     },
     {
       "partId": "amd-ryzen-7-9800x3d",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
-      "amount": 1916.0,
+      "amount": 1916,
       "retailer": "amazon-sa",
       "url": "https://www.amazon.sa/-/en/dp/B0DKFMSMYK",
       "inStock": true,
@@ -129,6 +139,7 @@
     },
     {
       "partId": "amd-ryzen-9-9950x",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
       "amount": 2361.43,
@@ -143,6 +154,7 @@
     },
     {
       "partId": "amd-ryzen-7-9700x",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
       "amount": 1398.9,
@@ -157,9 +169,10 @@
     },
     {
       "partId": "amd-ryzen-5-9600x",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
-      "amount": 843.0,
+      "amount": 843,
       "retailer": "amazon-sa",
       "url": "https://www.amazon.sa/-/en/dp/B0D6NN6TM7",
       "inStock": true,
@@ -171,9 +184,10 @@
     },
     {
       "partId": "amd-ryzen-7-7800x3d",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
-      "amount": 1512.0,
+      "amount": 1512,
       "retailer": "amazon-sa",
       "url": "https://www.amazon.sa/-/en/dp/B0BTZB7F88",
       "inStock": true,
@@ -185,6 +199,7 @@
     },
     {
       "partId": "amd-ryzen-5-7600",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
       "amount": 791.93,
@@ -199,6 +214,7 @@
     },
     {
       "partId": "amd-ryzen-5-5600",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
       "amount": 608.1,
@@ -219,9 +235,10 @@
     },
     {
       "partId": "intel-core-ultra-9-285k",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
-      "amount": 2959.0,
+      "amount": 2959,
       "retailer": "amazon-sa",
       "url": "https://www.amazon.sa/-/en/dp/B0DMXB5DVP",
       "inStock": true,
@@ -238,6 +255,7 @@
     },
     {
       "partId": "intel-core-ultra-7-270k-plus",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
       "amount": 1553.04,
@@ -262,9 +280,10 @@
     },
     {
       "partId": "intel-core-ultra-7-265k",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
-      "amount": 1691.0,
+      "amount": 1691,
       "retailer": "amazon-sa",
       "url": "https://www.amazon.sa/-/en/dp/B0DFK2MH2D",
       "inStock": true,
@@ -286,6 +305,7 @@
     },
     {
       "partId": "intel-core-ultra-5-245k",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
       "amount": 1089.1,
@@ -300,6 +320,7 @@
     },
     {
       "partId": "intel-core-i7-14700k",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
       "amount": 1673.35,
@@ -314,6 +335,7 @@
     },
     {
       "partId": "intel-core-i5-14600k",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
       "amount": 1316.91,
@@ -338,6 +360,7 @@
     },
     {
       "partId": "intel-core-i5-12400f",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
       "amount": 849.87,
@@ -358,6 +381,7 @@
     },
     {
       "partId": "nvidia-geforce-rtx-5080-founders-edition",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
       "amount": 13932.99,
@@ -377,6 +401,7 @@
     },
     {
       "partId": "asus-dual-geforce-rtx-5060-ti-16gb-oc",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
       "amount": 3394.78,
@@ -396,6 +421,7 @@
     },
     {
       "partId": "asus-dual-geforce-rtx-5060-8gb-oc",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
       "amount": 2347.89,
@@ -410,9 +436,10 @@
     },
     {
       "partId": "asus-dual-geforce-rtx-4060-8gb-oc",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
-      "amount": 4150.0,
+      "amount": 4150,
       "retailer": "amazon-sa",
       "url": "https://www.amazon.sa/-/en/dp/B0C7YPGFFW",
       "inStock": true,
@@ -424,9 +451,10 @@
     },
     {
       "partId": "sapphire-pulse-radeon-rx-9070-xt-16gb",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
-      "amount": 4199.0,
+      "amount": 4199,
       "retailer": "amazon-sa",
       "url": "https://www.amazon.sa/-/en/dp/B0DTHMPWFR",
       "inStock": true,
@@ -438,9 +466,10 @@
     },
     {
       "partId": "sapphire-pulse-radeon-rx-9070-16gb",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
-      "amount": 3499.0,
+      "amount": 3499,
       "retailer": "amazon-sa",
       "url": "https://www.amazon.sa/-/en/dp/B0DRPSF34T",
       "inStock": true,
@@ -452,9 +481,10 @@
     },
     {
       "partId": "sapphire-pulse-radeon-rx-9060-xt-oc-16gb",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
-      "amount": 2999.0,
+      "amount": 2999,
       "retailer": "amazon-sa",
       "url": "https://www.amazon.sa/-/en/dp/B0F8C6MWSY",
       "inStock": true,
@@ -466,9 +496,10 @@
     },
     {
       "partId": "asus-tuf-gaming-b650-plus-wifi",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
-      "amount": 999.0,
+      "amount": 999,
       "retailer": "amazon-sa",
       "url": "https://www.amazon.sa/-/en/dp/B0BHN7GGBQ",
       "inStock": true,
@@ -480,6 +511,7 @@
     },
     {
       "partId": "asus-tuf-gaming-x870-plus-wifi",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
       "amount": 1518.98,
@@ -494,9 +526,10 @@
     },
     {
       "partId": "asus-rog-strix-b650e-i-gaming-wifi",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
-      "amount": 1099.0,
+      "amount": 1099,
       "retailer": "amazon-sa",
       "url": "https://www.amazon.sa/-/en/dp/B0BHHVC3BS",
       "inStock": true,
@@ -508,9 +541,10 @@
     },
     {
       "partId": "asus-tuf-gaming-b650m-plus-wifi",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
-      "amount": 759.0,
+      "amount": 759,
       "retailer": "amazon-sa",
       "url": "https://www.amazon.sa/-/en/dp/B0FP2ZVRCD",
       "inStock": true,
@@ -522,6 +556,7 @@
     },
     {
       "partId": "asus-tuf-gaming-b550-plus-wifi-ii",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
       "amount": 686.35,
@@ -546,6 +581,7 @@
     },
     {
       "partId": "asus-tuf-gaming-z890-plus-wifi",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
       "amount": 955.65,
@@ -570,6 +606,7 @@
     },
     {
       "partId": "asus-prime-b760m-a-wifi-d4",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
       "amount": 598.99,
@@ -589,9 +626,10 @@
     },
     {
       "partId": "nzxt-c850-gold-atx-3-1",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
-      "amount": 499.0,
+      "amount": 499,
       "retailer": "amazon-sa",
       "url": "https://www.amazon.sa/-/en/dp/B0DHVPZZ77",
       "inStock": true,
@@ -608,6 +646,7 @@
     },
     {
       "partId": "nzxt-c1200-gold-atx-3-1",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
       "amount": 924.47,
@@ -635,9 +674,10 @@
     },
     {
       "partId": "nzxt-c850-sfx-gold",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
-      "amount": 994.0,
+      "amount": 994,
       "retailer": "amazon-sa",
       "url": "https://www.amazon.sa/-/en/dp/B0GFVSV779",
       "inStock": true,
@@ -649,6 +689,7 @@
     },
     {
       "partId": "teamgroup-t-force-delta-rgb-ddr5-6000-cl30-2x16gb",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
       "amount": 2731.21,
@@ -673,6 +714,7 @@
     },
     {
       "partId": "gskill-flare-x5-ddr5-6000-cl30-2x16gb",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
       "amount": 2815.36,
@@ -687,6 +729,7 @@
     },
     {
       "partId": "gskill-trident-z5-neo-rgb-ddr5-6000-cl30-2x16gb",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
       "amount": 2888.48,
@@ -701,6 +744,7 @@
     },
     {
       "partId": "gskill-trident-z5-ck-ddr5-8200-cl40-2x24gb",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
       "amount": 6678.23,
@@ -715,9 +759,10 @@
     },
     {
       "partId": "gskill-trident-z-neo-ddr4-3600-cl16-2x16gb",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
-      "amount": 1511.0,
+      "amount": 1511,
       "retailer": "amazon-sa",
       "url": "https://www.amazon.sa/-/en/dp/B07VRLBXLR",
       "inStock": true,
@@ -729,9 +774,10 @@
     },
     {
       "partId": "wd-black-sn7100-1tb",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
-      "amount": 749.0,
+      "amount": 749,
       "retailer": "amazon-sa",
       "url": "https://www.amazon.sa/-/en/dp/B0DN7CYYSD",
       "inStock": true,
@@ -743,6 +789,7 @@
     },
     {
       "partId": "wd-blue-sa510-2-5-inch-1tb",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
       "amount": 1103.78,
@@ -767,9 +814,10 @@
     },
     {
       "partId": "samsung-990-pro-2tb",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "currency": "SAR",
-      "amount": 1789.0,
+      "amount": 1789,
       "retailer": "amazon-sa",
       "url": "https://www.amazon.sa/-/en/dp/B0B9C4DKKG",
       "inStock": true,
@@ -783,6 +831,7 @@
   "gaps": [
     {
       "partId": "arctic-p14-pwm-pst-black",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "reasonCode": "not-listed",
       "reason": "Amazon.sa: no listing for this exact part in the search results.",
@@ -793,6 +842,7 @@
     },
     {
       "partId": "deepcool-fc120-3-in-1",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "reasonCode": "not-listed",
       "reason": "Amazon.sa: no listing for this exact part in the search results.",
@@ -803,6 +853,7 @@
     },
     {
       "partId": "fractal-north-charcoal-black-tg-light",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "reasonCode": "no-price-shown",
       "reason": "Amazon.sa: the product page shows no buy-box price (only other buying options or none).",
@@ -818,6 +869,7 @@
     },
     {
       "partId": "fractal-pop-air-rgb-black-tg-clear-tint",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "reasonCode": "no-price-shown",
       "reason": "Amazon.sa: the product page shows no buy-box price (only other buying options or none).",
@@ -828,6 +880,7 @@
     },
     {
       "partId": "fractal-pop-mini-air-rgb-black-tg-clear-tint",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "reasonCode": "no-price-shown",
       "reason": "Amazon.sa: the product page shows no buy-box price (only other buying options or none).",
@@ -838,6 +891,7 @@
     },
     {
       "partId": "deepcool-ch560",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "reasonCode": "not-listed",
       "reason": "Amazon.sa: no listing for this exact part in the search results.",
@@ -848,6 +902,7 @@
     },
     {
       "partId": "deepcool-ak620",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "reasonCode": "not-listed",
       "reason": "Amazon.sa: no listing for this exact part in the search results.",
@@ -858,6 +913,7 @@
     },
     {
       "partId": "deepcool-an400",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "reasonCode": "not-listed",
       "reason": "Amazon.sa: no listing for this exact part in the search results.",
@@ -868,6 +924,7 @@
     },
     {
       "partId": "amd-ryzen-7-5700x3d",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "reasonCode": "not-listed",
       "reason": "Amazon.sa: no listing for this exact part in the search results.",
@@ -878,6 +935,7 @@
     },
     {
       "partId": "nvidia-geforce-rtx-5090-founders-edition",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "reasonCode": "not-listed",
       "reason": "Amazon.sa: no listing for this exact part in the search results.",
@@ -888,6 +946,7 @@
     },
     {
       "partId": "nvidia-geforce-rtx-5070-founders-edition",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "reasonCode": "not-listed",
       "reason": "Amazon.sa: no listing for this exact part in the search results.",
@@ -898,6 +957,7 @@
     },
     {
       "partId": "asus-tuf-gaming-geforce-rtx-5070-ti-16gb-oc",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "reasonCode": "unavailable",
       "reason": "Amazon.sa lists the exact card (B0DS6WTXGP, TUF-RTX5070TI-O16G-GAMING) as \"Currently unavailable\"; its other TUF 5070 Ti listings are the White edition and the non-OC TUF-RTX5070TI-16G-GAMING.",
@@ -908,6 +968,7 @@
     },
     {
       "partId": "deepcool-pn650m",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "reasonCode": "not-listed",
       "reason": "Amazon.sa: no listing for this exact part in the search results.",
@@ -918,6 +979,7 @@
     },
     {
       "partId": "deepcool-pn850m",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "reasonCode": "not-listed",
       "reason": "Amazon.sa: no listing for this exact part in the search results.",
@@ -928,6 +990,7 @@
     },
     {
       "partId": "teamgroup-t-force-vulcan-z-ddr4-3200-cl16-2x16gb",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "reasonCode": "not-listed",
       "reason": "Amazon.sa lists only TLZGD432G3200HC16FDC01 (B08NVQZ9XQ), a separate TeamGroup code for the same kit spec, and shows no buy-box price for it.",
@@ -938,6 +1001,7 @@
     },
     {
       "partId": "wd-black-sn8100-2tb",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "reasonCode": "no-price-shown",
       "reason": "Amazon.sa: the product page shows no buy-box price (only other buying options or none).",
@@ -948,6 +1012,7 @@
     },
     {
       "partId": "wd-black-sn850x-2tb",
+      "batch": "2026-09-30-seed",
       "market": "SA",
       "reasonCode": "no-price-shown",
       "reason": "Amazon.sa: the product page shows no buy-box price (only other buying options or none).",

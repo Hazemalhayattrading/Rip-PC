@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import type { LayoutCondition } from '../schema/case';
 import type { SourceRef } from '../schema/common';
 import { DATA_PATHS } from '../schema/files';
 import { formatIssue, validateFiles, type RuleId } from './index';
@@ -48,6 +49,7 @@ const usGap = (d: FixtureData) => first(d.prices.US.gaps);
 const liveRow = (d: FixtureData) => at(d.gameBenchmarks, 0);
 const archivedRow = (d: FixtureData) => at(d.gameBenchmarks, 1);
 const firstSource = (r: { sources: SourceRef[] }): SourceRef => first(r.sources);
+const trays = (count: number): LayoutCondition => ({ kind: 'drive-trays', count, asPublished: `${String(count)} HDD tray` });
 
 describe('fixture', () => {
   it('is a fully valid dataset', () => {
@@ -203,7 +205,7 @@ describe('sanity', () => {
     const aio = (fanCount: number) => (d: FixtureData) => {
       const air = first(d.specs.cooler);
       if (air.type !== 'air') throw new Error('fixture cooler should be air');
-      const { heightMm: _h, ramClearanceMm: _r, ...shared } = air;
+      const { heightMm: _h, ramClearanceMm: _r, singleFanRamClearanceMm: _s, ...shared } = air;
       d.specs.cooler = [
         { ...shared, type: 'aio', radiatorSizeMm: 360, radiatorLengthMm: 397, radiatorWidthMm: 120, radiatorThicknessMm: 27, tubeLengthMm: 400, fanSizeMm: 120, fanCount },
       ];
@@ -248,12 +250,70 @@ describe('sanity', () => {
     expectRule(run(sized('full-tower', ['E-ATX', 'ATX'])), 'sanity');
   });
   it('a case gives PSU length limits in range, with at most one unconditional row', () => {
-    const psu = (rows: { maxLengthMm: number; condition: string | null }[]) => (d: FixtureData) => {
+    const psu = (rows: { maxLengthMm: number; condition: LayoutCondition | null }[]) => (d: FixtureData) => {
       first(d.specs.case).psu.clearance = rows;
     };
-    expectClean(run(psu([{ maxLengthMm: 255, condition: 'with 1 HDD tray' }, { maxLengthMm: 155, condition: 'with 2 HDD trays' }])));
+    expectClean(run(psu([{ maxLengthMm: 255, condition: trays(1) }, { maxLengthMm: 155, condition: trays(2) }])));
     expectRule(run(psu([{ maxLengthMm: 200, condition: null }, { maxLengthMm: 160, condition: null }])), 'sanity');
     expectRule(run(psu([{ maxLengthMm: 40, condition: null }])), 'sanity');
+  });
+  it('a case condition must be possible in that case', () => {
+    const gpuRow = (condition: LayoutCondition) => (d: FixtureData) => {
+      first(d.specs.case).gpuClearance = [{ maxLengthMm: 380, condition: null }, { maxLengthMm: 300, condition }];
+    };
+    expectClean(run(gpuRow({ kind: 'radiator', position: 'front', sizesMm: [240, 360], asPublished: 'with a front radiator' })));
+    expectRule(run(gpuRow({ kind: 'radiator', position: 'front', sizesMm: [280], asPublished: 'with a 280 mm front radiator' })), 'sanity');
+    expectRule(run(gpuRow({ kind: 'radiator', position: 'top', sizesMm: [240], asPublished: 'with a top radiator' })), 'sanity');
+    expectRule(run(gpuRow(trays(3))), 'sanity');
+  });
+  it('drive-tray layouts agree with the trays and the PSU limits', () => {
+    const layouts = (rows: { label: string; trays: string[]; psuMaxLengthMm: number }[]) => (d: FixtureData) => {
+      const c = first(d.specs.case);
+      c.psu.clearance = [{ maxLengthMm: 255, condition: trays(1) }, { maxLengthMm: 155, condition: trays(2) }];
+      c.driveTrayLayouts = rows.map((r) => ({ ...r, frontRadiatorMaxMm: 360 }));
+    };
+    const ok = [{ label: 'A', trays: ['A'], psuMaxLengthMm: 255 }, { label: 'A+D', trays: ['A', 'D'], psuMaxLengthMm: 140 }];
+    expectClean(run(layouts(ok)));
+    expectRule(run(layouts([...ok, { label: 'A', trays: ['B'], psuMaxLengthMm: 215 }])), 'sanity');
+    expectRule(run(layouts([{ label: 'A+B+C', trays: ['A', 'B', 'C'], psuMaxLengthMm: 140 }])), 'sanity');
+    expectRule(run(layouts([{ label: 'B+E', trays: ['B', 'E'], psuMaxLengthMm: 215 }])), 'sanity');
+    expectRule(run(layouts([{ label: 'A+A', trays: ['A', 'A'], psuMaxLengthMm: 140 }])), 'sanity');
+    expectRule(
+      run((d) => {
+        layouts(ok)(d);
+        first(first(d.specs.case).driveTrayLayouts ?? []).frontRadiatorMaxMm = 420;
+      }),
+      'sanity',
+    );
+  });
+  it('a PSU has no more PCIe cables than connectors, and an ATX unit no bracket', () => {
+    const psu = (d: FixtureData) => first(d.specs.psu);
+    expectRule(run((d) => { psu(d).connectors.pcie8pinCables = 4; }), 'sanity');
+    expectRule(run((d) => { psu(d).connectors.pcie8pinCables = 0; }), 'sanity');
+    expectRule(run((d) => { psu(d).atxBracketIncluded = true; }), 'sanity');
+    expectRule(run((d) => { psu(d).connectors.pcie8pinCables = null; }), 'null-note');
+    expectClean(run((d) => { psu(d).connectors.pcie8pinCables = 2; }));
+  });
+  it('a 16-pin adapter belongs to a card with a 16-pin plug, and its absence there needs a note', () => {
+    const adapter = { pcie8pinInputs: 2, separateCables: true };
+    expectRule(run((d) => { card(d).powerAdapter = adapter; }), 'sanity');
+    const sixteen = (d: FixtureData) => { card(d).powerConnectors = [{ type: '16-pin', standard: '12V-2x6', count: 1 }]; };
+    expectClean(run((d) => { sixteen(d); card(d).powerAdapter = adapter; }));
+    expectRule(run(sixteen), 'null-note');
+  });
+  it('a single-fan RAM clearance needs two fans and is no lower than the clearance as sold', () => {
+    const air = (d: FixtureData) => {
+      const c = first(d.specs.cooler);
+      if (c.type !== 'air') throw new Error('fixture cooler should be air');
+      return c;
+    };
+    expectRule(run((d) => { air(d).singleFanRamClearanceMm = 55; }), 'sanity');
+    expectRule(run((d) => { air(d).fanCount = 2; air(d).singleFanRamClearanceMm = 30; }), 'sanity');
+    expectClean(run((d) => { air(d).fanCount = 2; air(d).singleFanRamClearanceMm = 55; }));
+  });
+  it("a board's official memory speed is no higher than its top speed, and null needs a note", () => {
+    expectRule(run((d) => { board(d).memory.officialMaxSpeedMtps = 8400; }), 'sanity');
+    expectRule(run((d) => { board(d).memory.officialMaxSpeedMtps = null; }), 'null-note');
   });
 });
 
@@ -275,8 +335,19 @@ describe("prices (Owner's rule 1)", () => {
   });
   it('price-window: retrievedAt must fall inside the batch window', () => {
     expectRule(run((d) => { usObs(d).retrievedAt = '2026-09-29'; }), 'price-window');
-    expectNoRule(run((d) => { usObs(d).retrievedAt = d.prices.US.batch.windowStart; }), 'price-window');
+    expectNoRule(run((d) => { usObs(d).retrievedAt = first(d.prices.US.batches).windowStart; }), 'price-window');
     expectRule(run((d) => { usGap(d).checkedAt = '2026-09-01'; }), 'price-window');
+  });
+  it('price-window: each entry falls inside the window of the batch it names', () => {
+    const later = (d: FixtureData) => {
+      d.prices.US.batches.push({ id: 'fixture-later', label: 'Later', windowStart: '2026-09-25', windowEnd: '2026-09-26' });
+      usObs(d).batch = 'fixture-later';
+    };
+    expectRule(run(later), 'price-window');
+    expectClean(run((d) => { later(d); usObs(d).retrievedAt = '2026-09-26'; usObs(d).capture = 'artifacts/prices/US/fx-cpu-am5--shop-us--2026-09-26.html'; }));
+    expectRule(run((d) => { usGap(d).batch = 'no-such-batch'; }), 'ref');
+    expectRule(run((d) => { d.prices.US.batches.push({ ...first(d.prices.US.batches) }); }), 'id-unique');
+    expectRule(run((d) => { first(d.prices.US.batches).windowStart = '2026-10-05'; }), 'price-window');
   });
   it('price-gap-reason: a gap record must state its reason', () => {
     expectRule(run((d) => { Reflect.deleteProperty(usGap(d), 'reason'); }), 'price-gap-reason');

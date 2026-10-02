@@ -21,6 +21,10 @@
           "count": 1
         }
       ],
+      "powerAdapter": {
+        "pcie8pinInputs": 4,
+        "separateCables": true
+      },
       "cardPowerW": 575,
       "recommendedPsuW": 1000,
       "outputs": [
@@ -42,6 +46,17 @@
           "retrievedAt": "2026-09-30",
           "docType": "spec-page",
           "title": "GeForce RTX 5090 - full specs (Card Dimensions: Founders Edition)"
+        },
+        {
+          "url": "https://www.nvidia.com/content/geforce-gtx/GeForce_RTX_5090_User_Guide_Rev1.pdf",
+          "publisher": "nvidia",
+          "retrievedAt": "2026-10-02",
+          "docType": "manual",
+          "fields": [
+            "powerAdapter"
+          ],
+          "title": "Quick Start Guide GeForce RTX 5090",
+          "locator": "p. 3 System Power Supply; p. 8 step 3"
         }
       ],
       "notes": [
@@ -60,6 +75,10 @@
         {
           "field": "cardPowerW",
           "text": "NVIDIA's spec page gives one Total Graphics Power, required system power and boost clock for the GPU, alongside the Founders Edition card dimensions."
+        },
+        {
+          "field": "powerAdapter",
+          "text": "The spec page lists \"4x PCIe 8-pin cables (adapter in box)\"; the Quick Start Guide says \"Connect at least four independent dedicated cables with 8-pin PCI Express plugs from the system power supply to the NVIDIA power connector adapter.\""
         }
       ]
     },
@@ -82,6 +101,10 @@
           "count": 1
         }
       ],
+      "powerAdapter": {
+        "pcie8pinInputs": 3,
+        "separateCables": true
+      },
       "cardPowerW": 360,
       "recommendedPsuW": 850,
       "outputs": [
@@ -103,6 +126,17 @@
           "retrievedAt": "2026-09-30",
           "docType": "spec-page",
           "title": "GeForce RTX 5080 - full specs (Card Dimensions: Founders Edition)"
+        },
+        {
+          "url": "https://www.nvidia.com/content/geforce-gtx/GeForce_RTX_5080_User_Guide_Rev1.pdf",
+          "publisher": "nvidia",
+          "retrievedAt": "2026-10-02",
+          "docType": "manual",
+          "fields": [
+            "powerAdapter"
+          ],
+          "title": "Quick Start Guide GeForce RTX 5080",
+          "locator": "p. 3 System Power Supply; p. 8 step 3"
         }
       ],
       "notes": [
@@ -121,6 +155,10 @@
         {
           "field": "cardPowerW",
           "text": "NVIDIA's spec page gives one Total Graphics Power, required system power and boost clock for the GPU, alongside the Founders Edition card dimensions."
+        },
+        {
+          "field": "powerAdapter",
+          "text": "The spec page lists \"3x PCIe 8-pin cables (adapter in box)\"; the Quick Start Guide says \"Connect at least three independent dedicated cables with 8-pin PCI Express plugs from the system power supply to the NVIDIA power connector adapter.\""
         }
       ]
     },
@@ -143,6 +181,10 @@
           "count": 1
         }
       ],
+      "powerAdapter": {
+        "pcie8pinInputs": 2,
+        "separateCables": true
+      },
       "cardPowerW": 250,
       "recommendedPsuW": 650,
       "outputs": [
@@ -164,6 +206,17 @@
           "retrievedAt": "2026-09-30",
           "docType": "spec-page",
           "title": "GeForce RTX 5070 - full specs (Card Dimensions: Founders Edition)"
+        },
+        {
+          "url": "https://www.nvidia.com/content/geforce-gtx/geforce-rtx-5070-user-guide-r1.pdf",
+          "publisher": "nvidia",
+          "retrievedAt": "2026-10-02",
+          "docType": "manual",
+          "fields": [
+            "powerAdapter"
+          ],
+          "title": "Quick Start Guide GeForce RTX 5070",
+          "locator": "p. 3 System Power Supply; p. 8 step 3"
         }
       ],
       "notes": [
@@ -182,6 +235,10 @@
         {
           "field": "cardPowerW",
           "text": "NVIDIA's spec page gives one Total Graphics Power, required system power and boost clock for the GPU, alongside the Founders Edition card dimensions."
+        },
+        {
+          "field": "powerAdapter",
+          "text": "The spec page lists \"2x PCIe 8-pin cables (adapter in box)\"; the Quick Start Guide says \"Connect at least two independent dedicated cables with 8-pin PCI Express plugs from the system power supply to the NVIDIA power connector adapter.\""
         }
       ]
     },
@@ -204,6 +261,10 @@
           "count": 1
         }
       ],
+      "powerAdapter": {
+        "pcie8pinInputs": 3,
+        "separateCables": null
+      },
       "cardPowerW": null,
       "recommendedPsuW": 850,
       "outputs": [
@@ -235,6 +296,10 @@
         {
           "field": "powerConnectors.0.standard",
           "text": "ASUS lists the connector as '1 x 16-pin' without naming 12V-2x6 or 12VHPWR."
+        },
+        {
+          "field": "powerAdapter",
+          "text": "ASUS lists \"1 x Adpater Cable (1 to 3)\" under Accessories (a 16-pin to three 8-pin adapter) and does not say whether each plug needs its own PSU cable."
         }
       ]
     },
@@ -257,6 +322,7 @@
           "count": 1
         }
       ],
+      "powerAdapter": null,
       "cardPowerW": null,
       "recommendedPsuW": 550,
       "outputs": [
@@ -306,6 +372,7 @@
           "count": 1
         }
       ],
+      "powerAdapter": null,
       "cardPowerW": null,
       "recommendedPsuW": 550,
       "outputs": [
@@ -355,6 +422,7 @@
           "count": 1
         }
       ],
+      "powerAdapter": null,
       "cardPowerW": null,
       "recommendedPsuW": 550,
       "outputs": [
@@ -404,6 +472,7 @@
           "count": 2
         }
       ],
+      "powerAdapter": null,
       "cardPowerW": 304,
       "recommendedPsuW": 750,
       "outputs": [
@@ -453,6 +522,7 @@
           "count": 2
         }
       ],
+      "powerAdapter": null,
       "cardPowerW": 220,
       "recommendedPsuW": 650,
       "outputs": [
@@ -502,6 +572,7 @@
           "count": 1
         }
       ],
+      "powerAdapter": null,
       "cardPowerW": 170,
       "recommendedPsuW": 450,
       "outputs": [

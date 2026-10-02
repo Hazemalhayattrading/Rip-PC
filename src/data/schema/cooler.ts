@@ -27,6 +27,11 @@ export const Cooler = z.discriminatedUnion('type', [
     heightMm: PosNum,
     /** Tallest RAM that fits under the fan (or the clearance under it), as published. */
     ramClearanceMm: PosNum.nullable(),
+    /**
+     * A dual-fan cooler's RAM clearance with one fan, when the maker publishes it (the AK620: "59mm
+     * in single fan configurations"). `null` means none is published, or the cooler has one fan.
+     */
+    singleFanRamClearanceMm: PosNum.nullable(),
   }),
   z.strictObject({
     ...coolerBase,

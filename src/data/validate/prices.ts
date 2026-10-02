@@ -1,5 +1,6 @@
 import { MARKETS, MARKET_CURRENCY, type Market } from '../schema/common';
 import { DATA_PATHS, PRICED_CATEGORIES } from '../schema/files';
+import type { PriceBatch } from '../schema/price';
 import type { IssueSink } from './issues';
 import type { Dataset } from './parse';
 import type { Registry } from './sources';
@@ -57,13 +58,27 @@ export function checkPrices(sink: IssueSink, dataset: Dataset, registry: Registr
     const file = DATA_PATHS.prices[market];
     const pf = dataset.prices[market];
     if (pf === null) continue;
-    const { windowStart, windowEnd } = pf.batch;
 
     if (pf.market !== market) sink.error('price-currency', file, `file holds market ${pf.market}, expected ${market}`, undefined, 'market');
     if (pf.currency !== MARKET_CURRENCY[market]) {
       sink.error('price-currency', file, `market ${market} is priced in ${MARKET_CURRENCY[market]}, not ${pf.currency}`, undefined, 'currency');
     }
-    if (windowStart > windowEnd) sink.error('price-window', file, 'batch windowStart is after windowEnd', undefined, 'batch');
+    const batches = new Map<string, PriceBatch>();
+    pf.batches.forEach((b, i) => {
+      const at = `batches.${String(i)}`;
+      if (batches.has(b.id)) sink.error('id-unique', file, `batch ID "${b.id}" is used twice`, undefined, at);
+      batches.set(b.id, b);
+      if (b.windowStart > b.windowEnd) sink.error('price-window', file, `batch "${b.id}" starts after it ends`, undefined, at);
+    });
+    /** The read or check date must fall inside the window of the batch the entry names. */
+    const checkWindow = (batchId: string, date: string, rid: string, at: string, what: string): void => {
+      const b = batches.get(batchId);
+      if (b === undefined) {
+        sink.error('ref', file, `batch "${batchId}" is not in this file's batches`, rid, `${at}.batch`);
+      } else if (date < b.windowStart || date > b.windowEnd) {
+        sink.error('price-window', file, `${what} ${date} is outside batch "${b.id}" (${b.windowStart}..${b.windowEnd})`, rid, at);
+      }
+    };
 
     const seen = new Set<string>();
     pf.observations.forEach((o, i) => {
@@ -87,9 +102,7 @@ export function checkPrices(sink: IssueSink, dataset: Dataset, registry: Registr
           sink.error('publisher-domain', file, `url host ${host ?? '(invalid)'} is not a domain of retailer "${pub.id}"`, rid, `${at}.url`);
         }
       }
-      if (o.retrievedAt < windowStart || o.retrievedAt > windowEnd) {
-        sink.error('price-window', file, `retrievedAt ${o.retrievedAt} is outside the batch window ${windowStart}..${windowEnd}`, rid, `${at}.retrievedAt`);
-      }
+      checkWindow(o.batch, o.retrievedAt, rid, `${at}.retrievedAt`, 'retrievedAt');
       if (o.retrievedAt > today) sink.error('date-future', file, `retrievedAt ${o.retrievedAt} is after today (${today})`, rid, `${at}.retrievedAt`);
       // A later attempt on the same day carries an attempt number, --2 and up (data/tools/capture-name.mjs).
       const expected = `artifacts/prices/${market}/${o.partId}--${o.retailer}--${o.retrievedAt}`;
@@ -112,9 +125,7 @@ export function checkPrices(sink: IssueSink, dataset: Dataset, registry: Registr
       g.retailersTried.forEach((r, j) => {
         checkRetailer(sink, file, rid, `${at}.retailersTried.${String(j)}`, r, market, registry);
       });
-      if (g.checkedAt < windowStart || g.checkedAt > windowEnd) {
-        sink.error('price-window', file, `checkedAt ${g.checkedAt} is outside the batch window ${windowStart}..${windowEnd}`, rid, `${at}.checkedAt`);
-      }
+      checkWindow(g.batch, g.checkedAt, rid, `${at}.checkedAt`, 'checkedAt');
       if (g.checkedAt > today) sink.error('date-future', file, `checkedAt ${g.checkedAt} is after today (${today})`, rid, `${at}.checkedAt`);
       if (gapSeen.has(g.partId)) sink.error('price-duplicate', file, `two gap records for "${g.partId}"`, rid, at);
       gapSeen.add(g.partId);

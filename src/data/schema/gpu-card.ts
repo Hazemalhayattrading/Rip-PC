@@ -11,6 +11,21 @@ export const GpuPowerConnector = z.strictObject({
 export type GpuPowerConnector = z.infer<typeof GpuPowerConnector>;
 
 /**
+ * The power adapter in the box of a card with a 16-pin plug, for a PSU without a native 16-pin
+ * cable (NVIDIA: "3x PCIe 8-pin cables (adapter)").
+ */
+export const GpuPowerAdapter = z.strictObject({
+  /** PCIe 8-pin plugs the adapter takes. */
+  pcie8pinInputs: PosInt,
+  /**
+   * The maker wants each plug on its own PSU cable (NVIDIA: "independent dedicated cables"), not a
+   * daisy chain. `null` plus a note when the maker doesn't say.
+   */
+  separateCables: z.boolean().nullable(),
+});
+export type GpuPowerAdapter = z.infer<typeof GpuPowerAdapter>;
+
+/**
  * A retail graphics card (architecture call 4.2): everything physical. Clearance and power checks
  * use cards; performance comes from the chip it references.
  */
@@ -29,6 +44,11 @@ export const GpuCard = z.strictObject({
   slots: PosNum,
   /** `[]` means the card is powered by the slot alone. */
   powerConnectors: z.array(GpuPowerConnector),
+  /**
+   * The adapter in the box, on a card with a 16-pin plug. `null` on a card without one; on a 16-pin
+   * card, `null` plus a note when the maker lists no adapter.
+   */
+  powerAdapter: GpuPowerAdapter.nullable(),
   /** Card power as the maker lists it. `null` plus a note when not published. */
   cardPowerW: PosInt.nullable(),
   recommendedPsuW: PosInt.nullable(),

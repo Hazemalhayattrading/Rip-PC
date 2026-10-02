@@ -1,4 +1,4 @@
-import { deriveCaseSize } from '../schema/case';
+import { deriveCaseSize, type Case, type LayoutCondition } from '../schema/case';
 import { CPU_FAMILIES, SOCKET_MEMORY, type Cpu } from '../schema/cpu';
 import { DATA_PATHS, SPEC_CATEGORIES, type SpecCategory, type SpecRecord } from '../schema/files';
 import { CHIPSETS_BY_SOCKET, type Motherboard } from '../schema/motherboard';
@@ -30,11 +30,15 @@ function nullMeansNone(record: SpecRecord): string[] {
       return [
         'ocModeBoostClockMhz',
         ...record.powerConnectors.flatMap((c, i) => (c.type === '16-pin' ? [] : [`powerConnectors.${String(i)}.standard`])),
+        ...(record.powerConnectors.some((c) => c.type === '16-pin') ? [] : ['powerAdapter']),
       ];
     case 'psu':
-      return record.connectors.pcie16pin === 0 ? ['connectors.pcie16pinStandard'] : [];
+      return [
+        ...(record.connectors.pcie16pin === 0 ? ['connectors.pcie16pinStandard'] : []),
+        ...(record.formFactor === 'ATX' ? ['atxBracketIncluded'] : []),
+      ];
     case 'cooler':
-      return record.manufacturer === 'noctua' ? [] : ['nsprRating'];
+      return [...(record.manufacturer === 'noctua' ? [] : ['nsprRating']), ...(record.type === 'air' ? ['singleFanRamClearanceMm'] : [])];
     case 'case':
       return ['gpuClearance.*.condition', 'coolerClearance.*.condition', 'psu.clearance.*.condition', 'includedFans.*.model', 'gpuMaxHeightMm'];
     case 'gpu-chip':
@@ -141,6 +145,10 @@ function checkMotherboard(sink: IssueSink, file: string, board: Motherboard, cpu
   if (board.biosFlashback.supported !== (board.biosFlashback.name !== null)) {
     sink.error('sanity', file, 'biosFlashback.name is set exactly when flashback is supported', id, 'biosFlashback');
   }
+  const official = board.memory.officialMaxSpeedMtps;
+  if (official !== null && official > board.memory.maxSpeedMtps) {
+    sink.error('sanity', file, 'the official memory speed is above the highest listed speed', id, 'memory.officialMaxSpeedMtps');
+  }
 
   // BIOS support: families match the socket; one row per catalogue CPU on the socket.
   board.biosSupport.families.forEach((f, i) => {
@@ -188,6 +196,44 @@ const RAD_FANS: Readonly<Record<number, { size: number; count: number }>> = {
   360: { size: 120, count: 3 },
   420: { size: 140, count: 3 },
 };
+
+/**
+ * Structured case conditions must be possible in that case: a radiator condition names a position
+ * and sizes the case supports, and a drive-tray count fits its trays. Drive-tray layouts must agree
+ * with the case's other limits.
+ */
+function checkCaseLayouts(r: Case, bad: (message: string, path?: string) => void): void {
+  const rows: { path: string; condition: LayoutCondition | null }[] = [
+    ...r.gpuClearance.map((c, i) => ({ path: `gpuClearance.${String(i)}`, condition: c.condition })),
+    ...r.coolerClearance.map((c, i) => ({ path: `coolerClearance.${String(i)}`, condition: c.condition })),
+    ...(r.psu.clearance ?? []).map((c, i) => ({ path: `psu.clearance.${String(i)}`, condition: c.condition })),
+  ];
+  for (const { path, condition } of rows) {
+    if (condition === null) continue;
+    if (condition.kind === 'radiator') {
+      const supported = new Set(r.radiatorSupport.filter((s) => s.position === condition.position).flatMap((s) => s.sizesMm));
+      const missing = condition.sizesMm.filter((size) => !supported.has(size));
+      if (missing.length > 0) bad(`the case takes no ${missing.join('/')} mm radiator at the ${condition.position}`, `${path}.condition`);
+    } else if (condition.count > r.driveBays.bays35) {
+      bad(`${String(condition.count)} drive trays, but the case has ${String(r.driveBays.bays35)}`, `${path}.condition`);
+    }
+  }
+  const layouts = r.driveTrayLayouts ?? [];
+  if (new Set(layouts.map((l) => l.label)).size !== layouts.length) bad('drive-tray layout labels must be unique', 'driveTrayLayouts');
+  const frontMax = Math.max(0, ...r.radiatorSupport.filter((s) => s.position === 'front').flatMap((s) => s.sizesMm));
+  layouts.forEach((l, i) => {
+    const at = `driveTrayLayouts.${String(i)}`;
+    if (new Set(l.trays).size !== l.trays.length) bad('a layout lists a tray position twice', at);
+    if (l.trays.length > r.driveBays.bays35) bad(`${String(l.trays.length)} trays, but the case has ${String(r.driveBays.bays35)}`, at);
+    if (l.psuMaxLengthMm < 90 || l.psuMaxLengthMm > 400) bad('layout PSU length limit out of range', at);
+    if (l.frontRadiatorMaxMm > frontMax) bad(`a ${String(l.frontRadiatorMaxMm)} mm front radiator, but the case takes ${String(frontMax)} mm at most`, at);
+    for (const c of r.psu.clearance ?? []) {
+      if (c.condition?.kind === 'drive-trays' && c.condition.count === l.trays.length && l.psuMaxLengthMm > c.maxLengthMm) {
+        bad(`the layout allows a longer PSU than the ${String(c.condition.count)}-tray limit of ${String(c.maxLengthMm)} mm`, at);
+      }
+    }
+  });
+}
 
 function checkSanity(sink: IssueSink, file: string, r: SpecRecord): void {
   const bad = (message: string, path?: string): void => {
@@ -244,6 +290,7 @@ function checkSanity(sink: IssueSink, file: string, r: SpecRecord): void {
         if (c.type !== '16-pin' && c.standard !== null) bad('only a 16-pin connector has a standard', `powerConnectors.${String(i)}`);
       });
       if (r.cardPowerW !== null && r.recommendedPsuW !== null && r.recommendedPsuW < r.cardPowerW) bad('PSU recommendation < card power', 'recommendedPsuW');
+      if (r.powerAdapter !== null && !r.powerConnectors.some((c) => c.type === '16-pin')) bad('only a card with a 16-pin plug has a 16-pin adapter', 'powerAdapter');
       break;
     }
     case 'storage': {
@@ -261,11 +308,22 @@ function checkSanity(sink: IssueSink, file: string, r: SpecRecord): void {
       if ((r.connectors.pcie16pin === 0) !== (r.connectors.pcie16pinStandard === null)) {
         bad('pcie16pinStandard is set exactly when there is a 16-pin cable', 'connectors');
       }
+      const cables = r.connectors.pcie8pinCables;
+      if (cables !== null && (cables > r.connectors.pcie8pin || (cables === 0) !== (r.connectors.pcie8pin === 0))) {
+        bad('PCIe 8-pin connectors need at least one cable, and no more cables than connectors', 'connectors.pcie8pinCables');
+      }
+      if (r.formFactor === 'ATX' && r.atxBracketIncluded !== null) bad('an ATX unit needs no SFX-to-ATX bracket', 'atxBracketIncluded');
       if (r.wattageW < 200 || r.wattageW > 3000) bad('wattage out of range', 'wattageW');
       break;
     }
     case 'cooler': {
       if (r.type === 'air' && (r.heightMm < 20 || r.heightMm > 200)) bad('air cooler height out of range', 'heightMm');
+      if (r.type === 'air' && r.singleFanRamClearanceMm !== null) {
+        if (r.fanCount < 2) bad('a single-fan RAM clearance needs a cooler with two or more fans', 'singleFanRamClearanceMm');
+        if (r.ramClearanceMm !== null && r.singleFanRamClearanceMm < r.ramClearanceMm) {
+          bad('the single-fan RAM clearance is lower than the clearance as sold', 'singleFanRamClearanceMm');
+        }
+      }
       if (r.type === 'aio') {
         const expect = RAD_FANS[r.radiatorSizeMm];
         if (expect !== undefined && (expect.size !== r.fanSizeMm || expect.count !== r.fanCount)) {
@@ -297,6 +355,7 @@ function checkSanity(sink: IssueSink, file: string, r: SpecRecord): void {
           bad('a tall-GPU thickness limit must not be looser than the normal one', 'layoutPositions');
         }
       }
+      checkCaseLayouts(r, bad);
       break;
     }
     case 'case-fan': {

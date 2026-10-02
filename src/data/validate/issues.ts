@@ -26,7 +26,7 @@ export const RULES = {
   'price-currency': 'A price is in its market currency (SA: SAR, US: USD).',
   'price-archive': 'A price never has an archiveUrl and never comes from an archive, cache, tracker or aggregator.',
   'price-retailer': 'A price or gap names retailer-kind publishers that sell in that market.',
-  'price-window': "A price's retrievedAt, and a gap's checkedAt, fall inside the batch window.",
+  'price-window': "A price's retrievedAt, and a gap's checkedAt, fall inside the window of the batch it names.",
   'price-capture':
     'A price names its capture as artifacts/prices/<market>/<partId>--<retailer>--<retrievedAt>[--<n>].<html|png>, with its SHA-256.',
   'price-gap-reason': 'A gap record states its reason.',

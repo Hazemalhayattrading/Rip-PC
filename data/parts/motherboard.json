@@ -78,6 +78,7 @@
         "slots": 4,
         "maxCapacityGb": 256,
         "maxSpeedMtps": 7600,
+        "officialMaxSpeedMtps": 5200,
         "speedsAsPublished": "4 x DIMM, Max. 256GB, DDR5 7600+(OC)/ 7200(OC)/ 7000(OC)/ 6800(OC)/6600(OC)/ 6400(OC)/ 6200(OC)/ 6000(OC)/ 5800(OC)/ 5600(OC)/ 5400(OC)/ 5200/ 5000/ 4800"
       },
       "m2Slots": [
@@ -374,6 +375,7 @@
         "slots": 4,
         "maxCapacityGb": 256,
         "maxSpeedMtps": 8000,
+        "officialMaxSpeedMtps": null,
         "speedsAsPublished": "4 x DIMM slots, max. 256GB, DDR5 Supports up to 8000+MT/s(OC) with Ryzen 9000 & 8000 & 7000 Series Processors"
       },
       "m2Slots": [
@@ -576,6 +578,10 @@
         {
           "field": "m2Slots",
           "text": "With a Ryzen 8000 Series CPU, M.2_2 does not work and M.2_1 runs at PCIe 4.0 x4 (manual p. 9). The catalogue has no Ryzen 8000 CPU."
+        },
+        {
+          "field": "memory.officialMaxSpeedMtps",
+          "text": "The spec page lists overclocked speeds only (\"4 x DIMM slots, max. 256GB, DDR5 Supports up to 8000+MT/s(OC) with Ryzen 9000 & 8000 & 7000 Series Processors\"), so the board's official speed is not published; the CPU's official speed still applies."
         }
       ]
     },
@@ -655,6 +661,7 @@
         "slots": 2,
         "maxCapacityGb": 96,
         "maxSpeedMtps": 8000,
+        "officialMaxSpeedMtps": 5200,
         "speedsAsPublished": "2 x DIMM, Max. 96GB, DDR5 8000+(OC)/7800(OC)/7600(OC)/7200(OC)/7000(OC)/6800(OC)/6600(OC)/6400(OC)/ 6200(OC)/ 6000(OC)/ 5800(OC)/ 5600(OC)/ 5400(OC)/ 5200/ 5000/ 4800"
       },
       "m2Slots": [
@@ -891,6 +898,7 @@
         "slots": 4,
         "maxCapacityGb": 256,
         "maxSpeedMtps": 7600,
+        "officialMaxSpeedMtps": 5200,
         "speedsAsPublished": "4 x DIMM, Max. 256GB, DDR5 7600+OC)/7200(OC)/7000(OC)/6800(OC)/6600(OC)/6400(OC)/ 6200(OC)/ 6000(OC)/5800(OC)/ 5600(OC)/ 5400(OC)/ 5200/ 5000/ 4800"
       },
       "m2Slots": [
@@ -1098,6 +1106,7 @@
         "slots": 4,
         "maxCapacityGb": 128,
         "maxSpeedMtps": 4866,
+        "officialMaxSpeedMtps": 3200,
         "speedsAsPublished": "4 x DIMM, Max. 128GB, DDR4 4866(OC)/4800(OC)/4600(OC)/4466(OC)/4400(OC)/4333(OC)/4266(OC)/4200(OC)/4133(OC)/4000(OC)/3866(OC)/3733(OC)/3600(OC)/3466(OC)/3400(OC)/3333(OC)/3200/3000/2933/2800/2666/2400/2133 MHz"
       },
       "m2Slots": [
@@ -1404,6 +1413,7 @@
         "slots": 4,
         "maxCapacityGb": 256,
         "maxSpeedMtps": 9066,
+        "officialMaxSpeedMtps": null,
         "speedsAsPublished": "4 x DIMM slots, max. 256GB, DDR5 Support up to 9066+MT/s (OC), Non-ECC, Un-buffered, Clocked Unbuffered DIMM (CUDIMM)"
       },
       "m2Slots": [
@@ -1603,6 +1613,10 @@
         {
           "field": "laneSharing",
           "text": "The manual's specifications summary and expansion-slot pages give no shared-bandwidth footnote for any slot or port on this board."
+        },
+        {
+          "field": "memory.officialMaxSpeedMtps",
+          "text": "The spec page lists overclocked speeds only (\"4 x DIMM slots, max. 256GB, DDR5 Support up to 9066+MT/s (OC), Non-ECC, Un-buffered, Clocked Unbuffered DIMM (CUDIMM)\"), so the board's official speed is not published; the CPU's official speed still applies."
         }
       ]
     },
@@ -1658,6 +1672,7 @@
         "slots": 4,
         "maxCapacityGb": 128,
         "maxSpeedMtps": 5333,
+        "officialMaxSpeedMtps": 3200,
         "speedsAsPublished": "4 x DIMM, Max. 128GB, DDR4 5333(OC)/5066(OC)/5000(OC)/4800(OC)/4600(OC)/4400(OC)/4266(OC)/4000(OC)/3733(OC)/3600(OC)/3466(OC)/3400(OC)/3333(OC)/3200/3000/2933/2800/2666/2400/2133"
       },
       "m2Slots": [

@@ -84,7 +84,8 @@ describe('seed compatibility cases', () => {
       return (
         base !== undefined &&
         c.gpuClearance.some(
-          (g) => g.condition !== null && /front radiator/i.test(g.condition) && g.maxLengthMm < base.maxLengthMm,
+          (g) =>
+            g.condition?.kind === 'radiator' && g.condition.position === 'front' && g.maxLengthMm < base.maxLengthMm,
         )
       );
     });
