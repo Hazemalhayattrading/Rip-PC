@@ -1,5 +1,6 @@
 import type * as z from 'zod';
 import { CreatorBenchmarkFile, type CreatorBenchmark } from '../schema/benchmark-creator';
+import { CompatFixturesFile } from '../schema/compat-fixtures';
 import { GameBenchmarkFile, type GameBenchmark } from '../schema/benchmark-game';
 import { MARKETS, type Market } from '../schema/common';
 import {
@@ -22,9 +23,10 @@ export interface Dataset {
   games: GamesFile | null;
   gameBenchmarks: GameBenchmark[] | null;
   creatorBenchmarks: CreatorBenchmark[] | null;
+  compatFixtures: CompatFixturesFile | null;
 }
 
-type FileKind = 'publishers' | 'spec' | 'price' | 'games' | 'benchmark';
+type FileKind = 'publishers' | 'spec' | 'price' | 'games' | 'benchmark' | 'fixtures';
 type ZodIssue = z.core.$ZodIssue;
 
 /** Maps a schema issue onto the rule it breaks, so Owner's-rule failures report under their own ID. */
@@ -117,6 +119,14 @@ export function parseDataset(files: Readonly<Record<string, unknown>>, sink: Iss
     'benchmark',
   );
 
+  const compatFixtures = parseFile(
+    sink,
+    DATA_PATHS.compatFixtures,
+    files[DATA_PATHS.compatFixtures],
+    CompatFixturesFile,
+    'fixtures',
+  );
+
   return {
     publishers: publishers === null ? null : publishers.publishers,
     specs: specs as Dataset['specs'],
@@ -124,5 +134,6 @@ export function parseDataset(files: Readonly<Record<string, unknown>>, sink: Iss
     games,
     gameBenchmarks: gameBench === null ? null : gameBench.items,
     creatorBenchmarks: creatorBench === null ? null : creatorBench.items,
+    compatFixtures,
   };
 }

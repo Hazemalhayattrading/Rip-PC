@@ -282,6 +282,17 @@
           ],
           "title": "User's Manual E21902 (V3)",
           "locator": "p. vii, Storage"
+        },
+        {
+          "url": "https://www.asus.com/support/faq/1038568/",
+          "publisher": "asus",
+          "retrievedAt": "2026-10-02",
+          "docType": "support-article",
+          "fields": [
+            "biosFlashback"
+          ],
+          "title": "[Motherboard] How to use USB BIOS FlashBack™?",
+          "locator": "ASUS FAQ 1038568, \"Last Update : 2026/04/09 18:20\": the general USB BIOS FlashBack procedure, steps 1 to 8 (step 5: \"Please refer to the FlashBack location of the model manual\"). Its product list does not name this board."
         }
       ],
       "notes": [
@@ -572,6 +583,17 @@
           ],
           "title": "User's Manual E25811 (V2)",
           "locator": "pp. 8-9 specifications summary; p. 14 Connectors with shared bandwidth"
+        },
+        {
+          "url": "https://www.asus.com/support/faq/1038568/",
+          "publisher": "asus",
+          "retrievedAt": "2026-10-02",
+          "docType": "support-article",
+          "fields": [
+            "biosFlashback"
+          ],
+          "title": "[Motherboard] How to use USB BIOS FlashBack™?",
+          "locator": "ASUS FAQ 1038568, \"Last Update : 2026/04/09 18:20\": the general USB BIOS FlashBack procedure, steps 1 to 8 (step 5: \"Please refer to the FlashBack location of the model manual\"). Its product list does not name this board."
         }
       ],
       "notes": [
@@ -797,6 +819,17 @@
           ],
           "title": "User's Manual E28634 (V2)",
           "locator": "p. vii specifications summary; p. 1-8 (M.2 slots)"
+        },
+        {
+          "url": "https://www.asus.com/support/faq/1038568/",
+          "publisher": "asus",
+          "retrievedAt": "2026-10-02",
+          "docType": "support-article",
+          "fields": [
+            "biosFlashback"
+          ],
+          "title": "[Motherboard] How to use USB BIOS FlashBack™?",
+          "locator": "ASUS FAQ 1038568, \"Last Update : 2026/04/09 18:20\": the general USB BIOS FlashBack procedure, steps 1 to 8 (step 5: \"Please refer to the FlashBack location of the model manual\"). Its product list does not name this board."
         }
       ],
       "notes": [
@@ -1052,6 +1085,17 @@
           ],
           "title": "User's Manual E20197",
           "locator": "p. vi specifications summary; pp. 1-2 to 1-3 (expansion slots)"
+        },
+        {
+          "url": "https://www.asus.com/support/faq/1038568/",
+          "publisher": "asus",
+          "retrievedAt": "2026-10-02",
+          "docType": "support-article",
+          "fields": [
+            "biosFlashback"
+          ],
+          "title": "[Motherboard] How to use USB BIOS FlashBack™?",
+          "locator": "ASUS FAQ 1038568, \"Last Update : 2026/04/09 18:20\": the general USB BIOS FlashBack procedure, steps 1 to 8 (step 5: \"Please refer to the FlashBack location of the model manual\"). Its product list does not name this board."
         }
       ],
       "notes": [
@@ -1078,8 +1122,8 @@
         "families": [
           {
             "family": "ryzen-5000",
-            "minBiosVersion": "0303",
-            "statement": "CPU support list: earliest listed BIOS for Ryzen 5000 models is 0303 (e.g. Ryzen 5 5600: 0303; Ryzen 7 5700X3D: 2803)."
+            "minBiosVersion": null,
+            "statement": "CPU support list: Ryzen 5000 models validated since BIOS 0303 or later (e.g. Ryzen 5 5600: 0303; Ryzen 7 5700X3D: 2803). BIOS page: \"TUF GAMING B550-PLUS WIFI II BIOS 0303 Version 0303 20.2 MB 2021/10/21 First Release\", so the first BIOS already supports the family."
           },
           {
             "family": "ryzen-3000",
@@ -1365,7 +1409,7 @@
           "retrievedAt": "2026-10-02",
           "docType": "bios-release-notes",
           "fields": [
-            "biosSupport.families.1"
+            "biosSupport.families"
           ],
           "title": "BIOS & FIRMWARE (all versions shown)",
           "locator": "Last entry: \"TUF GAMING B550-PLUS WIFI II BIOS 0303 Version 0303 20.2 MB 2021/10/21 First Release\""
@@ -1381,6 +1425,17 @@
           ],
           "title": "AMD Socket AM4 Chipsets | Specs & CPU Compatibility",
           "locator": "Table \"AMD Socket AM4 Motherboard Chipset Solutions\": row \"B550\", column \"AMD Ryzen™ 3000 Series Processors with Radeon™ Graphics\": \"X\""
+        },
+        {
+          "url": "https://www.asus.com/support/faq/1038568/",
+          "publisher": "asus",
+          "retrievedAt": "2026-10-02",
+          "docType": "support-article",
+          "fields": [
+            "biosFlashback"
+          ],
+          "title": "[Motherboard] How to use USB BIOS FlashBack™?",
+          "locator": "ASUS FAQ 1038568, \"Last Update : 2026/04/09 18:20\": the general USB BIOS FlashBack procedure, steps 1 to 8 (step 5: \"Please refer to the FlashBack location of the model manual\"). Its product list does not name this board."
         }
       ],
       "notes": [
@@ -1390,7 +1445,7 @@
         },
         {
           "field": "pcieSlots",
-          "text": "With a Ryzen 5000 G-Series or 4000 G-Series CPU, PCIEX16_1 runs at PCIe 3.0 (spec page). The catalogue has no G-Series CPU."
+          "text": "With a Ryzen 5000 G-Series or 4000 G-Series CPU, PCIEX16_1 runs at PCIe 3.0 (spec page). The catalogue has no Ryzen 5000 or 4000 G-Series CPU; its Ryzen 5 3400G (Ryzen 3000 G-Series) is not on this board's CPU support list."
         },
         {
           "field": "biosSupport.cpus.2",
@@ -1645,6 +1700,17 @@
           ],
           "title": "User's Manual E24160",
           "locator": "pp. 8-9 specifications summary; p. 17 (expansion slots)"
+        },
+        {
+          "url": "https://www.asus.com/support/faq/1038568/",
+          "publisher": "asus",
+          "retrievedAt": "2026-10-02",
+          "docType": "support-article",
+          "fields": [
+            "biosFlashback"
+          ],
+          "title": "[Motherboard] How to use USB BIOS FlashBack™?",
+          "locator": "ASUS FAQ 1038568, \"Last Update : 2026/04/09 18:20\": the general USB BIOS FlashBack procedure, steps 1 to 8 (step 5: \"Please refer to the FlashBack location of the model manual\"). Its product list does not name this board."
         }
       ],
       "notes": [

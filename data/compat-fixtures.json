@@ -1,0 +1,2269 @@
+{
+  "schemaVersion": 1,
+  "rules": [
+    {
+      "rule": "cpu-socket",
+      "fixtures": [
+        {
+          "id": "cpu-socket-ok-9800x3d-b650-plus",
+          "outcome": "ok",
+          "parts": {
+            "cpu": "amd-ryzen-7-9800x3d",
+            "motherboard": "asus-tuf-gaming-b650-plus-wifi"
+          },
+          "reason": "The Ryzen 7 9800X3D and the TUF GAMING B650-PLUS WIFI are both AM5.",
+          "facts": [
+            {
+              "part": "amd-ryzen-7-9800x3d",
+              "path": "socket",
+              "value": "AM5"
+            },
+            {
+              "part": "asus-tuf-gaming-b650-plus-wifi",
+              "path": "socket",
+              "value": "AM5"
+            }
+          ]
+        },
+        {
+          "id": "cpu-socket-block-9800x3d-z890-plus",
+          "outcome": "block",
+          "parts": {
+            "cpu": "amd-ryzen-7-9800x3d",
+            "motherboard": "asus-tuf-gaming-z890-plus-wifi"
+          },
+          "reason": "The Ryzen 7 9800X3D needs an AM5 board, and the TUF GAMING Z890-PLUS WIFI is LGA1851.",
+          "facts": [
+            {
+              "part": "amd-ryzen-7-9800x3d",
+              "path": "socket",
+              "value": "AM5"
+            },
+            {
+              "part": "asus-tuf-gaming-z890-plus-wifi",
+              "path": "socket",
+              "value": "LGA1851"
+            }
+          ]
+        }
+      ],
+      "gaps": [
+        {
+          "outcome": "warn",
+          "kind": "not-applicable",
+          "reason": "A CPU socket either matches the board or it doesn't."
+        },
+        {
+          "outcome": "cant-verify",
+          "kind": "not-applicable",
+          "reason": "The rule reads only required fields (cpu.socket, motherboard.socket), which can't be null; the validator tests \"[schema] … is rejected\" prove it."
+        }
+      ]
+    },
+    {
+      "rule": "cpu-chipset",
+      "fixtures": [
+        {
+          "id": "cpu-chipset-ok-9950x-b650-plus",
+          "outcome": "ok",
+          "parts": {
+            "cpu": "amd-ryzen-9-9950x",
+            "motherboard": "asus-tuf-gaming-b650-plus-wifi"
+          },
+          "reason": "ASUS's CPU support list for the TUF GAMING B650-PLUS WIFI lists the Ryzen 9 9950X.",
+          "facts": [
+            {
+              "part": "amd-ryzen-9-9950x",
+              "path": "socket",
+              "value": "AM5"
+            },
+            {
+              "part": "asus-tuf-gaming-b650-plus-wifi",
+              "path": "biosSupport.cpus.2",
+              "value": {
+                "cpuId": "amd-ryzen-9-9950x",
+                "listing": "all",
+                "minBiosVersion": null,
+                "asListed": "Ryzen 9 9950X (4.3GHz, 170W, 64MB, 16, ): all"
+              }
+            }
+          ]
+        },
+        {
+          "id": "cpu-chipset-block-3400g-b550-plus",
+          "outcome": "block",
+          "parts": {
+            "cpu": "amd-ryzen-5-3400g",
+            "motherboard": "asus-tuf-gaming-b550-plus-wifi-ii"
+          },
+          "reason": "The Ryzen 5 3400G is an AM4 CPU, but ASUS's CPU support list for the TUF GAMING B550-PLUS WIFI II leaves it out: B550 doesn't support the Ryzen 3000 G-Series.",
+          "facts": [
+            {
+              "part": "amd-ryzen-5-3400g",
+              "path": "socket",
+              "value": "AM4"
+            },
+            {
+              "part": "amd-ryzen-5-3400g",
+              "path": "family",
+              "value": "ryzen-3000"
+            },
+            {
+              "part": "asus-tuf-gaming-b550-plus-wifi-ii",
+              "path": "socket",
+              "value": "AM4"
+            },
+            {
+              "part": "asus-tuf-gaming-b550-plus-wifi-ii",
+              "path": "biosSupport.cpus.2",
+              "value": {
+                "cpuId": "amd-ryzen-5-3400g",
+                "listing": "not-listed",
+                "minBiosVersion": null,
+                "asListed": "(not listed)"
+              }
+            }
+          ]
+        }
+      ],
+      "gaps": [
+        {
+          "outcome": "warn",
+          "kind": "not-applicable",
+          "reason": "A CPU is on the board's support list or it isn't; a newer BIOS is the bios-version rule."
+        },
+        {
+          "outcome": "cant-verify",
+          "kind": "not-applicable",
+          "reason": "Every board has a BIOS row for every catalogue CPU on its socket (validator rule bios-coverage), and the row's listing can't be null (\"[schema] motherboard.biosSupport.cpus[].listing: null is rejected\")."
+        }
+      ]
+    },
+    {
+      "rule": "bios-version",
+      "fixtures": [
+        {
+          "id": "bios-version-ok-9950x-x870-plus",
+          "outcome": "ok",
+          "parts": {
+            "cpu": "amd-ryzen-9-9950x",
+            "motherboard": "asus-tuf-gaming-x870-plus-wifi"
+          },
+          "reason": "ASUS lists the Ryzen 9 9950X as supported by every BIOS of the TUF GAMING X870-PLUS WIFI (\"ALL\"), so no update is needed.",
+          "facts": [
+            {
+              "part": "asus-tuf-gaming-x870-plus-wifi",
+              "path": "biosSupport.cpus.2",
+              "value": {
+                "cpuId": "amd-ryzen-9-9950x",
+                "listing": "all",
+                "minBiosVersion": null,
+                "asListed": "Ryzen 9 9950X (4.3GHz, 170W, 64MB, 16, ): ALL"
+              }
+            },
+            {
+              "part": "asus-tuf-gaming-x870-plus-wifi",
+              "path": "biosSupport.families.1",
+              "value": {
+                "family": "ryzen-9000",
+                "minBiosVersion": null,
+                "statement": "CPU support list: Ryzen 9000 models 'ALL' (Ryzen 7 9850X3D: 1066)."
+              }
+            }
+          ],
+          "notes": [
+            {
+              "text": "D1 batch 3 adds board launch or first-BIOS dates, so an \"all\" listing can be checked against the CPU's launch date (plan WP-D1 item 5)."
+            }
+          ]
+        },
+        {
+          "id": "bios-version-warn-9850x3d-x870-plus-flashback",
+          "outcome": "warn",
+          "parts": {
+            "cpu": "amd-ryzen-7-9850x3d",
+            "motherboard": "asus-tuf-gaming-x870-plus-wifi"
+          },
+          "reason": "The Ryzen 7 9850X3D needs BIOS 1066 or later on the TUF GAMING X870-PLUS WIFI, which has BIOS FlashBack, so the BIOS can be updated without a supported CPU.",
+          "facts": [
+            {
+              "part": "asus-tuf-gaming-x870-plus-wifi",
+              "path": "biosSupport.cpus.0",
+              "value": {
+                "cpuId": "amd-ryzen-7-9850x3d",
+                "listing": "since",
+                "minBiosVersion": "1066",
+                "asListed": "Ryzen 7 9850X3D (4.7GHz, 120W, 96MB, 8, ): 1066"
+              }
+            },
+            {
+              "part": "asus-tuf-gaming-x870-plus-wifi",
+              "path": "biosFlashback",
+              "value": {
+                "supported": true,
+                "name": "BIOS FlashBack"
+              }
+            }
+          ]
+        },
+        {
+          "id": "bios-version-warn-14600k-b760m-a-no-flashback",
+          "outcome": "warn",
+          "parts": {
+            "cpu": "intel-core-i5-14600k",
+            "motherboard": "asus-prime-b760m-a-wifi-d4"
+          },
+          "reason": "The Core i5-14600K needs BIOS 1205 or later on the PRIME B760M-A WIFI D4, which has no BIOS FlashBack, so the buyer should ask the retailer for a board already updated to BIOS 1205 or later.",
+          "facts": [
+            {
+              "part": "asus-prime-b760m-a-wifi-d4",
+              "path": "biosSupport.cpus.1",
+              "value": {
+                "cpuId": "intel-core-i5-14600k",
+                "listing": "since",
+                "minBiosVersion": "1205",
+                "asListed": "Core i5 | I5-14600K | 3.5 GHz | 125W | 24MB | 14 | B-0 | 1205"
+              }
+            },
+            {
+              "part": "asus-prime-b760m-a-wifi-d4",
+              "path": "biosFlashback",
+              "value": {
+                "supported": false,
+                "name": null
+              }
+            }
+          ]
+        }
+      ],
+      "gaps": [
+        {
+          "outcome": "block",
+          "kind": "not-applicable",
+          "reason": "Hazem's decision (plan §6): a CPU that needs a newer BIOS on a board without BIOS FlashBack gives warn, not block."
+        },
+        {
+          "outcome": "cant-verify",
+          "kind": "pending",
+          "reason": "D1 batch 3 adds board launch or first-BIOS dates (plan WP-D1 item 5). Then an \"all\" listing for a CPU that launched after the board's first BIOS gives can't verify, e.g. the Ryzen 7 9850X3D (launched 2026-01-29) listed \"all\" on the TUF GAMING B650-PLUS WIFI."
+        }
+      ]
+    },
+    {
+      "rule": "ram-type",
+      "fixtures": [
+        {
+          "id": "ram-type-ok-flare-x5-b650-plus",
+          "outcome": "ok",
+          "parts": {
+            "ram": "gskill-flare-x5-ddr5-6000-cl30-2x16gb",
+            "motherboard": "asus-tuf-gaming-b650-plus-wifi"
+          },
+          "reason": "The Flare X5 kit and the TUF GAMING B650-PLUS WIFI are both DDR5.",
+          "facts": [
+            {
+              "part": "gskill-flare-x5-ddr5-6000-cl30-2x16gb",
+              "path": "type",
+              "value": "DDR5"
+            },
+            {
+              "part": "asus-tuf-gaming-b650-plus-wifi",
+              "path": "memory.type",
+              "value": "DDR5"
+            }
+          ]
+        },
+        {
+          "id": "ram-type-block-trident-z-neo-ddr4-b650-plus",
+          "outcome": "block",
+          "parts": {
+            "ram": "gskill-trident-z-neo-ddr4-3600-cl16-2x16gb",
+            "motherboard": "asus-tuf-gaming-b650-plus-wifi"
+          },
+          "reason": "The Trident Z Neo kit is DDR4, and the TUF GAMING B650-PLUS WIFI takes DDR5 only.",
+          "facts": [
+            {
+              "part": "gskill-trident-z-neo-ddr4-3600-cl16-2x16gb",
+              "path": "type",
+              "value": "DDR4"
+            },
+            {
+              "part": "asus-tuf-gaming-b650-plus-wifi",
+              "path": "memory.type",
+              "value": "DDR5"
+            }
+          ]
+        }
+      ],
+      "gaps": [
+        {
+          "outcome": "warn",
+          "kind": "not-applicable",
+          "reason": "A memory type either matches the board or it doesn't."
+        },
+        {
+          "outcome": "cant-verify",
+          "kind": "not-applicable",
+          "reason": "The rule reads only required fields (ram.type, motherboard.memory.type), which can't be null; the validator tests \"[schema] … is rejected\" prove it."
+        }
+      ]
+    },
+    {
+      "rule": "ram-slots",
+      "fixtures": [
+        {
+          "id": "ram-slots-ok-2-modules-2-slots",
+          "outcome": "ok",
+          "parts": {
+            "ram": "gskill-flare-x5-ddr5-6000-cl30-2x16gb",
+            "motherboard": "asus-rog-strix-b650e-i-gaming-wifi"
+          },
+          "reason": "The Flare X5 kit has 2 modules, and the ROG STRIX B650E-I GAMING WIFI has 2 DIMM slots.",
+          "facts": [
+            {
+              "part": "gskill-flare-x5-ddr5-6000-cl30-2x16gb",
+              "path": "moduleCount",
+              "value": 2
+            },
+            {
+              "part": "asus-rog-strix-b650e-i-gaming-wifi",
+              "path": "memory.slots",
+              "value": 2
+            }
+          ]
+        },
+        {
+          "id": "ram-slots-ok-4-modules-4-slots",
+          "outcome": "ok",
+          "parts": {
+            "ram": "kingston-fury-beast-ddr5-6000-cl40-4x16gb",
+            "motherboard": "asus-tuf-gaming-b650-plus-wifi"
+          },
+          "reason": "The FURY Beast kit has 4 modules, and the TUF GAMING B650-PLUS WIFI has 4 DIMM slots.",
+          "facts": [
+            {
+              "part": "kingston-fury-beast-ddr5-6000-cl40-4x16gb",
+              "path": "moduleCount",
+              "value": 4
+            },
+            {
+              "part": "asus-tuf-gaming-b650-plus-wifi",
+              "path": "memory.slots",
+              "value": 4
+            }
+          ]
+        },
+        {
+          "id": "ram-slots-block-4-modules-2-slots",
+          "outcome": "block",
+          "parts": {
+            "ram": "kingston-fury-beast-ddr5-6000-cl40-4x16gb",
+            "motherboard": "asus-rog-strix-b650e-i-gaming-wifi"
+          },
+          "reason": "The FURY Beast kit has 4 modules, but the ROG STRIX B650E-I GAMING WIFI has only 2 DIMM slots.",
+          "facts": [
+            {
+              "part": "kingston-fury-beast-ddr5-6000-cl40-4x16gb",
+              "path": "moduleCount",
+              "value": 4
+            },
+            {
+              "part": "asus-rog-strix-b650e-i-gaming-wifi",
+              "path": "memory.slots",
+              "value": 2
+            }
+          ]
+        }
+      ],
+      "gaps": [
+        {
+          "outcome": "warn",
+          "kind": "not-applicable",
+          "reason": "The modules fit the slots or they don't."
+        },
+        {
+          "outcome": "cant-verify",
+          "kind": "not-applicable",
+          "reason": "The rule reads only required fields (ram.moduleCount, motherboard.memory.slots), which can't be null; the validator tests \"[schema] … is rejected\" prove it."
+        }
+      ]
+    },
+    {
+      "rule": "ram-speed",
+      "fixtures": [
+        {
+          "id": "ram-speed-ok-vulcan-z-5600-b550",
+          "outcome": "ok",
+          "parts": {
+            "ram": "teamgroup-t-force-vulcan-z-ddr4-3200-cl16-2x16gb",
+            "cpu": "amd-ryzen-5-5600",
+            "motherboard": "asus-tuf-gaming-b550-plus-wifi-ii"
+          },
+          "reason": "The Vulcan Z kit runs at DDR4-3200, the official speed of both the Ryzen 5 5600 with 2 modules and the TUF GAMING B550-PLUS WIFI II.",
+          "facts": [
+            {
+              "part": "teamgroup-t-force-vulcan-z-ddr4-3200-cl16-2x16gb",
+              "path": "speedMtps",
+              "value": 3200
+            },
+            {
+              "part": "teamgroup-t-force-vulcan-z-ddr4-3200-cl16-2x16gb",
+              "path": "moduleCount",
+              "value": 2
+            },
+            {
+              "part": "amd-ryzen-5-5600",
+              "path": "memory.speeds",
+              "value": [
+                {
+                  "type": "DDR4",
+                  "speedMtps": 3200,
+                  "config": "2x1R"
+                },
+                {
+                  "type": "DDR4",
+                  "speedMtps": 3200,
+                  "config": "2x2R"
+                },
+                {
+                  "type": "DDR4",
+                  "speedMtps": 2933,
+                  "config": "4x1R"
+                },
+                {
+                  "type": "DDR4",
+                  "speedMtps": 2667,
+                  "config": "4x2R"
+                }
+              ]
+            },
+            {
+              "part": "asus-tuf-gaming-b550-plus-wifi-ii",
+              "path": "memory.officialMaxSpeedMtps",
+              "value": 3200
+            }
+          ]
+        },
+        {
+          "id": "ram-speed-warn-trident-z5-ck-285k-z890",
+          "outcome": "warn",
+          "parts": {
+            "ram": "gskill-trident-z5-ck-ddr5-8200-cl40-2x24gb",
+            "cpu": "intel-core-ultra-9-285k",
+            "motherboard": "asus-tuf-gaming-z890-plus-wifi"
+          },
+          "reason": "The Trident Z5 CK kit is rated DDR5-8200, above the Core Ultra 9 285K's official DDR5-6400, so it runs at 8200 MT/s only with its XMP profile, an overclock.",
+          "facts": [
+            {
+              "part": "gskill-trident-z5-ck-ddr5-8200-cl40-2x24gb",
+              "path": "speedMtps",
+              "value": 8200
+            },
+            {
+              "part": "gskill-trident-z5-ck-ddr5-8200-cl40-2x24gb",
+              "path": "profiles",
+              "value": {
+                "xmp": "3.0",
+                "expo": false
+              }
+            },
+            {
+              "part": "intel-core-ultra-9-285k",
+              "path": "memory.speeds",
+              "value": [
+                {
+                  "type": "DDR5",
+                  "speedMtps": 6400,
+                  "config": null
+                }
+              ]
+            },
+            {
+              "part": "asus-tuf-gaming-z890-plus-wifi",
+              "path": "memory.officialMaxSpeedMtps",
+              "value": null
+            }
+          ]
+        },
+        {
+          "id": "ram-speed-cant-verify-flare-x5-285k-z890",
+          "outcome": "cant-verify",
+          "parts": {
+            "ram": "gskill-flare-x5-ddr5-6000-cl30-2x16gb",
+            "cpu": "intel-core-ultra-9-285k",
+            "motherboard": "asus-tuf-gaming-z890-plus-wifi"
+          },
+          "reason": "The Flare X5 kit's DDR5-6000 is within the Core Ultra 9 285K's official DDR5-6400, but ASUS lists only overclocked speeds for the TUF GAMING Z890-PLUS WIFI, so the board's official speed is not published.",
+          "facts": [
+            {
+              "part": "gskill-flare-x5-ddr5-6000-cl30-2x16gb",
+              "path": "speedMtps",
+              "value": 6000
+            },
+            {
+              "part": "intel-core-ultra-9-285k",
+              "path": "memory.speeds",
+              "value": [
+                {
+                  "type": "DDR5",
+                  "speedMtps": 6400,
+                  "config": null
+                }
+              ]
+            },
+            {
+              "part": "asus-tuf-gaming-z890-plus-wifi",
+              "path": "memory.officialMaxSpeedMtps",
+              "value": null
+            }
+          ],
+          "notes": [
+            {
+              "text": "Intel publishes one speed for the 285K (\"Up to DDR5 6400 MT/s\"). D1 batch 4 records official speeds per configuration and module rank (plan WP-D1 item 7); if Intel gives a lower UDIMM speed, this fixture becomes warn."
+            }
+          ]
+        }
+      ],
+      "gaps": [
+        {
+          "outcome": "block",
+          "kind": "not-applicable",
+          "reason": "A kit faster than the official speed still runs at a supported speed, so the rule warns and explains XMP or EXPO (test plan §9.2)."
+        }
+      ]
+    },
+    {
+      "rule": "gpu-length",
+      "fixtures": [
+        {
+          "id": "gpu-length-ok-9070-xt-north",
+          "outcome": "ok",
+          "parts": {
+            "gpu-card": "sapphire-pulse-radeon-rx-9070-xt-16gb",
+            "case": "fractal-north-charcoal-black-tg-light"
+          },
+          "reason": "The PULSE RX 9070 XT is 320 mm long, and the North takes cards up to 355 mm.",
+          "facts": [
+            {
+              "part": "sapphire-pulse-radeon-rx-9070-xt-16gb",
+              "path": "lengthMm",
+              "value": 320
+            },
+            {
+              "part": "fractal-north-charcoal-black-tg-light",
+              "path": "gpuClearance.0",
+              "value": {
+                "maxLengthMm": 355,
+                "condition": null
+              }
+            }
+          ]
+        },
+        {
+          "id": "gpu-length-block-9070-xt-north-front-360",
+          "outcome": "block",
+          "parts": {
+            "gpu-card": "sapphire-pulse-radeon-rx-9070-xt-16gb",
+            "case": "fractal-north-charcoal-black-tg-light",
+            "cooler": "arctic-liquid-freezer-iii-pro-360"
+          },
+          "reason": "A 360 mm radiator fits only at the front of the North, which then takes cards up to 300 mm, and the PULSE RX 9070 XT is 320 mm long.",
+          "facts": [
+            {
+              "part": "sapphire-pulse-radeon-rx-9070-xt-16gb",
+              "path": "lengthMm",
+              "value": 320
+            },
+            {
+              "part": "arctic-liquid-freezer-iii-pro-360",
+              "path": "radiatorSizeMm",
+              "value": 360
+            },
+            {
+              "part": "fractal-north-charcoal-black-tg-light",
+              "path": "gpuClearance.1",
+              "value": {
+                "maxLengthMm": 300,
+                "condition": {
+                  "kind": "radiator",
+                  "position": "front",
+                  "sizesMm": [
+                    360
+                  ],
+                  "asPublished": "up to 300 mm with a 360 mm front radiator"
+                }
+              }
+            },
+            {
+              "part": "fractal-north-charcoal-black-tg-light",
+              "path": "radiatorSupport",
+              "value": [
+                {
+                  "position": "front",
+                  "sizesMm": [
+                    120,
+                    240,
+                    360
+                  ],
+                  "maxThicknessMm": 55
+                },
+                {
+                  "position": "front",
+                  "sizesMm": [
+                    140,
+                    280
+                  ],
+                  "maxThicknessMm": 35
+                },
+                {
+                  "position": "top",
+                  "sizesMm": [
+                    120,
+                    240
+                  ],
+                  "maxThicknessMm": 35
+                },
+                {
+                  "position": "rear",
+                  "sizesMm": [
+                    120
+                  ],
+                  "maxThicknessMm": null
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "gaps": [
+        {
+          "outcome": "warn",
+          "kind": "not-applicable",
+          "reason": "A card fits the case length or it doesn't."
+        },
+        {
+          "outcome": "cant-verify",
+          "kind": "no-real-product",
+          "reason": "Can't verify needs a radiator size the North's GPU rows don't list (only 360 mm at the front) where it can go only at the front. The catalogue's Kraken Plus 240 also fits the North's top, where the GPU limit stays 355 mm, and its Liquid Freezer III Pro 280 (38 mm thick) is too thick for the North's front 140/280 mm position (35 mm). No other case has a radiator condition."
+        }
+      ]
+    },
+    {
+      "rule": "gpu-thickness",
+      "fixtures": [
+        {
+          "id": "gpu-thickness-ok-9060-xt-an400-terra",
+          "outcome": "ok",
+          "parts": {
+            "gpu-card": "sapphire-pulse-radeon-rx-9060-xt-oc-16gb",
+            "cooler": "deepcool-an400",
+            "case": "fractal-terra-graphite"
+          },
+          "reason": "Spine positions 2 to 6 of the Terra fit both the 46.08 mm thick PULSE RX 9060 XT (position 2 takes 48 mm) and the 52.5 mm tall AN400 (position 6 takes 53 mm).",
+          "facts": [
+            {
+              "part": "sapphire-pulse-radeon-rx-9060-xt-oc-16gb",
+              "path": "thicknessMm",
+              "value": 46.08
+            },
+            {
+              "part": "sapphire-pulse-radeon-rx-9060-xt-oc-16gb",
+              "path": "heightMm",
+              "value": 111.25
+            },
+            {
+              "part": "deepcool-an400",
+              "path": "heightMm",
+              "value": 52.5
+            },
+            {
+              "part": "fractal-terra-graphite",
+              "path": "layoutPositions",
+              "value": [
+                {
+                  "position": "1",
+                  "coolerMaxHeightMm": 77,
+                  "gpuMaxThicknessMm": 43,
+                  "tallGpuLimit": {
+                    "aboveGpuHeightMm": 131,
+                    "maxThicknessMm": 33
+                  },
+                  "radiatorFanMaxThicknessMm": 49
+                },
+                {
+                  "position": "2",
+                  "coolerMaxHeightMm": 72,
+                  "gpuMaxThicknessMm": 48,
+                  "tallGpuLimit": {
+                    "aboveGpuHeightMm": 131,
+                    "maxThicknessMm": 38
+                  },
+                  "radiatorFanMaxThicknessMm": 54
+                },
+                {
+                  "position": "3",
+                  "coolerMaxHeightMm": 67,
+                  "gpuMaxThicknessMm": 53,
+                  "tallGpuLimit": {
+                    "aboveGpuHeightMm": 131,
+                    "maxThicknessMm": 43
+                  },
+                  "radiatorFanMaxThicknessMm": 59
+                },
+                {
+                  "position": "4",
+                  "coolerMaxHeightMm": 62,
+                  "gpuMaxThicknessMm": 58,
+                  "tallGpuLimit": {
+                    "aboveGpuHeightMm": 131,
+                    "maxThicknessMm": 48
+                  },
+                  "radiatorFanMaxThicknessMm": 64
+                },
+                {
+                  "position": "5",
+                  "coolerMaxHeightMm": 57,
+                  "gpuMaxThicknessMm": 63,
+                  "tallGpuLimit": {
+                    "aboveGpuHeightMm": 131,
+                    "maxThicknessMm": 53
+                  },
+                  "radiatorFanMaxThicknessMm": 69
+                },
+                {
+                  "position": "6",
+                  "coolerMaxHeightMm": 53,
+                  "gpuMaxThicknessMm": 67,
+                  "tallGpuLimit": {
+                    "aboveGpuHeightMm": 131,
+                    "maxThicknessMm": 57
+                  },
+                  "radiatorFanMaxThicknessMm": 74
+                },
+                {
+                  "position": "7",
+                  "coolerMaxHeightMm": 48,
+                  "gpuMaxThicknessMm": 72,
+                  "tallGpuLimit": {
+                    "aboveGpuHeightMm": 131,
+                    "maxThicknessMm": 62
+                  },
+                  "radiatorFanMaxThicknessMm": 79
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "gpu-thickness-block-tuf-5070-ti-terra",
+          "outcome": "block",
+          "parts": {
+            "gpu-card": "asus-tuf-gaming-geforce-rtx-5070-ti-16gb-oc",
+            "case": "fractal-terra-graphite"
+          },
+          "reason": "The TUF RTX 5070 Ti is 62.5 mm thick and 140 mm tall, and for cards taller than 131 mm the Terra takes 62 mm at most (spine position 7).",
+          "facts": [
+            {
+              "part": "asus-tuf-gaming-geforce-rtx-5070-ti-16gb-oc",
+              "path": "thicknessMm",
+              "value": 62.5
+            },
+            {
+              "part": "asus-tuf-gaming-geforce-rtx-5070-ti-16gb-oc",
+              "path": "heightMm",
+              "value": 140
+            },
+            {
+              "part": "fractal-terra-graphite",
+              "path": "layoutPositions.6",
+              "value": {
+                "position": "7",
+                "coolerMaxHeightMm": 48,
+                "gpuMaxThicknessMm": 72,
+                "tallGpuLimit": {
+                  "aboveGpuHeightMm": 131,
+                  "maxThicknessMm": 62
+                },
+                "radiatorFanMaxThicknessMm": 79
+              }
+            },
+            {
+              "part": "fractal-terra-graphite",
+              "path": "gpuMaxHeightMm",
+              "value": 145
+            }
+          ]
+        },
+        {
+          "id": "gpu-thickness-cant-verify-5070-fe-terra",
+          "outcome": "cant-verify",
+          "parts": {
+            "gpu-card": "nvidia-geforce-rtx-5070-founders-edition",
+            "case": "fractal-terra-graphite"
+          },
+          "reason": "NVIDIA gives the RTX 5070 Founders Edition as 2-slot but publishes no thickness in millimetres, and the Terra's spine limits are in millimetres.",
+          "facts": [
+            {
+              "part": "nvidia-geforce-rtx-5070-founders-edition",
+              "path": "thicknessMm",
+              "value": null
+            },
+            {
+              "part": "nvidia-geforce-rtx-5070-founders-edition",
+              "path": "slots",
+              "value": 2
+            },
+            {
+              "part": "fractal-terra-graphite",
+              "path": "layoutPositions",
+              "value": [
+                {
+                  "position": "1",
+                  "coolerMaxHeightMm": 77,
+                  "gpuMaxThicknessMm": 43,
+                  "tallGpuLimit": {
+                    "aboveGpuHeightMm": 131,
+                    "maxThicknessMm": 33
+                  },
+                  "radiatorFanMaxThicknessMm": 49
+                },
+                {
+                  "position": "2",
+                  "coolerMaxHeightMm": 72,
+                  "gpuMaxThicknessMm": 48,
+                  "tallGpuLimit": {
+                    "aboveGpuHeightMm": 131,
+                    "maxThicknessMm": 38
+                  },
+                  "radiatorFanMaxThicknessMm": 54
+                },
+                {
+                  "position": "3",
+                  "coolerMaxHeightMm": 67,
+                  "gpuMaxThicknessMm": 53,
+                  "tallGpuLimit": {
+                    "aboveGpuHeightMm": 131,
+                    "maxThicknessMm": 43
+                  },
+                  "radiatorFanMaxThicknessMm": 59
+                },
+                {
+                  "position": "4",
+                  "coolerMaxHeightMm": 62,
+                  "gpuMaxThicknessMm": 58,
+                  "tallGpuLimit": {
+                    "aboveGpuHeightMm": 131,
+                    "maxThicknessMm": 48
+                  },
+                  "radiatorFanMaxThicknessMm": 64
+                },
+                {
+                  "position": "5",
+                  "coolerMaxHeightMm": 57,
+                  "gpuMaxThicknessMm": 63,
+                  "tallGpuLimit": {
+                    "aboveGpuHeightMm": 131,
+                    "maxThicknessMm": 53
+                  },
+                  "radiatorFanMaxThicknessMm": 69
+                },
+                {
+                  "position": "6",
+                  "coolerMaxHeightMm": 53,
+                  "gpuMaxThicknessMm": 67,
+                  "tallGpuLimit": {
+                    "aboveGpuHeightMm": 131,
+                    "maxThicknessMm": 57
+                  },
+                  "radiatorFanMaxThicknessMm": 74
+                },
+                {
+                  "position": "7",
+                  "coolerMaxHeightMm": 48,
+                  "gpuMaxThicknessMm": 72,
+                  "tallGpuLimit": {
+                    "aboveGpuHeightMm": 131,
+                    "maxThicknessMm": 62
+                  },
+                  "radiatorFanMaxThicknessMm": 79
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "gaps": [
+        {
+          "outcome": "warn",
+          "kind": "pending",
+          "reason": "A card that covers another expansion slot needs each board's PCIe slot positions, which D1 batch 3 adds (plan WP-D1 item 4)."
+        }
+      ]
+    },
+    {
+      "rule": "cooler-height",
+      "fixtures": [
+        {
+          "id": "cooler-height-ok-ak620-north",
+          "outcome": "ok",
+          "parts": {
+            "cooler": "deepcool-ak620",
+            "case": "fractal-north-charcoal-black-tg-light"
+          },
+          "reason": "The AK620 is 160 mm tall, and the North takes coolers up to 170 mm.",
+          "facts": [
+            {
+              "part": "deepcool-ak620",
+              "path": "heightMm",
+              "value": 160
+            },
+            {
+              "part": "fractal-north-charcoal-black-tg-light",
+              "path": "coolerClearance.0",
+              "value": {
+                "maxHeightMm": 170,
+                "condition": null
+              }
+            }
+          ]
+        },
+        {
+          "id": "cooler-height-block-ak620-terra",
+          "outcome": "block",
+          "parts": {
+            "cooler": "deepcool-ak620",
+            "case": "fractal-terra-graphite"
+          },
+          "reason": "The AK620 is 160 mm tall, and the Terra takes coolers up to 77 mm (spine position 1).",
+          "facts": [
+            {
+              "part": "deepcool-ak620",
+              "path": "heightMm",
+              "value": 160
+            },
+            {
+              "part": "fractal-terra-graphite",
+              "path": "layoutPositions.0",
+              "value": {
+                "position": "1",
+                "coolerMaxHeightMm": 77,
+                "gpuMaxThicknessMm": 43,
+                "tallGpuLimit": {
+                  "aboveGpuHeightMm": 131,
+                  "maxThicknessMm": 33
+                },
+                "radiatorFanMaxThicknessMm": 49
+              }
+            }
+          ]
+        }
+      ],
+      "gaps": [
+        {
+          "outcome": "warn",
+          "kind": "not-applicable",
+          "reason": "An air cooler fits under the side panel or it doesn't."
+        },
+        {
+          "outcome": "cant-verify",
+          "kind": "not-applicable",
+          "reason": "The rule reads only required fields (cooler.heightMm, case.coolerClearance, case.layoutPositions[].coolerMaxHeightMm), which can't be null; the validator tests \"[schema] … is rejected\" prove it."
+        }
+      ]
+    },
+    {
+      "rule": "ram-cooler-clearance",
+      "fixtures": [
+        {
+          "id": "ram-cooler-clearance-ok-flare-x5-ak620",
+          "outcome": "ok",
+          "parts": {
+            "ram": "gskill-flare-x5-ddr5-6000-cl30-2x16gb",
+            "cooler": "deepcool-ak620"
+          },
+          "reason": "The Flare X5 modules are 33 mm tall, and the AK620 leaves 43 mm for RAM.",
+          "facts": [
+            {
+              "part": "gskill-flare-x5-ddr5-6000-cl30-2x16gb",
+              "path": "heightMm",
+              "value": 33
+            },
+            {
+              "part": "deepcool-ak620",
+              "path": "ramClearanceMm",
+              "value": 43
+            }
+          ]
+        },
+        {
+          "id": "ram-cooler-clearance-warn-delta-rgb-ak620",
+          "outcome": "warn",
+          "parts": {
+            "ram": "teamgroup-t-force-delta-rgb-ddr5-6000-cl30-2x16gb",
+            "cooler": "deepcool-ak620"
+          },
+          "reason": "The Delta RGB modules are 46.1 mm tall, over the AK620's 43 mm clearance with both fans, but within its 59 mm with one fan, so the front fan must come off.",
+          "facts": [
+            {
+              "part": "teamgroup-t-force-delta-rgb-ddr5-6000-cl30-2x16gb",
+              "path": "heightMm",
+              "value": 46.1
+            },
+            {
+              "part": "deepcool-ak620",
+              "path": "ramClearanceMm",
+              "value": 43
+            },
+            {
+              "part": "deepcool-ak620",
+              "path": "singleFanRamClearanceMm",
+              "value": 59
+            }
+          ]
+        },
+        {
+          "id": "ram-cooler-clearance-block-delta-rgb-an600",
+          "outcome": "block",
+          "parts": {
+            "ram": "teamgroup-t-force-delta-rgb-ddr5-6000-cl30-2x16gb",
+            "cooler": "deepcool-an600"
+          },
+          "reason": "The Delta RGB modules are 46.1 mm tall, and the AN600 takes RAM up to 40 mm.",
+          "facts": [
+            {
+              "part": "teamgroup-t-force-delta-rgb-ddr5-6000-cl30-2x16gb",
+              "path": "heightMm",
+              "value": 46.1
+            },
+            {
+              "part": "deepcool-an600",
+              "path": "ramClearanceMm",
+              "value": 40
+            },
+            {
+              "part": "deepcool-an600",
+              "path": "singleFanRamClearanceMm",
+              "value": null
+            }
+          ]
+        },
+        {
+          "id": "ram-cooler-clearance-cant-verify-flare-x5-an400",
+          "outcome": "cant-verify",
+          "parts": {
+            "ram": "gskill-flare-x5-ddr5-6000-cl30-2x16gb",
+            "cooler": "deepcool-an400"
+          },
+          "reason": "DeepCool publishes no RAM clearance for the AN400.",
+          "facts": [
+            {
+              "part": "gskill-flare-x5-ddr5-6000-cl30-2x16gb",
+              "path": "heightMm",
+              "value": 33
+            },
+            {
+              "part": "deepcool-an400",
+              "path": "ramClearanceMm",
+              "value": null
+            }
+          ]
+        }
+      ],
+      "gaps": []
+    },
+    {
+      "rule": "radiator-fit",
+      "fixtures": [
+        {
+          "id": "radiator-fit-ok-lf-360-north-front",
+          "outcome": "ok",
+          "parts": {
+            "cooler": "arctic-liquid-freezer-iii-pro-360",
+            "case": "fractal-north-charcoal-black-tg-light"
+          },
+          "reason": "The North takes a 360 mm radiator up to 55 mm thick at the front, and the Liquid Freezer III Pro 360's is 38 mm, with the drive trays out of position A.",
+          "facts": [
+            {
+              "part": "arctic-liquid-freezer-iii-pro-360",
+              "path": "radiatorSizeMm",
+              "value": 360
+            },
+            {
+              "part": "arctic-liquid-freezer-iii-pro-360",
+              "path": "radiatorThicknessMm",
+              "value": 38
+            },
+            {
+              "part": "fractal-north-charcoal-black-tg-light",
+              "path": "radiatorSupport.0",
+              "value": {
+                "position": "front",
+                "sizesMm": [
+                  120,
+                  240,
+                  360
+                ],
+                "maxThicknessMm": 55
+              }
+            },
+            {
+              "part": "fractal-north-charcoal-black-tg-light",
+              "path": "driveTrayLayouts.4",
+              "value": {
+                "label": "B",
+                "trays": [
+                  "B"
+                ],
+                "psuMaxLengthMm": 215,
+                "frontRadiatorMaxMm": 360
+              }
+            }
+          ]
+        },
+        {
+          "id": "radiator-fit-block-lf-360-pop-mini-air",
+          "outcome": "block",
+          "parts": {
+            "cooler": "arctic-liquid-freezer-iii-pro-360",
+            "case": "fractal-pop-mini-air-rgb-black-tg-clear-tint"
+          },
+          "reason": "The Pop Mini Air takes radiators up to 240 mm, and the Liquid Freezer III Pro 360 is a 360 mm radiator.",
+          "facts": [
+            {
+              "part": "arctic-liquid-freezer-iii-pro-360",
+              "path": "radiatorSizeMm",
+              "value": 360
+            },
+            {
+              "part": "fractal-pop-mini-air-rgb-black-tg-clear-tint",
+              "path": "radiatorSupport",
+              "value": [
+                {
+                  "position": "front",
+                  "sizesMm": [
+                    120,
+                    140,
+                    240
+                  ],
+                  "maxThicknessMm": null
+                },
+                {
+                  "position": "top",
+                  "sizesMm": [
+                    120,
+                    240
+                  ],
+                  "maxThicknessMm": 47
+                },
+                {
+                  "position": "rear",
+                  "sizesMm": [
+                    120
+                  ],
+                  "maxThicknessMm": null
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "radiator-fit-cant-verify-kraken-240-ch560",
+          "outcome": "cant-verify",
+          "parts": {
+            "cooler": "nzxt-kraken-plus-240",
+            "case": "deepcool-ch560"
+          },
+          "reason": "The CH560 takes a 240 mm radiator at the front or the top, but DeepCool publishes no radiator thickness limit.",
+          "facts": [
+            {
+              "part": "nzxt-kraken-plus-240",
+              "path": "radiatorSizeMm",
+              "value": 240
+            },
+            {
+              "part": "nzxt-kraken-plus-240",
+              "path": "radiatorThicknessMm",
+              "value": 27
+            },
+            {
+              "part": "deepcool-ch560",
+              "path": "radiatorSupport",
+              "value": [
+                {
+                  "position": "front",
+                  "sizesMm": [
+                    120,
+                    140,
+                    240,
+                    280,
+                    360
+                  ],
+                  "maxThicknessMm": null
+                },
+                {
+                  "position": "top",
+                  "sizesMm": [
+                    120,
+                    140,
+                    240,
+                    280,
+                    360
+                  ],
+                  "maxThicknessMm": null
+                },
+                {
+                  "position": "rear",
+                  "sizesMm": [
+                    120,
+                    140
+                  ],
+                  "maxThicknessMm": null
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "gaps": [
+        {
+          "outcome": "warn",
+          "kind": "not-applicable",
+          "reason": "A radiator fits a position or it doesn't; the case layout it needs (such as the North's tray position) is stated with an ok."
+        }
+      ]
+    },
+    {
+      "rule": "psu-form-factor",
+      "fixtures": [
+        {
+          "id": "psu-form-factor-ok-pn850m-north",
+          "outcome": "ok",
+          "parts": {
+            "psu": "deepcool-pn850m",
+            "case": "fractal-north-charcoal-black-tg-light"
+          },
+          "reason": "The PN850M is an ATX unit, and the North takes ATX power supplies.",
+          "facts": [
+            {
+              "part": "deepcool-pn850m",
+              "path": "formFactor",
+              "value": "ATX"
+            },
+            {
+              "part": "fractal-north-charcoal-black-tg-light",
+              "path": "psu.formFactors",
+              "value": [
+                "ATX"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "psu-form-factor-warn-c850-sfx-north",
+          "outcome": "warn",
+          "parts": {
+            "psu": "nzxt-c850-sfx-gold",
+            "case": "fractal-north-charcoal-black-tg-light"
+          },
+          "reason": "The C850 SFX Gold is an SFX unit in an ATX-only case, and NZXT includes no SFX-to-ATX bracket, so one must be bought separately.",
+          "facts": [
+            {
+              "part": "nzxt-c850-sfx-gold",
+              "path": "formFactor",
+              "value": "SFX"
+            },
+            {
+              "part": "nzxt-c850-sfx-gold",
+              "path": "atxBracketIncluded",
+              "value": false
+            },
+            {
+              "part": "fractal-north-charcoal-black-tg-light",
+              "path": "psu.formFactors",
+              "value": [
+                "ATX"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "psu-form-factor-block-pn850m-terra",
+          "outcome": "block",
+          "parts": {
+            "psu": "deepcool-pn850m",
+            "case": "fractal-terra-graphite"
+          },
+          "reason": "The PN850M is an ATX unit, and the Terra takes SFX and SFX-L power supplies only.",
+          "facts": [
+            {
+              "part": "deepcool-pn850m",
+              "path": "formFactor",
+              "value": "ATX"
+            },
+            {
+              "part": "fractal-terra-graphite",
+              "path": "psu.formFactors",
+              "value": [
+                "SFX",
+                "SFX-L"
+              ]
+            }
+          ]
+        }
+      ],
+      "gaps": [
+        {
+          "outcome": "cant-verify",
+          "kind": "no-real-product",
+          "reason": "It needs an SFX unit whose maker doesn't say whether an SFX-to-ATX bracket is in the box; the catalogue's only SFX unit, the C850 SFX Gold, says it has none."
+        }
+      ]
+    },
+    {
+      "rule": "psu-length",
+      "fixtures": [
+        {
+          "id": "psu-length-ok-pn850m-pop-air",
+          "outcome": "ok",
+          "parts": {
+            "psu": "deepcool-pn850m",
+            "case": "fractal-pop-air-rgb-black-tg-clear-tint"
+          },
+          "reason": "The PN850M is 140 mm long, and the Pop Air takes power supplies up to 170 mm.",
+          "facts": [
+            {
+              "part": "deepcool-pn850m",
+              "path": "lengthMm",
+              "value": 140
+            },
+            {
+              "part": "fractal-pop-air-rgb-black-tg-clear-tint",
+              "path": "psu.clearance.0",
+              "value": {
+                "maxLengthMm": 170,
+                "condition": null
+              }
+            }
+          ]
+        },
+        {
+          "id": "psu-length-ok-c1200-north-one-tray",
+          "outcome": "ok",
+          "parts": {
+            "psu": "nzxt-c1200-gold-atx-3-1",
+            "case": "fractal-north-charcoal-black-tg-light"
+          },
+          "reason": "The C1200 Gold is 160 mm long, and the North takes it with one drive tray at position A, B or C (255, 215 or 180 mm), not with two trays (155 mm at most).",
+          "facts": [
+            {
+              "part": "nzxt-c1200-gold-atx-3-1",
+              "path": "lengthMm",
+              "value": 160
+            },
+            {
+              "part": "fractal-north-charcoal-black-tg-light",
+              "path": "psu.clearance",
+              "value": [
+                {
+                  "maxLengthMm": 255,
+                  "condition": {
+                    "kind": "drive-trays",
+                    "count": 1,
+                    "asPublished": "1 HDD tray: 255 mm max"
+                  }
+                },
+                {
+                  "maxLengthMm": 155,
+                  "condition": {
+                    "kind": "drive-trays",
+                    "count": 2,
+                    "asPublished": "2 HDD tray: 155 mm max"
+                  }
+                }
+              ]
+            },
+            {
+              "part": "fractal-north-charcoal-black-tg-light",
+              "path": "driveTrayLayouts",
+              "value": [
+                {
+                  "label": "A+D",
+                  "trays": [
+                    "A",
+                    "D"
+                  ],
+                  "psuMaxLengthMm": 140,
+                  "frontRadiatorMaxMm": 280
+                },
+                {
+                  "label": "A+E",
+                  "trays": [
+                    "A",
+                    "E"
+                  ],
+                  "psuMaxLengthMm": 155,
+                  "frontRadiatorMaxMm": 280
+                },
+                {
+                  "label": "A",
+                  "trays": [
+                    "A"
+                  ],
+                  "psuMaxLengthMm": 255,
+                  "frontRadiatorMaxMm": 280
+                },
+                {
+                  "label": "B+E",
+                  "trays": [
+                    "B",
+                    "E"
+                  ],
+                  "psuMaxLengthMm": 155,
+                  "frontRadiatorMaxMm": 360
+                },
+                {
+                  "label": "B",
+                  "trays": [
+                    "B"
+                  ],
+                  "psuMaxLengthMm": 215,
+                  "frontRadiatorMaxMm": 360
+                },
+                {
+                  "label": "C+E",
+                  "trays": [
+                    "C",
+                    "E"
+                  ],
+                  "psuMaxLengthMm": 155,
+                  "frontRadiatorMaxMm": 360
+                },
+                {
+                  "label": "C",
+                  "trays": [
+                    "C"
+                  ],
+                  "psuMaxLengthMm": 180,
+                  "frontRadiatorMaxMm": 360
+                },
+                {
+                  "label": "D+E",
+                  "trays": [
+                    "D",
+                    "E"
+                  ],
+                  "psuMaxLengthMm": 140,
+                  "frontRadiatorMaxMm": 360
+                },
+                {
+                  "label": "D",
+                  "trays": [
+                    "D"
+                  ],
+                  "psuMaxLengthMm": 140,
+                  "frontRadiatorMaxMm": 360
+                },
+                {
+                  "label": "E",
+                  "trays": [
+                    "E"
+                  ],
+                  "psuMaxLengthMm": 155,
+                  "frontRadiatorMaxMm": 360
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "psu-length-block-c1200-pop-mini-air",
+          "outcome": "block",
+          "parts": {
+            "psu": "nzxt-c1200-gold-atx-3-1",
+            "case": "fractal-pop-mini-air-rgb-black-tg-clear-tint"
+          },
+          "reason": "The C1200 Gold is 160 mm long, and the Pop Mini Air takes power supplies up to 150 mm.",
+          "facts": [
+            {
+              "part": "nzxt-c1200-gold-atx-3-1",
+              "path": "lengthMm",
+              "value": 160
+            },
+            {
+              "part": "fractal-pop-mini-air-rgb-black-tg-clear-tint",
+              "path": "psu.clearance.0",
+              "value": {
+                "maxLengthMm": 150,
+                "condition": null
+              }
+            }
+          ]
+        }
+      ],
+      "gaps": [
+        {
+          "outcome": "warn",
+          "kind": "not-applicable",
+          "reason": "A power supply fits the case length or it doesn't; the tray layout it needs is stated with an ok."
+        },
+        {
+          "outcome": "cant-verify",
+          "kind": "no-real-product",
+          "reason": "Every catalogue case publishes a PSU length limit; the schema allows none (null with a note), but no catalogue case uses it."
+        }
+      ]
+    },
+    {
+      "rule": "psu-wattage",
+      "fixtures": [
+        {
+          "id": "psu-wattage-ok-dual-4060-7600-pn650m",
+          "outcome": "ok",
+          "parts": {
+            "gpu-card": "asus-dual-geforce-rtx-4060-8gb-oc",
+            "cpu": "amd-ryzen-5-7600",
+            "psu": "deepcool-pn650m"
+          },
+          "reason": "ASUS recommends a 550 W power supply for the Dual RTX 4060, and the PN650M is 650 W.",
+          "facts": [
+            {
+              "part": "asus-dual-geforce-rtx-4060-8gb-oc",
+              "path": "recommendedPsuW",
+              "value": 550
+            },
+            {
+              "part": "amd-ryzen-5-7600",
+              "path": "power",
+              "value": {
+                "scheme": "amd",
+                "tdpW": 65,
+                "pptW": null
+              }
+            },
+            {
+              "part": "deepcool-pn650m",
+              "path": "wattageW",
+              "value": 650
+            }
+          ],
+          "notes": [
+            {
+              "text": "The engine's range comes from WP-E2; this fixture rests on the card maker's recommendation."
+            }
+          ]
+        },
+        {
+          "id": "psu-wattage-block-5090-fe-9800x3d-pn650m",
+          "outcome": "block",
+          "parts": {
+            "gpu-card": "nvidia-geforce-rtx-5090-founders-edition",
+            "cpu": "amd-ryzen-7-9800x3d",
+            "psu": "deepcool-pn650m"
+          },
+          "reason": "NVIDIA requires a 1000 W power supply for the RTX 5090 Founders Edition, and the PN650M is 650 W.",
+          "facts": [
+            {
+              "part": "nvidia-geforce-rtx-5090-founders-edition",
+              "path": "recommendedPsuW",
+              "value": 1000
+            },
+            {
+              "part": "nvidia-geforce-rtx-5090-founders-edition",
+              "path": "cardPowerW",
+              "value": 575
+            },
+            {
+              "part": "amd-ryzen-7-9800x3d",
+              "path": "power",
+              "value": {
+                "scheme": "amd",
+                "tdpW": 120,
+                "pptW": null
+              }
+            },
+            {
+              "part": "deepcool-pn650m",
+              "path": "wattageW",
+              "value": 650
+            }
+          ]
+        }
+      ],
+      "gaps": [
+        {
+          "outcome": "warn",
+          "kind": "pending",
+          "reason": "WP-E2 sets the transient headroom per GPU class; a power supply above the minimum but below the headroom gives warn. The fixture follows E2's range."
+        },
+        {
+          "outcome": "cant-verify",
+          "kind": "not-applicable",
+          "reason": "The estimate uses the chip's reference TBP and the CPU's power figures, which every catalogue chip and CPU publishes (referenceTbpW and the power scheme are required)."
+        }
+      ]
+    },
+    {
+      "rule": "gpu-power-connector",
+      "fixtures": [
+        {
+          "id": "gpu-power-connector-ok-9070-xt-pn850m",
+          "outcome": "ok",
+          "parts": {
+            "gpu-card": "sapphire-pulse-radeon-rx-9070-xt-16gb",
+            "psu": "deepcool-pn850m"
+          },
+          "reason": "The PULSE RX 9070 XT takes two PCIe 8-pin plugs, and the PN850M has three.",
+          "facts": [
+            {
+              "part": "sapphire-pulse-radeon-rx-9070-xt-16gb",
+              "path": "powerConnectors",
+              "value": [
+                {
+                  "type": "8-pin",
+                  "standard": null,
+                  "count": 2
+                }
+              ]
+            },
+            {
+              "part": "deepcool-pn850m",
+              "path": "connectors.pcie8pin",
+              "value": 3
+            }
+          ]
+        },
+        {
+          "id": "gpu-power-connector-ok-5080-fe-pn850m-native",
+          "outcome": "ok",
+          "parts": {
+            "gpu-card": "nvidia-geforce-rtx-5080-founders-edition",
+            "psu": "deepcool-pn850m"
+          },
+          "reason": "The RTX 5080 Founders Edition takes a 16-pin plug, and the PN850M has a native 12V-2x6 cable.",
+          "facts": [
+            {
+              "part": "nvidia-geforce-rtx-5080-founders-edition",
+              "path": "powerConnectors",
+              "value": [
+                {
+                  "type": "16-pin",
+                  "standard": null,
+                  "count": 1
+                }
+              ]
+            },
+            {
+              "part": "deepcool-pn850m",
+              "path": "connectors.pcie16pin",
+              "value": 1
+            },
+            {
+              "part": "deepcool-pn850m",
+              "path": "connectors.pcie16pinStandard",
+              "value": "12V-2x6"
+            }
+          ]
+        },
+        {
+          "id": "gpu-power-connector-warn-5070-fe-pk650d-adapter",
+          "outcome": "warn",
+          "parts": {
+            "gpu-card": "nvidia-geforce-rtx-5070-founders-edition",
+            "psu": "deepcool-pk650d"
+          },
+          "reason": "The PK650D has no 16-pin cable, so the RTX 5070 Founders Edition needs its adapter, which takes two independent PCIe 8-pin cables, and the PK650D has two.",
+          "facts": [
+            {
+              "part": "nvidia-geforce-rtx-5070-founders-edition",
+              "path": "powerConnectors",
+              "value": [
+                {
+                  "type": "16-pin",
+                  "standard": null,
+                  "count": 1
+                }
+              ]
+            },
+            {
+              "part": "nvidia-geforce-rtx-5070-founders-edition",
+              "path": "powerAdapter",
+              "value": {
+                "pcie8pinInputs": 2,
+                "separateCables": true
+              }
+            },
+            {
+              "part": "deepcool-pk650d",
+              "path": "connectors.pcie16pin",
+              "value": 0
+            },
+            {
+              "part": "deepcool-pk650d",
+              "path": "connectors.pcie8pin",
+              "value": 4
+            },
+            {
+              "part": "deepcool-pk650d",
+              "path": "connectors.pcie8pinCables",
+              "value": 2
+            }
+          ]
+        },
+        {
+          "id": "gpu-power-connector-block-5080-fe-pk650d-cables",
+          "outcome": "block",
+          "parts": {
+            "gpu-card": "nvidia-geforce-rtx-5080-founders-edition",
+            "psu": "deepcool-pk650d"
+          },
+          "reason": "The RTX 5080 Founders Edition's adapter needs three independent PCIe 8-pin cables, and the PK650D has its four PCIe 8-pin plugs on two cables and no 16-pin cable.",
+          "facts": [
+            {
+              "part": "nvidia-geforce-rtx-5080-founders-edition",
+              "path": "powerAdapter",
+              "value": {
+                "pcie8pinInputs": 3,
+                "separateCables": true
+              }
+            },
+            {
+              "part": "deepcool-pk650d",
+              "path": "connectors.pcie16pin",
+              "value": 0
+            },
+            {
+              "part": "deepcool-pk650d",
+              "path": "connectors.pcie8pin",
+              "value": 4
+            },
+            {
+              "part": "deepcool-pk650d",
+              "path": "connectors.pcie8pinCables",
+              "value": 2
+            }
+          ]
+        },
+        {
+          "id": "gpu-power-connector-cant-verify-tuf-5070-ti-pk650d",
+          "outcome": "cant-verify",
+          "parts": {
+            "gpu-card": "asus-tuf-gaming-geforce-rtx-5070-ti-16gb-oc",
+            "psu": "deepcool-pk650d"
+          },
+          "reason": "The TUF RTX 5070 Ti's adapter takes three PCIe 8-pin plugs and the PK650D has four, but on two cables, and ASUS doesn't say whether each plug needs its own cable.",
+          "facts": [
+            {
+              "part": "asus-tuf-gaming-geforce-rtx-5070-ti-16gb-oc",
+              "path": "powerAdapter",
+              "value": {
+                "pcie8pinInputs": 3,
+                "separateCables": null
+              }
+            },
+            {
+              "part": "deepcool-pk650d",
+              "path": "connectors.pcie16pin",
+              "value": 0
+            },
+            {
+              "part": "deepcool-pk650d",
+              "path": "connectors.pcie8pin",
+              "value": 4
+            },
+            {
+              "part": "deepcool-pk650d",
+              "path": "connectors.pcie8pinCables",
+              "value": 2
+            }
+          ]
+        }
+      ],
+      "gaps": []
+    },
+    {
+      "rule": "m2-lanes",
+      "fixtures": [
+        {
+          "id": "m2-lanes-ok-sn850x-b650-plus",
+          "outcome": "ok",
+          "parts": {
+            "storage": [
+              "wd-black-sn850x-2tb"
+            ],
+            "motherboard": "asus-tuf-gaming-b650-plus-wifi"
+          },
+          "reason": "One M.2 2280 NVMe drive goes in M.2_1 of the TUF GAMING B650-PLUS WIFI, which shares no lanes.",
+          "facts": [
+            {
+              "part": "wd-black-sn850x-2tb",
+              "path": "formFactor",
+              "value": "M.2 2280"
+            },
+            {
+              "part": "asus-tuf-gaming-b650-plus-wifi",
+              "path": "m2Slots.0",
+              "value": {
+                "id": "m2-1",
+                "label": "M.2_1",
+                "pcieGen": 5,
+                "lanes": 4,
+                "source": "cpu",
+                "sizes": [
+                  "2242",
+                  "2260",
+                  "2280"
+                ],
+                "sataSupport": false
+              }
+            },
+            {
+              "part": "asus-tuf-gaming-b650-plus-wifi",
+              "path": "laneSharing",
+              "value": [
+                {
+                  "id": "ls-1",
+                  "trigger": {
+                    "slot": "m2-3",
+                    "deviceType": "any"
+                  },
+                  "effects": [
+                    {
+                      "type": "disables",
+                      "slots": [
+                        "pcie-2"
+                      ]
+                    }
+                  ],
+                  "manualPage": "vii",
+                  "text": "M.2_3 shares bandwidth with PCIEX16_2. PCIEX16_2 will be suspended once M.2_3 is populated."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "m2-lanes-warn-two-nvme-b550-plus",
+          "outcome": "warn",
+          "parts": {
+            "storage": [
+              "wd-black-sn850x-2tb",
+              "samsung-990-pro-2tb"
+            ],
+            "motherboard": "asus-tuf-gaming-b550-plus-wifi-ii"
+          },
+          "reason": "The second NVMe drive goes in M.2_2 of the TUF GAMING B550-PLUS WIFI II, and ASUS's manual says \"When M.2_2 is populated, SATA6G_56 will be disabled.\"",
+          "facts": [
+            {
+              "part": "wd-black-sn850x-2tb",
+              "path": "formFactor",
+              "value": "M.2 2280"
+            },
+            {
+              "part": "samsung-990-pro-2tb",
+              "path": "formFactor",
+              "value": "M.2 2280"
+            },
+            {
+              "part": "asus-tuf-gaming-b550-plus-wifi-ii",
+              "path": "m2Slots",
+              "value": [
+                {
+                  "id": "m2-1",
+                  "label": "M.2_1",
+                  "pcieGen": 4,
+                  "lanes": 4,
+                  "source": "cpu",
+                  "sizes": [
+                    "2242",
+                    "2260",
+                    "2280",
+                    "22110"
+                  ],
+                  "sataSupport": true
+                },
+                {
+                  "id": "m2-2",
+                  "label": "M.2_2",
+                  "pcieGen": 3,
+                  "lanes": 4,
+                  "source": "chipset",
+                  "sizes": [
+                    "2242",
+                    "2260",
+                    "2280",
+                    "22110"
+                  ],
+                  "sataSupport": true
+                }
+              ]
+            },
+            {
+              "part": "asus-tuf-gaming-b550-plus-wifi-ii",
+              "path": "laneSharing.0",
+              "value": {
+                "id": "ls-1",
+                "trigger": {
+                  "slot": "m2-2",
+                  "deviceType": "any"
+                },
+                "effects": [
+                  {
+                    "type": "disables",
+                    "slots": [
+                      "sata-5",
+                      "sata-6"
+                    ]
+                  }
+                ],
+                "manualPage": "vii, x",
+                "text": "M.2_2 shares bandwidth with SATA6G_56. When M.2_2 is populated, SATA6G_56 will be disabled."
+              }
+            }
+          ]
+        },
+        {
+          "id": "m2-lanes-block-three-nvme-b650e-i",
+          "outcome": "block",
+          "parts": {
+            "storage": [
+              "wd-black-sn8100-2tb",
+              "wd-black-sn850x-2tb",
+              "samsung-990-pro-2tb"
+            ],
+            "motherboard": "asus-rog-strix-b650e-i-gaming-wifi"
+          },
+          "reason": "Three NVMe drives need three M.2 slots, and the ROG STRIX B650E-I GAMING WIFI has two.",
+          "facts": [
+            {
+              "part": "wd-black-sn8100-2tb",
+              "path": "interface",
+              "value": "NVMe"
+            },
+            {
+              "part": "wd-black-sn850x-2tb",
+              "path": "interface",
+              "value": "NVMe"
+            },
+            {
+              "part": "samsung-990-pro-2tb",
+              "path": "interface",
+              "value": "NVMe"
+            },
+            {
+              "part": "asus-rog-strix-b650e-i-gaming-wifi",
+              "path": "m2Slots",
+              "value": [
+                {
+                  "id": "m2-1",
+                  "label": "M.2_1",
+                  "pcieGen": 5,
+                  "lanes": 4,
+                  "source": "cpu",
+                  "sizes": [
+                    "2242",
+                    "2260",
+                    "2280"
+                  ],
+                  "sataSupport": false
+                },
+                {
+                  "id": "m2-2",
+                  "label": "M.2_2",
+                  "pcieGen": 4,
+                  "lanes": 4,
+                  "source": "cpu",
+                  "sizes": [
+                    "2242",
+                    "2260",
+                    "2280"
+                  ],
+                  "sataSupport": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "gaps": [
+        {
+          "outcome": "cant-verify",
+          "kind": "not-applicable",
+          "reason": "The rule reads only required fields (storage.interface, storage.formFactor, motherboard.m2Slots, motherboard.sataPorts, motherboard.laneSharing), which can't be null; the validator tests \"[schema] … is rejected\" prove it."
+        }
+      ]
+    },
+    {
+      "rule": "board-form-factor",
+      "fixtures": [
+        {
+          "id": "board-form-factor-ok-b650m-pop-air",
+          "outcome": "ok",
+          "parts": {
+            "motherboard": "asus-tuf-gaming-b650m-plus-wifi",
+            "case": "fractal-pop-air-rgb-black-tg-clear-tint"
+          },
+          "reason": "The TUF GAMING B650M-PLUS WIFI is Micro-ATX, and the Pop Air takes ATX, Micro-ATX and Mini-ITX boards.",
+          "facts": [
+            {
+              "part": "asus-tuf-gaming-b650m-plus-wifi",
+              "path": "formFactor",
+              "value": "Micro-ATX"
+            },
+            {
+              "part": "fractal-pop-air-rgb-black-tg-clear-tint",
+              "path": "supportedBoards",
+              "value": [
+                "ATX",
+                "Micro-ATX",
+                "Mini-ITX"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "board-form-factor-block-b650-plus-pop-mini-air",
+          "outcome": "block",
+          "parts": {
+            "motherboard": "asus-tuf-gaming-b650-plus-wifi",
+            "case": "fractal-pop-mini-air-rgb-black-tg-clear-tint"
+          },
+          "reason": "The TUF GAMING B650-PLUS WIFI is ATX, and the Pop Mini Air takes Micro-ATX and Mini-ITX boards only.",
+          "facts": [
+            {
+              "part": "asus-tuf-gaming-b650-plus-wifi",
+              "path": "formFactor",
+              "value": "ATX"
+            },
+            {
+              "part": "fractal-pop-mini-air-rgb-black-tg-clear-tint",
+              "path": "supportedBoards",
+              "value": [
+                "Micro-ATX",
+                "Mini-ITX"
+              ]
+            }
+          ]
+        }
+      ],
+      "gaps": [
+        {
+          "outcome": "warn",
+          "kind": "not-applicable",
+          "reason": "A board fits the case or it doesn't."
+        },
+        {
+          "outcome": "cant-verify",
+          "kind": "not-applicable",
+          "reason": "The rule reads only required fields (motherboard.formFactor, case.supportedBoards), which can't be null; the validator tests \"[schema] … is rejected\" prove it."
+        }
+      ]
+    },
+    {
+      "rule": "usb-c-header",
+      "fixtures": [
+        {
+          "id": "usb-c-header-ok-north-x870-plus",
+          "outcome": "ok",
+          "parts": {
+            "case": "fractal-north-charcoal-black-tg-light",
+            "motherboard": "asus-tuf-gaming-x870-plus-wifi"
+          },
+          "reason": "The North's front USB-C port is 20 Gbps, and the TUF GAMING X870-PLUS WIFI has a 20 Gbps front USB-C header.",
+          "facts": [
+            {
+              "part": "fractal-north-charcoal-black-tg-light",
+              "path": "frontIo.usbC",
+              "value": [
+                {
+                  "label": "USB 3.2 Gen 2x2 Type-C",
+                  "speedGbps": 20,
+                  "count": 1
+                }
+              ]
+            },
+            {
+              "part": "asus-tuf-gaming-x870-plus-wifi",
+              "path": "headers.usbCFront",
+              "value": [
+                {
+                  "label": "USB 20Gbps connector (supports USB Type-C with up to 30W PD Fast-charge)",
+                  "speedGbps": 20,
+                  "count": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "usb-c-header-warn-north-b550-plus",
+          "outcome": "warn",
+          "parts": {
+            "case": "fractal-north-charcoal-black-tg-light",
+            "motherboard": "asus-tuf-gaming-b550-plus-wifi-ii"
+          },
+          "reason": "The North has a front USB-C port, but the TUF GAMING B550-PLUS WIFI II has no front USB-C header, so the port won't work.",
+          "facts": [
+            {
+              "part": "fractal-north-charcoal-black-tg-light",
+              "path": "frontIo.usbC",
+              "value": [
+                {
+                  "label": "USB 3.2 Gen 2x2 Type-C",
+                  "speedGbps": 20,
+                  "count": 1
+                }
+              ]
+            },
+            {
+              "part": "asus-tuf-gaming-b550-plus-wifi-ii",
+              "path": "headers.usbCFront",
+              "value": []
+            }
+          ]
+        }
+      ],
+      "gaps": [
+        {
+          "outcome": "block",
+          "kind": "not-applicable",
+          "reason": "A missing header leaves one front port unused; the build still works, so the rule warns (test plan §9.2)."
+        },
+        {
+          "outcome": "cant-verify",
+          "kind": "not-applicable",
+          "reason": "The rule reads only required fields (case.frontIo.usbC, motherboard.headers.usbCFront), which can't be null; the validator tests \"[schema] … is rejected\" prove it."
+        }
+      ]
+    },
+    {
+      "rule": "cooler-socket",
+      "fixtures": [
+        {
+          "id": "cooler-socket-ok-ak620-9800x3d",
+          "outcome": "ok",
+          "parts": {
+            "cooler": "deepcool-ak620",
+            "cpu": "amd-ryzen-7-9800x3d"
+          },
+          "reason": "DeepCool lists AM5 for the AK620, and the Ryzen 7 9800X3D is AM5.",
+          "facts": [
+            {
+              "part": "deepcool-ak620",
+              "path": "sockets",
+              "value": [
+                "AM5",
+                "AM4",
+                "LGA1851",
+                "LGA1700"
+              ]
+            },
+            {
+              "part": "amd-ryzen-7-9800x3d",
+              "path": "socket",
+              "value": "AM5"
+            }
+          ]
+        },
+        {
+          "id": "cooler-socket-block-nh-l9i-9800x3d",
+          "outcome": "block",
+          "parts": {
+            "cooler": "noctua-nh-l9i-17xx-chromax-black",
+            "cpu": "amd-ryzen-7-9800x3d"
+          },
+          "reason": "The NH-L9i-17xx chromax.black mounts on Intel LGA1700 and LGA1851 only, and the Ryzen 7 9800X3D is AM5.",
+          "facts": [
+            {
+              "part": "noctua-nh-l9i-17xx-chromax-black",
+              "path": "sockets",
+              "value": [
+                "LGA1851",
+                "LGA1700"
+              ]
+            },
+            {
+              "part": "amd-ryzen-7-9800x3d",
+              "path": "socket",
+              "value": "AM5"
+            }
+          ]
+        }
+      ],
+      "gaps": [
+        {
+          "outcome": "warn",
+          "kind": "not-applicable",
+          "reason": "A cooler's mounting kit fits the socket or it doesn't."
+        },
+        {
+          "outcome": "cant-verify",
+          "kind": "not-applicable",
+          "reason": "The rule reads only required fields (cooler.sockets, cpu.socket), which can't be null; the validator tests \"[schema] … is rejected\" prove it."
+        }
+      ]
+    },
+    {
+      "rule": "display-output",
+      "fixtures": [
+        {
+          "id": "display-output-ok-9800x3d-no-card",
+          "outcome": "ok",
+          "parts": {
+            "cpu": "amd-ryzen-7-9800x3d",
+            "motherboard": "asus-tuf-gaming-b650-plus-wifi",
+            "gpu-card": null
+          },
+          "reason": "The Ryzen 7 9800X3D has integrated AMD Radeon Graphics, and the TUF GAMING B650-PLUS WIFI has DisplayPort and HDMI outputs.",
+          "facts": [
+            {
+              "part": "amd-ryzen-7-9800x3d",
+              "path": "igpu",
+              "value": {
+                "model": "AMD Radeon Graphics"
+              }
+            },
+            {
+              "part": "asus-tuf-gaming-b650-plus-wifi",
+              "path": "rearIo.3",
+              "value": "1 x DisplayPort"
+            },
+            {
+              "part": "asus-tuf-gaming-b650-plus-wifi",
+              "path": "rearIo.4",
+              "value": "1 x HDMI port"
+            }
+          ]
+        },
+        {
+          "id": "display-output-block-12400f-no-card",
+          "outcome": "block",
+          "parts": {
+            "cpu": "intel-core-i5-12400f",
+            "motherboard": "asus-prime-b760m-a-wifi-d4",
+            "gpu-card": null
+          },
+          "reason": "The Core i5-12400F has no integrated graphics, so a build without a graphics card has no display output.",
+          "facts": [
+            {
+              "part": "intel-core-i5-12400f",
+              "path": "igpu",
+              "value": null
+            }
+          ]
+        }
+      ],
+      "gaps": [
+        {
+          "outcome": "warn",
+          "kind": "not-applicable",
+          "reason": "Without a graphics card, the CPU has integrated graphics or it doesn't."
+        },
+        {
+          "outcome": "cant-verify",
+          "kind": "not-applicable",
+          "reason": "cpu.igpu null means no integrated graphics, a real answer (src/data/schema/cpu.ts)."
+        }
+      ]
+    }
+  ]
+}

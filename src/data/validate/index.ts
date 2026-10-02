@@ -1,4 +1,5 @@
 import { checkCreatorBenchmarks, checkGameBenchmarks } from './benchmarks';
+import { checkCompatFixtures } from './fixtures';
 import { checkGames } from './games';
 import { checkIds, checkRegistry } from './integrity';
 import { IssueSink, type Issue } from './issues';
@@ -42,6 +43,7 @@ export function validateFiles(files: Readonly<Record<string, unknown>>, options:
     checkGames(sink, dataset, registry, options.today);
     checkGameBenchmarks(sink, dataset, registry, options.today);
     checkCreatorBenchmarks(sink, dataset, registry, options.today);
+    checkCompatFixtures(sink, dataset, registry, options.today);
   }
   const issues = sink.issues;
   return {

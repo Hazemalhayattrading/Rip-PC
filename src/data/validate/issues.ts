@@ -37,6 +37,8 @@ export const RULES = {
   'benchmark-conflict': 'Comparable rows from different publishers that differ by more than 10% flag each other.',
   'benchmark-conditions': 'Upscaling state, limiter subject, aggregate and test system are consistent.',
   'game-list': 'Franchise slots appear once, replacements name what they replace, and player counts are dated.',
+  'fixture-coverage': 'The fixture table lists every compatibility rule once, and each outcome has a fixture or a gap, never both.',
+  'fixture-fact': "A fixture's facts name a part of its build and a real field, hold the catalogue's value, and are backed by the maker (or, for null, the record's note).",
 } as const;
 
 export type RuleId = keyof typeof RULES;

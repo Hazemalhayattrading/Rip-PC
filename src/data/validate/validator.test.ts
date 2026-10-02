@@ -432,6 +432,64 @@ describe("benchmarks (Owner's rule 1, amended)", () => {
   });
 });
 
+describe('compatibility fixtures', () => {
+  const rule0 = (d: FixtureData) => first(d.compatFixtures.rules);
+  const fixture0 = (d: FixtureData) => first(rule0(d).fixtures);
+  it('fixture-coverage: every rule is listed once', () => {
+    expectRule(run((d) => { d.compatFixtures.rules = d.compatFixtures.rules.slice(1); }), 'fixture-coverage');
+    expectRule(run((d) => { d.compatFixtures.rules.push({ ...rule0(d), fixtures: [] }); }), 'fixture-coverage');
+  });
+  it('fixture-coverage: each outcome has a fixture or one gap, never both', () => {
+    expectRule(run((d) => { rule0(d).gaps = rule0(d).gaps.slice(1); }), 'fixture-coverage');
+    expectRule(run((d) => { rule0(d).gaps.push({ outcome: 'ok', kind: 'not-applicable', reason: 'Both.' }); }), 'fixture-coverage');
+    expectRule(run((d) => { rule0(d).gaps.push({ ...first(rule0(d).gaps) }); }), 'fixture-coverage');
+  });
+  it('fixture-coverage: a fixture ID starts with its rule ID', () => {
+    expectRule(run((d) => { fixture0(d).id = 'some-other-ok'; }), 'fixture-coverage');
+  });
+  it('id-unique: fixture IDs are unique in the file', () => {
+    expectRule(run((d) => { rule0(d).fixtures.push({ ...fixture0(d), outcome: 'ok' }); }), 'id-unique');
+  });
+  it('ref: a fixture names real parts', () => {
+    expectRule(run((d) => { fixture0(d).parts.cpu = 'no-such-cpu'; }), 'ref');
+    expectRule(run((d) => { fixture0(d).parts.motherboard = 'fx-cpu-am5'; }), 'ref');
+  });
+  it('fixture-fact: a fact names a part of the build and a real field, with the catalogue value', () => {
+    expectRule(run((d) => { first(fixture0(d).facts).part = 'fx-ram'; }), 'fixture-fact');
+    expectRule(run((d) => { first(fixture0(d).facts).path = 'cpuSocket'; }), 'fixture-fact');
+    expectRule(run((d) => { first(fixture0(d).facts).value = 'AM4'; }), 'fixture-fact');
+    expectClean(run((d) => { fixture0(d).facts.push({ part: 'fx-board-am5', path: 'memory', value: { ...board(d).memory } }); }));
+  });
+  it('fixture-fact: a null fact needs the note that explains it, unless null means none', () => {
+    expectClean(run((d) => { fixture0(d).facts.push({ part: 'fx-cpu-am5', path: 'power.pptW', value: null }); }));
+    expectClean(run((d) => { fixture0(d).facts.push({ part: 'fx-cpu-am5', path: 'igpu', value: null }); }));
+    expectRule(
+      run((d) => {
+        Reflect.deleteProperty(cpu(d), 'notes');
+        fixture0(d).facts.push({ part: 'fx-cpu-am5', path: 'power.pptW', value: null });
+      }),
+      'fixture-fact',
+    );
+  });
+  it('fixture-fact: a fact must be backed by a maker source', () => {
+    expectRule(
+      run((d) => {
+        board(d).sources = board(d).sources.map((s) => ({ ...s, fields: ['laneSharing'] }));
+        board(d).sources.push({ url: 'https://acme.example/b650-fixture/memory', publisher: 'acme', retrievedAt: TODAY, docType: 'spec-page', fields: ['memory'] });
+      }),
+      'fixture-fact',
+    );
+  });
+  it('publisher-domain: a fixture source is checked like any other', () => {
+    expectRule(
+      run((d) => {
+        fixture0(d).sources = [{ url: 'https://acme.example/statement', publisher: 'amd', retrievedAt: TODAY, docType: 'support-article' }];
+      }),
+      'publisher-domain',
+    );
+  });
+});
+
 describe('games list', () => {
   it('game-list: each franchise slot names exactly one current title', () => {
     expectRule(run((d) => { d.games.games = d.games.games.filter((g) => g.franchiseSlot !== 'ea-sports-fc'); }), 'game-list');

@@ -86,6 +86,8 @@ export const DATA_PATHS = {
   },
   prices: { SA: 'data/prices/sa.json', US: 'data/prices/us.json' },
   benchmarks: { game: 'data/benchmarks/game.json', creator: 'data/benchmarks/creator.json' },
+  /** Real catalogue builds for every compatibility rule's tests (WP-D1). Read by the engine's tests. */
+  compatFixtures: 'data/compat-fixtures.json',
   /** The data lead's seeded audits. Not catalogue data: `audits.test.ts` checks it, not the validator. */
   audits: 'data/audits.json',
 } as const satisfies {
@@ -94,5 +96,6 @@ export const DATA_PATHS = {
   specs: Record<SpecCategory, string>;
   prices: Record<Market, string>;
   benchmarks: { game: string; creator: string };
+  compatFixtures: string;
   audits: string;
 };

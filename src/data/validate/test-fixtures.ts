@@ -5,6 +5,7 @@
 import type { CreatorBenchmark } from '../schema/benchmark-creator';
 import type { GameBenchmark } from '../schema/benchmark-game';
 import type { SourceRef } from '../schema/common';
+import { COMPAT_RULE_IDS, type CompatFixturesFile } from '../schema/compat-fixtures';
 import { DATA_PATHS, type SpecCategory, type SpecRecordByCategory } from '../schema/files';
 import type { GamesFile } from '../schema/game';
 import type { PriceFile } from '../schema/price';
@@ -19,6 +20,7 @@ export interface FixtureData {
   games: GamesFile;
   gameBenchmarks: GameBenchmark[];
   creatorBenchmarks: CreatorBenchmark[];
+  compatFixtures: CompatFixturesFile;
 }
 
 const src = (publisher: string, url: string, extra: Partial<SourceRef> = {}): SourceRef => ({
@@ -457,6 +459,27 @@ export function fixtureData(): FixtureData {
     notes: [{ field: 'gameVersion', text: 'The review does not state the patch.' }],
   });
 
+  // Every rule gets the same ok build (an AM5 CPU on an AM5 board) and a gap for each other outcome.
+  const compatFixtures: CompatFixturesFile = {
+    schemaVersion: 1,
+    rules: COMPAT_RULE_IDS.map((rule) => ({
+      rule,
+      fixtures: [
+        {
+          id: `${rule}-ok-fixture`,
+          outcome: 'ok' as const,
+          parts: { cpu: 'fx-cpu-am5', motherboard: 'fx-board-am5' },
+          reason: 'Fixture: both are AM5.',
+          facts: [
+            { part: 'fx-cpu-am5', path: 'socket', value: 'AM5' },
+            { part: 'fx-board-am5', path: 'socket', value: 'AM5' },
+          ],
+        },
+      ],
+      gaps: (['warn', 'block', 'cant-verify'] as const).map((outcome) => ({ outcome, kind: 'not-applicable' as const, reason: 'Fixture.' })),
+    })),
+  };
+
   return {
     publishers,
     specs,
@@ -468,6 +491,7 @@ export function fixtureData(): FixtureData {
         archiveUrl: 'https://web.archive.org/web/20250601120000/https://bench-b.example/review',
       }),
     ],
+    compatFixtures,
     creatorBenchmarks: [
       {
         id: 'fx-blender',
@@ -497,6 +521,7 @@ export function toFiles(d: FixtureData): Record<string, unknown> {
     [DATA_PATHS.prices.US]: d.prices.US,
     [DATA_PATHS.benchmarks.game]: { schemaVersion: 1, items: d.gameBenchmarks },
     [DATA_PATHS.benchmarks.creator]: { schemaVersion: 1, items: d.creatorBenchmarks },
+    [DATA_PATHS.compatFixtures]: d.compatFixtures,
   };
   for (const [category, items] of Object.entries(d.specs)) {
     files[DATA_PATHS.specs[category as SpecCategory]] = { schemaVersion: 1, category, items };
