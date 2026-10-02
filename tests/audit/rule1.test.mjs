@@ -1338,3 +1338,69 @@ describe('CLI', () => {
     expect(cli(badManifest).stderr).toMatch(/manifest/);
   });
 });
+
+// From WP-D1 a price file lists "batches", and each observation and gap names its own "batch", so
+// a part added later is dated against its own window (data-lead, feat/data-engine-data @ c588afb).
+describe('price batches in the WP-D1 format', () => {
+  const toBatches = (m) => {
+    for (const file of [us(m), sa(m)]) {
+      file.batches = [
+        { id: 'seed', label: 'Seed catalogue', windowStart: '2026-09-30', windowEnd: '2026-10-01' },
+        { id: 'late', label: 'Added later', windowStart: '2026-09-28', windowEnd: '2026-09-29' },
+      ];
+      delete file.batch;
+      for (const row of [...file.observations, ...file.gaps]) row.batch = 'seed';
+    }
+  };
+
+  it('passes every row inside its own batch window', () => {
+    const r = build(toBatches).run();
+    expect(failuresOf(r, 'R1-P4')).toEqual([]);
+    expect(failuresOf(r, 'R1-G3')).toEqual([]);
+  });
+
+  it("fails a price dated outside its own batch's window, even inside another batch's", () => {
+    const f = failing('R1-P4', (m) => {
+      toBatches(m);
+      us(m).observations[0].batch = 'late';
+    });
+    expect(f).toEqual([expect.objectContaining({ row: US_KEY, field: 'retrievedAt' })]);
+    expect(f[0].why).toBe("outside batch late's window 2026-09-28..2026-09-29");
+  });
+
+  it("fails a gap dated outside its own batch's window", () => {
+    const f = failing('R1-G3', (m) => {
+      toBatches(m);
+      usGap(m).batch = 'late';
+    });
+    expect(f).toEqual([expect.objectContaining({ row: US_GAP, field: 'checkedAt' })]);
+  });
+
+  it('fails a row that names no batch, or a batch the file does not list once', () => {
+    const none = failing('R1-P4', (m) => {
+      toBatches(m);
+      delete us(m).observations[0].batch;
+    });
+    expect(none[0].why).toBe('the row names no batch');
+    const unknown = failing('R1-P4', (m) => {
+      toBatches(m);
+      us(m).observations[0].batch = 'no-such-batch';
+    });
+    expect(unknown[0].why).toBe(
+      'the row names the batch "no-such-batch", which the file lists 0 times',
+    );
+    const twice = failing('R1-G3', (m) => {
+      toBatches(m);
+      us(m).batches.push({ ...us(m).batches[0] });
+    });
+    expect(twice[0].why).toBe('the row names the batch "seed", which the file lists 2 times');
+  });
+
+  it('fails a file that has both "batch" and "batches"', () => {
+    const f = failing('R1-P4', (m) => {
+      toBatches(m);
+      us(m).batch = { id: 'seed', windowStart: '2026-09-30', windowEnd: '2026-10-01' };
+    });
+    expect(f[0].why).toMatch(/both "batch" and "batches"/);
+  });
+});

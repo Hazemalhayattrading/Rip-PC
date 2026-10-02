@@ -174,7 +174,7 @@ describe('budget.json keeps the approved method values', () => {
       maxRunSpreadPct: 15,
       gatedAtCpuThrottleRates: [1, 4],
     });
-    expect(budget.models).toMatchObject({ heldOutCount: 5, heldOutMaxErrorPct: 10 });
+    expect(budget.models).toMatchObject({ heldOutCount: 20, heldOutMaxErrorPct: 10 });
     expect(budget.definitionOfDone).toMatchObject({
       firstVisitMaxMinutes: 5,
       usabilityParticipants: 5,
@@ -187,6 +187,22 @@ describe('budget.json keeps the approved method values', () => {
       minPerStratum: 1,
       algorithm: 'sha256-rank-v1',
     });
+  });
+
+  // With a class dropped or a smaller per-class minimum, a set of 20 could leave a class out.
+  it('at least 20 held-out results, at least 4 in each of the 5 coverage classes (Hazem, 2026-10-02)', () => {
+    expect(budget.models.heldOutClasses).toEqual([
+      'gpu-bound',
+      'cpu-bound',
+      'other-publisher',
+      'creator',
+      'interpolated-gpu',
+    ]);
+    expect(budget.models.heldOutPerClassMin).toBe(4);
+    expect(budget.models.heldOutCount).toBeGreaterThanOrEqual(
+      budget.models.heldOutPerClassMin * budget.models.heldOutClasses.length,
+    );
+    expect(budget.models.heldOutSource).toMatch(/phase-1-plan\.md §6\.3/);
   });
 
   it('web vitals watch each load for at least 5 s of page time (QA-P0-004)', () => {

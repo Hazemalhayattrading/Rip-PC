@@ -1,0 +1,1 @@
+{ "rules": [{ "id": "cpu-socket" }, { "id": "gpu-length" }, { "id": "bios-version" }] }
