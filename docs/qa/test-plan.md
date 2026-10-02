@@ -1,6 +1,6 @@
 # Rig Lab test plan
 
-Owner: qa-lead · Version 4.2 · 2026-10-03 · Applies to every phase, from Phase 0 to release.
+Owner: qa-lead · Version 4.3 · 2026-10-03 · Applies to every phase, from Phase 0 to release.
 
 **What v4 adds (Phase 1, the engine):** the 20 compatibility rule ids agreed with build-lead and how
 each is traced (§9); the held-out protocol of at least 20 results, 4 per coverage class (§8.2);
@@ -848,9 +848,19 @@ Captures QA makes go to `artifacts/audit/<phase>/` (git-ignored).
   - Every anchor row must have exactly one passing golden case, matched by id. Equal counts can
     hide one missing case and one duplicate. A missing, extra, duplicated, failed, skipped or
     misnamed case fails, and a title that Vitest cut short is named as the cause.
-  - With `--estimates`, it reads the engine's own estimate for each anchor (from the dump,
-    `artifacts/engine/golden-estimates.json`: `[{ anchorId, low, high, confidence }]`) and checks
-    the ±5% itself. A golden test that asserted a looser tolerance would pass Vitest and fail here.
+  - With `--estimates`, it reads the engine's own estimate for each anchor, as
+    `[{ anchorId, low, high, confidence }]`, and checks the ±5% itself. A golden test that asserted
+    a looser tolerance would pass Vitest and fail here.
+  - QA builds those queries itself, one per anchor row, from the row alone: its test system as a
+    `PerfSystem` (catalogue CPU and chip ids, the memory as a `RamConfig`), its conditions as a
+    `GameQuery` or `CreatorQuery` with `source: { publisher, benchmarkId }`, and its preset through
+    WP-D2's preset map. The dump's query mode answers them. A wrong mapping on either side, QA's
+    or the golden test's, then shows as a difference (build-lead's contract at `83aa5ab`).
+  - **Which field the estimate is read from** (the contract's C2): a row whose upscaling method is
+    "native" (36 at `c621c15`) is a query with `upscaling: null`, checked against `.native`. Every
+    other row, the upscaler's own "Native" mode included (16 rows, DLAA and FSR or XeSS Native AA)
+    and the Quality and Ultra Quality rows (64), is a query with that `UpscalingChoice`, checked
+    against `.withUpscaler`.
   - `--anchors data/benchmarks/game.json` limits it to the game rows, while WP-E3 has landed and
     WP-E4 hasn't.
   - Exit 0 pass, 1 a failed check, 2 cannot measure. Its tests run on real Vitest output of a
@@ -921,8 +931,11 @@ Captures QA makes go to `artifacts/audit/<phase>/` (git-ignored).
      and its source, also without any model output. The picker replaces an ineligible pick, and the
      replacement is committed before the run.
   5. qa-lead runs the model once, at the frozen commit, in a worktree checked out at that commit,
-     through the dump's query mode. Each pick is one query: its published test system, its game or
-     workload and its setting, without a source context, since that is the estimate the lab shows.
+     through the dump's query mode. Each pick is one query: its published test system as a
+     `PerfSystem`, its game or workload and its setting, with `source: null`, since that is the
+     estimate the lab shows. Upscaling maps as for the golden rows (§8.1): plain native rendering
+     is `upscaling: null`, read from `.native`; any upscaler mode, "Native" included, is that
+     `UpscalingChoice`, read from `.withUpscaler`.
   6. QA's script computes each error and writes the results under `artifacts/qa/phase-1/holdout/`.
      A tooling crash may be fixed and the same picks run once more, and the report says so. The
      picks never change after the run.
@@ -996,9 +1009,15 @@ Captures QA makes go to `artifacts/audit/<phase>/` (git-ignored).
 
 ### 8.3 Frame generation and VRAM
 
-- In build-lead's result types, `FpsEstimate.frameGeneration` can only be a `NoEstimate` in Phase 1,
-  so no frame-generation number can exist. Unit and e2e tests check that frame-generation figures
-  never appear in native fields or native UI rows.
+- `FpsEstimate` keeps `native`, `withUpscaler` and `frameGeneration` as separate fields, so a
+  frame-generation figure can never enter a native one. The contract at `83aa5ab` types
+  `frameGeneration` as `FpsResult | NoEstimate`, ready for later sources, so the Phase 1 rule moves
+  from the type to checks: while no anchor has frame generation on, `frameGeneration` is a
+  `NoEstimate` for every query (QA's query-mode checks, and build-lead's `fpsEstimateProblems`
+  from WP-E3). Unit and e2e tests check that frame-generation figures never appear in native
+  fields or native UI rows.
+- From the query-mode output, QA also checks that every `exact` anchor behind `.native` is a
+  native row, and every one behind `.withUpscaler` has the query's upscaler and mode.
 - A setting that needs more VRAM than the card has is flagged (`VramCheck`, `exceeds`), never
   hidden. The lab's local-AI case, "doesn't fit in 8 GB" (plan WP-E4), is checked in e2e.
 
@@ -1162,7 +1181,9 @@ never on its code:
   - `build` has the shape of the engine's `BuildParts`, and every part id exists in the catalogue
     at the commit tested.
   - The engine chooses the case layout, so an entry must fail under every layout. A combination
-    that fails in one layout only belongs in a rule's unit tests.
+    that fails in one layout only belongs in a rule's unit tests. An entry may fix where the
+    radiator goes (`BuildParts.radiatorPosition`, "front"), and it must then fail with the
+    radiator there.
   - `expect` lists every rule that must not be `ok`, each with `block` or `warn`.
   - **Results:** `ok` for an expected rule, or the rule not run, is a Blocker: a false negative. A
     milder status than expected (`warn` for `block`) is a Major. `worst` must be `block` whenever an
@@ -1190,7 +1211,7 @@ never on its code:
   | S12 | No `ok` result has a `not-published` evidence item, and every `cantVerify` warning has one (change C3) |
   | S13 | Every report names each rule exactly once, in `results` or `notRun`, and `worst` is the worst status in `results`, or null when none ran |
   | S14 | A report whose layout search finds no layout has `worst` = block (change C4) |
-  | S15 | Each rule's combination count equals the product of its categories' sizes, plus one for each optional category (change C5) |
+  | S15 | Each rule's combination count equals what its sweep kind implies, computed by QA from the catalogue (change C5). `product`: the product of its categories' sizes, plus one for each optional category; for a layout-dependent rule, a combination with a liquid cooler counts once unset and once more for each position the case takes for that radiator. `drive-lists`: the boards times every multiset of 1 to `maxDrives` drives. `power-extremes`: the CPUs times the cards plus one (none) times the power supplies, times two (the other categories at their lowest and highest draw) |
 
   - The sweep worker (§17) owns these checks. A failed invariant is a Blocker when it hides an
     incompatibility (S1 to S11, S14), and a Major otherwise.
@@ -1754,6 +1775,7 @@ QA re-tests every fix on the integration branch before closing the defect.
 | 2026-10-02 | 4 | WP-Q3, Phase 1. The 20 rule ids agreed with build-lead, with their outcomes and their numeric and unknown-data flags (§9.1, §9.2), and their trace: compat-trace with `compat-rules.json`, the validator proofs of the unknown-data ruling, and the check of the engine's `RuleSpec` (§9.3). Golden tests in each anchor's own source context, the golden-count check and the conflicting-pairs check (§8.1). The held-out protocol: at least 20 results, 4 per class, blind picks committed before one run, the eligibility and mix rules, and the calibration check (§8.2); `models.heldOutCount` 20, with `heldOutPerClassMin` 4 and `heldOutClasses`, pinned. The corpus format and the sweep invariants (§9.4). The mutation-test check (§9.5). The Phase 1 audit seed (§7.2). The independent checks of phase-1-plan §4 (§17 and `docs/qa/phase-1-worker-briefs.md`). The Phase 1 wiring (Appendix C). `rule1.mjs` reads WP-D1's per-batch price windows (§7.5) | The held-out count and classes: Hazem, 2026-10-02 (phase-1-plan §6.3). The unknown-data ruling and the golden source context: the Director, 2026-10-02 (`9f47477`). The rest: pending the Director's review of WP-Q3 |
 | 2026-10-02 | 4.1 | The Director's acceptance of WP-Q3 (`9d56356`): QA's v4 method proposals approved as written (the held-out mix rules, a corpus result milder than expected as a Major, Stryker reasons of at least 20 characters, the sweep severities). "No estimate" fails a held-out result only on an eligible pick, so §8.2's rule 4 now says outright that a pick for a game or workload without anchors there is ineligible | Approved by: Director, 2026-10-02 (`7f3382f`) |
 | 2026-10-03 | 4.2 | WP-Q4, Hazem's navigation report: the in-app navigation spec, run by `verify` at 390, 768 and 1440 px (`@nav` joins the 768 px project's grep), and its live-site config in five browsers (§12.1, §5). Hazem's report closed as an automated click made before the app rendered its links (§12.1). Found on the way: QA-P1-001 (Major, the new heading off screen after an in-app navigation at 1440 px) and QA-P1-002 (Minor, `/index.html` shows the 404 view), both with build-lead. The declared-404 allow-list entry takes the HTTP/2 form of the notice (§13.2). No gate value changed | qa-lead; the live-site check and the closing rule are the Director's (2026-10-02, 2026-10-03) |
+| 2026-10-03 | 4.3 | QA's re-review of the engine contract (`83aa5ab`, OK for WP-E1): §8.1 says which field each golden row is read from (C2) and that QA builds the golden queries itself through the dump's query mode; §8.2 maps a held-out pick's upscaling the same way; §8.3 moves Phase 1's no-frame-generation rule from the type to checks; §9.4 lets a corpus entry fix the radiator position and counts S15 by sweep kind; Appendix C drops `golden-estimates.json`. compat-trace also compares `RuleSpec.unknownData`. No gate value changed | qa-lead |
 
 ## 17. Phase 1 independent checks
 
@@ -2004,8 +2026,10 @@ With coverage on, the report also carries the coverage map.
   build-lead in WP-E0.
 - During WP-E1, `audit:compat-trace` adds `--allow-pending <the ids not built yet>`. A rule comes
   off the list in the commit that adds it.
-- Until WP-E4 lands, `audit:golden` adds `--anchors data/benchmarks/game.json`. Once the dump
-  writes the golden estimates, it also adds `--estimates artifacts/engine/golden-estimates.json`.
+- Until WP-E4 lands, `audit:golden` adds `--anchors data/benchmarks/game.json`.
+- From WP-E3, QA's golden-query step (a WP-Q4 tool) writes one query per anchor row (§8.1), the
+  dump's query mode answers it, and `audit:golden` reads the answers with `--estimates`. The exact
+  lines follow with that tool.
 
 **C.3 `verify`.** The two checks run after the unit tests and the engine dump, and before the
 build:

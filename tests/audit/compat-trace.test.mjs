@@ -335,9 +335,9 @@ describe('the unknown-data ruling: validator tests for rules that read only requ
 
 describe("the engine's RuleSpec against test plan §9.2", () => {
   const specs = [
-    { id: 'cpu-socket', outcomes: ['ok', 'block'], numeric: false },
-    { id: 'gpu-length', outcomes: ['block', 'ok'], numeric: true },
-    { id: 'bios-version', outcomes: ['ok', 'warn'], numeric: false },
+    { id: 'cpu-socket', outcomes: ['ok', 'block'], numeric: false, unknownData: false },
+    { id: 'gpu-length', outcomes: ['block', 'ok'], numeric: true, unknownData: true },
+    { id: 'bios-version', outcomes: ['ok', 'warn'], numeric: false, unknownData: true },
   ];
   const run = (registrySpecs) => traceScenario('clean', { registrySpecs });
 
@@ -345,22 +345,23 @@ describe("the engine's RuleSpec against test plan §9.2", () => {
     expect(run(specs).errors).toEqual([]);
   });
 
-  it('fails on a different outcome set or numeric flag', () => {
+  it('fails on a different outcome set, numeric flag or unknownData flag', () => {
     const r = run([
       { ...specs[0], outcomes: ['ok', 'warn', 'block'] },
       { ...specs[1], numeric: false },
-      specs[2],
+      { ...specs[2], unknownData: false },
     ]);
     expect(r.errors).toEqual([
       'cpu-socket: the registry gives the outcomes ok, warn, block, test plan §9.2 gives ok, block',
       'gpu-length: the registry says numeric is false, test plan §9.2 says true',
+      'bios-version: the registry says unknownData is false, test plan §9.2 says true',
     ]);
   });
 
   it('reads RuleSpec objects from the registry file', () => {
     expect(registryEntries({ rules: specs })).toEqual(specs);
     expect(registryEntries(['cpu-socket'])).toEqual([
-      { id: 'cpu-socket', outcomes: null, numeric: null },
+      { id: 'cpu-socket', outcomes: null, numeric: null, unknownData: null },
     ]);
   });
 });

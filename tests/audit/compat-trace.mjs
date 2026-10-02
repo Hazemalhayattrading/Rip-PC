@@ -20,7 +20,8 @@
  * A rule that reads only required fields has no unknown-data test. Instead, each validator test its
  * "requiredFields" names must pass, in a file under --data-test-root (the Director's ruling,
  * 2026-10-02, phase-1-plan WP-E1). When the registry holds the engine's RuleSpec objects, their
- * "outcomes" and "numeric" must equal compat-rules.json's, so the two sides cannot drift apart.
+ * "outcomes", "numeric" and "unknownData" must equal compat-rules.json's, so the two sides cannot
+ * drift apart.
  *
  * Usage:
  *   node tests/audit/compat-trace.mjs --registry <rules.json> --vitest <vitest-report.json>
@@ -152,7 +153,7 @@ export function validateRules(doc) {
 
 /**
  * The engine's registry entries, from any of the accepted shapes: { id, outcomes, numeric }, where
- * outcomes and numeric are null when the registry does not give them. Duplicates are kept.
+ * outcomes, numeric and unknownData are null when the registry does not give them. Duplicates are kept.
  */
 export function registryEntries(doc) {
   const list = Array.isArray(doc) ? doc : Array.isArray(doc?.rules) ? doc.rules : null;
@@ -166,7 +167,8 @@ export function registryEntries(doc) {
       throw new TraceInputError(`registry entry ${i} has no rule id`);
     const outcomes = Array.isArray(entry?.outcomes) ? entry.outcomes.map(String) : null;
     const numeric = typeof entry?.numeric === 'boolean' ? entry.numeric : null;
-    return { id, outcomes, numeric };
+    const unknownData = typeof entry?.unknownData === 'boolean' ? entry.unknownData : null;
+    return { id, outcomes, numeric, unknownData };
   });
 }
 
@@ -340,6 +342,10 @@ export function trace({
     if (spec.numeric !== null && spec.numeric !== rule.numeric)
       errors.push(
         `${spec.id}: the registry says numeric is ${spec.numeric}, test plan §9.2 says ${rule.numeric}`,
+      );
+    if (spec.unknownData !== null && spec.unknownData !== rule.unknownData)
+      errors.push(
+        `${spec.id}: the registry says unknownData is ${spec.unknownData}, test plan §9.2 says ${rule.unknownData}`,
       );
   }
   for (const id of allowPending)

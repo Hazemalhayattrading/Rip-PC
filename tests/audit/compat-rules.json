@@ -294,7 +294,7 @@
           "field": "motherboard.laneSharing",
           "proof": "null-rejected",
           "test": "[schema] motherboard.laneSharing: null is rejected",
-          "why": "[] means the manual states the board shares no lanes; the per-rule worker checks each [] against the manual"
+          "why": "[] means the maker publishes no lane sharing for the board: the manual has no sharing statement, while the boards that share lanes state it in their specification footnotes (data-lead searched each manual in full, 2026-10-03). The m2-lanes worker re-checks every [] against the manual and the spec page"
         }
       ],
       "data": "ready"
