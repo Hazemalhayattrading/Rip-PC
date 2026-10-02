@@ -1019,8 +1019,11 @@ For each of the 20 rules in §9.2:
     1 W, 1 MT/s, one module, one drive, one 8-pin cable, 0.1 slot, or the next radiator size (120,
     140, 240, 280, 360, 420 mm). The reason says what happens exactly at the limit;
   - an **unknown-data** test for each rule whose decision can depend on a value the data doesn't
-    publish (`unknownData: true` in `compat-rules.json`): the unpublished value gives `warn` with
-    `cantVerify`, never `ok` (`compatibility.unknownDataMustNotReturn`).
+    publish (`unknownData: true` in `compat-rules.json`): a field that is null with a note, a
+    nullable list (a case's `psu.clearance`), or a fact the schema doesn't hold (a RAM kit's rank).
+    The unpublished value gives `warn` with `cantVerify`, never `ok`
+    (`compatibility.unknownDataMustNotReturn`). An empty list is a real answer ("none"), not an
+    unpublished one.
 - **The unknown-data ruling** (the Director, 2026-10-02, phase-1-plan WP-E1):
   - A rule whose every input is required by the schema or the validator has no unknown-data test,
     since valid data can't be unpublished there. Instead, `compat-rules.json` names, for each field
