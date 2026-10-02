@@ -122,12 +122,15 @@ describe('the real rule set, tests/audit/compat-rules.json', () => {
   // The Director's ruling named 8 rules on the integration data. Re-checked against WP-D1 batch 1
   // (c588afb), as the ruling asks: gpu-length reads conditional rows that leave some radiator sizes
   // without a limit, and psu-form-factor reads atxBracketIncluded, which can be unpublished.
-  it('asks unknown-data tests of 10 rules, and validator proofs of the other 10', () => {
+  // Re-checked against build-lead's RuleSpec (480a30e): cooler-height reads the memory kit, whose
+  // height, like the cooler's memory clearance, can be unpublished.
+  it('asks unknown-data tests of 11 rules, and validator proofs of the other 9', () => {
     expect(rules.filter((r) => r.unknownData).map((r) => r.id)).toEqual([
       'bios-version',
       'ram-speed',
       'gpu-length',
       'gpu-thickness',
+      'cooler-height',
       'ram-cooler-clearance',
       'radiator-fit',
       'psu-form-factor',
@@ -140,7 +143,6 @@ describe('the real rule set, tests/audit/compat-rules.json', () => {
       'cpu-chipset',
       'ram-type',
       'ram-slots',
-      'cooler-height',
       'm2-lanes',
       'board-form-factor',
       'usb-c-header',

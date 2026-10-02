@@ -1,7 +1,7 @@
 # QA status: WP-Q4 (independent verification and the QA report)
 
 Branch `feat/qa-phase1-verification`, worktree `C:\Projects\Rip-PC\.claude\worktrees\qa-lead`.
-Owner: qa-lead. Spec: `docs/reports/phase-1-plan.md` §2 (WP-Q4) and §4; test plan v4.2 §17 and
+Owner: qa-lead. Spec: `docs/reports/phase-1-plan.md` §2 (WP-Q4) and §4; test plan v4.5 §17 and
 `docs/qa/phase-1-worker-briefs.md`.
 
 ## Done
@@ -52,10 +52,19 @@ Owner: qa-lead. Spec: `docs/reports/phase-1-plan.md` §2 (WP-Q4) and §4; test p
    self-tests. The `index.html` smoke tests for QA-P1-002 are in, and run once the fix and the lab
    index land. design-lead's four 3D checks are in test plan v4.4 §6.7. verify: 699 unit, 192 e2e
    (4 skipped), exit 0.
+10. 2026-10-03: the unknown-data re-check against build-lead's `RuleSpec` at `480a30e` (test plan
+    v4.5, pending the Director's approval). cooler-height now reads the memory kit, and
+    `ram.heightMm` and `cooler.ramClearanceMm` are both nullable, so it moves to the unknown-data
+    group: 11 rules with unknown-data tests, 9 with validator proofs, 20 distinct validator titles
+    (data-lead's four cooler-height tests still run, but compat-trace no longer requires them).
+    cooler-socket gains `motherboard.socket`'s proof. build-lead's `RuleSpec` for cooler-height
+    must say `unknownData: true` in the same merge window, because `rules.test.ts` pins this
+    file. The lab-index smoke test now finds its route by `htmlFileOf(route) === 'lab/index.html'`
+    (build-lead's catch: the lab's path is `/lab/`).
 
 ## In progress
-- Waiting: build-lead's answers to follow-ups 2 and 3; the dump's query mode and `rules.json`
-  (WP-E0); WP-D1 batch 1's merge (the validator tests).
+- Waiting: the dump's query mode and `rules.json` (WP-E0); WP-D1 batch 1's merge (the validator
+  tests); the SHA of build-lead's QA-P1-001 and QA-P1-002 fixes, which come together.
 
 ## Next steps, in order
 1. When the dump's query mode lands (WP-E0): the golden-query step (`tests/audit/golden-queries.mjs`:
@@ -69,7 +78,9 @@ Owner: qa-lead. Spec: `docs/reports/phase-1-plan.md` §2 (WP-Q4) and §4; test p
      coarse pointer, 36 px with a mouse; `artifacts/qa/phase-1/ds2-aa/retest-p1-003/`). Close it
      after WP-DS2 batch 2 merges, with one re-run on the integration branch.
 3. QA-P1-002: when build-lead's fix lands, check that the two gated `index.html` smoke tests ran
-   (not skipped) at 390 and 1440 px, then re-run the live config after the deploy.
+   (not skipped) at 390 and 1440 px, then re-run the live config after the deploy, and check by
+   hand that `/lab` answers 301 to `/lab/` there (GitHub Pages' directory redirect, which
+   `vite preview` need not copy).
 4. The other Q4 tools, as E0 and E1 land: `mutation-check.mjs` (the first Stryker report), the
    blind anchor key list; `strata.mjs` for WP-D1's new data files.
 5. The §4 fan-out, as each WP hands off (the briefs file).

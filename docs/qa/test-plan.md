@@ -1,6 +1,6 @@
 # Rig Lab test plan
 
-Owner: qa-lead · Version 4.4 · 2026-10-03 · Applies to every phase, from Phase 0 to release.
+Owner: qa-lead · Version 4.5 · 2026-10-03 · Applies to every phase, from Phase 0 to release.
 
 **What v4 adds (Phase 1, the engine):** the 20 compatibility rule ids agreed with build-lead and how
 each is traced (§9); the held-out protocol of at least 20 results, 4 per coverage class (§8.2);
@@ -1084,8 +1084,12 @@ For each of the 20 rules in §9.2:
     `case.frontIo.usbC`) holds a real answer, not an unpublished one.
   - The lists are re-checked whenever a rule starts to read a new field, every WP-D1 field
     included. The first re-check, against WP-D1 batch 1 (`c588afb`), moved gpu-length and
-    psu-form-factor into the unknown-data group, so 10 rules have unknown-data tests and 10 have
-    validator proofs.
+    psu-form-factor into the unknown-data group. The second, against build-lead's `RuleSpec`
+    (`480a30e`), moved cooler-height there too: it now reads the memory kit, because a kit taller
+    than the cooler's memory clearance raises the front fan, and both of those heights can be
+    unpublished. So 11 rules have unknown-data tests and 9 have validator proofs. cooler-socket,
+    which now reads the board's socket while no CPU is picked, gained `motherboard.socket`'s
+    proof.
 - **Real products.** Fixtures use real, sourced catalogue products (`data/compat-fixtures.json`,
   WP-D1). A boundary or unknown-data test may take a real product and override the one field under
   test, and its title says so ("Sapphire Pulse RX 9070 XT with its length set to 355 mm"). No test
@@ -1108,7 +1112,7 @@ The examples are phase-1-plan §3's real products.
 | 6 | `ram-speed` | The kit's speed against the board's and the CPU's official speeds | ok, warn | yes | yes | Trident Z5 CK DDR5-8200 with the Core Ultra 9 285K on the TUF Gaming Z890-Plus WiFi: warn, naming the official speed and explaining XMP |
 | 7 | `gpu-length` | Card length against the case, per layout | ok, block | yes | yes | Sapphire Pulse RX 9070 XT (320 mm) in the Fractal North: ok (355 mm). With the ARCTIC Liquid Freezer III Pro 360 at the front: block (300 mm) |
 | 8 | `gpu-thickness` | Card thickness against slot spacing and the case's slots | ok, warn, block | yes | yes | Fractal Terra with the Sapphire Pulse RX 9060 XT and the DeepCool AN400: names the spine positions where both fit |
-| 9 | `cooler-height` | Air-cooler height against the case, per layout | ok, block | yes | no | DeepCool AK620 (160 mm) in the Fractal Terra: block |
+| 9 | `cooler-height` | Air-cooler height against the case, per layout, with the front fan raised over a taller memory kit | ok, block | yes | yes | DeepCool AK620 (160 mm) in the Fractal Terra: block |
 | 10 | `ram-cooler-clearance` | RAM height under an air cooler | ok, warn, block | yes | yes | TeamGroup T-Force Delta RGB (46.1 mm) under the AK620 (43 mm): block, or warn if the fan can move up. DeepCool AN400 (clearance not published): warn, can't verify |
 | 11 | `radiator-fit` | Radiator size and position against the case | ok, block | yes | yes | ARCTIC Liquid Freezer III Pro 360 in the Fractal Pop Mini Air (240 mm at most): block |
 | 12 | `psu-form-factor` | The PSU form factor against the case | ok, warn, block | no | yes | DeepCool PN850M (ATX) in the Fractal Terra (SFX and SFX-L only): block |
@@ -1118,7 +1122,7 @@ The examples are phase-1-plan §3's real products.
 | 16 | `m2-lanes` | M.2 count, and lane-sharing side effects | ok, warn, block | yes | no | Three NVMe drives on the ROG Strix B650E-I (2 slots): block. A drive in a shared slot on the TUF Gaming B550-Plus WiFi II: warn, quoting the manual |
 | 17 | `board-form-factor` | The board's form factor against the case | ok, block | no | no | TUF Gaming B650-Plus WiFi (ATX) in the Pop Mini Air: block |
 | 18 | `usb-c-header` | A front USB-C port needs a header on the board | ok, warn | no | no | Fractal North with the TUF Gaming B550-Plus WiFi II (no header): warn |
-| 19 | `cooler-socket` | The cooler's mounting kit fits the CPU socket | ok, block | no | no | A cooler that doesn't list every socket (WP-D1 adds one) |
+| 19 | `cooler-socket` | The cooler's mounting kit fits the CPU socket, or the board's while no CPU is picked | ok, block | no | no | A cooler that doesn't list every socket (WP-D1 adds one) |
 | 20 | `display-output` | A build with no graphics card needs a CPU with integrated graphics | ok, block | no | no | Core i5-12400F with no graphics card: block |
 
 Rows 4 and 5, and 12 and 13, each split one item of BUILD_PROMPT §5.1, as in v3. Rows 19 and 20
@@ -1535,7 +1539,8 @@ WP-Q1 added, all done on 2026-09-30 except the last item:
 - **`index.html` paths** (QA-P1-002, build-lead, WP-E0): the host serves `/index.html` and
   `/lab/index.html` with a 200, so the app renders their directory's route. The smoke loads each
   and expects a 200 with no redirect and that route's heading; `/build/index.html` stays not found.
-  The first two run once the route table shows the fix (and the lab index route), so the smoke
+  The first two run once the route table shows the fix (and the lab index route, found by the file
+  the host serves for it, `lab/index.html`, whether or not its path ends in a slash), so the smoke
   stays green whichever lands first. A stand-in fix ran them green on 2026-10-03; QA checks that
   they ran when it verifies the fix.
 - **The same spec on the live site** (PAGES), after each milestone deploy and on any navigation
@@ -1820,6 +1825,7 @@ QA re-tests every fix on the integration branch before closing the defect.
 | 2026-10-03 | 4.2 | WP-Q4, Hazem's navigation report: the in-app navigation spec, run by `verify` at 390, 768 and 1440 px (`@nav` joins the 768 px project's grep), and its live-site config in five browsers (§12.1, §5). Hazem's report closed as an automated click made before the app rendered its links (§12.1). Found on the way: QA-P1-001 (Major, the new heading off screen after an in-app navigation at 1440 px) and QA-P1-002 (Minor, `/index.html` shows the 404 view), both with build-lead. The declared-404 allow-list entry takes the HTTP/2 form of the notice (§13.2). No gate value changed | qa-lead; the live-site check and the closing rule are the Director's (2026-10-02, 2026-10-03) |
 | 2026-10-03 | 4.3 | QA's re-review of the engine contract (`83aa5ab`, OK for WP-E1): §8.1 says which field each golden row is read from (C2) and that QA builds the golden queries itself through the dump's query mode; §8.2 maps a held-out pick's upscaling the same way; §8.3 moves Phase 1's no-frame-generation rule from the type to checks; §9.4 lets a corpus entry fix the radiator position and counts S15 by sweep kind; Appendix C drops `golden-estimates.json`. compat-trace also compares `RuleSpec.unknownData`. No gate value changed | qa-lead |
 | 2026-10-03 | 4.4 | Two Firefox allow-list entries from the live run, as build-lead triaged them: the deliberate WebGL context loss when the 3D preview unmounts, and three.js r186's 1 px viewport rounding note (§13.2). The `index.html` smoke tests for QA-P1-002, which run once the fix and the lab index are in (§12.1). design-lead's four 3D checks for Phases 2 and 3, and the shadows warning (§6.7). No gate value changed | qa-lead |
+| 2026-10-03 | 4.5 | The unknown-data lists re-checked against build-lead's `RuleSpec` at `480a30e`, as the Director's ruling asks: cooler-height reads the memory kit, so it joins the unknown-data group (11 rules, 9 with validator proofs), and cooler-socket gains `motherboard.socket`'s validator proof (§9.1, §9.2). The lab-index smoke test finds its route by the file the host serves (§12.1). No gate value changed | qa-lead, pending the Director's approval |
 
 ## 17. Phase 1 independent checks
 

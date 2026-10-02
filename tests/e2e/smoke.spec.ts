@@ -1,7 +1,14 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import type { Page } from '@playwright/test';
-import { KNOWN_ROUTES, BASE_PATH, matchPath, metaOf, pathOf } from '../../src/app/routes.ts';
+import {
+  KNOWN_ROUTES,
+  BASE_PATH,
+  htmlFileOf,
+  matchPath,
+  metaOf,
+  pathOf,
+} from '../../src/app/routes.ts';
 import { GARAGE_TEXT } from '../../src/components/garage/garage-text.ts';
 import { projectMeta } from '../lib/project-meta.ts';
 import { expect, test } from './fixtures.ts';
@@ -160,7 +167,8 @@ test.describe('unknown paths', { tag: '@smoke' }, () => {
 // verifies the fix.
 test.describe('index.html paths', { tag: '@smoke' }, () => {
   const indexFixed = matchPath('/index.html').name === 'home';
-  const labIndex = KNOWN_ROUTES.find((route) => pathOf(route) === '/lab');
+  // Keyed on the file the host serves, which stays put whether the lab's path ends in a slash.
+  const labIndex = KNOWN_ROUTES.find((route) => htmlFileOf(route) === 'lab/index.html');
 
   test('/index.html is the home page, with a 200 and no redirect', async ({ page }) => {
     test.skip(!indexFixed, 'QA-P1-002 is not in yet: matchPath does not map /index.html home');
@@ -183,6 +191,7 @@ test.describe('index.html paths', { tag: '@smoke' }, () => {
     const meta = metaOf(labIndex);
     expect(response?.status()).toBe(200);
     expect(response?.request().redirectedFrom()).toBeNull();
+    expect(new URL(page.url()).pathname).toBe(`${BASE_PATH}lab/index.html`);
     await expect(heading(page)).toHaveText(meta.heading);
     await expect(page).toHaveTitle(meta.title);
   });
