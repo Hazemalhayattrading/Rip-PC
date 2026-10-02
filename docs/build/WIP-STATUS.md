@@ -57,13 +57,16 @@ in the hand-off commit.
 ## Next steps
 
 1. Read the two workers' reports (they arrive by SendMessage). Review every diff against the spec.
-2. **The hand-off waits for `src/data/semantics.ts` on the integration branch** (Director,
-   2026-10-03: no hand-off with the "not published" gap). It is data-lead's `feat/data-semantics`
-   @ 3e3bdf3, or D1 batch 1, with the same API. Then:
-   1. merge the integration branch;
-   2. point `src/app/lab/null-means-none.ts` at `nullMeansNone`;
-   3. test that the i5-12400F's igpu reads "none";
-   4. check that the lab chunk holds no Zod.
+2. Done (2026-10-03):
+   - data-lead's `src/data/semantics.ts` is merged in through the integration branch at ddee87b
+     (02b3d6b);
+   - the lab adapter re-exports it (526ab87), and its test proves the i5-12400F's igpu reads
+     "none";
+   - the lab chunk holds no Zod.
+3. **Open, budget:** a build of the working tree put the initial JS at 80.00 KB, against the limit
+   of 77.92 + 2 = 79.92 KB. Cause: `SiteLayout` imports `LabHeader` statically. The frontend
+   worker is moving all lab UI into the lazy chunk and re-measuring with
+   `tests/perf/bundle-budget.mjs`.
 3. Handle the re-review answers of qa-lead and design-lead on the types; agree the query-mode
    format with qa-lead.
 4. Full `npm run verify`, `npm run perf:bundle`, the screenshots, then the hand-off to `team-lead`.
