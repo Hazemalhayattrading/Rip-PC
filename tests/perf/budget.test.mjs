@@ -155,6 +155,40 @@ describe('budget.json keeps the approved method values', () => {
     expect(budget.fps).toMatchObject({ runs: 3, aggregation: 'median', warmupRuns: 1 });
   });
 
+  // QA-P0-039: the rest of the approved method values (test plan §16, v1.1 and later). With
+  // visual.threshold or maxDiffPixelRatio at 1, a fully changed page would pass; with a 9000 px
+  // viewport, a late banner's CLS falls under the gate.
+  it('the visual thresholds, viewport sizes and scale, and the other approved values (QA-P0-039)', () => {
+    expect(budget.visual).toMatchObject({ threshold: 0.2, maxDiffPixelRatio: 0.001 });
+    expect(budget.visual.deviceScaleFactor).toBe(1);
+    expect(budget.visual.viewports).toEqual([
+      { name: '390', width: 390, height: 844, isMobile: true, hasTouch: true },
+      { name: '768', width: 768, height: 1024, isMobile: false, hasTouch: true },
+      { name: '1440', width: 1440, height: 900, isMobile: false, hasTouch: false },
+    ]);
+    expect(budget.bundle.gzip).toMatchObject({ level: 6, bytesPerKilobyte: 1000 });
+    expect(budget.bundle.initialJs.warnAtFraction).toBe(0.95);
+    expect(budget.fps).toMatchObject({ maxRunSpreadPct: 15, calibrationMs: 2000 });
+    expect(budget.fps.ciProxy).toMatchObject({ maxRegressionPct: 10, blocking: false });
+    expect(budget.webVitals.gates.inpMs).toMatchObject({
+      maxRunSpreadPct: 15,
+      gatedAtCpuThrottleRates: [1, 4],
+    });
+    expect(budget.models).toMatchObject({ heldOutCount: 5, heldOutMaxErrorPct: 10 });
+    expect(budget.definitionOfDone).toMatchObject({
+      firstVisitMaxMinutes: 5,
+      usabilityParticipants: 5,
+      minFinishingUnaided: 4,
+      maxMedianMinutes: 5,
+    });
+    expect(budget.compatibility.unknownDataMustNotReturn).toBe('ok');
+    expect(budget.dataAudit).toMatchObject({
+      sampleFraction: 0.1,
+      minPerStratum: 1,
+      algorithm: 'sha256-rank-v1',
+    });
+  });
+
   it('web vitals watch each load for at least 5 s of page time (QA-P0-004)', () => {
     expect(budget.webVitals.minObserveMs).toBe(5000);
     expect(budget.webVitals.minObserveMs).toBeGreaterThan(budget.webVitals.gates.lcpMs.value);

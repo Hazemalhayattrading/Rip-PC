@@ -72,11 +72,12 @@ export const CHROMIUM_404_CONSOLE_TEXT =
  * Chromium's notice when WebGL falls back to its software renderer, SwiftShader, without the
  * --enable-unsafe-swiftshader flag (seen by build-lead, 2026-10-01). The whole text, in the
  * wording of Chromium 141 (Playwright 1.56.1's build) and of Chromium's current source, which
- * drops the about:flags part. The bracketed prefix changes per GPU process. Every e2e project
- * passes the flag, so this should not appear at all (QA-P0-032).
+ * drops the about:flags part. The optional prefix is one of the two that Chromium's GPU logger
+ * writes, with an id that changes per GPU process. Every e2e project passes the flag, so this
+ * should not appear at all (QA-P0-032, QA-P0-038).
  */
 export const SOFTWARE_WEBGL_NOTICE =
-  /^(?:\[[^\]]*\])?Automatic fallback to software WebGL has been deprecated\. Please use the --enable-unsafe-swiftshader(?: \(about:flags#enable-unsafe-swiftshader\))? flag to opt in to lower security guarantees for trusted content\.$/;
+  /^(?:\[GroupMarkerNotSet\(crbug\.com\/242999\)!:[0-9A-F]+\]|\[\.WebGL-0x[0-9a-f]+\])?Automatic fallback to software WebGL has been deprecated\. Please use the --enable-unsafe-swiftshader(?: \(about:flags#enable-unsafe-swiftshader\))? flag to opt in to lower security guarantees for trusted content\.$/;
 
 /**
  * ANGLE's performance warning, which Chromium logs as a "GL Driver Message", when a WebGL canvas
@@ -90,8 +91,10 @@ export const GPU_READPIXELS_STALL_NOTICE =
 
 /**
  * Chromium attributes both notices to the page itself: the message's location is the document's
- * URL. A script that logs the same text has its own file's URL, so it still fails (QA-P0-033).
- * An inline script in the page has the page's URL too; that limit is in test plan §13.2.
+ * URL. A console call in a script file has that file's URL, so it still fails (QA-P0-033). Code
+ * that Chromium compiles with the page's URL has it too: an inline script in the HTML, and an
+ * inline event-handler attribute, even one a script file sets (QA-P0-038). That limit is in test
+ * plan §13.2.
  */
 function fromThePageItself(problem: Problem): boolean {
   return problem.url !== '' && problem.url === problem.documentUrl;

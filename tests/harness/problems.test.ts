@@ -212,6 +212,13 @@ describe('classify', () => {
         url: page,
         documentUrl: page,
       },
+      // QA-P0-038: the whole notice behind a bracketed prefix that Chromium's logger never writes.
+      {
+        kind: 'console.warning',
+        text: '[any app text]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content.',
+        url: page,
+        documentUrl: page,
+      },
       // A message with no location proves nothing about where it came from.
       {
         kind: 'console.warning',

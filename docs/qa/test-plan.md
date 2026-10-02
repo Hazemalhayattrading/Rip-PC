@@ -1,6 +1,6 @@
 # Rig Lab test plan
 
-Owner: qa-lead · Version 3.3 · 2026-10-02 · Applies to every phase, from Phase 0 to release.
+Owner: qa-lead · Version 3.4 · 2026-10-02 · Applies to every phase, from Phase 0 to release.
 
 This is a working document. Every team follows it. It says how each quality bar in BUILD_PROMPT §8
 and each item of the definition of done in §9 is measured, where, how often, by whom, and what
@@ -1212,15 +1212,18 @@ rejections as page errors.
   THREE.Clock filter merged (QA-P0-001), the app logs no warning of its own on any route. So an
   app warning now fails the test, and only two notices from the browser's own WebGL stack are
   allowed (the allow-list below).
-  - Measured on the home PC, 2026-10-02 at `73005aa`: 166 smoke tests pass. The allow-list let
+  - Measured on the home PC, 2026-10-02 at `1027152`, and again at `e3f58fc`: 166 smoke tests
+    pass. The allow-list let
     through 48 ReadPixels notices, all on `/build/*` pages, where the 3D preview runs. ANGLE logs
     that notice at most 4 times per GPU process, so the count follows browser launches, not
     pages: 6 projects × 2 workers × 4 = 48 (QA-P0-034).
   - Self-tests: an app warning fails; ANGLE's exact notice passes when the page itself logs it,
     and fails from a script file; a GL driver message with any other text fails.
-  - **A limit:** an inline script in the page that logs one of the two notices word for word
-    would pass, because Chromium gives an inline script the page's own URL (QA-P0-033). A script
-    file, the app's bundle included, fails.
+  - **A limit** (QA-P0-033, QA-P0-038): code that Chromium compiles with the page's own URL can
+    log one of the two notices word for word and pass. That is an inline script in the HTML, and
+    an inline event-handler attribute, even one that a script file sets. A plain console call
+    from a script file, the app's bundle included, fails, and so do `eval`, `new Function` and
+    string timers, which have no location.
   - **Not covered: Chrome's unused-preload warning** (QA-P0-017). Chrome logs it a few seconds
     after the load event ("not used within a few seconds from the window's load event"), and only
     on a repeat load in the same tab. That is later than any smoke test watches, so the gate never
@@ -1308,7 +1311,7 @@ an owning team and an `until`: `permanent`, the last day it applies, or an https
   | a request aborted by navigating away | passes | none |
   | a page that answers 404, not declared | fails | console.error, http-error |
   | the same page, declared | passes | none; both allowed |
-  | a 404 image on a declared 404 page | fails | console.error, http-error |
+  | a 404 image on a declared 404 page | fails | console.error, http-error; the page's own 404 allowed |
   | an uncaught error in a worker | fails | pageerror |
   | `console.error` in a worker | fails | console.error |
   | `console.error` in a popup | fails | console.error |
@@ -1385,6 +1388,7 @@ QA re-tests every fix on the integration branch before closing the defect.
 | 2026-10-01 | 3.1 | WP-Q2: a 1 s soak per route in the dark 1440 smoke project (`console.soakMs`, `console.soakViewports`), so a late error or rejection fails (§13.2, QA-P0-005). Dark and light e2e projects at every width, with axe in all six cells on PR as §5 always planned (§5). `budget.test.mjs` pins the median-of-3 run counts, the per-rule test minimums, `minObserveMs` and the soak. The LCP blind spots documented, and their fix deferred (§6.1, QA-P0-006) | Approved by: Director, 2026-10-01 (the soak; QA-P0-006 deferred to Phase 2 entry, owner qa-lead) |
 | 2026-10-02 | 3.2 | WP-Q2: console warnings fail the e2e run like errors (`console.maxConsoleWarnings` 0, §13.2), with two allow-list entries for the browser's software-WebGL notice and the GPU driver's ReadPixels note, from build-lead's proposal. `budget.test.mjs` pins it. The unused-preload warning the gate cannot see is recorded (QA-P0-017). No §8 number changed | Approved by: Director, 2026-10-01 (`progress.md`, WP-Q2 next step 4) |
 | 2026-10-02 | 3.3 | WP-Q2: fixes from the independent check of v3.2, QA-P0-032 to 037. Both warning entries match the whole notice and only from the page itself, and the ReadPixels notice is attributed to ANGLE on SwiftShader, not a GPU driver (§13.2). The self-test table and how the checker catches a broken fixture (§13.2). Seven more method values pinned, and the web-vitals spec refuses an empty plan. D10's environment and blocks columns (§3.2). No gate value changed | qa-lead; no approval needed (no gate or method changed) |
+| 2026-10-02 | 3.4 | WP-Q2: from the re-test of v3.3, QA-P0-038 to 040. The software-WebGL entry takes only the two prefixes Chromium's GPU logger writes, and §13.2 states the page-URL limit exactly: inline scripts and inline event handlers, even ones a script file sets. The remaining approved method values pinned (visual thresholds, viewport sizes and flags, scale, gzip level and bytes per KB, the 95% warning, fps spread and calibration, the CI proxy, INP spread and rates, the model, D1 and audit values). Two §13.2 slips | qa-lead; no approval needed (no gate or method changed) |
 
 ---
 
