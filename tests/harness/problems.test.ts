@@ -153,10 +153,129 @@ describe('classify', () => {
     ]);
   });
 
+  it("allows the browser's software-WebGL notice and ANGLE's ReadPixels notice, from the page", () => {
+    const at = { url: `${SITE}/Rip-PC/build/cpu`, documentUrl: `${SITE}/Rip-PC/build/cpu` };
+    const notices: Problem[] = [
+      {
+        kind: 'console.warning',
+        text: '[GroupMarkerNotSet(crbug.com/242999)!:A0402700246C0000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader (about:flags#enable-unsafe-swiftshader) flag to opt in to lower security guarantees for trusted content.',
+        ...at,
+      },
+      // The same notice in the wording of Chromium's current source.
+      {
+        kind: 'console.warning',
+        text: 'Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content.',
+        ...at,
+      },
+      {
+        kind: 'console.warning',
+        text: '[.WebGL-0x202c00194200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels',
+        ...at,
+      },
+      {
+        kind: 'console.warning',
+        text: '[.WebGL-0x6e6400194e00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)',
+        ...at,
+      },
+    ];
+    expect(
+      classify(notices, { expectNotFoundDocument: false }).allowed.map((a) => a.allowedBy),
+    ).toEqual([
+      'software-webgl-notice',
+      'software-webgl-notice',
+      'gpu-readpixels-stall-notice',
+      'gpu-readpixels-stall-notice',
+    ]);
+  });
+
+  it('fails either notice when a script logs it, or when only its opening words match', () => {
+    const page = `${SITE}/Rip-PC/build/cpu`;
+    const script = `${SITE}/Rip-PC/assets/index-abc123.js`;
+    const copies: Problem[] = [
+      // QA-P0-033: an app or library logging the exact text has its script's URL.
+      {
+        kind: 'console.warning',
+        text: '[.WebGL-0x202c00194200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels',
+        url: script,
+        documentUrl: page,
+      },
+      {
+        kind: 'console.warning',
+        text: 'Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content.',
+        url: script,
+        documentUrl: page,
+      },
+      // QA-P0-032: the notice's opening words with a tail of the app's own.
+      {
+        kind: 'console.warning',
+        text: 'Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag, says the app.',
+        url: page,
+        documentUrl: page,
+      },
+      // QA-P0-038: the whole notice behind a bracketed prefix that Chromium's logger never writes.
+      {
+        kind: 'console.warning',
+        text: '[any app text]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content.',
+        url: page,
+        documentUrl: page,
+      },
+      // A message with no location proves nothing about where it came from.
+      {
+        kind: 'console.warning',
+        text: '[.WebGL-0x202c00194200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels',
+        url: '',
+        documentUrl: '',
+      },
+    ];
+    expect(classify(copies, { expectNotFoundDocument: false }).unexpected).toEqual(copies);
+  });
+
+  it('fails every other warning, and the same notices logged as errors', () => {
+    const at = { url: `${SITE}/Rip-PC/build/cpu`, documentUrl: `${SITE}/Rip-PC/build/cpu` };
+    const others: Problem[] = [
+      // An app's own warning (QA-P0-001's text, before build-lead's filter).
+      {
+        kind: 'console.warning',
+        text: 'THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.',
+        ...at,
+      },
+      // Chrome's unused-preload warning on a repeat load (QA-P0-017).
+      {
+        kind: 'console.warning',
+        text: `The resource ${SITE}/Rip-PC/assets/rig-lab-sans.woff2 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate \`as\` value and it is preloaded intentionally.`,
+        ...at,
+      },
+      {
+        kind: 'console.warning',
+        text: '[.WebGL-0x202c00194200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): Buffer performance warning',
+        ...at,
+      },
+      {
+        kind: 'console.warning',
+        text: 'GPU stall due to ReadPixels',
+        ...at,
+      },
+      {
+        kind: 'console.error',
+        text: '[.WebGL-0x202c00194200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels',
+        ...at,
+      },
+    ];
+    for (const expectNotFoundDocument of [false, true]) {
+      expect(classify(others, { expectNotFoundDocument }).unexpected).toEqual(others);
+    }
+  });
+
   it('never allows anything else', () => {
     const others: Problem[] = [
       {
         kind: 'console.error',
+        text: 'boom',
+        url: `${SITE}/Rip-PC/`,
+        documentUrl: `${SITE}/Rip-PC/`,
+      },
+      {
+        kind: 'console.warning',
         text: 'boom',
         url: `${SITE}/Rip-PC/`,
         documentUrl: `${SITE}/Rip-PC/`,

@@ -5,23 +5,38 @@
  * Owner: qa-lead. No numbers are typed here: runs, aggregation, routes and every threshold come
  * from budget.json (lighthouse.*), and the base path from bundle.basePath.
  *
- * Chrome: LHCI launches the browser at $CHROME_PATH. Locally that is /opt/pw-browsers/chromium
- * (Playwright's Chromium 1194). CI sets it to the Chromium that @playwright/test@1.56.1 installs, so
- * local and CI runs use the same browser build (docs/qa/test-plan.md §6.3).
+ * Chrome: LHCI launches the browser at $CHROME_PATH. CI sets it to the Chromium that
+ * @playwright/test@1.56.1 installs (Chromium 1194), and so did the cloud container. Without it, LHCI
+ * finds installed Google Chrome, as on the home PC (docs/qa/test-plan.md §6.3).
  */
+const { createHash } = require('node:crypto');
 const path = require('node:path');
 const budget = require('./budget.json');
 
 /**
- * `vite preview` serves the production build under the base path, answering like GitHub Pages
- * (build-lead's scripts/vite/github-pages-preview.ts). 127.0.0.1 rather than localhost because this
- * container has no IPv6. --strictPort fails loudly on a clash; LHCI_PORT overrides the port locally.
+ * A stable port per checkout, derived from the repository root's path, so several git worktrees
+ * on one machine can run Lighthouse at the same time. A fixed 4173 made two teams' runs collide on
+ * the home PC (2026-10-01). playwright.config.ts derives its preview port the same way in
+ * 20000-29999; this takes 30000-39999, so the two never clash within a checkout. Below Windows'
+ * dynamic range (49152 and up).
  */
-const port = Number(process.env.LHCI_PORT ?? 4173);
+function portForThisCheckout() {
+  const digest = createHash('sha256')
+    .update(path.resolve(__dirname, '..', '..'))
+    .digest();
+  return 30_000 + (digest.readUInt16BE(0) % 10_000);
+}
+
+/**
+ * `vite preview` serves the production build under the base path, answering like GitHub Pages
+ * (build-lead's scripts/vite/github-pages-preview.ts). 127.0.0.1 rather than localhost because the
+ * cloud container had no IPv6. --strictPort fails loudly on a clash; LHCI_PORT overrides the port.
+ */
+const port = Number(process.env.LHCI_PORT ?? portForThisCheckout());
 const PREVIEW = {
   origin: `http://127.0.0.1:${String(port)}`,
   command: `npm run preview -- --host 127.0.0.1 --port ${String(port)} --strictPort`,
-  // vite preview prints "  ➜  Local:   http://127.0.0.1:4173/Rip-PC/" when it is ready.
+  // vite preview prints "  ➜  Local:   http://127.0.0.1:<port>/Rip-PC/" when it is ready.
   readyPattern: 'Local',
   readyTimeoutMs: 60000,
 };
@@ -101,4 +116,4 @@ function buildLhciConfig({ preset }) {
   };
 }
 
-module.exports = { buildLhciConfig, maxFor, minScoreFor, PREVIEW };
+module.exports = { buildLhciConfig, maxFor, minScoreFor, portForThisCheckout, PREVIEW };

@@ -33,6 +33,12 @@ const QaBudgetSchema = z.object({
     maxPageErrors: z.literal(0),
     maxUnhandledRejections: z.literal(0),
     maxFailedSameOriginRequests: z.literal(0),
+    /** Two notices from the browser's own WebGL stack are allowed in tests/e2e/problems.ts. */
+    maxConsoleWarnings: z.literal(0),
+    /** How long a route's smoke test keeps watching after network idle (QA-P0-005). */
+    soakMs: z.number().int().nonnegative(),
+    /** The widths (visual.viewports names) whose dark project soaks. */
+    soakViewports: z.array(z.string().regex(/^\d+$/, 'a viewport name is its width')).min(1),
   }),
   visual: z.object({
     viewports: z.array(ViewportSchema).min(1),

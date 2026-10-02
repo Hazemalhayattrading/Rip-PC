@@ -65,11 +65,16 @@ function specImportErrors(file: string, source: string): string[] {
   return errors;
 }
 
+/** A spec's path under tests/, with forward slashes on every platform, so names match CI's. */
+function nameOf(file: string): string {
+  return path.relative(TESTS, file).split(path.sep).join('/');
+}
+
 describe('Playwright specs run under the shared console fixture', () => {
   const files = specFiles();
 
   it('finds the specs', () => {
-    const names = files.map((file) => path.relative(TESTS, file).split(path.sep).join('/'));
+    const names = files.map(nameOf);
     expect(names).toEqual(
       expect.arrayContaining([
         'e2e/a11y.spec.ts',
@@ -82,7 +87,7 @@ describe('Playwright specs run under the shared console fixture', () => {
   });
 
   for (const file of files) {
-    it(path.relative(TESTS, file), () => {
+    it(nameOf(file), () => {
       expect(specImportErrors(file, readFileSync(file, 'utf8'))).toEqual([]);
     });
   }

@@ -1,6 +1,8 @@
 import { createHash } from 'node:crypto';
 import { defineConfig, devices } from '@playwright/test';
 import { BASE_PATH } from './src/app/routes.ts';
+import { THEME_STORAGE_KEY, type Theme } from './src/state/theme.ts';
+import type { ProjectMeta } from './tests/lib/project-meta.ts';
 import { loadQaBudget, type ViewportSpec } from './tests/lib/qa-budget.ts';
 
 /**
@@ -16,7 +18,8 @@ function portForThisCheckout(): number {
 }
 
 const port = Number(process.env.E2E_PORT ?? portForThisCheckout());
-const siteUrl = `http://127.0.0.1:${String(port)}${BASE_PATH}`;
+const siteOrigin = `http://127.0.0.1:${String(port)}`;
+const siteUrl = `${siteOrigin}${BASE_PATH}`;
 const isCI = process.env.CI !== undefined;
 
 /** Viewports, themes and visual thresholds: tests/perf/budget.json, the single source of truth. */
@@ -60,16 +63,35 @@ function sizedAt(viewport: ViewportSpec) {
 }
 
 /**
- * The test plan §5 matrix: what each width runs on every push and PR. At 768 only axe (and, from
- * Phase 2, the keyboard path) runs; the other suites run there in the full matrix, which
- * E2E_FULL_MATRIX=1 turns on (the nightly job, from Phase 2). One theme until the design tokens
- * exist (WP-DS1): then every width gets a dark and a light project from budget.json
- * `visual.themes`.
+ * The test plan §5 matrix: what each width and theme runs on every push and PR.
+ * - Dark at 390 and 1440 runs everything. Dark at 768 runs only axe (and, from Phase 2, the
+ *   keyboard path).
+ * - Light runs only axe: contrast depends on the theme, layout does not.
+ * The other suites run in every cell in the full matrix, which E2E_FULL_MATRIX=1 turns on (the
+ * nightly job, from Phase 2).
  */
 const fullMatrix = process.env.E2E_FULL_MATRIX === '1';
-const PULL_REQUEST_SUITES: Readonly<Partial<Record<string, RegExp>>> = {
-  '768': /@a11y|@keyboard/,
+function pullRequestSuites(viewport: ViewportSpec, theme: Theme): RegExp | undefined {
+  if (theme === 'light') return /@a11y/;
+  return viewport.name === '768' ? /@a11y|@keyboard/ : undefined;
+}
+
+/**
+ * Each e2e project is one width and one theme from budget.json `visual.themes`. Dark is what every
+ * first visit gets, so a dark project starts with nothing stored. A light project starts with the
+ * visitor's stored choice, which the inline script in index.html restores before the first paint
+ * (src/state/theme.ts); the a11y spec checks that the page really shows the project's theme.
+ */
+const LIGHT_THEME_STATE = {
+  cookies: [],
+  origins: [{ origin: siteOrigin, localStorage: [{ name: THEME_STORAGE_KEY, value: 'light' }] }],
 };
+
+/** The dark project at a soak width keeps watching each route a little longer (QA-P0-005). */
+function metaFor(viewport: ViewportSpec, theme: Theme): ProjectMeta {
+  const soaks = theme === 'dark' && budget.console.soakViewports.includes(viewport.name);
+  return { theme, soakMs: soaks ? budget.console.soakMs : 0 };
+}
 
 /**
  * Visual baselines live in tests/visual/__screenshots__ (test plan §11). QA_SNAPSHOT_DIR points
@@ -109,16 +131,22 @@ export default defineConfig({
     },
   },
   projects: [
-    // e2e-390, e2e-768, e2e-1440: smoke, axe and (from Phase 2) builder flows.
-    ...budget.visual.viewports.map((viewport) => {
-      const onlyThese = fullMatrix ? undefined : PULL_REQUEST_SUITES[viewport.name];
-      return {
-        name: `e2e-${viewport.name}`,
-        testDir: 'tests/e2e',
-        ...(onlyThese === undefined ? {} : { grep: onlyThese }),
-        use: sizedAt(viewport),
-      };
-    }),
+    // e2e-390-dark, e2e-390-light, … e2e-1440-light: smoke, axe and (from Phase 2) builder flows.
+    ...budget.visual.viewports.flatMap((viewport) =>
+      budget.visual.themes.map((theme) => {
+        const onlyThese = fullMatrix ? undefined : pullRequestSuites(viewport, theme);
+        return {
+          name: `e2e-${viewport.name}-${theme}`,
+          testDir: 'tests/e2e',
+          metadata: metaFor(viewport, theme),
+          ...(onlyThese === undefined ? {} : { grep: onlyThese }),
+          use: {
+            ...sizedAt(viewport),
+            ...(theme === 'light' ? { storageState: LIGHT_THEME_STATE } : {}),
+          },
+        };
+      }),
+    ),
     // Web vitals on the production preview (test plan §6.4). Run with `npm run perf:vitals`.
     // No trace: tracing costs CPU during the loads it would measure, and its DOM snapshots hide
     // layout shifts at the phone width (see traceFor). The spec attaches every sample instead.

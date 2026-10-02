@@ -9,8 +9,9 @@
  *    `visual.viewports`) and every CPU throttle rate (x1 and x4, via Chrome DevTools Protocol). The
  *    phone width is measured here as well because Lighthouse's mobile run missed a late layout
  *    shift that the browser itself reported (test plan §6.3, WP-Q1 mutation M4).
- *  - After load, network idle and a settle period, the page is hidden. That is when web-vitals reports
- *    final LCP and CLS, exactly as when a real visitor leaves.
+ *  - After load, network idle and a settle period, and never before `minObserveMs` of page time, the
+ *    page is hidden. That is when web-vitals reports final LCP and CLS, exactly as when a real
+ *    visitor leaves.
  *  - The median of `runs` cold loads is compared with the gate. Routes, runs, throttle rates, settle
  *    time and thresholds all come from tests/perf/budget.json.
  *
@@ -37,6 +38,7 @@ interface WebVitalsBudget {
   runs: number;
   cpuThrottleRates: number[];
   settleMs: number;
+  minObserveMs: number;
   gates: { lcpMs: Gate; cls: Gate; inpMs: Gate };
 }
 interface Viewport {
@@ -73,6 +75,14 @@ interface Sample {
   inputFlaggedShifts: number;
   lcpTarget: string | null;
   clsTarget: string | null;
+  /** Page time (ms after navigation start) when the page was hidden: the end of what was seen. */
+  hiddenAtMs: number;
+}
+
+/** How long a sample watches the page: after load, network idle and settle, and never less. */
+interface ObserveWindow {
+  settleMs: number;
+  minObserveMs: number;
 }
 
 /**
@@ -148,7 +158,7 @@ async function measureOnce(
   viewport: Viewport,
   deviceScaleFactor: number,
   cpuRate: number,
-  settleMs: number,
+  observe: ObserveWindow,
   script: string,
 ): Promise<Sample> {
   const context = await browser.newContext({
@@ -174,14 +184,21 @@ async function measureOnce(
       'web vitals must be measured on the production build (vite preview), not the dev server',
     ).toBe(0);
     await page.waitForLoadState('networkidle');
-    await page.waitForTimeout(settleMs);
+    await page.waitForTimeout(observe.settleMs);
+    // Never hide before minObserveMs of page time. A fast page was otherwise hidden about 2 s in,
+    // before a late LCP element or layout shift could happen, so the gate could not fail
+    // (WP-Q2 negative controls NC-V2b and NC-V3, test plan §6.4).
+    await page.waitForFunction((min) => performance.now() >= min, observe.minObserveMs, {
+      polling: 50,
+    });
     // Hide the page: web-vitals reports final LCP and CLS on visibilitychange to hidden.
-    await page.evaluate(() => {
+    const hiddenAtMs = await page.evaluate(() => {
       Object.defineProperty(document, 'visibilityState', {
         configurable: true,
         get: () => 'hidden',
       });
       document.dispatchEvent(new Event('visibilitychange'));
+      return Math.round(performance.now());
     });
     const store = await page.evaluate(
       () => (window as unknown as { __rigLabVitals?: VitalsStore }).__rigLabVitals ?? null,
@@ -206,6 +223,7 @@ async function measureOnce(
       inputFlaggedShifts: store.shifts.filter((shift) => shift.hadRecentInput).length,
       lcpTarget: store.lcpTarget,
       clsTarget: store.clsTarget,
+      hiddenAtMs,
     };
   } finally {
     await context.close();
@@ -224,6 +242,17 @@ test('web vitals: LCP and CLS within budget on every route, at every CPU throttl
     visual: VisualBudget;
   };
   const budget = everything.webVitals;
+  // An empty list would make this test pass with no samples at all (QA-P0-036).
+  for (const [key, list] of Object.entries({
+    routes: budget.routes,
+    viewports: budget.viewports,
+    cpuThrottleRates: budget.cpuThrottleRates,
+  })) {
+    if (list.length === 0) {
+      throw new Error(`budget.json webVitals.${key} is empty, so nothing would be measured`);
+    }
+  }
+  if (budget.runs < 1) throw new Error('budget.json webVitals.runs must be at least 1');
   const viewports = budget.viewports.map((name) => {
     const viewport = everything.visual.viewports.find((candidate) => candidate.name === name);
     if (viewport === undefined) {
@@ -292,7 +321,7 @@ test('web vitals: LCP and CLS within budget on every route, at every CPU throttl
             viewport,
             everything.visual.deviceScaleFactor,
             cpuRate,
-            budget.settleMs,
+            { settleMs: budget.settleMs, minObserveMs: budget.minObserveMs },
             script,
           ),
         );
@@ -315,10 +344,16 @@ test('web vitals: LCP and CLS within budget on every route, at every CPU throttl
         clsPass,
         samples,
       });
+      const summary = `LCP ${lcpText} (${lcpPass ? 'pass' : 'FAIL'}, ${lcpGate}); CLS ${clsText} (${clsPass ? 'pass' : 'FAIL'}, ${clsGate})`;
       testInfo.annotations.push({
         type: `web-vitals ${route.name} ${viewport.name} px CPU x${String(cpuRate)}`,
-        description: `LCP ${lcpText} (${lcpPass ? 'pass' : 'FAIL'}, ${lcpGate}); CLS ${clsText} (${clsPass ? 'pass' : 'FAIL'}, ${clsGate})`,
+        description: summary,
       });
+      // Annotations show only in the HTML and JSON reports, so a local `npm run perf:vitals` prints
+      // each result as well.
+      console.log(
+        `web vitals ${where}: ${summary}; LCP samples ${samples.map((s) => String(Math.round(s.lcpMs))).join('/')} ms; watched until ${samples.map((s) => String(s.hiddenAtMs)).join('/')} ms`,
+      );
       const flagged = samples.reduce((sum, s) => sum + s.inputFlaggedShifts, 0);
       if (flagged > 0) {
         testInfo.annotations.push({

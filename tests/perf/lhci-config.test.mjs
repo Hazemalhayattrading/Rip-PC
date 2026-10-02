@@ -11,17 +11,35 @@ const require = createRequire(import.meta.url);
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '../..');
 const budget = JSON.parse(readFileSync(path.join(HERE, 'budget.json'), 'utf8'));
-const { buildLhciConfig, maxFor, minScoreFor, PREVIEW } = require('./lhci-config.cjs');
+const {
+  buildLhciConfig,
+  maxFor,
+  minScoreFor,
+  portForThisCheckout,
+  PREVIEW,
+} = require('./lhci-config.cjs');
 const mobile = require(path.join(ROOT, 'lighthouserc.cjs'));
 const desktop = require(path.join(ROOT, 'lighthouserc.desktop.cjs'));
 
 describe('lighthouserc.cjs and lighthouserc.desktop.cjs', () => {
   it('audit the landing page under the GitHub Pages base path, served by vite preview', () => {
     for (const cfg of [mobile, desktop]) {
-      expect(cfg.ci.collect.url).toEqual(['http://127.0.0.1:4173/Rip-PC/']);
+      expect(cfg.ci.collect.url).toEqual([`${PREVIEW.origin}/Rip-PC/`]);
       expect(cfg.ci.collect.startServerCommand).toBe(PREVIEW.command);
       expect(cfg.ci.collect.numberOfRuns).toBe(budget.lighthouse.numberOfRuns);
     }
+  });
+
+  it("serve the preview on this checkout's own port, so worktrees on one machine never collide", () => {
+    const port = portForThisCheckout();
+    expect(port).toBe(portForThisCheckout());
+    // Playwright's preview takes 20000-29999 (playwright.config.ts); Windows' dynamic range starts at 49152.
+    expect(port).toBeGreaterThanOrEqual(30_000);
+    expect(port).toBeLessThan(40_000);
+    expect(PREVIEW.origin).toBe(`http://127.0.0.1:${String(process.env.LHCI_PORT ?? port)}`);
+    expect(PREVIEW.command).toBe(
+      `npm run preview -- --host 127.0.0.1 --port ${String(process.env.LHCI_PORT ?? port)} --strictPort`,
+    );
   });
 
   it('use Lighthouse mobile defaults for mobile and the desktop preset for desktop', () => {

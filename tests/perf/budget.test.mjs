@@ -124,4 +124,84 @@ describe('budget.json matches BUILD_PROMPT.md §8', () => {
     expect(buildPrompt).toMatch(/within ±5%/);
     expect(budget.models.goldenTolerancePct).toBe(5);
   });
+
+  it('every compatibility rule has at least one positive and one negative test', () => {
+    expect(section8).toMatch(/Every compatibility rule has a passing positive and negative test/);
+    expect(budget.compatibility).toMatchObject({
+      minPositiveTestsPerRule: 1,
+      minNegativeTestsPerRule: 1,
+    });
+  });
+});
+
+// Method values the Director approved (docs/qa/test-plan.md §16). They are not §8 numbers, but a
+// silent change would weaken a gate: one Lighthouse run is not a median, and a shorter watch
+// misses late problems (WP-Q2 findings V6, QA-P0-004 and QA-P0-005).
+describe('budget.json keeps the approved method values', () => {
+  it('a median of 3 runs for Lighthouse and for web vitals (test plan §6.6)', () => {
+    expect(budget.lighthouse).toMatchObject({ numberOfRuns: 3, aggregationMethod: 'median' });
+    expect(budget.webVitals).toMatchObject({ runs: 3, aggregation: 'median' });
+  });
+
+  // QA-P0-036: each of these could shrink what a gate measures without failing anything. With
+  // visual.themes ["dark"] the light projects vanish; with webVitals.routes [] perf:vitals passes
+  // with no samples at all.
+  it('both themes, the web-vitals routes, widths and CPU rates, and the fps runs (QA-P0-036)', () => {
+    expect(budget.visual.themes).toEqual(['dark', 'light']);
+    expect(budget.webVitals.routes).toEqual([{ name: 'landing', path: './' }]);
+    expect(budget.webVitals.viewports).toEqual(['390', '1440']);
+    expect(budget.webVitals.cpuThrottleRates).toEqual([1, 4]);
+    expect(budget.webVitals.settleMs).toBe(1500);
+    expect(budget.fps).toMatchObject({ runs: 3, aggregation: 'median', warmupRuns: 1 });
+  });
+
+  // QA-P0-039: the rest of the approved method values (test plan §16, v1.1 and later). With
+  // visual.threshold or maxDiffPixelRatio at 1, a fully changed page would pass; with a 9000 px
+  // viewport, a late banner's CLS falls under the gate.
+  it('the visual thresholds, viewport sizes and scale, and the other approved values (QA-P0-039)', () => {
+    expect(budget.visual).toMatchObject({ threshold: 0.2, maxDiffPixelRatio: 0.001 });
+    expect(budget.visual.deviceScaleFactor).toBe(1);
+    expect(budget.visual.viewports).toEqual([
+      { name: '390', width: 390, height: 844, isMobile: true, hasTouch: true },
+      { name: '768', width: 768, height: 1024, isMobile: false, hasTouch: true },
+      { name: '1440', width: 1440, height: 900, isMobile: false, hasTouch: false },
+    ]);
+    expect(budget.bundle.gzip).toMatchObject({ level: 6, bytesPerKilobyte: 1000 });
+    expect(budget.bundle.initialJs.warnAtFraction).toBe(0.95);
+    expect(budget.fps).toMatchObject({ maxRunSpreadPct: 15, calibrationMs: 2000 });
+    expect(budget.fps.ciProxy).toMatchObject({ maxRegressionPct: 10, blocking: false });
+    expect(budget.webVitals.gates.inpMs).toMatchObject({
+      maxRunSpreadPct: 15,
+      gatedAtCpuThrottleRates: [1, 4],
+    });
+    expect(budget.models).toMatchObject({ heldOutCount: 5, heldOutMaxErrorPct: 10 });
+    expect(budget.definitionOfDone).toMatchObject({
+      firstVisitMaxMinutes: 5,
+      usabilityParticipants: 5,
+      minFinishingUnaided: 4,
+      maxMedianMinutes: 5,
+    });
+    expect(budget.compatibility.unknownDataMustNotReturn).toBe('ok');
+    expect(budget.dataAudit).toMatchObject({
+      sampleFraction: 0.1,
+      minPerStratum: 1,
+      algorithm: 'sha256-rank-v1',
+    });
+  });
+
+  it('web vitals watch each load for at least 5 s of page time (QA-P0-004)', () => {
+    expect(budget.webVitals.minObserveMs).toBe(5000);
+    expect(budget.webVitals.minObserveMs).toBeGreaterThan(budget.webVitals.gates.lcpMs.value);
+  });
+
+  it('console warnings fail the e2e run, like errors (the Director, 2026-10-01)', () => {
+    expect(budget.console.maxConsoleWarnings).toBe(0);
+    expect(budget.console.warningsSource).toMatch(/tests\/e2e\/problems\.ts/);
+  });
+
+  it('the smoke watches every route for 1 s more at 1440 px (QA-P0-005)', () => {
+    expect(budget.console).toMatchObject({ soakMs: 1000, soakViewports: ['1440'] });
+    const widths = budget.visual.viewports.map((v) => v.name);
+    for (const name of budget.console.soakViewports) expect(widths).toContain(name);
+  });
 });

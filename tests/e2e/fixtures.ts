@@ -7,14 +7,15 @@
  * popups, new tabs and workers are all covered. It fails the test on any of these, unless an
  * ALLOWED entry in problems.ts covers it:
  * - a console error;
+ * - a console warning (the Director, 2026-10-01; two notices from the browser's own WebGL stack
+ *   are allowed in problems.ts);
  * - an uncaught error in a page or worker;
  * - an unhandled promise rejection (Chromium also reports these as page errors; our own hook is
  *   defence in depth, test plan §13.1);
  * - a same-origin request that fails for any reason other than net::ERR_ABORTED;
  * - a same-origin response with status 400 or more;
  * - a page crash.
- * Console warnings are attached to the report and never fail. BUILD_PROMPT.md §8: "Zero console
- * errors. Zero unhandled promise rejections." Owner: qa-lead.
+ * BUILD_PROMPT.md §8: "Zero console errors. Zero unhandled promise rejections." Owner: qa-lead.
  */
 import {
   expect,
@@ -139,7 +140,6 @@ export const test = base.extend<GuardOptions & { problemGuard: ProblemGuard }>({
       }
       const origin = new URL(baseURL).origin;
       const problems: Problem[] = [];
-      const warnings: string[] = [];
       const contexts = new Set<BrowserContext>();
       const pages = new WeakSet<Page>();
 
@@ -158,16 +158,13 @@ export const test = base.extend<GuardOptions & { problemGuard: ProblemGuard }>({
 
       const onConsole = (message: ConsoleMessage): void => {
         const type = message.type();
-        if (type === 'error') {
-          problems.push({
-            kind: 'console.error',
-            text: message.text(),
-            url: message.location().url,
-            documentUrl: pageUrlOf(message.page()),
-          });
-        } else if (type === 'warning') {
-          warnings.push(`${message.text()} (${message.location().url})`);
-        }
+        if (type !== 'error' && type !== 'warning') return;
+        problems.push({
+          kind: type === 'error' ? 'console.error' : 'console.warning',
+          text: message.text(),
+          url: message.location().url,
+          documentUrl: pageUrlOf(message.page()),
+        });
       };
 
       const onRequestFailed = (request: Request): void => {
@@ -233,18 +230,18 @@ export const test = base.extend<GuardOptions & { problemGuard: ProblemGuard }>({
         for (const page of watched.pages()) await flush(page);
       }
       const verdict = classify(problems, { expectNotFoundDocument });
-      if (problems.length > 0 || warnings.length > 0) {
+      if (problems.length > 0) {
         await testInfo.attach('page-problems.json', {
-          body: JSON.stringify({ ...verdict, warnings }, null, 2),
+          body: JSON.stringify(verdict, null, 2),
           contentType: 'application/json',
         });
       }
       expect(
         verdict.unexpected,
-        'console errors, page errors, unhandled rejections, failed same-origin requests and crashes (tests/e2e/fixtures.ts)',
+        'console errors and warnings, page errors, unhandled rejections, failed same-origin requests and crashes (tests/e2e/fixtures.ts)',
       ).toEqual([]);
     },
-    { auto: true, title: 'zero console errors, page errors and failed requests' },
+    { auto: true, title: 'zero console errors and warnings, page errors and failed requests' },
   ],
 });
 

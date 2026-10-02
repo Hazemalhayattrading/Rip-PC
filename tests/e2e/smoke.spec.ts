@@ -3,6 +3,7 @@ import { resolve } from 'node:path';
 import type { Page } from '@playwright/test';
 import { KNOWN_ROUTES, BASE_PATH, metaOf, pathOf } from '../../src/app/routes.ts';
 import { GARAGE_TEXT } from '../../src/components/garage/garage-text.ts';
+import { projectMeta } from '../lib/project-meta.ts';
 import { expect, test } from './fixtures.ts';
 
 // Every test here also runs under the shared fixture (./fixtures.ts), which fails it on any
@@ -89,7 +90,7 @@ test.describe('every known route loads directly', { tag: '@smoke' }, () => {
     const path = pathOf(route);
     const meta = metaOf(route);
 
-    test(`${path} answers 200 with its own page`, async ({ page }) => {
+    test(`${path} answers 200 with its own page`, async ({ page }, testInfo) => {
       const requests = collectHttpRequests(page);
       const response = await page.goto(relative(path));
 
@@ -111,6 +112,15 @@ test.describe('every known route loads directly', { tag: '@smoke' }, () => {
       }
       // Every file comes from this site under /Rip-PC/, as GitHub Pages will serve it.
       expect(outsideTheSite(requests, page.url())).toEqual([]);
+
+      // QA-P0-005: at the soak width, keep watching, so a console error or unhandled rejection
+      // that comes a second after these checks still fails here (budget.json console.soakMs).
+      // Without it, a rejection 1 s after start passed every smoke test.
+      const { soakMs } = projectMeta(testInfo);
+      if (soakMs > 0) {
+        await page.waitForLoadState('networkidle');
+        await page.waitForTimeout(soakMs);
+      }
     });
   }
 });
