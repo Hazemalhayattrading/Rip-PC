@@ -126,7 +126,10 @@ const SPECS: Readonly<Record<RuleId, Omit<RuleSpec, 'id'>>> = {
     numeric: true,
     unknownData: false,
     layoutDependent: true,
-    reads: [mayRead('gpu-card'), mayRead('psu'), needs('cooler'), needs('case')],
+    // Memory too: a kit taller than the cooler's memory clearance makes its front fan sit
+    // higher, and this rule checks the height the cooler then has (QA's follow-up 2, so it and
+    // ram-cooler-clearance always judge the same cooler setup).
+    reads: [mayRead('ram'), mayRead('gpu-card'), mayRead('psu'), needs('cooler'), needs('case')],
     sweep: PRODUCT,
   },
   'ram-cooler-clearance': {
@@ -237,7 +240,9 @@ const SPECS: Readonly<Record<RuleId, Omit<RuleSpec, 'id'>>> = {
     numeric: false,
     unknownData: false,
     layoutDependent: false,
-    reads: [needs('cpu'), needs('cooler')],
+    // The CPU's socket, or the board's while no CPU is picked: buyers often pick the board
+    // first (QA's follow-up 5).
+    reads: [mayRead('cpu'), mayRead('motherboard'), needs('cooler')],
     sweep: PRODUCT,
   },
   'display-output': {

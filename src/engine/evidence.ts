@@ -149,18 +149,80 @@ function isSpecValue(value: unknown): value is SpecValue {
   );
 }
 
+/** Counts in a sentence: words from one to nine, digits from 10 (copy guide §3). */
+const COUNT_WORDS = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+
+export function countInWords(count: number): string {
+  const word = Number.isInteger(count) && count >= 1 ? COUNT_WORDS[count - 1] : undefined;
+  return word ?? String(count);
+}
+
+/** Radiator positions as a phrase names them. A position without a word gets no phrase. */
+const POSITION_WORDS: Readonly<Partial<Record<string, string>>> = {
+  front: 'front',
+  top: 'top',
+  rear: 'rear',
+  bottom: 'bottom',
+  side: 'side',
+};
+
+const SIZES = new Intl.ListFormat('en-GB', { type: 'disjunction' });
+
+function isPositiveNumber(value: unknown): value is number {
+  return typeof value === 'number' && Number.isFinite(value) && value > 0;
+}
+
 /**
- * The condition of a conditional limit, in words: the `condition` beside the value in its row
- * (`gpuClearance.1.maxLengthMm` reads `gpuClearance.1.condition`). The data writes it as text,
- * or as a structured condition with the maker's words in `asPublished`. `null` for a value
- * outside such a row, for an unconditional row, and for the condition's own fields.
+ * A layout condition as a phrase inside a sentence (copy guide §3), or `null` when its kind has
+ * no phrase, so the limit shows on its own:
+ * - radiator: "with a 360 mm front radiator"; several sizes join with "or", the unit once;
+ * - drive trays: "with one HDD tray", "with two HDD trays".
+ * Text from data written before conditions were structured (WP-D1) passes through as it is.
  */
-export function conditionOf(record: unknown, path: string): string | null {
+export function conditionPhrase(condition: unknown): string | null {
+  if (typeof condition === 'string') return condition;
+  const kind = valueAt(condition, 'kind');
+  if (kind === 'radiator') {
+    const position = valueAt(condition, 'position');
+    const where = typeof position === 'string' ? POSITION_WORDS[position] : undefined;
+    const sizes = valueAt(condition, 'sizesMm');
+    if (where === undefined || !Array.isArray(sizes) || sizes.length === 0) return null;
+    if (!sizes.every(isPositiveNumber)) return null;
+    return `with a ${SIZES.format(sizes.map(String))}\u00A0mm ${where} radiator`;
+  }
+  if (kind === 'drive-trays') {
+    const count = valueAt(condition, 'count');
+    if (!isPositiveNumber(count) || !Number.isInteger(count)) return null;
+    return `with ${countInWords(count)} HDD ${count === 1 ? 'tray' : 'trays'}`;
+  }
+  return null;
+}
+
+/** The path of the `condition` in the same row as `path`, or `null` outside such a row. */
+function conditionPath(path: string): string | null {
   const segments = path.split('.');
   if (segments.length < 2 || segments.includes('condition')) return null;
-  const condition = valueAt(record, [...segments.slice(0, -1), 'condition'].join('.'));
-  if (typeof condition === 'string') return condition;
-  const asPublished = valueAt(condition, 'asPublished');
+  return [...segments.slice(0, -1), 'condition'].join('.');
+}
+
+/**
+ * The condition of a conditional limit, as a phrase: from the `condition` beside the value in
+ * its row (`gpuClearance.1.maxLengthMm` reads `gpuClearance.1.condition`). `null` for a value
+ * outside such a row, an unconditional row, the condition's own fields, and a kind without a
+ * phrase.
+ */
+export function conditionOf(record: unknown, path: string): string | null {
+  const at = conditionPath(path);
+  return at === null ? null : conditionPhrase(valueAt(record, at));
+}
+
+/**
+ * The maker's own words for that condition (`asPublished`), which the lab quotes under the
+ * value for audit (lab-spec §5). `null` when the row has no structured condition.
+ */
+export function conditionAsPublished(record: unknown, path: string): string | null {
+  const at = conditionPath(path);
+  const asPublished = at === null ? undefined : valueAt(record, `${at}.asPublished`);
   return typeof asPublished === 'string' ? asPublished : null;
 }
 

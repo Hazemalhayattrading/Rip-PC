@@ -146,6 +146,14 @@ describe('RULE_SPECS: the layout search and the sweeps', () => {
     }
   });
 
+  it('makes cooler-height read the memory that can raise the cooler (QA follow-up 2)', () => {
+    expect(readsOf('cooler-height')).toEqual(['ram?', 'gpu-card?', 'psu?', 'cooler', 'case']);
+  });
+
+  it('checks the cooler against the CPU socket, or the board socket before a CPU is picked', () => {
+    expect(readsOf('cooler-socket')).toEqual(['cpu?', 'motherboard?', 'cooler']);
+  });
+
   it('pins the reads of the rules whose parts are not layout inputs', () => {
     expect(readsOf('display-output')).toEqual(['cpu', 'gpu-card?']);
     expect(readsOf('ram-cooler-clearance')).toEqual(['ram', 'cooler']);

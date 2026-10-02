@@ -4,7 +4,10 @@ import { buildCatalogue, readDataFiles } from '../../scripts/catalogue/catalogue
 import type { SourceRef } from '../data/schema';
 import { utcToday } from '../data/validate';
 import {
+  conditionAsPublished,
   conditionOf,
+  conditionPhrase,
+  countInWords,
   evidenceFor,
   noteFor,
   pathCovers,
@@ -248,15 +251,64 @@ describe('conditionOf (design-lead S2)', () => {
     ).toBe('with a 360 mm front radiator');
   });
 
-  it("reads a structured condition's maker wording (WP-D1)", () => {
-    const structured = {
-      gpuClearance: [
-        { maxLengthMm: 300, condition: { kind: 'radiator', asPublished: 'with front radiator' } },
-        { maxLengthMm: 280, condition: { kind: 'radiator' } },
-      ],
-    };
-    expect(conditionOf(structured, 'gpuClearance.0.maxLengthMm')).toBe('with front radiator');
-    expect(conditionOf(structured, 'gpuClearance.1.maxLengthMm')).toBeNull();
+  // WP-D1's structured conditions, shaped as on feat/data-engine-data @ 4337e09.
+  const structured = {
+    gpuClearance: [
+      {
+        maxLengthMm: 300,
+        condition: {
+          kind: 'radiator',
+          position: 'front',
+          sizesMm: [360],
+          asPublished: 'With front 360mm radiator',
+        },
+      },
+      { maxLengthMm: 280, condition: { kind: 'radiator', position: 'front', sizesMm: [240, 280] } },
+      { maxLengthMm: 200, condition: { kind: 'radiator', position: 'psu-shroud', sizesMm: [240] } },
+    ],
+    psu: { clearance: [{ maxLengthMm: 255, condition: { kind: 'drive-trays', count: 1 } }] },
+  };
+
+  it('builds the phrase from a structured condition, not from its maker wording', () => {
+    expect(conditionOf(structured, 'gpuClearance.0.maxLengthMm')).toBe(
+      'with a 360\u00A0mm front radiator',
+    );
+    expect(conditionOf(structured, 'gpuClearance.1.maxLengthMm')).toBe(
+      'with a 240 or 280\u00A0mm front radiator',
+    );
+    expect(conditionOf(structured, 'psu.clearance.0.maxLengthMm')).toBe('with one HDD tray');
+  });
+
+  it('keeps the maker wording apart, for the lab to quote', () => {
+    expect(conditionAsPublished(structured, 'gpuClearance.0.maxLengthMm')).toBe(
+      'With front 360mm radiator',
+    );
+    expect(conditionAsPublished(structured, 'gpuClearance.1.maxLengthMm')).toBeNull();
+    expect(conditionAsPublished(structured, 'expansionSlots')).toBeNull();
+  });
+
+  it('gives no phrase for a position without a word, or a kind without a phrase', () => {
+    expect(conditionOf(structured, 'gpuClearance.2.maxLengthMm')).toBeNull();
+    expect(conditionPhrase({ kind: 'vertical-gpu-mount' })).toBeNull();
+    expect(conditionPhrase(null)).toBeNull();
+    expect(conditionPhrase(42)).toBeNull();
+  });
+
+  it('gives no phrase for a malformed radiator or tray condition', () => {
+    expect(conditionPhrase({ kind: 'radiator', position: 'top', sizesMm: [] })).toBeNull();
+    expect(conditionPhrase({ kind: 'radiator', position: 'top', sizesMm: 360 })).toBeNull();
+    expect(conditionPhrase({ kind: 'radiator', position: 'top', sizesMm: [0] })).toBeNull();
+    expect(conditionPhrase({ kind: 'radiator', position: 3, sizesMm: [360] })).toBeNull();
+    expect(conditionPhrase({ kind: 'drive-trays', count: 0 })).toBeNull();
+    expect(conditionPhrase({ kind: 'drive-trays', count: 1.5 })).toBeNull();
+  });
+
+  it('counts trays in words up to nine, then in digits', () => {
+    expect(conditionPhrase({ kind: 'drive-trays', count: 2 })).toBe('with two HDD trays');
+    expect(countInWords(9)).toBe('nine');
+    expect(countInWords(10)).toBe('10');
+    expect(countInWords(0)).toBe('0');
+    expect(countInWords(2.5)).toBe('2.5');
   });
 
   it('gives none for top-level specs and for the condition itself', () => {
