@@ -11,8 +11,11 @@ in the hand-off commit.
 - Step 2: Context7 checks (Vite 8 plugin API and `runnerImport`, Vitest 5 thresholds and title
   truncation, wouter 3, React 19 `use`/`lazy`/`<meta>`).
 - Step 3: the result types, `src/engine/types.ts`. First version 15f9b5c; revised for qa-lead's
-  C1–C6 and design-lead's M1–M3 and S1–S4 at 83aa5ab. Re-review requested from both on
-  2026-10-03. **WP-E1 waits for both OKs.**
+  C1–C6 and design-lead's M1–M3 and S1–S4 at 83aa5ab. **Approved by design-lead and qa-lead on
+  2026-10-03; the E1 gate is met** (Director). Follow-ups since: Steps.title is a label
+  (b9e6361); condition phrases, cooler-height reads memory, cooler-socket board-first (480a30e).
+- QA's follow-ups for later WPs: `fpsEstimateProblems()` in E3 (frame generation stays a
+  NoEstimate; a disagreement is never high confidence); golden-estimates.json is dropped.
 - Step 4 (core): the catalogue builder (`scripts/catalogue/`), the Vite plugin
   (`scripts/vite/catalogue.ts`, `virtual:rig-lab/catalogue-url`), the lab loader, and the engine's
   Zod-free helpers (`catalogue.ts`, `evidence.ts`), 4fa8a95.
@@ -36,6 +39,20 @@ in the hand-off commit.
   `src/state/**`, `scripts/vite/static-route-pages.*`, `scripts/vite/github-pages-preview.*`.
 - **Known red until the engine worker lands:** `src/engine/dump.test.ts` follows the old contract,
   and the full product of the complete `reads` exhausts the test worker's memory. verify is red.
+
+- The engine worker also builds `systemOf` (src/engine/system.ts) and the query mode's `system` and
+  `problems` per build (exit 1 on any problem), qa-lead's follow-up 3.
+- The frontend worker also fixes QA-P1-001 (design-lead's focus and scroll rule in SiteLayout)
+  and QA-P1-002 (`…/index.html` renders its directory's route). qa-lead adds `/index.html` and
+  `/lab/index.html` to the e2e smoke.
+
+## E1 plan (Director's go, 2026-10-03)
+
+- Cut `feat/build-engine-compat` from this branch once the compatibility scaffold
+  (`src/engine/compat/check.ts`) is reviewed and committed, in `worktrees/build-lead-compat`, and
+  resume the same engine-engineer there.
+- Batch 1a, on today's data: cpu-socket, ram-type, board-form-factor, usb-c-header, m2-lanes.
+  The rest waits for WP-D1 batch 1 (semantics.ts, fixtures, structured conditions) or WP-E2.
 
 ## Next steps
 
