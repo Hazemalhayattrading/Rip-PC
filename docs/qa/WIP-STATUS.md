@@ -33,6 +33,11 @@ Owner: qa-lead. Spec: `docs/reports/phase-1-plan.md` §2 (WP-Q4) and §4; test p
    44 px but the round theme toggle is 36 px (passes 2.5.8's 24 px). Evidence:
    `artifacts/qa/phase-1/ds2-aa/`, with `manifest.sha256`.
 
+6. 2026-10-03: design-lead's focus and scroll rules (route change: scrollY 0 at once, focus on the
+   h1, header and site nav on screen; Back restores the scroll, focus on the h1; the theme toggle
+   neither scrolls nor moves focus) are measured in `tests/e2e/navigation.spec.ts` (`dc21124`).
+   Rule 3 is enforced; rules 1 and 2 are recorded as QA-P1-001 annotations until build-lead's fix.
+
 ## In progress
 - Waiting: build-lead's revised `types.ts` (C1 to C6), which gates WP-E1; data-lead's 23 validator
   tests.
@@ -40,7 +45,9 @@ Owner: qa-lead. Spec: `docs/reports/phase-1-plan.md` §2 (WP-Q4) and §4; test p
 ## Next steps, in order
 1. When build-lead's revised types arrive: re-review C1 to C6 in the next turn, and reply OK or a
    numbered list of changes, copying team-lead.
-2. Re-test QA-P1-001, QA-P1-002 and QA-P1-003 when their owners report fixes.
+2. Re-test QA-P1-001, QA-P1-002 and QA-P1-003 when their owners report fixes. For QA-P1-001: set
+   `FOCUS_RULES.enforced` to true and empty `KNOWN_OFF_SCREEN` in the navigation spec, run it at
+   all three widths, then run the live config after the deploy.
 3. Triage, with build-lead, the two Firefox WebGL warnings the live run shows on the build steps:
    "WebGL context was lost" (likely R3F's forceContextLoss on unmount) and "drawElementsInstanced:
    Drawing to a destination rect smaller than the viewport rect". Then allow-list them with reasons,
