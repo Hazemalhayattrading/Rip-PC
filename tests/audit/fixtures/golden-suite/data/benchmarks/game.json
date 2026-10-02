@@ -1,0 +1,9 @@
+{
+  "$comment": "Three real anchor rows from data/benchmarks/game.json at c621c15, cut to the fields tests/audit/golden-count.mjs reads (id and avgFps).",
+  "schemaVersion": 1,
+  "items": [
+    { "id": "cb-2026-battlefield-6-1440p-raster-nvidia-geforce-rtx-5090", "avgFps": 145.6 },
+    { "id": "cb-2026-call-of-duty-black-ops-7-4k-raster-nvidia-geforce-rtx-5070-ti", "avgFps": 92.6 },
+    { "id": "cb-2026-cyberpunk-2077-4k-rt-nvidia-geforce-rtx-5070-ti", "avgFps": 47.5 }
+  ]
+}
