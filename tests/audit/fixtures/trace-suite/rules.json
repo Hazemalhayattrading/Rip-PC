@@ -1,0 +1,19 @@
+{
+  "$comment": "A reduced rule set for tests/audit/compat-trace.test.mjs: one categorical rule, one numeric rule, one with variants, and one the registry does not have yet.",
+  "schemaVersion": 1,
+  "rules": [
+    { "id": "cpu-socket", "outcomes": ["ok", "block"], "numeric": false, "unknownData": true },
+    { "id": "gpu-length", "outcomes": ["ok", "block"], "numeric": true, "unknownData": true },
+    {
+      "id": "bios-version",
+      "outcomes": ["ok", "warn"],
+      "numeric": false,
+      "unknownData": true,
+      "variants": [
+        { "kind": "warn", "pattern": "\\bwith (BIOS )?FlashBack\\b" },
+        { "kind": "warn", "pattern": "\\b(without|no) (BIOS )?FlashBack\\b" }
+      ]
+    },
+    { "id": "display-output", "outcomes": ["ok", "block"], "numeric": false, "unknownData": true }
+  ]
+}

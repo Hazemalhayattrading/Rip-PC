@@ -1,0 +1,186 @@
+{
+  "$comment": "QA's expected compatibility rule set: the 20 rule ids of docs/qa/test-plan.md §9.2 (v4), which are the 18 ids of test plan v3 plus cooler-socket and display-output (Hazem, 2026-10-02, phase-1-plan §6). tests/audit/compat-trace.mjs checks the engine's registry against this list and every rule's tests against its fields. Owner: qa-lead. A change here needs the same change in test plan §9.2 (tests/audit/compat-trace.test.mjs pins both) and the Director's approval, recorded in test plan §16.",
+  "schemaVersion": 1,
+  "owner": "qa-lead",
+  "fields": {
+    "outcomes": "Every status the rule returns for real, fully published data. Each needs at least one passing test of that kind: 'ok' is the positive test, and 'warn' and 'block' are the negative tests.",
+    "numeric": "The rule compares a number with a limit, so it needs 'boundary at', 'boundary inside' and 'boundary outside' tests (test plan §9.1).",
+    "unknownData": "The rule needs an 'unknown' test: a spec that is not published gives warn ('can't verify: <field> not published'), never ok (budget.json compatibility.unknownDataMustNotReturn).",
+    "variants": "Cases a decision requires to be told apart. Each needs at least one passing test of that kind whose description matches the pattern (case-insensitive).",
+    "data": "When the rule's test data exists (phase-1-plan §3): ready, or the work package it waits for."
+  },
+  "rules": [
+    {
+      "id": "cpu-socket",
+      "check": "The CPU socket matches the board",
+      "outcomes": ["ok", "block"],
+      "numeric": false,
+      "unknownData": true,
+      "data": "ready"
+    },
+    {
+      "id": "cpu-chipset",
+      "check": "The board's CPU support list includes the CPU",
+      "outcomes": ["ok", "block"],
+      "numeric": false,
+      "unknownData": true,
+      "data": "needs WP-D1"
+    },
+    {
+      "id": "bios-version",
+      "check": "Whether the CPU needs a newer BIOS than the board shipped with, and whether the board has BIOS FlashBack",
+      "outcomes": ["ok", "warn"],
+      "numeric": false,
+      "unknownData": true,
+      "variants": [
+        {
+          "kind": "warn",
+          "pattern": "\\bwith (BIOS )?FlashBack\\b",
+          "why": "phase-1-plan WP-E1: where the board has BIOS FlashBack, the warning gives the update steps"
+        },
+        {
+          "kind": "warn",
+          "pattern": "\\b(without|no) (BIOS )?FlashBack\\b",
+          "why": "Hazem, 2026-10-02 (phase-1-plan §6.1): warn, not block; the warning names the BIOS version needed and tells the buyer to ask the retailer for a board already updated to it"
+        }
+      ],
+      "data": "ready; the BIOS dates need WP-D1"
+    },
+    {
+      "id": "ram-type",
+      "check": "The kit's memory type (DDR4 or DDR5) matches the board",
+      "outcomes": ["ok", "block"],
+      "numeric": false,
+      "unknownData": true,
+      "data": "ready"
+    },
+    {
+      "id": "ram-slots",
+      "check": "The kit's modules fit the board's DIMM slots",
+      "outcomes": ["ok", "block"],
+      "numeric": true,
+      "unknownData": true,
+      "data": "needs WP-D1"
+    },
+    {
+      "id": "ram-speed",
+      "check": "The kit's speed against the board's and the CPU's official speeds",
+      "outcomes": ["ok", "warn"],
+      "numeric": true,
+      "unknownData": true,
+      "data": "ready"
+    },
+    {
+      "id": "gpu-length",
+      "check": "The card's length against the case, per layout",
+      "outcomes": ["ok", "block"],
+      "numeric": true,
+      "unknownData": true,
+      "data": "ready"
+    },
+    {
+      "id": "gpu-thickness",
+      "check": "The card's thickness against the board's slot spacing and the case's expansion slots",
+      "outcomes": ["ok", "warn", "block"],
+      "numeric": true,
+      "unknownData": true,
+      "data": "the Terra's data is ready; the board slots need WP-D1"
+    },
+    {
+      "id": "cooler-height",
+      "check": "The air cooler's height against the case, per layout",
+      "outcomes": ["ok", "block"],
+      "numeric": true,
+      "unknownData": true,
+      "data": "ready"
+    },
+    {
+      "id": "ram-cooler-clearance",
+      "check": "The RAM's height under the air cooler's overhang",
+      "outcomes": ["ok", "warn", "block"],
+      "numeric": true,
+      "unknownData": true,
+      "data": "ready"
+    },
+    {
+      "id": "radiator-fit",
+      "check": "The radiator's size and position against the case",
+      "outcomes": ["ok", "block"],
+      "numeric": true,
+      "unknownData": true,
+      "data": "ready; the North needs WP-D1"
+    },
+    {
+      "id": "psu-form-factor",
+      "check": "The PSU's form factor against the case",
+      "outcomes": ["ok", "warn", "block"],
+      "numeric": false,
+      "unknownData": true,
+      "data": "ready"
+    },
+    {
+      "id": "psu-length",
+      "check": "The PSU's length against the case, per layout",
+      "outcomes": ["ok", "block"],
+      "numeric": true,
+      "unknownData": true,
+      "data": "ready; the North needs WP-D1"
+    },
+    {
+      "id": "psu-wattage",
+      "check": "The PSU's wattage against the estimated load, with transient headroom",
+      "outcomes": ["ok", "warn", "block"],
+      "numeric": true,
+      "unknownData": true,
+      "data": "needs WP-E2"
+    },
+    {
+      "id": "gpu-power-connector",
+      "check": "A native 12V-2x6 where the card needs one, and enough 8-pin cables",
+      "outcomes": ["ok", "warn", "block"],
+      "numeric": true,
+      "unknownData": true,
+      "data": "needs WP-D1"
+    },
+    {
+      "id": "m2-lanes",
+      "check": "The M.2 drive count against the board's slots, and lane-sharing side effects",
+      "outcomes": ["ok", "warn", "block"],
+      "numeric": true,
+      "unknownData": true,
+      "data": "ready"
+    },
+    {
+      "id": "board-form-factor",
+      "check": "The board's form factor against the case",
+      "outcomes": ["ok", "block"],
+      "numeric": false,
+      "unknownData": true,
+      "data": "ready"
+    },
+    {
+      "id": "usb-c-header",
+      "check": "A front USB-C port needs a USB-C header on the board",
+      "outcomes": ["ok", "warn"],
+      "numeric": false,
+      "unknownData": true,
+      "data": "ready"
+    },
+    {
+      "id": "cooler-socket",
+      "check": "The cooler's mounting kit fits the CPU socket",
+      "outcomes": ["ok", "block"],
+      "numeric": false,
+      "unknownData": true,
+      "data": "needs WP-D1"
+    },
+    {
+      "id": "display-output",
+      "check": "A build with no graphics card needs a CPU with integrated graphics",
+      "outcomes": ["ok", "block"],
+      "numeric": false,
+      "unknownData": true,
+      "data": "ready"
+    }
+  ]
+}
