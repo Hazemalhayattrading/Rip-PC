@@ -275,8 +275,11 @@ Steps:
 
 **WP-E0, now:**
 1. Branch from the integration tip. Run verify, then commit and push.
-2. **Check the APIs first with Context7:** Vite (JSON and asset output, build-time plugins), Vitest
-   4 (coverage thresholds, generated `test.each` cases), wouter and React 19.
+2. **Check the APIs first with Context7:** Vite 8 (JSON and asset output, build-time plugins),
+   Vitest 5 (coverage thresholds, generated `test.each` cases), wouter 3 and React 19.
+   - Vitest 5 truncates values interpolated into `it.each` titles at 40 characters by default
+     (qa-lead's finding). Golden test titles carry full anchor ids, so build them so they aren't
+     truncated.
 3. **The result types come first.** Write them in `src/engine/`, with doc comments. Send the file
    path to qa-lead and design-lead for review, and copy the Director. WP-E1 waits for both OKs.
 4. **Catalogue loading** (plan WP-E0):
@@ -285,13 +288,19 @@ Steps:
    - passed to the engine as an argument.
 
    Prove with `npm run perf:bundle` that the product pages' initial JS stays within 2 KB of
-   77.92 KB gzip, with no catalogue data and no Zod in it.
+   77.92 KB gzip, with no catalogue data, no data schemas and no classic `zod` in it. The build
+   codec's `zod/mini` stays (Director, 2026-10-02).
 5. **The engine dump script,** `npm run engine:dump`. It writes every rule's result for every
    catalogue combination as JSON, under `artifacts/engine/`, and it runs in CI. Until E1 adds
    rules, it writes the catalogue combinations only.
+   - It also has a **query mode**, for qa-lead: given a file of builds and queries, it writes the
+     results for exactly those.
+   - E0 fixes the input format and covers compatibility. E2 to E5 each add their entry point
+     (plan WP-E0).
 6. **The ESLint rule:** `src/**` can't import `tests/**`. Prove it with a planted import as a
    negative control.
-7. **The lab shell:** `/lab`, `/lab/parts` and `/lab/accuracy`, in the route table.
+7. **The lab shell:** `/lab/` (the index, `lab/index.html`), `/lab/parts` and `/lab/accuracy`,
+   in the route table.
    - Mark it "Engine lab: internal preview", with `<meta name="robots" content="noindex">`, and
      keep it out of the site nav.
    - One shared part picker, with the parts in the URL through the existing build codec.
@@ -312,6 +321,10 @@ Steps:
 - A second engine-engineer, in `build-lead-perf`, in its own folders: `src/engine/perf/**` and
   `src/engine/creator/**`.
 - The golden test is generated from the anchor files, one case per row.
+  - Each case is evaluated in the anchor's own source context: its publisher and its test
+    conditions.
+  - Where sources disagree, the range shown without a source context contains both values, at
+    medium confidence or lower (plan WP-E3).
 - Plan §8, risk 1: scale the CPU limits against each source's own reference CPU.
 
 **WP-E5,** once E1, E3 and E4 are accepted.
@@ -388,6 +401,8 @@ Steps:
    - the held-out protocol: **at least 20 results, 4 per coverage class** (Hazem, 2026-10-02).
      Raise `models.heldOutCount` in `budget.json`, and its pin test, to 20;
    - the corpus format;
+   - the unknown-data rule, and the check for conflicting anchors (plan WP-E1 and WP-E3, the
+     Director's rulings of 2026-10-02);
    - the mutation-test check;
    - the Phase 1 audit seed;
    - a brief for every row in plan §4.
