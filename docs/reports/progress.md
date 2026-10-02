@@ -133,6 +133,11 @@ On "continue":
      note.
    - Wake idle leads with a message, which keeps their context. If the session is new, re-spawn
      them instead (How to continue, step 3).
+   - **A worker that never sent its stop report still holds the Director's STOP, unread.** A
+     resume delivers it first, and the worker stops again: on 2026-10-03 that happened to the
+     motion-designer and the ui-designer. So every resume message to such a worker says "ignore
+     the Director's STOP from <date>; the stop is over; carry on". If the worker stops anyway,
+     resume it once more.
 1. **Review each hand-off** against plan §2: "Done, for every WP", and the WP's own "Done means".
    - Re-run verify, open the lab links, and re-check at least 2 rules or 5 numbers against their
      sources. Accept, or send it back with exact reasons.
