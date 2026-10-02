@@ -1,6 +1,6 @@
 # Rig Lab test plan
 
-Owner: qa-lead · Version 4.1 · 2026-10-02 · Applies to every phase, from Phase 0 to release.
+Owner: qa-lead · Version 4.2 · 2026-10-03 · Applies to every phase, from Phase 0 to release.
 
 **What v4 adds (Phase 1, the engine):** the 20 compatibility rule ids agreed with build-lead and how
 each is traced (§9); the held-out protocol of at least 20 results, 4 per coverage class (§8.2);
@@ -172,15 +172,17 @@ scene measured 5.3 fps and then 8.5 fps ten minutes apart on 2026-09-30.
     through `storageState`, so the real restore script runs. The axe spec checks that each page
     shows its project's theme (`data-theme`) before it runs, so a light run cannot silently test
     dark.
-  - The PR column below is enforced by each project's `grep`. Dark at 768 runs only `@a11y` (and,
-    from Phase 2, `@keyboard`); light runs only `@a11y`. `E2E_FULL_MATRIX=1` runs everything in
-    every cell, for the nightly job from Phase 2.
+  - The PR column below is enforced by each project's `grep`. Dark at 768 runs only `@a11y`,
+    `@nav` (in-app navigation by touch, since WP-Q4) and, from Phase 2, `@keyboard`; light runs
+    only `@a11y`. `E2E_FULL_MATRIX=1` runs everything in every cell, for the nightly job from
+    Phase 2.
   - Cost, measured on the home PC with 2 workers: the three light projects add 54 axe tests and
     about 19 s to `npm run verify`.
 
 | Suite | 390 dark | 390 light | 768 dark | 768 light | 1440 dark | 1440 light |
 |---|---|---|---|---|---|---|
 | Smoke (routes, 404, `?b=`) | PR | nightly | nightly | nightly | PR | nightly |
+| In-app navigation by tap and mouse (§12.1, `@nav`) | PR | nightly | PR | nightly | PR | nightly |
 | Builder flows (§12.2) | PR | nightly | nightly | nightly | PR | nightly |
 | Keyboard-only path (§10.2) | — | — | PR | — | PR | — |
 | axe on every route and state (§10.1) | PR | PR | PR | PR | PR | PR |
@@ -1458,8 +1460,28 @@ WP-Q1 added, all done on 2026-09-30 except the last item:
   shift, including one flagged as following input. The test gives no input, and at 390 px
   Chromium flags real shifts that way (§6.4). Mutation M4 fails it at 390 (0.3646) and at 1440
   (0.2205).
-- Still open: a post-deploy smoke against PAGES once Pages is live. It is blocked until Hazem
-  enables Pages and merges to `main`.
+- **In-app navigation** (WP-Q4, after Hazem's report of 2026-10-02): `tests/e2e/navigation.spec.ts`,
+  tagged `@smoke @nav`, so `verify` runs it at 390, 768 and 1440 px.
+  - The smoke test loads each route directly. This spec instead activates every in-site link on
+    one page of each kind: the home page, the first, a middle and the last build step, a summary
+    page and the 404 page. It taps at the touch widths and clicks with the mouse at 1440.
+  - After each link it checks the URL, the title and the h1 against the route table, that it was
+    an in-app navigation, that the new h1 is on screen (not only in the document), and that Back
+    returns.
+  - A known defect is recorded, not failed: `KNOWN_OFF_SCREEN` (QA-P1-001, build-lead, Major) at
+    1440 px on the build steps, where a link low on the page leaves the new heading scrolled out of
+    view. QA removes the entry when it verifies the fix.
+  - Proof: a planted `AppLink` that swallows its click fails the spec at the URL check.
+- **The same spec on the live site** (PAGES), after each milestone deploy and on any navigation
+  report: `npx playwright test --config tests/e2e/live/playwright.config.ts`. It runs in five
+  browsers (Playwright's Chromium, the installed Chrome and Edge, Playwright's Firefox and WebKit)
+  at the three widths, one page at a time, and never inside `verify`.
+- **Hazem's report, closed 2026-10-03: not an app bug.** His automated desktop Chrome clicked about
+  270 ms after the response, before the app had rendered any links: the static HTML's `#root` is
+  empty until the app runs. The click hit nothing, so the address bar didn't change, and the text
+  read right after showed the home page. A click once the link exists navigates at once, headless
+  and headed. Rendering the shell into the static HTML (Phase 2, the Director's WP-B1 decision)
+  turns such an early click into an ordinary page load.
 
 ### 12.2 Builder flows (from Phase 2)
 
@@ -1584,7 +1606,9 @@ an owning team and an `until`: `permanent`, the last day it applies, or an https
 - Four entries today, all qa-lead's and permanent:
   - `not-found-page-status`: the 404 answer of a page that a test declared it asks for.
   - `not-found-page-console`: Chromium's console error for that same page URL. It moved here
-    from build-lead's `isOwnDocument404`.
+    from build-lead's `isOwnDocument404`. It takes the exact text in two forms: "404 (Not Found)"
+    over HTTP/1.1, as the local preview answers, and "404 ()" over HTTP/2, as GitHub Pages
+    answers, where WebKit logs the same text (the live navigation run, 2026-10-02).
   - `software-webgl-notice`: Chromium's warning that WebGL fell back to its software renderer
     without `--enable-unsafe-swiftshader`, in the wording of Chromium 141 and of its current
     source. The e2e projects pass that flag, so it should not appear; build-lead saw it from a
@@ -1715,6 +1739,7 @@ QA re-tests every fix on the integration branch before closing the defect.
 | 2026-10-02 | 3.4 | WP-Q2: from the re-test of v3.3, QA-P0-038 to 040. The software-WebGL entry takes only the two prefixes Chromium's GPU logger writes, and §13.2 states the page-URL limit exactly: inline scripts and inline event handlers, even ones a script file sets. The remaining approved method values pinned (visual thresholds, viewport sizes and flags, scale, gzip level and bytes per KB, the 95% warning, fps spread and calibration, the CI proxy, INP spread and rates, the model, D1 and audit values). Two §13.2 slips | qa-lead; no approval needed (no gate or method changed) |
 | 2026-10-02 | 4 | WP-Q3, Phase 1. The 20 rule ids agreed with build-lead, with their outcomes and their numeric and unknown-data flags (§9.1, §9.2), and their trace: compat-trace with `compat-rules.json`, the validator proofs of the unknown-data ruling, and the check of the engine's `RuleSpec` (§9.3). Golden tests in each anchor's own source context, the golden-count check and the conflicting-pairs check (§8.1). The held-out protocol: at least 20 results, 4 per class, blind picks committed before one run, the eligibility and mix rules, and the calibration check (§8.2); `models.heldOutCount` 20, with `heldOutPerClassMin` 4 and `heldOutClasses`, pinned. The corpus format and the sweep invariants (§9.4). The mutation-test check (§9.5). The Phase 1 audit seed (§7.2). The independent checks of phase-1-plan §4 (§17 and `docs/qa/phase-1-worker-briefs.md`). The Phase 1 wiring (Appendix C). `rule1.mjs` reads WP-D1's per-batch price windows (§7.5) | The held-out count and classes: Hazem, 2026-10-02 (phase-1-plan §6.3). The unknown-data ruling and the golden source context: the Director, 2026-10-02 (`9f47477`). The rest: pending the Director's review of WP-Q3 |
 | 2026-10-02 | 4.1 | The Director's acceptance of WP-Q3 (`9d56356`): QA's v4 method proposals approved as written (the held-out mix rules, a corpus result milder than expected as a Major, Stryker reasons of at least 20 characters, the sweep severities). "No estimate" fails a held-out result only on an eligible pick, so §8.2's rule 4 now says outright that a pick for a game or workload without anchors there is ineligible | Approved by: Director, 2026-10-02 (`7f3382f`) |
+| 2026-10-03 | 4.2 | WP-Q4, Hazem's navigation report: the in-app navigation spec, run by `verify` at 390, 768 and 1440 px (`@nav` joins the 768 px project's grep), and its live-site config in five browsers (§12.1, §5). Hazem's report closed as an automated click made before the app rendered its links (§12.1). Found on the way: QA-P1-001 (Major, the new heading off screen after an in-app navigation at 1440 px) and QA-P1-002 (Minor, `/index.html` shows the 404 view), both with build-lead. The declared-404 allow-list entry takes the HTTP/2 form of the notice (§13.2). No gate value changed | qa-lead; the live-site check and the closing rule are the Director's (2026-10-02, 2026-10-03) |
 
 ## 17. Phase 1 independent checks
 
