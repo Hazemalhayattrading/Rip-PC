@@ -1,5 +1,5 @@
 {
-  "$comment": "QA's expected compatibility rule set: the 20 rule ids of docs/qa/test-plan.md §9.2 (v4), which are the 18 ids of test plan v3 plus cooler-socket and display-output (Hazem, 2026-10-02, phase-1-plan §6), agreed with build-lead (src/engine/types.ts RULE_IDS at 4fa8a95). tests/audit/compat-trace.mjs checks the engine's registry against this list and every rule's tests against its fields. Owner: qa-lead. A change here needs the same change in test plan §9.2 (tests/audit/compat-trace.test.mjs pins both) and the Director's approval, recorded in test plan §16.",
+  "$comment": "QA's expected compatibility rule set: the 20 rule ids of docs/qa/test-plan.md §9.2 (v4), which are the 18 ids of test plan v3 plus cooler-socket and display-output (Hazem, 2026-10-02, phase-1-plan §6), agreed with build-lead (src/engine/types.ts RULE_IDS at 4fa8a95). unknownData re-checked against WP-D1 batch 1 (feat/data-engine-data @ c588afb), as the Director's ruling asks for every field a rule starts to read. tests/audit/compat-trace.mjs checks the engine's registry against this list and every rule's tests against its fields. Owner: qa-lead. A change here needs the same change in test plan §9.2 (tests/audit/compat-trace.test.mjs pins both) and the Director's approval, recorded in test plan §16.",
   "schemaVersion": 1,
   "owner": "qa-lead",
   "fields": {
@@ -122,7 +122,8 @@
       "numeric": true,
       "unknownData": true,
       "unpublishable": [
-        "ram: the modules' rank, which the schema does not hold; the CPU's official speed depends on it for DDR4 with 4 modules (Ryzen 5000: 4x1R 2933 MT/s, 4x2R 2667 MT/s, data/parts/cpu.json)"
+        "ram: the modules' rank, which the schema does not hold; the CPU's official speed depends on it for DDR4 with 4 modules (Ryzen 5000: 4x1R 2933 MT/s, 4x2R 2667 MT/s, data/parts/cpu.json)",
+        "motherboard.memory.officialMaxSpeedMtps (WP-D1 batch 1, c588afb)"
       ],
       "data": "ready"
     },
@@ -131,23 +132,9 @@
       "check": "The card's length against the case, per layout",
       "outcomes": ["ok", "block"],
       "numeric": true,
-      "unknownData": false,
-      "requiredFields": [
-        {
-          "field": "gpu-card.lengthMm",
-          "proof": "null-rejected",
-          "test": "[schema] gpu-card.lengthMm: null is rejected"
-        },
-        {
-          "field": "case.gpuClearance",
-          "proof": "empty-rejected",
-          "test": "[schema] case.gpuClearance: an empty list is rejected"
-        },
-        {
-          "field": "case.gpuClearance[].maxLengthMm",
-          "proof": "null-rejected",
-          "test": "[schema] case.gpuClearance[].maxLengthMm: null is rejected"
-        }
+      "unknownData": true,
+      "unpublishable": [
+        "case.gpuClearance[].condition: a radiator of a size that the case's conditional rows do not list, at their position, has no published limit (WP-D1 batch 1, c588afb)"
       ],
       "data": "ready"
     },
@@ -200,7 +187,11 @@
       "outcomes": ["ok", "warn", "block"],
       "numeric": true,
       "unknownData": true,
-      "unpublishable": ["cooler.ramClearanceMm", "ram.heightMm"],
+      "unpublishable": [
+        "cooler.ramClearanceMm",
+        "ram.heightMm",
+        "cooler.singleFanRamClearanceMm (WP-D1 batch 1, c588afb)"
+      ],
       "data": "ready"
     },
     {
@@ -222,18 +213,9 @@
       "check": "The PSU's form factor against the case",
       "outcomes": ["ok", "warn", "block"],
       "numeric": false,
-      "unknownData": false,
-      "requiredFields": [
-        {
-          "field": "psu.formFactor",
-          "proof": "null-rejected",
-          "test": "[schema] psu.formFactor: null is rejected"
-        },
-        {
-          "field": "case.psu.formFactors",
-          "proof": "empty-rejected",
-          "test": "[schema] case.psu.formFactors: an empty list is rejected"
-        }
+      "unknownData": true,
+      "unpublishable": [
+        "psu.atxBracketIncluded: on an SFX or SFX-L unit, when the maker does not say (WP-D1 batch 1, c588afb)"
       ],
       "data": "ready"
     },
@@ -262,7 +244,10 @@
       "numeric": true,
       "unknownData": true,
       "unpublishable": [
-        "gpu-card: the 16-pin connector's standard (12V-2x6 or 12VHPWR), when the maker does not name it"
+        "gpu-card: the 16-pin connector's standard (12V-2x6 or 12VHPWR), when the maker does not name it",
+        "gpu-card.powerAdapter, on a 16-pin card (WP-D1 batch 1, c588afb)",
+        "gpu-card.powerAdapter.separateCables (WP-D1 batch 1, c588afb)",
+        "psu.connectors.pcie8pinCables (WP-D1 batch 1, c588afb)"
       ],
       "data": "needs WP-D1"
     },

@@ -119,18 +119,34 @@ describe('the real rule set, tests/audit/compat-rules.json', () => {
     ]);
   });
 
-  it('asks unknown-data tests of the 8 rules the Director named, and proofs of the other 12', () => {
+  // The Director's ruling named 8 rules on the integration data. Re-checked against WP-D1 batch 1
+  // (c588afb), as the ruling asks: gpu-length reads conditional rows that leave some radiator sizes
+  // without a limit, and psu-form-factor reads atxBracketIncluded, which can be unpublished.
+  it('asks unknown-data tests of 10 rules, and validator proofs of the other 10', () => {
     expect(rules.filter((r) => r.unknownData).map((r) => r.id)).toEqual([
       'bios-version',
       'ram-speed',
+      'gpu-length',
       'gpu-thickness',
       'ram-cooler-clearance',
       'radiator-fit',
+      'psu-form-factor',
       'psu-length',
       'psu-wattage',
       'gpu-power-connector',
     ]);
-    expect(rules.filter((r) => !r.unknownData)).toHaveLength(12);
+    expect(rules.filter((r) => !r.unknownData).map((r) => r.id)).toEqual([
+      'cpu-socket',
+      'cpu-chipset',
+      'ram-type',
+      'ram-slots',
+      'cooler-height',
+      'm2-lanes',
+      'board-form-factor',
+      'usb-c-header',
+      'cooler-socket',
+      'display-output',
+    ]);
   });
 
   it('names each validator test as "[schema] <field>: null is rejected" or "...: an empty list is rejected"', () => {
