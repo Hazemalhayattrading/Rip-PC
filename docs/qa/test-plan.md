@@ -1471,6 +1471,16 @@ WP-Q1 added, all done on 2026-09-30 except the last item:
   - A known defect is recorded, not failed: `KNOWN_OFF_SCREEN` (QA-P1-001, build-lead, Major) at
     1440 px on the build steps, where a link low on the page leaves the new heading scrolled out of
     view. QA removes the entry when it verifies the fix.
+  - It also measures design-lead's focus and scroll rules (2026-10-03, `docs/design/components.md`
+    with WP-DS2 batch 2): a route change jumps to scrollY 0, never smoothly, with focus on the new
+    h1 and the header, the site nav and the h1 on screen; Back restores the scroll position, with
+    focus on the h1; an in-page change (the theme toggle) neither scrolls nor moves focus.
+    - The third rule holds and is enforced. The first two are build-lead's fix for QA-P1-001, so
+      each deviation is recorded as an annotation until QA verifies the fix and sets
+      `FOCUS_RULES.enforced`.
+    - On 2026-10-03, at `5055f3a`: focus lands on `main`, not the h1, after every route change at
+      every width; "Build" from the home page lands at scrollY 90 at 768 px and 178 at 1440, with
+      the header and the site nav off screen at 1440. Back already restores the scroll position.
   - Proof: a planted `AppLink` that swallows its click fails the spec at the URL check.
 - **The same spec on the live site** (PAGES), after each milestone deploy and on any navigation
   report: `npx playwright test --config tests/e2e/live/playwright.config.ts`. It runs in five
