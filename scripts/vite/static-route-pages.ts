@@ -5,6 +5,10 @@
  * exists for it. Each file is the built index.html with that route's <title> and description,
  * so the right title shows before any JavaScript runs. The file layout comes from the route
  * table (`htmlFileOf`), which is why `/build/cpu` becomes `build/cpu.html`.
+ *
+ * A page the route table marks not indexable (the Engine lab) also gets
+ * `<meta name="robots" content="noindex" />`. Every other page, 404.html included, gets nothing
+ * more than its title and description.
  */
 import type { Plugin } from 'vite';
 import {
@@ -40,10 +44,15 @@ export function escapeHtml(text: string): string {
 const TITLE = /<title>[^<]*<\/title>/g;
 // Tolerates the line breaks Prettier puts between attributes in index.html.
 const DESCRIPTION = /<meta\s+name="description"\s+content="[^"]*"\s*\/?>/g;
+const ROBOTS = /<meta\s[^>]*name\s*=\s*["']?robots\b/i;
+
+/** What a page that is not indexable carries, right after its description. */
+export const ROBOTS_NOINDEX_TAG = '<meta name="robots" content="noindex" />';
 
 /**
- * Returns the page HTML with its <title> and description set from `meta`.
- * @throws {Error} unless the template has exactly one <title> and one description.
+ * Returns the page HTML with its <title> and description set from `meta`, and the robots
+ * `noindex` tag when `meta.indexable` is false.
+ * @throws {Error} unless the template has exactly one <title>, one description and no robots tag.
  */
 export function withPageMeta(html: string, meta: PageMeta): string {
   const titles = html.match(TITLE)?.length ?? 0;
@@ -53,11 +62,16 @@ export function withPageMeta(html: string, meta: PageMeta): string {
       `index.html must have exactly one <title> and one <meta name="description">; found ${String(titles)} and ${String(descriptions)}.`,
     );
   }
+  if (ROBOTS.test(html)) {
+    throw new Error(
+      'index.html must not have a <meta name="robots">: the build writes it for each page that src/app/routes.ts marks not indexable.',
+    );
+  }
+  const description = `<meta name="description" content="${escapeHtml(meta.description)}" />`;
   return html
     .replace(TITLE, () => `<title>${escapeHtml(meta.title)}</title>`)
-    .replace(
-      DESCRIPTION,
-      () => `<meta name="description" content="${escapeHtml(meta.description)}" />`,
+    .replace(DESCRIPTION, () =>
+      meta.indexable ? description : `${description}\n    ${ROBOTS_NOINDEX_TAG}`,
     );
 }
 

@@ -7,6 +7,10 @@ import { reactRefresh } from 'eslint-plugin-react-refresh';
 import { defineConfig, globalIgnores } from 'eslint/config';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
+import importGuards from './scripts/eslint/import-guards.js';
+
+/** The repo root, for the import guards that resolve each import to the path it names. */
+const REPO_ROOT = import.meta.dirname;
 
 const LAZY_3D_MESSAGE =
   '3D code lives in src/three and loads only through React.lazy, so the landing page never downloads it. Import src/three with a dynamic import() instead.';
@@ -94,6 +98,27 @@ export default defineConfig([
         },
       ],
     },
+  },
+
+  // Architecture guards: rig-lab rules, not no-restricted-imports, so they don't replace the
+  // lazy-3D guard's options above. Each resolves an import to the path it names
+  // (scripts/eslint/import-guards.js); scripts/eslint-guards.test.ts holds the negative controls.
+  //
+  // src/ never imports tests/, test files included: QA's held-out results live in
+  // tests/audit/holdout/, and engine code must never see them (test plan §8).
+  {
+    files: ['src/**/*.{ts,tsx,js,mjs,cjs}'],
+    plugins: { 'rig-lab': importGuards },
+    rules: { 'rig-lab/no-tests-import': ['error', { root: REPO_ROOT }] },
+  },
+  // The engine stays pure and Zod-free: it ships to the browser in the lab chunk, and the
+  // catalogue was already validated at build time. No UI, state, routing, Node or Zod code, and
+  // src/data for types only. Its tests may use Node and the data schemas.
+  {
+    files: ['src/engine/**/*.{ts,tsx,js,mjs,cjs}'],
+    ignores: ['src/engine/**/*.test.{ts,tsx}'],
+    plugins: { 'rig-lab': importGuards },
+    rules: { 'rig-lab/engine-purity': ['error', { root: REPO_ROOT }] },
   },
 
   // Tooling and tests run in Node.

@@ -22,6 +22,45 @@ describe('planStaticPages', () => {
     expect(new Set(pages.map((p) => p.fileName)).size).toBe(pages.length);
     expect(pages.map((p) => p.fileName)).toContain('build/cpu.html');
   });
+
+  it('plans the lab home as lab/index.html and each lab page as lab/<page>.html', () => {
+    const files = planStaticPages().map((p) => p.fileName);
+    expect(files).toEqual(
+      expect.arrayContaining(['lab/index.html', 'lab/parts.html', 'lab/accuracy.html']),
+    );
+    expect(files).not.toContain('lab.html');
+  });
+});
+
+const ROBOTS_NOINDEX = '<meta name="robots" content="noindex" />';
+
+describe('withPageMeta: robots', () => {
+  const page = { title: 't', heading: 'h', description: 'd' };
+
+  it('asks search engines not to index a page that is not indexable, inside <head>', () => {
+    const html = withPageMeta(TEMPLATE, { ...page, indexable: false });
+    expect(html.split(ROBOTS_NOINDEX)).toHaveLength(2);
+    expect(html.indexOf(ROBOTS_NOINDEX)).toBeGreaterThan(html.indexOf('<head>'));
+    expect(html.indexOf(ROBOTS_NOINDEX)).toBeLessThan(html.indexOf('</head>'));
+  });
+
+  it('writes no robots tag for an indexable page, so its HTML stays as it was', () => {
+    const html = withPageMeta(TEMPLATE, { ...page, indexable: true });
+    expect(html).not.toContain('robots');
+    expect(html).toBe(
+      TEMPLATE.replace('<title>Rig Lab</title>', '<title>t</title>').replace(
+        'content="Home."',
+        'content="d"',
+      ),
+    );
+  });
+
+  it('rejects a template that already has a robots tag, because the route table owns it', () => {
+    const template = TEMPLATE.replace('</head>', '<meta name="robots" content="none" /></head>');
+    expect(() => withPageMeta(template, { ...page, indexable: true })).toThrow(
+      /must not have a <meta name="robots">/,
+    );
+  });
 });
 
 describe('withPageMeta', () => {
@@ -30,6 +69,7 @@ describe('withPageMeta', () => {
       title: 'Step 3 of 12: CPU · Rig Lab',
       heading: 'unused',
       description: 'Choose your CPU.',
+      indexable: true,
     });
     expect(html).toContain('<title>Step 3 of 12: CPU · Rig Lab</title>');
     expect(html).toContain('<meta name="description" content="Choose your CPU." />');
@@ -42,7 +82,12 @@ describe('withPageMeta', () => {
       '<meta name="description" content="Home." />',
       '<meta\n      name="description"\n      content="Home."\n    />',
     );
-    const html = withPageMeta(wrapped, { title: 't', heading: 'h', description: 'Choose.' });
+    const html = withPageMeta(wrapped, {
+      title: 't',
+      heading: 'h',
+      description: 'Choose.',
+      indexable: true,
+    });
     expect(html).toContain('<meta name="description" content="Choose." />');
     expect(html).not.toContain('Home.');
   });
@@ -52,6 +97,7 @@ describe('withPageMeta', () => {
       title: 'A <b> & "C" $& $1',
       heading: 'unused',
       description: 'Say "hi" & <leave> $&',
+      indexable: true,
     });
     expect(html).toContain('<title>A &lt;b&gt; &amp; &quot;C&quot; $&amp; $1</title>');
     expect(html).toContain('content="Say &quot;hi&quot; &amp; &lt;leave&gt; $&amp;"');
@@ -62,9 +108,9 @@ describe('withPageMeta', () => {
     ['two titles', TEMPLATE.replace('</head>', '<title>Again</title></head>')],
     ['no description', TEMPLATE.replace('<meta name="description" content="Home." />', '')],
   ])('rejects a template with %s', (_label, template) => {
-    expect(() => withPageMeta(template, { title: 't', heading: 'h', description: 'd' })).toThrow(
-      /exactly one <title> and one <meta name="description">/,
-    );
+    expect(() =>
+      withPageMeta(template, { title: 't', heading: 'h', description: 'd', indexable: true }),
+    ).toThrow(/exactly one <title> and one <meta name="description">/);
   });
 
   it('escapes the four HTML-significant characters', () => {
@@ -104,6 +150,28 @@ describe('staticRoutePages plugin', () => {
     const cpu = emitted.find((f) => f.fileName === 'build/cpu.html');
     expect(cpu?.source).toContain('<title>Step 3 of 12: CPU · Rig Lab</title>');
     expect(error).not.toHaveBeenCalled();
+  });
+
+  it('marks every lab page noindex, and no product page or the 404 page', () => {
+    const emitFile = vi.fn<(file: unknown) => string>(() => 'ref');
+    const error = vi.fn<(message: string) => never>((message) => {
+      throw new Error(message);
+    });
+    const indexAsset = { type: 'asset', fileName: 'index.html', source: TEMPLATE };
+    generateBundleHook().call({ emitFile, error }, {}, { 'index.html': indexAsset });
+
+    const emitted = emitFile.mock.calls.map(
+      ([file]) => file as { fileName: string; source: string },
+    );
+    const noindex = emitted
+      .filter((file) => file.source.includes(ROBOTS_NOINDEX))
+      .map((file) => file.fileName);
+    expect(noindex).toEqual(['lab/index.html', 'lab/parts.html', 'lab/accuracy.html']);
+    expect(indexAsset.source).not.toContain('robots');
+    const notFound = emitted.find((file) => file.fileName === '404.html');
+    expect(notFound?.source).not.toContain('robots');
+    const labHome = emitted.find((file) => file.fileName === 'lab/index.html');
+    expect(labHome?.source).toContain('<title>Engine lab · Rig Lab</title>');
   });
 
   it('reads an index.html asset given as bytes', () => {

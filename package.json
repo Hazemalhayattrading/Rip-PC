@@ -25,7 +25,8 @@
     "perf:lhci:desktop": "lhci autorun --config=./lighthouserc.desktop.cjs",
     "perf:vitals": "playwright test --project=perf --workers=1",
     "perf:fps": "node tests/perf/fps-probe.mjs",
-    "audit:sample": "node tests/audit/sample.mjs"
+    "audit:sample": "node tests/audit/sample.mjs",
+    "engine:dump": "node scripts/engine-dump.mjs"
   },
   "dependencies": {
     "@react-three/drei": "10.7.9",

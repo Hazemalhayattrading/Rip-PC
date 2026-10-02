@@ -35,6 +35,20 @@ jobs:
       # Typecheck, lint, unit tests with coverage gates, production build, e2e smoke.
       - run: npm run verify
 
+      # Every compatibility rule's result for every catalogue combination, as JSON under
+      # artifacts/engine/, for QA's sweep and per-rule checks (plan WP-E0). It fails if the data
+      # doesn't validate.
+      - run: npm run engine:dump
+
+      - name: Upload the engine dump
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: engine-dump
+          path: artifacts/engine/
+          retention-days: 14
+          if-no-files-found: error
+
       - name: Upload Playwright report and traces
         if: failure()
         uses: actions/upload-artifact@v7

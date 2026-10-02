@@ -1,0 +1,10 @@
+{
+  // Type information for the planted files that scripts/eslint-guards.test.ts lints. They are not
+  // on disk, so no tsconfig includes them: typescript-eslint gives them its default project, with
+  // these options. The app's options, except that JSON imports stay unresolved, so a planted import
+  // of QA's held-out set (tests/audit/holdout/) never makes TypeScript read the file.
+  "extends": "../../tsconfig.app.json",
+  "compilerOptions": {
+    "resolveJsonModule": false
+  }
+}

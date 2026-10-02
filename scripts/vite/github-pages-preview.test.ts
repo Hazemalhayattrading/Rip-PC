@@ -12,10 +12,15 @@ beforeAll(() => {
   root = mkdtempSync(join(tmpdir(), 'rig-lab-pages-'));
   dist = join(root, 'dist');
   mkdirSync(join(dist, 'build'), { recursive: true });
+  mkdirSync(join(dist, 'lab'), { recursive: true });
+  mkdirSync(join(root, 'outside'), { recursive: true });
   writeFileSync(join(dist, 'index.html'), '<h1>home</h1>');
   writeFileSync(join(dist, 'build', 'cpu.html'), '<h1>cpu</h1>');
+  writeFileSync(join(dist, 'lab', 'index.html'), '<h1>Engine lab</h1>');
+  writeFileSync(join(dist, 'lab', 'parts.html'), '<h1>Parts and specs</h1>');
   writeFileSync(join(dist, '404.html'), '<h1>Page not found</h1>');
   writeFileSync(join(root, 'secret.html'), 'outside the output directory');
+  writeFileSync(join(root, 'outside', 'index.html'), 'a folder outside the output directory');
 });
 
 afterAll(() => {
@@ -28,7 +33,7 @@ interface FakeResponse {
   body: string | undefined;
 }
 
-function run(url: string | undefined) {
+function run(url: string | undefined, base = '/Rip-PC/') {
   const response: FakeResponse = { statusCode: 200, headers: {}, body: undefined };
   const res = {
     set statusCode(code: number) {
@@ -37,31 +42,40 @@ function run(url: string | undefined) {
     setHeader(name: string, value: string) {
       response.headers[name.toLowerCase()] = value;
     },
-    end(body: Buffer) {
-      response.body = body.toString('utf8');
+    end(body?: Buffer) {
+      response.body = body?.toString('utf8') ?? '';
     },
   };
   const next = vi.fn();
-  notFoundLikeGithubPages(dist)({ url } as IncomingMessage, res as unknown as ServerResponse, next);
+  notFoundLikeGithubPages(dist, base)(
+    { url } as IncomingMessage,
+    res as unknown as ServerResponse,
+    next,
+  );
   return { response, next };
 }
 
 describe('notFoundLikeGithubPages', () => {
-  it.each(['/build/cpu.html', '/index.html', '/build/cpu.html?b=v1.c_x#top'])(
-    'lets the existing file %s through to Vite',
-    (url) => {
-      const { response, next } = run(url);
-      expect(next).toHaveBeenCalledOnce();
-      expect(response.body).toBeUndefined();
-    },
-  );
+  it.each([
+    '/build/cpu.html',
+    '/index.html',
+    '/build/cpu.html?b=v1.c_x#top',
+    '/lab/index.html',
+    '/lab/parts.html',
+  ])('lets the existing file %s through to Vite', (url) => {
+    const { response, next } = run(url);
+    expect(next).toHaveBeenCalledOnce();
+    expect(response.body).toBeUndefined();
+  });
 
   it.each([
     '/build/nope',
     '/build/nope.html',
     '/assets/missing.js',
     '/build',
+    '/build/',
     '/../secret.html',
+    '/../outside',
     '/%E0%A4%A.html',
     undefined,
   ])('answers %s with 404 and the 404.html page', (url) => {
@@ -71,13 +85,31 @@ describe('notFoundLikeGithubPages', () => {
     expect(response.headers['content-type']).toBe('text/html; charset=utf-8');
     expect(response.body).toBe('<h1>Page not found</h1>');
   });
+
+  it.each([
+    ['/lab', '/Rip-PC/lab/'],
+    ['/lab?b=v1.c_amd-ryzen-7-9800x3d', '/Rip-PC/lab/?b=v1.c_amd-ryzen-7-9800x3d'],
+    ['/lab?b=v1.c_x&chip=y', '/Rip-PC/lab/?b=v1.c_x&chip=y'],
+  ])(
+    'answers the folder %s, which holds an index.html, with a 301 to its trailing slash',
+    (url, location) => {
+      const { response, next } = run(url);
+      expect(next).not.toHaveBeenCalled();
+      expect(response.statusCode).toBe(301);
+      expect(response.headers.location).toBe(location);
+    },
+  );
+
+  it('puts the base in front of the redirect, whatever the base is', () => {
+    expect(run('/lab', '/').response.headers.location).toBe('/lab/');
+  });
 });
 
 type ConfigurePreviewServer = (server: unknown) => (() => void) | undefined;
 
 function hookFor(outDir: string) {
-  const use = vi.fn();
-  const server = { config: { root, build: { outDir } }, middlewares: { use } };
+  const use = vi.fn<(middleware: ReturnType<typeof notFoundLikeGithubPages>) => void>();
+  const server = { config: { root, base: '/Rip-PC/', build: { outDir } }, middlewares: { use } };
   const hook = githubPagesPreview().configurePreviewServer as unknown as ConfigurePreviewServer;
   return { use, call: () => hook(server) };
 }
@@ -89,6 +121,21 @@ describe('githubPagesPreview plugin', () => {
     expect(use).not.toHaveBeenCalled();
     postHook?.();
     expect(use).toHaveBeenCalledOnce();
+  });
+
+  it('redirects folders under the server’s base', () => {
+    const { use, call } = hookFor('dist');
+    call()?.();
+    const middleware = use.mock.calls[0]?.[0];
+    const headers: Record<string, string> = {};
+    const res = {
+      statusCode: 0,
+      setHeader: (name: string, value: string) => (headers[name.toLowerCase()] = value),
+      end: () => undefined,
+    };
+    middleware?.({ url: '/lab' } as IncomingMessage, res as unknown as ServerResponse, vi.fn());
+    expect(res.statusCode).toBe(301);
+    expect(headers.location).toBe('/Rip-PC/lab/');
   });
 
   it('refuses to start without a build', () => {

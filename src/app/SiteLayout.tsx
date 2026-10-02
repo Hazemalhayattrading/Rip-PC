@@ -18,6 +18,13 @@ const SITE_LINKS: readonly SiteLink[] = [
   { label: 'Sources', route: { name: 'sources' } },
 ];
 
+const SITE_FOOTER =
+  'Rig Lab is in development: there are no parts, prices or estimates on this site yet.';
+
+/** The lab shows the catalogue, so the site's line about having no parts would be false there. */
+const LAB_FOOTER =
+  'Engine lab: an internal preview of the catalogue and the engine. The builder does not use them yet.';
+
 /** `page` for the exact page, `true` for the section it belongs to (any build step). */
 function currentness(link: Route, match: RouteMatch): 'page' | 'true' | undefined {
   if (match.name === 'not-found' || link.name !== match.name) return undefined;
@@ -74,7 +81,7 @@ export function SiteLayout({ match, location, children }: SiteLayoutProps) {
         {children}
       </main>
       <footer>
-        <p>Rig Lab is in development: there are no parts, prices or estimates on this site yet.</p>
+        <p>{match.name === 'lab' ? LAB_FOOTER : SITE_FOOTER}</p>
       </footer>
     </>
   );

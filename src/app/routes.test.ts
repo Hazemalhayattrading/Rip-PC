@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   BUILD_STEPS,
   KNOWN_ROUTES,
+  LAB_PAGES,
   NOT_FOUND_HTML_FILE,
   htmlFileOf,
   isBuildStep,
@@ -13,7 +14,7 @@ import {
 } from './routes';
 
 describe('route table', () => {
-  it('lists home, the 12 build steps in plan order, then the four result pages', () => {
+  it('lists home, the 12 build steps in plan order, the four result pages, then the lab', () => {
     expect(KNOWN_ROUTES.map(pathOf)).toEqual([
       '/',
       '/build/use-case',
@@ -32,7 +33,41 @@ describe('route table', () => {
       '/bottleneck',
       '/buy',
       '/sources',
+      '/lab/',
+      '/lab/parts',
+      '/lab/accuracy',
     ]);
+  });
+
+  it('has one lab route per lab page, so a new page id is a new route', () => {
+    expect(LAB_PAGES).toEqual(['index', 'parts', 'accuracy']);
+    expect(KNOWN_ROUTES.filter((route) => route.name === 'lab')).toEqual(
+      LAB_PAGES.map((page) => ({ name: 'lab', page })),
+    );
+  });
+
+  it('marks the lab pages, and only them, as not indexable', () => {
+    for (const route of [...KNOWN_ROUTES, { name: 'not-found' } as const]) {
+      expect(metaOf(route).indexable, JSON.stringify(route)).toBe(route.name !== 'lab');
+    }
+  });
+
+  it('names each lab page as a page of the Engine lab', () => {
+    expect(metaOf({ name: 'lab', page: 'index' })).toEqual({
+      title: 'Engine lab · Rig Lab',
+      heading: 'Engine lab',
+      description:
+        'Internal preview of the Rig Lab engine: what each lab page shows, and how many parts, prices and benchmark anchors the catalogue holds.',
+      indexable: false,
+    });
+    expect(metaOf({ name: 'lab', page: 'parts' }).title).toBe(
+      'Parts and specs · Engine lab · Rig Lab',
+    );
+    expect(metaOf({ name: 'lab', page: 'parts' }).heading).toBe('Parts and specs');
+    expect(metaOf({ name: 'lab', page: 'accuracy' }).title).toBe(
+      'Accuracy: benchmark anchors · Engine lab · Rig Lab',
+    );
+    expect(metaOf({ name: 'lab', page: 'accuracy' }).heading).toBe('Accuracy: benchmark anchors');
   });
 
   it('gives every route and the 404 view a unique heading and title', () => {
@@ -65,6 +100,12 @@ describe('matchPath', () => {
     }
   });
 
+  it('matches the lab home only with its trailing slash, and lab pages only without one', () => {
+    expect(matchPath('/lab/')).toEqual({ name: 'lab', page: 'index' });
+    expect(matchPath('/lab/parts')).toEqual({ name: 'lab', page: 'parts' });
+    expect(matchPath('/lab/accuracy')).toEqual({ name: 'lab', page: 'accuracy' });
+  });
+
   it.each([
     '/build',
     '/build/',
@@ -77,17 +118,32 @@ describe('matchPath', () => {
     '',
     '//',
     '/build/cpu/extra',
+    '/lab',
+    '/lab/index',
+    '/lab/index.html',
+    '/lab/parts/',
+    '/lab/compat',
   ])('treats %j as not found', (path) => {
     expect(matchPath(path)).toEqual({ name: 'not-found' });
   });
 });
 
 describe('suggestRoute', () => {
+  const labHome = { name: 'lab', page: 'index' } as const;
+
   it('suggests the canonical route for a trailing slash or wrong case', () => {
     expect(suggestRoute('/build/cpu/')).toEqual({ name: 'build', step: 'cpu' });
     expect(suggestRoute('/BUILD/CPU')).toEqual({ name: 'build', step: 'cpu' });
     expect(suggestRoute('/Results/')).toEqual({ name: 'results' });
     expect(suggestRoute('//')).toEqual({ name: 'home' });
+    expect(suggestRoute('/lab/parts/')).toEqual({ name: 'lab', page: 'parts' });
+    expect(suggestRoute('/Lab/Accuracy')).toEqual({ name: 'lab', page: 'accuracy' });
+  });
+
+  it('suggests the lab home, which keeps its trailing slash, for /lab without one', () => {
+    expect(suggestRoute('/lab')).toEqual(labHome);
+    expect(suggestRoute('/LAB')).toEqual(labHome);
+    expect(suggestRoute('/lab//')).toEqual(labHome);
   });
 
   it('suggests the canonical route for the .html files GitHub Pages also serves', () => {
@@ -95,6 +151,9 @@ describe('suggestRoute', () => {
     expect(suggestRoute('/build/cpu.html')).toEqual({ name: 'build', step: 'cpu' });
     expect(suggestRoute('/build/cpu/index.html')).toEqual({ name: 'build', step: 'cpu' });
     expect(suggestRoute('/404.html')).toBeNull();
+    expect(suggestRoute('/lab/index.html')).toEqual(labHome);
+    expect(suggestRoute('/lab.html')).toEqual(labHome);
+    expect(suggestRoute('/lab/parts.html')).toEqual({ name: 'lab', page: 'parts' });
   });
 
   it('suggests nothing for exact matches or unrelated paths', () => {
@@ -102,6 +161,15 @@ describe('suggestRoute', () => {
     expect(suggestRoute('/build/cpu')).toBeNull();
     expect(suggestRoute('/build/nope')).toBeNull();
     expect(suggestRoute('/nowhere')).toBeNull();
+    expect(suggestRoute('/lab/')).toBeNull();
+    expect(suggestRoute('/lab/parts')).toBeNull();
+    expect(suggestRoute('/lab/compat')).toBeNull();
+  });
+
+  it('never invents a folder index for a route that has none', () => {
+    expect(suggestRoute('/build')).toBeNull();
+    expect(suggestRoute('/build/')).toBeNull();
+    expect(suggestRoute('/results')).toBeNull();
   });
 });
 
@@ -125,7 +193,13 @@ describe('htmlFileOf', () => {
     expect(htmlFileOf({ name: 'home' })).toBe('index.html');
     expect(htmlFileOf({ name: 'build', step: 'cpu' })).toBe('build/cpu.html');
     expect(htmlFileOf({ name: 'sources' })).toBe('sources.html');
+    expect(htmlFileOf({ name: 'lab', page: 'parts' })).toBe('lab/parts.html');
+    expect(htmlFileOf({ name: 'lab', page: 'accuracy' })).toBe('lab/accuracy.html');
     expect(NOT_FOUND_HTML_FILE).toBe('404.html');
+  });
+
+  it('writes the lab home as the lab folder’s index.html, which Pages serves at /lab/', () => {
+    expect(htmlFileOf({ name: 'lab', page: 'index' })).toBe('lab/index.html');
   });
 
   it('never writes x.html next to a directory x/, which GitHub Pages would resolve ambiguously', () => {

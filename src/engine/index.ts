@@ -10,3 +10,15 @@
  */
 export * from './types';
 export { estimate } from './estimate';
+export { RULE_SPECS, ruleSpec } from './rules';
+export {
+  buildPartsOf,
+  combinationsOf,
+  dumpRule,
+  dumpSummary,
+  type Combination,
+  type DumpedCombination,
+  type EngineDumpSummary,
+  type RuleDump,
+  type RuleEvaluator,
+} from './dump';
