@@ -214,10 +214,19 @@ depict the product in the catalogue. So:
 | Materials | Slightly desaturated; selected part outlined in the trace colour, others at 30% ("x-ray") | Matte, restrained reflections; true colours | Glossy glass with reflections, emissive RGB with a half-resolution bloom pass |
 | iGPU cost | Lowest: no dynamic shadows, baked AO | Low: one contact shadow, no bloom | Highest: bloom, reflections, camera moves; must be budgeted first |
 
+*Superseded for Studio (WP-DS2, 2026-10-03):* the column above was the survey's first idea.
+[studio-3d-brief.md §3.2](studio-3d-brief.md#32-light) now sets Studio's light. The environment
+is drei Lightformers captured once, with a self-hosted Poly Haven HDRI only as a fallback, and
+never a drei preset, which loads from an external host. The bloom is a mip-chain bloom
+(`mipmapBlur`), with no `resolutionScale`.
+
 ## Risks
 
 - **Licence drift.** Sketchfab licences can change. Record each licence at download time, archive
-  the model page (Wayback), and keep the licence text with the entry in `CREDITS.md`.
+  the model page (Wayback), and keep the licence text with the entry in `CREDITS.md`. What each
+  `CREDITS.md` row must record before a model ships is set in
+  [studio-3d-brief.md §8](studio-3d-brief.md#8-delivering-a-model-the-spec-for-any-source)
+  (backlog item 46).
 - **Downloads need an account.** Someone Hazem designates must download, since the team may not
   log in.
 - **Trademark and trade dress** (NVIDIA Founders Edition shroud, Noctua colours, ROG logos).

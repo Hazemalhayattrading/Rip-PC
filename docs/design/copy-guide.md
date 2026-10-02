@@ -162,6 +162,25 @@ punctuation stay exactly as the catalogue has them.
 **Spelling:** US English in the product: "color", "gray", "license". Product names keep their own
 spelling.
 
+**Control names.** A toggle button keeps one name, the state it turns on, and says whether that
+state is on with `aria-pressed`, never by renaming itself: "Light theme" (tokens.md §1.3). Every
+other button names its action, starting with a verb.
+
+| Control | Name | Where it's specified |
+|---|---|---|
+| The 3D tools row (toggles) | "Exploded view", "Open side panel", "Interior light", "Spin fans" | studio-3d-brief.md §3.1; motion.md, Studio rules §6 (the fans) |
+| The 3D tools row (buttons) | "Orbit" (opens the orbit pad), "Reset view" | studio-3d-brief.md §3.1 |
+| The orbit pad | "Turn left", "Turn right", "Tilt up", "Tilt down", "Zoom in", "Zoom out" | studio-3d-brief.md §3.1 (backlog item 24) |
+| The theme | "Light theme" | tokens.md §1.3 |
+| The lab's picker | "Add a drive", "Remove drive {n}" | lab-spec.md §2 |
+| The lab's load error | "Reload" | lab-spec.md §7 |
+| The Specs view | the "View" group with "List" and "Specs"; "Clear filters" | specs-view.md (backlog items 14, 16) |
+
+- **"Spin fans"** shows only when the build has a fan. It is never stored, and it doesn't appear
+  under reduced motion, when the fans never spin (motion.md, Studio rules §6).
+- An icon-only button carries its name as visually hidden text, never as `aria-label` on a span
+  (backlog item 43).
+
 ## 6. Status words, rule names and the summary
 
 | Engine status | Word | Icon (18 px grid, [lab-spec.md §3](lab-spec.md#3-the-status-chip)) | Colour |
