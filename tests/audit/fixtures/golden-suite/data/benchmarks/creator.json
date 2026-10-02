@@ -1,0 +1,8 @@
+{
+  "$comment": "Two real anchor rows from data/benchmarks/creator.json at c621c15, cut to the fields tests/audit/golden-count.mjs reads (id and score).",
+  "schemaVersion": 1,
+  "items": [
+    { "id": "tpu-9800x3d-cinebench-2024-multi-core-intel-core-ultra-9-285k", "score": 2448 },
+    { "id": "tpu-9800x3d-cinebench-2024-single-core-intel-core-i5-14600k", "score": 122 }
+  ]
+}

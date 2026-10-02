@@ -396,6 +396,15 @@ Owner: qa-lead (data-auditors, e2e-tester, perf-tester) · Needs: each WP's hand
 **Deliverable**
 - The §4 checks, run for each WP as it lands.
 - e2e tests for the lab pages.
+- **In-app navigation on the live site** (Hazem's report, 2026-10-02: clicking "Build" or
+  "Start a build" seemed to stay on the home page, while opening `/Rip-PC/build/use-case`
+  directly worked).
+  - Every nav link and call to action is clicked by mouse and tapped by touch, on the live GitHub
+    Pages site as well as locally. Today's smoke tests only load each route directly.
+  - It runs in real browsers: Chrome with the GPU on, Edge, and Firefox and WebKit through
+    Playwright.
+  - If the bug is real, it goes to build-lead as a defect, the fix is written test first, and the
+    check runs on the live site again after the next deploy.
 - `docs/qa/report-phase-1.md`. As in Phase 0, the Director commits qa-lead's text unchanged.
 
 **In the browser**
@@ -404,6 +413,7 @@ Owner: qa-lead (data-auditors, e2e-tester, perf-tester) · Needs: each WP's hand
 
 **Done means**
 - QA's verdict is CLOSED: 0 Blockers, 0 open Majors.
+- The live-site navigation check passes after each milestone deploy.
 
 ### WP-DS2 · Design backlog and engine copy
 Owner: design-lead (ui-designer, motion-designer) · Needs: nothing · Wave 1

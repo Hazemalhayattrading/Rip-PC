@@ -964,6 +964,43 @@ export function matchRunnerLog(row, logs, capture) {
 }
 
 /**
+ * The batch window a price row or gap must fall in. A seed-format file (WP-D0) has one `batch` for
+ * every row. From WP-D1 a file lists `batches`, and each row names its own `batch` id, so a part
+ * added later is dated against its own window. Returns { label, windowStart, windowEnd } or { error }.
+ */
+export function batchWindow(row, file) {
+  if (Array.isArray(file.batches)) {
+    if (file.batch !== undefined)
+      return { error: 'the file has both "batch" and "batches", so the window is ambiguous' };
+    const id = row.batch;
+    if (typeof id !== 'string' || id === '') return { error: 'the row names no batch' };
+    const found = file.batches.filter((b) => b?.id === id);
+    if (found.length !== 1)
+      return {
+        error: `the row names the batch "${id}", which the file lists ${found.length} times`,
+      };
+    return { label: `batch ${id}'s window`, ...pickWindow(found[0]) };
+  }
+  return { label: "the file's batch window", ...pickWindow(file.batch ?? {}) };
+}
+
+function pickWindow(b) {
+  return { windowStart: b.windowStart, windowEnd: b.windowEnd };
+}
+
+/** Problems with a date against its batch window (R1-P4 and R1-G3). */
+function windowProblems(field, at, row, file) {
+  const w = batchWindow(row, file);
+  if (w.error) return [problem(field, at, w.error)];
+  const { windowStart: ws, windowEnd: we } = w;
+  if (!isIsoDate(ws) || !isIsoDate(we) || ws > we)
+    return [problem(field, at, `${w.label} ${ws}..${we} is not valid`)];
+  if (at < ws || at > we)
+    return [problem(field, at, `outside ${w.label.replace("the file's ", 'the ')} ${ws}..${we}`)];
+  return [];
+}
+
+/**
  * R1-P4: retrievedAt is a valid date, not after today, inside the batch window, and the UTC date of
  * both the capture's modification time and the runner log's product-page fetch.
  */
@@ -974,12 +1011,7 @@ export function checkRetrievedAt(row, file, today, capture, logMatch) {
     out.push(problem('retrievedAt', at, 'not a valid YYYY-MM-DD date'));
   } else {
     if (at > today) out.push(problem('retrievedAt', at, `after today (${today})`));
-    const { windowStart: ws, windowEnd: we } = file.batch ?? {};
-    if (!isIsoDate(ws) || !isIsoDate(we) || ws > we) {
-      out.push(problem('retrievedAt', at, `the file's batch window ${ws}..${we} is not valid`));
-    } else if (at < ws || at > we) {
-      out.push(problem('retrievedAt', at, `outside the batch window ${ws}..${we}`));
-    }
+    out.push(...windowProblems('retrievedAt', at, row, file));
   }
   const fileTime = { status: 'none', value: null };
   if (capture?.exists) {
@@ -1150,12 +1182,7 @@ export function checkGapDate(gap, file, today) {
   if (!isIsoDate(at)) return [problem('checkedAt', at, 'not a valid YYYY-MM-DD date')];
   const out = [];
   if (at > today) out.push(problem('checkedAt', at, `after today (${today})`));
-  const { windowStart: ws, windowEnd: we } = file.batch ?? {};
-  if (!isIsoDate(ws) || !isIsoDate(we) || ws > we) {
-    out.push(problem('checkedAt', at, `the file's batch window ${ws}..${we} is not valid`));
-  } else if (at < ws || at > we) {
-    out.push(problem('checkedAt', at, `outside the batch window ${ws}..${we}`));
-  }
+  out.push(...windowProblems('checkedAt', at, gap, file));
   return out;
 }
 
