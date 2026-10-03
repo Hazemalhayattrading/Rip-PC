@@ -50,6 +50,32 @@ export function trackArrival(
   };
 }
 
+/**
+ * A link to the page already shown, such as the current step in the steps list: wouter pushes the
+ * same path again, so nothing renders, yet the visitor followed a link (rule 1), and Back from it
+ * is a traversal (rule 2). This settles such a history event at once. A new path is settled once
+ * it has rendered (`usePageArrival`), so `samePath` tells the two apart.
+ * @returns a function that stops listening
+ */
+export function settleSamePath(
+  target: Pick<EventTarget, 'addEventListener' | 'removeEventListener'>,
+  samePath: () => boolean,
+  settle: (arrival: Arrival) => void,
+): () => void {
+  const pushed = () => {
+    if (samePath()) settle('route-change');
+  };
+  const traversed = () => {
+    if (samePath()) settle('history-traversal');
+  };
+  target.addEventListener('pushState', pushed);
+  target.addEventListener('popstate', traversed);
+  return () => {
+    target.removeEventListener('pushState', pushed);
+    target.removeEventListener('popstate', traversed);
+  };
+}
+
 /** What a new page needs from the window. */
 export interface PageView {
   /** Jump to the top at once, never smoothly. */

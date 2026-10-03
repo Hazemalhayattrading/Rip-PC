@@ -3,7 +3,9 @@ import {
   NAVIGATION_FOCUS,
   focusNewPage,
   settleNewPage,
+  settleSamePath,
   trackArrival,
+  type Arrival,
   type NavigationFocus,
   type PageView,
 } from './navigation-focus';
@@ -54,6 +56,52 @@ describe('trackArrival', () => {
     tracker.disconnect();
     window.dispatchEvent(new Event('popstate'));
     expect(tracker.current()).toBe('route-change');
+  });
+});
+
+// QA's navigation spec at 1440: on /build/ram, the steps list's own "Memory (RAM)" left the
+// heading off screen. wouter pushes the same path again, so nothing renders, and only the
+// history event tells the page that the visitor followed a link.
+describe('settleSamePath', () => {
+  function watch(samePath: () => boolean) {
+    const window = new EventTarget();
+    const settled: Arrival[] = [];
+    const disconnect = settleSamePath(window, samePath, (arrival) => settled.push(arrival));
+    return { window, settled, disconnect };
+  }
+
+  it('settles a link to the page already shown at once, as a route change', () => {
+    const { window, settled } = watch(() => true);
+    window.dispatchEvent(new Event('pushState'));
+    expect(settled).toEqual(['route-change']);
+  });
+
+  it('settles Back or Forward between two entries of the same path as a traversal', () => {
+    const { window, settled } = watch(() => true);
+    window.dispatchEvent(new Event('popstate'));
+    expect(settled).toEqual(['history-traversal']);
+  });
+
+  it('leaves a new path to usePageArrival, which settles it once it has rendered', () => {
+    const { window, settled } = watch(() => false);
+    window.dispatchEvent(new Event('pushState'));
+    window.dispatchEvent(new Event('popstate'));
+    expect(settled).toEqual([]);
+  });
+
+  it('ignores in-page changes, which only replace the entry', () => {
+    const { window, settled } = watch(() => true);
+    window.dispatchEvent(new Event('replaceState'));
+    window.dispatchEvent(new Event('hashchange'));
+    expect(settled).toEqual([]);
+  });
+
+  it('stops listening once disconnected', () => {
+    const { window, settled, disconnect } = watch(() => true);
+    disconnect();
+    window.dispatchEvent(new Event('pushState'));
+    window.dispatchEvent(new Event('popstate'));
+    expect(settled).toEqual([]);
   });
 });
 
