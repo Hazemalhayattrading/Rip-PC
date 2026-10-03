@@ -754,6 +754,29 @@ the whole record when `fields` is absent). Outcomes:
 | Prices | amount, currency, retailer, `inStock`, `isMarketplace` | Exact against the capture taken at `retrievedAt` (§7.5) |
 | Dates | `retrievedAt`, `checkedAt` | Valid ISO dates, not in the future |
 
+**Check C, stage 2** (`tests/audit/anchor-compare.mjs`) applies this table field by field to a
+worker's blind transcription (§17). Beyond the table:
+- **Exempt fields.** The validator exempts some fields from source coverage: `gameId`, `limiter`,
+  `conflictsWith`, and a creator row's `subject`. They are EXEMPT when the source is silent, and a
+  MISMATCH when it contradicts them. A classification such as `limiter` is still read against the
+  numbers by eye (QA-P1-005).
+- **Three documented conventions** turn a source's silence into a MATCH, as Phase 0's audit
+  accepted. There are no others:
+  - **absence:** `upscaling.method` "native", `frameGeneration` "off" or `rayTracing` "off". The
+    review mentions the feature nowhere, and the row's note says the value was recorded from that
+    silence;
+  - **read date:** a live database's `publishedAt`. It equals its source's `retrievedAt`, and a
+    note says so;
+  - **validator unit:** a creator row's `unit`, which the validator fixes by the app.
+- **The catalogue ids,** which the worker never sees, are checked against the catalogue. Each id
+  exists, and names the part the source names (MAPPING, a Blocker).
+- **A live database** moves after `retrievedAt`.
+  - A difference there is judged against the source as it stood on that date: a capture whose
+    SHA-256 is in a committed manifest, cross-checked where possible.
+  - The judgement is recorded as a resolution with its evidence, in
+    `docs/qa/evidence/phase-1/check-c-resolutions/`.
+  - A resolution names the outcome it replaces, so one that no longer fits stops the comparison.
+
 ### 7.4 Reaching sources (Owner's rule 1, plan §7)
 
 - **Specs.** Try in this order:
@@ -1842,7 +1865,7 @@ QA re-tests every fix on the integration branch before closing the defect.
 | 2026-10-03 | 4.3 | QA's re-review of the engine contract (`83aa5ab`, OK for WP-E1): §8.1 says which field each golden row is read from (C2) and that QA builds the golden queries itself through the dump's query mode; §8.2 maps a held-out pick's upscaling the same way; §8.3 moves Phase 1's no-frame-generation rule from the type to checks; §9.4 lets a corpus entry fix the radiator position and counts S15 by sweep kind; Appendix C drops `golden-estimates.json`. compat-trace also compares `RuleSpec.unknownData`. No gate value changed | qa-lead |
 | 2026-10-03 | 4.4 | Two Firefox allow-list entries from the live run, as build-lead triaged them: the deliberate WebGL context loss when the 3D preview unmounts, and three.js r186's 1 px viewport rounding note (§13.2). The `index.html` smoke tests for QA-P1-002, which run once the fix and the lab index are in (§12.1). design-lead's four 3D checks for Phases 2 and 3, and the shadows warning (§6.7). No gate value changed | qa-lead |
 | 2026-10-03 | 4.5 | The unknown-data lists re-checked against build-lead's `RuleSpec` at `480a30e`, as the Director's ruling asks: cooler-height reads the memory kit, so it joins the unknown-data group (11 rules, 9 with validator proofs), and cooler-socket gains `motherboard.socket`'s validator proof (§9.1, §9.2). The lab-index smoke test finds its route by the file the host serves (§12.1). No gate value changed | Approved by: Director, 2026-10-03 (`2fe7148`) |
-| 2026-10-03 | 4.6 | The synthetic-null exception (the Director's ruling, 2026-10-03, from the WP-D1 batch 1 review): gpu-length, cooler-height, psu-form-factor and psu-length may set a field to null on a real catalogue record in their unknown-data tests, titled "(synthetic null on <part id>)". `compat-rules.json` marks the four, and compat-trace fails a synthetic null anywhere else and checks the part id against the catalogue (§9.1, §9.3). An unknown-data test of any other rule uses a real product whose data has the null; a boundary test keeps v4's one-field override. Check C's blind key list, `tests/audit/anchor-keys.mjs`, and its transcription format (§17, brief C). §17 lists the 7 anchor sources after WP-D2 batch 1. No gate value changed | The synthetic-null exception: the Director, 2026-10-03. The rest: qa-lead |
+| 2026-10-03 | 4.6 | The synthetic-null exception (the Director's ruling, 2026-10-03, from the WP-D1 batch 1 review): gpu-length, cooler-height, psu-form-factor and psu-length may set a field to null on a real catalogue record in their unknown-data tests, titled "(synthetic null on <part id>)". `compat-rules.json` marks the four, and compat-trace fails a synthetic null anywhere else and checks the part id against the catalogue (§9.1, §9.3). An unknown-data test of any other rule uses a real product whose data has the null; a boundary test keeps v4's one-field override. Check C's blind key list, `tests/audit/anchor-keys.mjs`, and its transcription format (§17, brief C). §17 lists the 7 anchor sources after WP-D2 batch 1. Check C's stage 2, `tests/audit/anchor-compare.mjs`, and its rules in §7.3: the exempt fields, the three documented conventions (absence, read date, validator unit, as Phase 0's audit accepted), the catalogue-id check, and resolutions for a live database that moved after `retrievedAt`. No gate value changed | The synthetic-null exception: the Director, 2026-10-03. §7.3's stage-2 rules: pending the Director's approval. The rest: qa-lead |
 
 ## 17. Phase 1 independent checks
 

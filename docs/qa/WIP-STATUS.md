@@ -101,47 +101,60 @@ Owner: qa-lead. Spec: `docs/reports/phase-1-plan.md` §2 (WP-Q4) and §4; test p
     - Key lists: `artifacts/qa/phase-1/check-c/<item>/key-list.json`, with `key-lists.sha256` and
       `manifest.sha256`. Tool evidence: `artifacts/qa/phase-1/anchor-keys/`.
 
+18. 2026-10-03: **the synthetic-null ruling** (the Director, 2026-10-03) is in test plan v4.6 §9.1
+    and §9.3, `compat-rules.json` (exactly gpu-length, cooler-height, psu-form-factor, psu-length)
+    and compat-trace (`7e9e110`): 12 new tests, 7 planted defects caught. Handed off. My commit
+    removing the status file for a merge-ready hand-off was denied by the permission system, so the
+    Director decides. build-lead has the title format.
+19. 2026-10-03: **check C, all 190 anchor rows in 7 reviews, PASS.** Stage 1 is sealed at `e3fc909`
+    and `4fe4f6e`. Stage 2 runs `tests/audit/anchor-compare.mjs`: 34 tests, and 9 planted defects
+    each fail them.
+    - MATCH counts: CB page 4 1011; CB page 5 642; TPU 9850X3D 648; TPU 9800X3D 234; Blender 99;
+      Tom's 663; TechSpot 144. No MISMATCH, NOT COVERED or MAPPING is left.
+    - 114 fields pass by the three documented conventions of test plan v4.6 §7.3 (absence, read
+      date, validator unit). Each needs the row's own note or the validator's rule.
+    - Blender: 12 fields (6 rows) moved in the live database after 2026-09-30. The data equals that
+      day's capture (its SHA-256 is in `docs/reports/evidence/files.sha256`), so they're resolved
+      with that evidence: `docs/qa/evidence/phase-1/check-c-resolutions/blender-5.2.0.json`.
+    - TechSpot's live page is behind a Cloudflare challenge, so its worker read data-lead's Wayback
+      copy. QA fetched the same snapshot once: 120 of 122 sentences are identical, and the other 2
+      are page chrome (`artifacts/qa/phase-1/check-c/techspot-270k-plus/qa-lead-authenticity/`).
+    - New Major **QA-P1-005** (data-lead, build-lead copied): TPU's Battlefield 6 1080p rows span
+      6.0% over 9 CPUs, with three tied at 207.9, while the other TPU games span 22 to 68%. They
+      look GPU- or engine-limited, yet they're labelled limiter "cpu".
+    - Stage-2 results: `artifacts/qa/phase-1/check-c/<item>/stage2.json`, manifest
+      `docs/qa/evidence/phase-1/check-c-stage2.sha256`. verify: 816 unit, 192 e2e (4 skipped), exit 0.
+
 ## In progress
-- **Check C, the anchor data (all 190 rows, 7 reviews).** The waves keep each host to one worker
-  at a time; `web.archive.org` goes to one worker per wave:
-  - wave 1: `cb-2026-seite-4` (48 rows, computerbase.de), `tpu-9850x3d-p18` (36, techpowerup.com,
-    tpucdn.com, the archive), `blender-5.2.0` (9, opendata.blender.org), `toms-gpu-hierarchy-2026`
-    (39, tomshardware.com and its image CDN, live only);
-  - wave 2: `cb-2026-seite-5` (32), `tpu-9800x3d-p9` (18, the archive), `techspot-270k-plus` (8,
-    live only).
-  - Each worker writes `transcribed.json` to `artifacts/qa/phase-1/check-c/<item>/`. qa-lead
-    seals it by committing its SHA-256 (with the key list's and the capture manifest's) before
-    stage 2. The files stay under `artifacts/`: three of them are over 240 KB and quote the pages.
-  - **Wave 1, stage 1: done and sealed** (`e3fc909`, `docs/qa/evidence/phase-1/check-c-stage1-wave1.sha256`).
-    All 4 are complete, with no structural problem (`artifacts/qa/phase-1/check-c/structure-check.mjs`):
-    - CB page 4: 48 rows, 96 printed values, 813 MATCH, 99 NOT STATED;
-    - TPU 9850X3D: 36 rows, 72 printed values, 432 MATCH, 252 NOT STATED;
-    - Blender: 9 rows, 9 printed values, 66 MATCH, 6 MISMATCH, 18 NOT STATED;
-    - Tom's: 39 rows, 78 printed values, 585 MATCH, 156 NOT STATED.
-  - Worker ids, to resume one with SendMessage: CB page 4 `a824b88e9f4bc936d`, TPU 9850X3D
-    `af45ac9eecd4f6f54`, Blender `a0c4229284e5d9dfa`, Tom's `ab11f05c7be6cfbcc`. Their reports
-    arrive by message when qa-lead's turn ends.
-- Waiting: the dump's query mode and `rules.json` (WP-E0); WP-D1 batch 1's merge (the validator
-  tests); the SHA of build-lead's QA-P1-001 and QA-P1-002 fixes, which come together.
-- Open defects: QA-P1-001 (Major, build-lead), QA-P1-002 (Minor, build-lead).
+- Waiting:
+  - the Director on the v4.5 and v4.6 hand-off (`7e9e110`) and the status-file question;
+  - the dump's query mode and `rules.json` (WP-E0);
+  - WP-D1 batch 1's merge (the validator tests);
+  - the SHA of build-lead's QA-P1-001 and QA-P1-002 fixes, which come together.
+- Open defects: QA-P1-001 (Major, build-lead), QA-P1-002 (Minor, build-lead), QA-P1-005 (Major,
+  data-lead).
+- Check C workers, to resume one with SendMessage: CB page 4 `a824b88e9f4bc936d`, TPU 9850X3D
+  `af45ac9eecd4f6f54`, Blender `a0c4229284e5d9dfa`, Tom's `ab11f05c7be6cfbcc`, CB page 5
+  `a5b25994c6c8ab99e`, TPU 9800X3D `ab86e5c3f86c6c67a`, TechSpot `a862aafb5dff7dc0b`. Wave 2's
+  reports arrive by message when qa-lead's turn ends.
 
 ## Next steps, in order
-1. Check C, wave 1 then wave 2, as above. Read each worker's `transcribed.json` as its `Agent`
-   call returns, commit it, then stage 2.
-2. Stage 2: `tests/audit/anchor-compare.mjs` (§7.3's outcomes per field; the shared block; chart
-   tolerance; the catalogue ids against the catalogue), with planted-defect tests.
-3. Remove the second worktree: `git worktree remove .claude/worktrees/qa-lead-golden` (its
-   branch is merged, as `a2f95b3`).
-4. When the dump's query mode lands (WP-E0): the golden-query step (`tests/audit/golden-queries.mjs`:
-   one query per anchor row, the preset through WP-D2's map), the corpus runner and the sweep (S1
-   to S15, S15 by sweep kind), and the per-rule compare script for check A.
-5. Re-test QA-P1-001 and QA-P1-002 when build-lead reports the fixes.
+1. Read wave 2's three reports. Re-test QA-P1-005 when data-lead answers.
+2. Check C runs again on each WP-D2 batch the Director accepts: `node tests/audit/anchor-keys.mjs
+   --list`, a key list for each new review, a fresh worker, the seal, then `anchor-compare.mjs`.
+3. When the dump's query mode lands (WP-E0):
+   - the golden-query step, `tests/audit/golden-queries.mjs`: one query per anchor row, with the
+     preset through WP-D2's map. Native and null upscaling map to `.native`, every upscaler mode to
+     `.withUpscaler`, and any other form is refused;
+   - the corpus runner and the sweep (S1 to S15, S15 by sweep kind);
+   - the per-rule compare script for check A.
+4. Re-test QA-P1-001 and QA-P1-002 when build-lead reports the fixes.
    - QA-P1-001: when build-lead's fix lands, the navigation spec goes back to hard assertions (the
-     Director, 2026-10-03): set `FOCUS_RULES.enforced` to true and empty `KNOWN_OFF_SCREEN`, run it
+     Director, 2026-10-03). Set `FOCUS_RULES.enforced` to true and empty `KNOWN_OFF_SCREEN`, run it
      at all three widths, then run the live config after the deploy.
    - QA-P1-002: check that the two gated `index.html` smoke tests ran (not skipped) at 390 and
-     1440 px, then re-run the live config after the deploy, and check by hand that `/lab` answers
+     1440 px. Then re-run the live config after the deploy, and check by hand that `/lab` answers
      301 to `/lab/` there (GitHub Pages' directory redirect, which `vite preview` need not copy).
-6. The other Q4 tools, as E0 and E1 land: `mutation-check.mjs` (the first Stryker report);
+5. The other Q4 tools, as E0 and E1 land: `mutation-check.mjs` (the first Stryker report), and
    `strata.mjs` for WP-D1's new data files.
-7. The rest of the §4 fan-out, as each WP hands off (the briefs file).
+6. The rest of the §4 fan-out, as each WP hands off (the briefs file).
