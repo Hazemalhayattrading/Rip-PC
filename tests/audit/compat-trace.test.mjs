@@ -11,6 +11,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
+  catalogueIds,
   dataTestCases,
   formatTrace,
   parseTitle,
@@ -148,6 +149,15 @@ describe('the real rule set, tests/audit/compat-rules.json', () => {
       'usb-c-header',
       'cooler-socket',
       'display-output',
+    ]);
+  });
+
+  it("allows a synthetic null for exactly the four rules of the Director's ruling (2026-10-03)", () => {
+    expect(rules.filter((r) => r.syntheticNull).map((r) => r.id)).toEqual([
+      'gpu-length',
+      'cooler-height',
+      'psu-form-factor',
+      'psu-length',
     ]);
   });
 
@@ -412,6 +422,44 @@ describe('planted defects, through real Vitest', () => {
   });
 });
 
+describe("synthetic nulls, through real Vitest (the Director's ruling, 2026-10-03)", () => {
+  const catalogue = catalogueIds(path.join(SUITE, 'data', 'parts')).ids;
+
+  it('counts a synthetic null on a marked rule and a real catalogue part, and lists it', () => {
+    const r = traceScenario('synthetic-null', { catalogue });
+    expect(r.errors).toEqual([]);
+    expect(resultOf(r, 'gpu-length')).toMatchObject({
+      result: 'TRACED',
+      syntheticNulls: [{ partId: 'fractal-north-charcoal-black-tg-light', status: 'passed' }],
+    });
+    expect(r.summary.syntheticNullTests).toBe(1);
+    expect(formatTrace(r)).toContain(
+      'Synthetic nulls (test plan §9.1): gpu-length on fractal-north-charcoal-black-tg-light',
+    );
+  });
+
+  it.each([
+    ['synthetic-wrong-rule', 'bios-version', /allows only for gpu-length \(the Director's ruling/],
+    ['synthetic-wrong-kind', 'gpu-length', /belongs only in an "unknown:" test/],
+    [
+      'synthetic-unknown-part',
+      'gpu-length',
+      /"not-a-catalogue-part", which is not a catalogue part/,
+    ],
+    ['synthetic-malformed', 'gpu-length', /does not end "\(synthetic null on <part id>\)"/],
+  ])('fails %s, and does not count the test', (name, ruleId, message) => {
+    const r = traceScenario(name, { catalogue });
+    expect(r.ok).toBe(false);
+    expect(r.errors.filter((e) => message.test(e))).toHaveLength(1);
+    expect(resultOf(r, ruleId).result).toBe('UNTRACED');
+    expect(resultOf(r, ruleId).syntheticNulls).toEqual([]);
+  });
+
+  it('cannot measure a synthetic null without a catalogue to check its part against', () => {
+    expect(() => traceScenario('synthetic-null')).toThrow(TraceInputError);
+  });
+});
+
 describe('the registry against the rule set', () => {
   it.each([
     [
@@ -483,8 +531,10 @@ describe('the rule set is validated', () => {
     unknownData: false,
     requiredFields: [proof],
   };
-  it('accepts both kinds of rule', () => {
+  it('accepts both kinds of rule, and a synthetic-null mark with its reason', () => {
     expect(validateRules({ schemaVersion: 1, rules: [base, required] })).toHaveLength(2);
+    const marked = { ...base, syntheticNull: true, syntheticNullWhy: 'no product has the null' };
+    expect(validateRules({ schemaVersion: 1, rules: [marked] })).toHaveLength(1);
   });
 
   it.each([
@@ -519,6 +569,12 @@ describe('the rule set is validated', () => {
         requiredFields: [{ field: 'cpu.igpu', proof: 'none-by-definition', test: null }],
       },
     ],
+    [
+      'a synthetic-null mark on a rule without unknown data',
+      { ...required, syntheticNull: true, syntheticNullWhy: 'x' },
+    ],
+    ['a synthetic-null mark without its reason', { ...base, syntheticNull: true }],
+    ['a synthetic-null mark that is not true or false', { ...base, syntheticNull: 'yes' }],
   ])('refuses %s', (_, rule) => {
     expect(() => validateRules({ schemaVersion: 1, rules: [rule] })).toThrow(TraceInputError);
   });
@@ -636,6 +692,35 @@ describe('the command line', () => {
     const r = cli([...common(scenario('no-unknown')), '--allow-pending', 'display-output']);
     expect(r.status).toBe(1);
     expect(r.stdout).toMatch(/gpu-length: no passing "unknown" test/);
+  });
+
+  it('checks a synthetic null against the catalogue under the repo root, and records its files', () => {
+    const r = cli([...common(scenario('synthetic-null')), '--allow-pending', 'display-output']);
+    expect(r.status, r.stderr).toBe(0);
+    expect(r.matrix.inputs.catalogue.files.map((f) => f.file)).toEqual([
+      'case.json',
+      'gpu-card.json',
+      'motherboard.json',
+    ]);
+    expect(r.stdout).toMatch(/Synthetic nulls \(test plan §9\.1\): gpu-length on fractal-north/);
+    const wrong = cli([
+      ...common(scenario('synthetic-wrong-rule')),
+      '--allow-pending',
+      'display-output',
+    ]);
+    expect(wrong.status).toBe(1);
+  });
+
+  it('exits 2 for a synthetic null when there is no catalogue', () => {
+    const r = cli([
+      ...common(scenario('synthetic-null')),
+      '--allow-pending',
+      'display-output',
+      '--catalogue',
+      'no-such-dir',
+    ]);
+    expect(r.status).toBe(2);
+    expect(r.stderr).toMatch(/no catalogue was given/);
   });
 
   it('exits 2 when it cannot measure', () => {

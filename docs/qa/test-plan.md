@@ -1,6 +1,6 @@
 # Rig Lab test plan
 
-Owner: qa-lead · Version 4.5 · 2026-10-03 · Applies to every phase, from Phase 0 to release.
+Owner: qa-lead · Version 4.6 · 2026-10-03 · Applies to every phase, from Phase 0 to release.
 
 **What v4 adds (Phase 1, the engine):** the 20 compatibility rule ids agreed with build-lead and how
 each is traced (§9); the held-out protocol of at least 20 results, 4 per coverage class (§8.2);
@@ -1091,9 +1091,21 @@ For each of the 20 rules in §9.2:
     which now reads the board's socket while no CPU is picked, gained `motherboard.socket`'s
     proof.
 - **Real products.** Fixtures use real, sourced catalogue products (`data/compat-fixtures.json`,
-  WP-D1). A boundary or unknown-data test may take a real product and override the one field under
-  test, and its title says so ("Sapphire Pulse RX 9070 XT with its length set to 355 mm"). No test
-  adds an invented product to the catalogue (CLAUDE.md rule 8).
+  WP-D1). A boundary test may take a real product and override the one field under test, and its
+  title says so ("Sapphire Pulse RX 9070 XT with its length set to 355 mm"). An unknown-data test
+  uses a real product whose own data has the unpublished value. No test adds an invented product
+  to the catalogue (CLAUDE.md rule 8).
+- **The one exception: a synthetic null** (the Director's ruling, 2026-10-03, from the WP-D1
+  batch 1 review).
+  - Four rules have a "can't verify" outcome that no catalogue product can produce today, because
+    no product has the null: gpu-length, cooler-height, psu-form-factor and psu-length.
+  - Their unknown-data tests may take a real record and set the field to null inside the test,
+    titled `[<rule-id>] unknown: <description> (synthetic null on <part id>)`.
+  - `compat-rules.json` marks the four with `"syntheticNull": true`.
+  - compat-trace fails a synthetic null in any other place: another rule, another kind of test,
+    another wording, or a part id that isn't in the catalogue (§9.3).
+  - When a real product with the null joins the catalogue, the rule's test moves to it, and the
+    mark comes off.
 
 ### 9.2 The 20 rules
 
@@ -1152,7 +1164,11 @@ are Hazem's additions (phase-1-plan §6.2).
       the registry has an id the list doesn't, or one id twice;
     - a `RuleSpec`'s outcomes or numeric flag differ from §9.2;
     - a test name has a known rule id but a wrong kind, a valid kind but an unknown id, or a status
-      that §9.2 doesn't give that rule (usually an unknown-data test named `warn:`).
+      that §9.2 doesn't give that rule (usually an unknown-data test named `warn:`);
+    - a test sets a synthetic null that §9.1 doesn't allow: on a rule without the mark, in a test
+      that isn't `unknown:`, in another wording, or on a part id that isn't in the catalogue
+      (`--catalogue`, by default `data/parts`). Such a test doesn't count. The matrix lists every
+      synthetic null it accepted.
   - It exits 2 when it can't measure: bad input, or a test file under `src/engine/` or `src/data/`
     that didn't load.
   - It writes the matrix, with each input's SHA-256, to `artifacts/qa/compat-trace/compat-trace.json`
@@ -1825,7 +1841,8 @@ QA re-tests every fix on the integration branch before closing the defect.
 | 2026-10-03 | 4.2 | WP-Q4, Hazem's navigation report: the in-app navigation spec, run by `verify` at 390, 768 and 1440 px (`@nav` joins the 768 px project's grep), and its live-site config in five browsers (§12.1, §5). Hazem's report closed as an automated click made before the app rendered its links (§12.1). Found on the way: QA-P1-001 (Major, the new heading off screen after an in-app navigation at 1440 px) and QA-P1-002 (Minor, `/index.html` shows the 404 view), both with build-lead. The declared-404 allow-list entry takes the HTTP/2 form of the notice (§13.2). No gate value changed | qa-lead; the live-site check and the closing rule are the Director's (2026-10-02, 2026-10-03) |
 | 2026-10-03 | 4.3 | QA's re-review of the engine contract (`83aa5ab`, OK for WP-E1): §8.1 says which field each golden row is read from (C2) and that QA builds the golden queries itself through the dump's query mode; §8.2 maps a held-out pick's upscaling the same way; §8.3 moves Phase 1's no-frame-generation rule from the type to checks; §9.4 lets a corpus entry fix the radiator position and counts S15 by sweep kind; Appendix C drops `golden-estimates.json`. compat-trace also compares `RuleSpec.unknownData`. No gate value changed | qa-lead |
 | 2026-10-03 | 4.4 | Two Firefox allow-list entries from the live run, as build-lead triaged them: the deliberate WebGL context loss when the 3D preview unmounts, and three.js r186's 1 px viewport rounding note (§13.2). The `index.html` smoke tests for QA-P1-002, which run once the fix and the lab index are in (§12.1). design-lead's four 3D checks for Phases 2 and 3, and the shadows warning (§6.7). No gate value changed | qa-lead |
-| 2026-10-03 | 4.5 | The unknown-data lists re-checked against build-lead's `RuleSpec` at `480a30e`, as the Director's ruling asks: cooler-height reads the memory kit, so it joins the unknown-data group (11 rules, 9 with validator proofs), and cooler-socket gains `motherboard.socket`'s validator proof (§9.1, §9.2). The lab-index smoke test finds its route by the file the host serves (§12.1). No gate value changed | qa-lead, pending the Director's approval |
+| 2026-10-03 | 4.5 | The unknown-data lists re-checked against build-lead's `RuleSpec` at `480a30e`, as the Director's ruling asks: cooler-height reads the memory kit, so it joins the unknown-data group (11 rules, 9 with validator proofs), and cooler-socket gains `motherboard.socket`'s validator proof (§9.1, §9.2). The lab-index smoke test finds its route by the file the host serves (§12.1). No gate value changed | Approved by: Director, 2026-10-03 (`2fe7148`) |
+| 2026-10-03 | 4.6 | The synthetic-null exception (the Director's ruling, 2026-10-03, from the WP-D1 batch 1 review): gpu-length, cooler-height, psu-form-factor and psu-length may set a field to null on a real catalogue record in their unknown-data tests, titled "(synthetic null on <part id>)". `compat-rules.json` marks the four, and compat-trace fails a synthetic null anywhere else and checks the part id against the catalogue (§9.1, §9.3). An unknown-data test of any other rule uses a real product whose data has the null; a boundary test keeps v4's one-field override. Check C's blind key list, `tests/audit/anchor-keys.mjs`, and its transcription format (§17, brief C). §17 lists the 7 anchor sources after WP-D2 batch 1. No gate value changed | The synthetic-null exception: the Director, 2026-10-03. The rest: qa-lead |
 
 ## 17. Phase 1 independent checks
 
@@ -1857,9 +1874,17 @@ them:
 | H. 10% of all numbers | 2 or 3 | Wave 4, with the Phase 1 seed (§7.2) | §7 |
 | I. The lab pages (WP-Q4) | an e2e-tester and a perf-tester | As the lab pages land | No console errors or warnings; axe clean in both themes at all three widths; the lab marked internal, not indexed and out of the nav; the engine and the catalogue loaded only on lab pages; the JS budgets hold |
 
-Today's 143 anchors, by source, for check C: ComputerBase's "Gaming-Grafikkarten 2026 im Test",
-page 4 (48 rows) and page 5 (32 rows); TechPowerUp's Ryzen 7 9850X3D review, page 18 (36 rows);
-TechPowerUp's Ryzen 7 9800X3D review, page 9 (18 rows); Blender Open Data 5.2.0 (9 rows).
+The anchors by source, for check C, at `df6cd00` (190 rows): ComputerBase's "Gaming-Grafikkarten
+2026 im Test", page 4 (48 rows) and page 5 (32 rows); TechPowerUp's Ryzen 7 9850X3D review, page 18
+(36 rows); TechPowerUp's Ryzen 7 9800X3D review, page 9 (18 rows); Blender Open Data 5.2.0 (9
+rows); and, from WP-D2 batch 1, Tom's Hardware's GPU hierarchy 2026 (39 rows) and TechSpot's Core
+Ultra 7 270K Plus review (8 rows).
+
+A check C worker reads a blind key list made by `tests/audit/anchor-keys.mjs`: every row of its
+review with its claims, and no value. A field the tool doesn't know stops it, and so does a value of
+the review printed in a title, locator or note; a note that prints one can be withheld instead, and
+the row says which field it was on. qa-lead seals each transcription by committing its SHA-256
+before stage 2 compares it with the data rows.
 
 ---
 

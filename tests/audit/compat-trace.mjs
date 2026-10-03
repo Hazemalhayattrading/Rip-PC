@@ -23,17 +23,33 @@
  * "outcomes", "numeric" and "unknownData" must equal compat-rules.json's, so the two sides cannot
  * drift apart.
  *
+ * Fixtures are real products. The one exception is a synthetic null (the Director's ruling,
+ * 2026-10-03, test plan §9.1). A rule marked "syntheticNull" in compat-rules.json, whose "can't
+ * verify" outcome no catalogue product can produce today, may take a real record and set the field
+ * to null in its unknown-data test, titled
+ *   [<rule-id>] unknown: <description> (synthetic null on <part id>)
+ * and the part id must be in the catalogue (--catalogue: the "items" ids of each *.json file there).
+ * A synthetic null anywhere else (another rule, another kind, another wording) is an error, and the
+ * test does not count.
+ *
  * Usage:
  *   node tests/audit/compat-trace.mjs --registry <rules.json> --vitest <vitest-report.json>
  *     [--playwright <playwright-report.json>] [--require-e2e] [--allow-pending <id,id,...>]
  *     [--rules tests/audit/compat-rules.json] [--test-root src/engine] [--data-test-root src/data]
- *     [--repo-root .] [--json <out>]
+ *     [--catalogue data/parts] [--repo-root .] [--json <out>]
  * The registry is a JSON array of ids or of { id } objects, or an object holding one under "rules".
  * Exit codes: 0 every rule traced · 1 a rule is untraced, a rule test failed or a name is wrong ·
  * 2 cannot measure (bad input, or a test file under --test-root that failed to load).
  */
 import { createHash } from 'node:crypto';
-import { mkdirSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
+import {
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  realpathSync,
+  writeFileSync,
+} from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
@@ -41,6 +57,7 @@ import { parseArgs } from 'node:util';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const DEFAULT_RULES = path.join(HERE, 'compat-rules.json');
 export const DEFAULT_OUT = path.join('artifacts', 'qa', 'compat-trace', 'compat-trace.json');
+export const DEFAULT_CATALOGUE = path.join('data', 'parts');
 
 export const STATUSES = ['ok', 'warn', 'block'];
 export const UNIT_KINDS = [
@@ -60,6 +77,9 @@ const ID = '[a-z0-9]+(?:-[a-z0-9]+)*';
 const ID_RE = new RegExp(`^${ID}$`);
 const PREFIX_RE = new RegExp(`^\\[(${ID})\\]`);
 const TITLE_RE = new RegExp(`^\\[(${ID})\\] ([a-z]+(?: [a-z]+)?): (\\S.*)$`);
+// The one way a test may set a published field to null (the Director's ruling, 2026-10-03).
+const SYNTHETIC_RE = /\(synthetic null on ([a-z0-9]+(?:-[a-z0-9]+)*)\)$/;
+const SYNTHETIC_MENTION_RE = /synthetic null/i;
 
 /** Bad input: the checker cannot measure. */
 export class TraceInputError extends Error {}
@@ -105,6 +125,17 @@ export function validateRules(doc) {
       );
     if (typeof r.numeric !== 'boolean' || typeof r.unknownData !== 'boolean')
       throw new TraceInputError(`${r.id}: "numeric" and "unknownData" must be true or false`);
+    if (r.syntheticNull !== undefined) {
+      if (typeof r.syntheticNull !== 'boolean')
+        throw new TraceInputError(`${r.id}: "syntheticNull" must be true or false`);
+      if (
+        r.syntheticNull &&
+        (!r.unknownData || typeof r.syntheticNullWhy !== 'string' || r.syntheticNullWhy === '')
+      )
+        throw new TraceInputError(
+          `${r.id}: "syntheticNull" needs "unknownData": true and a "syntheticNullWhy"`,
+        );
+    }
     if (r.unknownData) {
       if (r.requiredFields !== undefined)
         throw new TraceInputError(`${r.id}: a rule with unknown data has no "requiredFields"`);
@@ -170,6 +201,27 @@ export function registryEntries(doc) {
     const unknownData = typeof entry?.unknownData === 'boolean' ? entry.unknownData : null;
     return { id, outcomes, numeric, unknownData };
   });
+}
+
+/**
+ * The catalogue's part ids, for checking that a synthetic null starts from a real record: the
+ * "items" ids of every *.json file in the directory, with each file's SHA-256. null when the
+ * directory does not exist.
+ */
+export function catalogueIds(dir) {
+  if (!existsSync(dir)) return null;
+  const ids = new Set();
+  const files = [];
+  for (const name of readdirSync(dir)
+    .filter((n) => n.endsWith('.json'))
+    .sort()) {
+    const { json, sha256: hash } = readJson(path.join(dir, name), 'catalogue file');
+    if (!Array.isArray(json?.items))
+      throw new TraceInputError(`the catalogue file ${name} has no "items" list`);
+    for (const item of json.items) if (typeof item?.id === 'string') ids.add(item.id);
+    files.push({ file: name, sha256: hash });
+  }
+  return { ids, files };
 }
 
 /** The engine's registry ids. Duplicates are kept for the check. */
@@ -310,6 +362,7 @@ export function trace({
   e2eCases = [],
   requireE2e = false,
   allowPending = [],
+  catalogue = null,
 }) {
   const errors = [];
   const known = new Set(rules.map((r) => r.id));
@@ -354,6 +407,30 @@ export function trace({
 
   const byRule = new Map(rules.map((r) => [r.id, []]));
   const outcomesOf = new Map(rules.map((r) => [r.id, r.outcomes]));
+  const syntheticRules = rules.filter((r) => r.syntheticNull).map((r) => r.id);
+  // Test plan §9.1: the one test that may set a published field to null, and only on a real record.
+  const syntheticProblem = (c, parsed) => {
+    const m = SYNTHETIC_RE.exec(parsed.description);
+    if (!m)
+      return {
+        problem: 'mentions a synthetic null, but does not end "(synthetic null on <part id>)"',
+      };
+    if (parsed.kind !== 'unknown')
+      return { problem: 'sets a synthetic null, which belongs only in an "unknown:" test' };
+    if (!byId.get(parsed.ruleId).syntheticNull)
+      return {
+        problem: `sets a synthetic null, which test plan §9.1 allows only for ${syntheticRules.join(', ') || 'no rule'} (the Director's ruling, 2026-10-03): use a real product whose data has the null`,
+      };
+    if (!catalogue)
+      throw new TraceInputError(
+        `"${c.title}" sets a synthetic null on ${m[1]}, and no catalogue was given to check that part against (--catalogue)`,
+      );
+    if (!catalogue.has(m[1]))
+      return {
+        problem: `sets a synthetic null on "${m[1]}", which is not a catalogue part: a synthetic null starts from a real record`,
+      };
+    return { partId: m[1] };
+  };
   const record = (c, allowedKinds, where) => {
     const parsed = parseTitle(c.title, known, allowedKinds);
     if (!parsed) return;
@@ -361,12 +438,26 @@ export function trace({
       errors.push(`${where} test "${c.title}" (${c.file}) ${parsed.error}`);
       return;
     }
+    let syntheticNullOn;
+    if (SYNTHETIC_MENTION_RE.test(parsed.description)) {
+      const { problem, partId } = syntheticProblem(c, parsed);
+      if (problem) {
+        errors.push(`${where} test "${c.title}" (${c.file}) ${problem}`);
+        return;
+      }
+      syntheticNullOn = partId;
+    }
     // A status the agreed outcome set leaves out: often an unknown-data test named "warn:".
     if (STATUSES.includes(parsed.kind) && !outcomesOf.get(parsed.ruleId).includes(parsed.kind))
       errors.push(
         `${where} test "${c.title}" (${c.file}) is a "${parsed.kind}" test, but test plan §9.2 gives ${parsed.ruleId} only ${outcomesOf.get(parsed.ruleId).join(', ')}: name unknown-data tests "unknown:", or agree the outcome set with QA`,
       );
-    byRule.get(parsed.ruleId).push({ ...c, kind: parsed.kind, description: parsed.description });
+    byRule.get(parsed.ruleId).push({
+      ...c,
+      kind: parsed.kind,
+      description: parsed.description,
+      ...(syntheticNullOn && { syntheticNullOn }),
+    });
   };
   for (const c of unitCases) record(c, UNIT_KINDS, 'unit');
   for (const c of e2eCases) record(c, E2E_KINDS, 'e2e');
@@ -432,6 +523,9 @@ export function trace({
       failing: failing.map((t) => ({ title: t.title, file: t.file, status: t.status })),
       notRun: notRun.map((t) => ({ title: t.title, file: t.file })),
       fieldProofs,
+      syntheticNulls: tests
+        .filter((t) => t.syntheticNullOn)
+        .map((t) => ({ title: t.title, partId: t.syntheticNullOn, status: t.status })),
       tests: tests.map((t) => ({ kind: t.kind, title: t.title, file: t.file, status: t.status })),
     });
   }
@@ -448,6 +542,7 @@ export function trace({
       untraced: count('UNTRACED'),
       pending: out.filter((x) => x.result === 'PENDING').map((x) => x.id),
       notInRegistry: out.filter((x) => x.result === 'NOT IN REGISTRY').map((x) => x.id),
+      syntheticNullTests: out.reduce((n, x) => n + x.syntheticNulls.length, 0),
       requireE2e,
     },
   };
@@ -489,6 +584,10 @@ export function formatTrace(result) {
       : '-';
     lines.push(`${r.id.padEnd(width)}${cells.join('')}  ${fields.padStart(6)}  ${r.result}`);
   }
+  const synthetic = result.rules.flatMap((r) =>
+    r.syntheticNulls.map((t) => `${r.id} on ${t.partId}`),
+  );
+  if (synthetic.length) lines.push('', `Synthetic nulls (test plan §9.1): ${synthetic.join('; ')}`);
   if (result.errors.length) {
     lines.push('', `${result.errors.length} problem(s):`);
     for (const e of result.errors) lines.push(`  - ${e}`);
@@ -510,6 +609,7 @@ export function main(argv = process.argv.slice(2)) {
         'allow-pending': { type: 'string' },
         'test-root': { type: 'string' },
         'data-test-root': { type: 'string' },
+        catalogue: { type: 'string' },
         'repo-root': { type: 'string' },
         json: { type: 'string' },
       },
@@ -545,6 +645,8 @@ export function main(argv = process.argv.slice(2)) {
       .map((s) => s.trim())
       .filter(Boolean);
     const entries = registryEntries(registryDoc.json);
+    const catalogueDir = values.catalogue ?? DEFAULT_CATALOGUE;
+    const catalogue = catalogueIds(path.resolve(repoRoot, catalogueDir));
     const result = trace({
       rules,
       registry: entries.map((e) => e.id),
@@ -554,6 +656,7 @@ export function main(argv = process.argv.slice(2)) {
       e2eCases: playwrightDoc ? playwrightCases(playwrightDoc.json, { repoRoot }) : [],
       requireE2e: Boolean(values['require-e2e']),
       allowPending,
+      catalogue: catalogue?.ids ?? null,
     });
     const inputs = {
       rules: { file: rulesFile, sha256: rulesDoc.sha256 },
@@ -562,6 +665,7 @@ export function main(argv = process.argv.slice(2)) {
       ...(playwrightDoc && {
         playwright: { file: values.playwright, sha256: playwrightDoc.sha256 },
       }),
+      catalogue: catalogue ? { dir: catalogueDir, files: catalogue.files } : null,
       testRoot,
       dataTestRoot,
       allowPending,

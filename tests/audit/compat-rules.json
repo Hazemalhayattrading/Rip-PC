@@ -1,5 +1,5 @@
 {
-  "$comment": "QA's expected compatibility rule set: the 20 rule ids of docs/qa/test-plan.md §9.2 (v4), which are the 18 ids of test plan v3 plus cooler-socket and display-output (Hazem, 2026-10-02, phase-1-plan §6), agreed with build-lead (src/engine/types.ts RULE_IDS at 4fa8a95). unknownData re-checked against WP-D1 batch 1 (feat/data-engine-data @ c588afb) and against build-lead's RuleSpec at 480a30e (cooler-height reads the memory kit), as the Director's ruling asks for every field a rule starts to read. tests/audit/compat-trace.mjs checks the engine's registry against this list and every rule's tests against its fields. Owner: qa-lead. A change here needs the same change in test plan §9.2 (tests/audit/compat-trace.test.mjs pins both) and the Director's approval, recorded in test plan §16.",
+  "$comment": "QA's expected compatibility rule set: the 20 rule ids of docs/qa/test-plan.md §9.2 (v4), which are the 18 ids of test plan v3 plus cooler-socket and display-output (Hazem, 2026-10-02, phase-1-plan §6), agreed with build-lead (src/engine/types.ts RULE_IDS at 4fa8a95). unknownData re-checked against WP-D1 batch 1 (feat/data-engine-data @ c588afb) and against build-lead's RuleSpec at 480a30e (cooler-height reads the memory kit), as the Director's ruling asks for every field a rule starts to read. syntheticNull marks the four rules of the Director's ruling of 2026-10-03 (gpu-length, cooler-height, psu-form-factor, psu-length). tests/audit/compat-trace.mjs checks the engine's registry against this list and every rule's tests against its fields. Owner: qa-lead. A change here needs the same change in test plan §9.2 (tests/audit/compat-trace.test.mjs pins both) and the Director's approval, recorded in test plan §16.",
   "schemaVersion": 1,
   "owner": "qa-lead",
   "fields": {
@@ -9,6 +9,8 @@
     "unpublishable": "For unknownData true: the values that can be unpublished, as dot paths (category.field, [] for every list item).",
     "requiredFields": "For unknownData false: each field the rule reads, and the proof that it cannot be unpublished. 'null-rejected' and 'empty-rejected' name a validator test that must pass in a file under src/data/; 'validator' names an existing validator test; 'none-by-definition' is a field whose schema defines null or [] as 'the part has none', a real answer, so no test applies. Re-checked whenever a rule starts to read a new field.",
     "variants": "Cases a decision requires to be told apart. Each needs at least one passing test of that kind whose description matches the pattern (case-insensitive).",
+    "syntheticNull": "true for the only rules whose unknown-data test may set a published field to null on a real catalogue record, titled '[<rule-id>] unknown: <description> (synthetic null on <part id>)', because no catalogue product has the null (the Director's ruling, 2026-10-03, test plan §9.1). compat-trace fails a synthetic null on any other rule, in any other kind of test, in any other wording, or on a part id that is not in the catalogue.",
+    "syntheticNullWhy": "For syntheticNull true: why no real product can give the rule's unknown-data test.",
     "data": "When the rule's test data exists (phase-1-plan §3): ready, or the work package it waits for."
   },
   "rules": [
@@ -136,6 +138,8 @@
       "unpublishable": [
         "case.gpuClearance[].condition: a radiator of a size that the case's conditional rows do not list, at their position, has no published limit (WP-D1 batch 1, c588afb)"
       ],
+      "syntheticNull": true,
+      "syntheticNullWhy": "No catalogue product has this null today, so the unknown-data test sets the field to null on a real record (the Director's ruling, 2026-10-03, from the WP-D1 batch 1 review). Take the mark off when a real product with the null joins the catalogue.",
       "data": "ready"
     },
     {
@@ -161,6 +165,8 @@
         "ram.heightMm: a kit taller than the cooler's memory clearance raises the front fan, and the cooler's height with it (build-lead's RuleSpec, 480a30e)",
         "cooler.ramClearanceMm, for the same reason"
       ],
+      "syntheticNull": true,
+      "syntheticNullWhy": "No catalogue product has this null today, so the unknown-data test sets the field to null on a real record (the Director's ruling, 2026-10-03, from the WP-D1 batch 1 review). Take the mark off when a real product with the null joins the catalogue.",
       "data": "ready"
     },
     {
@@ -199,6 +205,8 @@
       "unpublishable": [
         "psu.atxBracketIncluded: on an SFX or SFX-L unit, when the maker does not say (WP-D1 batch 1, c588afb)"
       ],
+      "syntheticNull": true,
+      "syntheticNullWhy": "No catalogue product has this null today, so the unknown-data test sets the field to null on a real record (the Director's ruling, 2026-10-03, from the WP-D1 batch 1 review). Take the mark off when a real product with the null joins the catalogue.",
       "data": "ready"
     },
     {
@@ -208,6 +216,8 @@
       "numeric": true,
       "unknownData": true,
       "unpublishable": ["case.psu.clearance"],
+      "syntheticNull": true,
+      "syntheticNullWhy": "No catalogue product has this null today, so the unknown-data test sets the field to null on a real record (the Director's ruling, 2026-10-03, from the WP-D1 batch 1 review). Take the mark off when a real product with the null joins the catalogue.",
       "data": "ready; the North needs WP-D1"
     },
     {
