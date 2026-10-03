@@ -106,7 +106,14 @@ for (const s of SHOTS) {
       lines.push({ text: text.slice(0, 48) + '…', lines: tops.size, longestLine: Math.max(...tops.values()) });
     }
     const fonts = [...document.fonts].filter((f) => f.status === 'loaded').map((f) => `${f.family} ${f.weight} ${f.stretch}`);
+    // The round theme toggle: drawn at 36 px; on touch screens its hit area reaches 44 px
+    // (QA-P1-003, backlog item 4). Probe 3 px outside each edge of the drawn circle's box.
+    const toggle = document.querySelector('[data-theme-toggle]');
+    const r = toggle.getBoundingClientRect();
+    const probes = [[r.left - 3, r.top + r.height / 2], [r.right + 3, r.top + r.height / 2], [r.left + r.width / 2, r.top - 3], [r.left + r.width / 2, r.bottom + 3]];
+    const hits = probes.filter(([x, y]) => toggle.contains(document.elementFromPoint(x, y))).length;
     return {
+      toggle: { drawnPx: Math.round(r.width), coarsePointer: matchMedia('(pointer: coarse)').matches, edgesHitAt3pxOutside: hits },
       horizontalOverflowPx: document.documentElement.scrollWidth - document.documentElement.clientWidth,
       fontsLoaded: [...new Set(fonts)],
       reasons: lines,

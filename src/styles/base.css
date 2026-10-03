@@ -125,3 +125,59 @@ label[for] {
 [aria-disabled='true'] {
   cursor: not-allowed;
 }
+
+/*
+ * Touch. A quick second tap on a control never zooms the page; panning and pinch zoom still work.
+ * Range sliders keep the browser's own touch-action, or a sideways drag would pan the page instead
+ * of moving the thumb. Sheets and the Specs panel contain their own scrolling with the
+ * overscroll-contain utility (docs/design/components.md).
+ */
+a[href],
+button,
+input:not([type='range']),
+select,
+textarea,
+summary,
+label,
+[role='button'],
+[role='checkbox'],
+[role='link'],
+[role='menuitem'],
+[role='option'],
+[role='radio'],
+[role='switch'],
+[role='tab'] {
+  touch-action: manipulation;
+}
+
+/*
+ * Touch screens: every input, select and textarea is at least 16 px, so iOS Safari never zooms the
+ * page when one takes focus. Desktop pointers keep the type roles' 14 and 15 px.
+ * The !important is deliberate. For important declarations the cascade reverses the layer order:
+ * an important declaration in an earlier layer (base) beats important declarations in later
+ * layers (utilities). So neither a type-* class nor an important utility can take a field below
+ * 16 px here. max() keeps 16 px when the visitor's default font size is smaller than 16 px.
+ */
+@media (pointer: coarse) {
+  input,
+  select,
+  textarea {
+    font-size: max(1rem, 16px) !important;
+  }
+}
+
+/*
+ * Native selects. Preflight makes their background transparent, and Windows can then draw the open
+ * list in system colours under Rig Lab's light text. An author colour on <option> also reaches
+ * disabled options, so they take the quietest text tier.
+ */
+select,
+optgroup,
+option {
+  background-color: var(--surface);
+  color: var(--ink);
+}
+
+:is(optgroup, option):disabled {
+  color: var(--ink-3);
+}

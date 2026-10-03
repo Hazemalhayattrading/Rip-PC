@@ -140,13 +140,13 @@
  * The same values, for Motion and the 3D scene, are in ./motion.ts (a test keeps them equal).
  */
 :root {
-  --dur-ui: 160ms; /* hover, pressed states, a pill's highlight */
+  --dur-ui: 160ms; /* a hover overlay's fade, the pressed scale, a chevron's turn */
   --dur-fade: 200ms; /* crossfades: a callout chip, a compatibility state */
   --dur-exit: 240ms; /* an old value leaving; the step track filling */
   --dur-value: 360ms; /* a new value arriving; the rail sliding; the callout re-anchoring */
   --delay-value: 40ms; /* the new value starts after the old one begins to leave */
   --dur-light: 400ms; /* the RGB colour changing, in the shader */
-  --dur-seat: 500ms; /* a part seating in 3D */
+  --dur-seat: 500ms; /* a part seating in 3D; the fans spinning up or down */
   --dur-camera: 700ms; /* the camera moving to the next part */
   --dur-cut: 200ms; /* reduced motion only: the crossfade that replaces a camera move */
 }
@@ -179,6 +179,17 @@
   --rail-width: 26.5rem; /* 424 px beside the stage from lg; full width below */
   --stage-horizon: 64%; /* where the wall meets the floor */
 
+  /*
+   * The device's safe areas (notch, rounded corners, home indicator) around the full-bleed stage.
+   * They stay 0 until the viewport meta says viewport-fit=cover, which lands with the Phase 2
+   * frame. Chrome offsets from the edge are max(var(--gutter), var(--safe-*)). The fallback is
+   * 0px, not 0: inside max() and calc() a bare 0 is a number, and max(1rem, 0) is invalid.
+   */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+
   /* Layers, back to front. */
   --z-stage: 0; /* the 3D canvas and its floor shadow */
   --z-stage-ui: 2; /* leader lines and callouts pinned to the build */
@@ -188,6 +199,9 @@
   --z-topbar: 10;
   --z-sheet: 20; /* the phone sheet expanded, the Specs panel */
   --z-toast: 30;
+  /* Under a control's own content: only inside that control's isolate context, for its hover overlay
+     (docs/design/motion.md, Studio rules for Phase 2, section 1). Never on the page's layers. */
+  --z-under: -1;
 }
 
 @media (width >= 48rem) {
@@ -293,6 +307,10 @@
   --spacing-topbar: var(--topbar);
   --spacing-dock: var(--dock);
   --spacing-rail: var(--rail-width);
+  --spacing-safe-top: var(--safe-top);
+  --spacing-safe-right: var(--safe-right);
+  --spacing-safe-bottom: var(--safe-bottom);
+  --spacing-safe-left: var(--safe-left);
 
   --z-index-stage: var(--z-stage);
   --z-index-stage-ui: var(--z-stage-ui);
@@ -302,6 +320,7 @@
   --z-index-topbar: var(--z-topbar);
   --z-index-sheet: var(--z-sheet);
   --z-index-toast: var(--z-toast);
+  --z-index-under: var(--z-under);
 }
 
 /*
