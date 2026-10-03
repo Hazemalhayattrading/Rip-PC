@@ -1,7 +1,14 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import type { Page } from '@playwright/test';
-import { KNOWN_ROUTES, BASE_PATH, metaOf, pathOf } from '../../src/app/routes.ts';
+import {
+  KNOWN_ROUTES,
+  BASE_PATH,
+  htmlFileOf,
+  matchPath,
+  metaOf,
+  pathOf,
+} from '../../src/app/routes.ts';
 import { GARAGE_TEXT } from '../../src/components/garage/garage-text.ts';
 import { projectMeta } from '../lib/project-meta.ts';
 import { expect, test } from './fixtures.ts';
@@ -151,6 +158,54 @@ test.describe('unknown paths', { tag: '@smoke' }, () => {
     await page.getByRole('link', { name: 'Step 3 of 12: CPU' }).click();
     await expect(page).toHaveURL((url) => url.pathname === `${BASE_PATH}build/cpu`);
     await expect(heading(page)).toHaveText('Step 3 of 12: CPU');
+  });
+});
+
+// QA-P1-002 (build-lead, WP-E0): a path that ends in /index.html renders its directory's route,
+// because the host serves that file with a 200. Each test runs once the route table shows its
+// fix is in, so this file stays green whichever lands first; QA checks that they ran when it
+// verifies the fix.
+test.describe('index.html paths', { tag: '@smoke' }, () => {
+  const indexFixed = matchPath('/index.html').name === 'home';
+  // Keyed on the file the host serves, which stays put whether the lab's path ends in a slash.
+  const labIndex = KNOWN_ROUTES.find((route) => htmlFileOf(route) === 'lab/index.html');
+
+  test('/index.html is the home page, with a 200 and no redirect', async ({ page }) => {
+    test.skip(!indexFixed, 'QA-P1-002 is not in yet: matchPath does not map /index.html home');
+    const response = await page.goto('index.html');
+    const meta = metaOf({ name: 'home' });
+    expect(response?.status()).toBe(200);
+    expect(response?.request().redirectedFrom()).toBeNull();
+    expect(new URL(page.url()).pathname).toBe(`${BASE_PATH}index.html`);
+    await expect(heading(page)).toHaveText(meta.heading);
+    await expect(page).toHaveTitle(meta.title);
+  });
+
+  test('/lab/index.html is the lab index, with a 200 and no redirect', async ({ page }) => {
+    test.skip(
+      !indexFixed || labIndex === undefined,
+      'waits for QA-P1-002 and for the lab index route (WP-E0)',
+    );
+    if (labIndex === undefined) return;
+    const response = await page.goto('lab/index.html');
+    const meta = metaOf(labIndex);
+    expect(response?.status()).toBe(200);
+    expect(response?.request().redirectedFrom()).toBeNull();
+    expect(new URL(page.url()).pathname).toBe(`${BASE_PATH}lab/index.html`);
+    await expect(heading(page)).toHaveText(meta.heading);
+    await expect(page).toHaveTitle(meta.title);
+  });
+
+  test.describe('a directory without a route', () => {
+    test.use({ expectNotFoundDocument: true });
+
+    test('/build/index.html stays not found', async ({ page }) => {
+      const response = await page.goto('build/index.html');
+      const meta = metaOf({ name: 'not-found' });
+      expect(response?.status()).toBe(404);
+      await expect(heading(page)).toHaveText(meta.heading);
+      await expect(page).toHaveTitle(meta.title);
+    });
   });
 });
 
