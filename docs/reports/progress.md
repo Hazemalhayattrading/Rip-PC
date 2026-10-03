@@ -102,6 +102,7 @@ rows below.
 | 2026-10-02 | **Phase 1 plan approved** by Hazem, with three answers. The BIOS warning: warn, naming the BIOS version and telling the buyer to ask the retailer for an updated board. Both extra rules, `cooler-socket` and `display-output`, so 20 in all. At least 20 held-out results. The other defaults stand | Hazem | `docs/reports/phase-1-plan.md` §6 |
 | 2026-10-02 | The integration branch fast-forwarded to `main` (`27dbc6e`), then merged the plan branch. `feat/director-phase-1-plan` deleted | Director | `385493f` |
 | 2026-10-02 | **Phase 1 briefs written,** and the four leads spawned for wave 1 | Director | `docs/reports/phase-1-briefs.md` |
+| 2026-10-03 | **WP-Q4's branch so far merged** (`ae9dc3e`), at QA's `7e9e110`:<br>• test plan v4.5, approved earlier, and v4.6: the synthetic-null exception, which compat-trace accepts only on gpu-length, cooler-height, psu-form-factor and psu-length;<br>• anchor-keys;<br>• brief C.<br>`docs/qa/WIP-STATUS.md` came along with it, because QA's commit removing it was **denied by the permission system**. The Director didn't remove it on QA's behalf (Open items for Hazem) | qa-lead | verify on the merged branch: 782 unit, 192 e2e, 4 skipped by design until QA-P1-002's fix. 7 planted defects each fail the new compat-trace tests |
 | 2026-10-03 | **QA-P1-004 closed** at `df6cd00`, and **check C started**: an independent re-read of all 190 anchor rows across 7 source reviews, in two waves, one worker per host at a time.<br>QA's `tests/audit/anchor-keys.mjs` gives each worker a blind key list: the claims, never a value. It refuses any list where a title, locator or note prints a value. Merged branches deleted on origin, with a lease: `feat/qa-golden-count`, `feat/data-semantics`, `feat/qa-phase1-plan` | qa-lead; Director | anchor-keys has 31 tests, two oracles and 7 planted defects. verify on QA's branch: 770 unit, 192 e2e |
 | 2026-10-03 | **QA closed QA-P1-003, QA-P0-018 and QA-P0-019** on the integration tip `2fe7148`. All 7 contrast ratios stated in `tokens.md` rules 2 and 6 recompute from `tokens.css`. New Minor QA-P1-004 (a `tokens.md` sentence) is fixed in WP-DS2 batch 3 (`47fcc0a`); QA re-tests it | qa-lead | QA's status file at `fa2a007` |
 | 2026-10-03 | **WP-DS2 batch 3 accepted and merged** (`47fcc0a`). The card maker's power supply figure in the maker's own word: NVIDIA *requires*, ASUS *recommends*, Sapphire and Intel *set a minimum* (copy guide §9, matching `recommendedPsuKind`). Also the QA-P1-004 fix in `tokens.md`. The plan's WP-E2 example now says "requires" | design-lead | The Director found all four maker quotes in the Phase 0 captures. verify on the merged branch passed. Open for others: whether `psu-wattage` warns below a required or minimum figure (build-lead, E2); quoting the makers' basis in notes (data-lead) |
@@ -224,6 +225,14 @@ Branch-tidy record:
     items).
 
 ## Open items for Hazem
+
+- **New (2026-10-03): a teammate's action denied by the permission system.** qa-lead's `git rm docs/qa/WIP-STATUS.md` plus push, on its own branch, was denied as "Modify Shared Resources". The briefs ask each lead to delete its status file in a hand-off commit.
+  - qa-lead didn't retry or work around it. The Director didn't do it on QA's behalf either, because a peer's denied action goes to Hazem.
+  - The file is now on the integration branch, which is harmless.
+  - Hazem's choice:
+    - allow leads to delete their own status files when prompted;
+    - tell the Director to remove this one;
+    - or let status files live on the integration branch from now on.
 
 - **Done 2026-10-02 (Hazem): the `main` ruleset's check names now match CI.** Ruleset "main"
   (id 24320209, active, default branch only) requires `npm run verify` and `Performance
