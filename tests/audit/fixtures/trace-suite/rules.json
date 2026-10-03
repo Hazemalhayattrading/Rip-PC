@@ -25,7 +25,9 @@
       "outcomes": ["ok", "block"],
       "numeric": true,
       "unknownData": true,
-      "unpublishable": ["gpu-card.lengthMm (fixture only)"]
+      "unpublishable": ["gpu-card.lengthMm (fixture only)"],
+      "syntheticNull": true,
+      "syntheticNullWhy": "Fixture: gpu-length stands in for a rule of the Director's ruling of 2026-10-03; bios-version does not have the mark."
     },
     {
       "id": "bios-version",

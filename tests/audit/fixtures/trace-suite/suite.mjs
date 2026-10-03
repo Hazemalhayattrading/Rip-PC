@@ -32,8 +32,27 @@ export function defineRuleSuite(defect = 'none') {
       ? '[gpu-lenght] ok: Sapphire Pulse RX 9070 XT (320 mm) in the Fractal North (355 mm)'
       : '[gpu-length] ok: Sapphire Pulse RX 9070 XT (320 mm) in the Fractal North (355 mm)',
   );
-  test('[gpu-length] block: the same card with a front 360 mm radiator (300 mm limit)');
-  if (defect !== 'no-unknown') test('[gpu-length] unknown: the card length is not published');
+  test(
+    defect === 'synthetic-wrong-kind'
+      ? '[gpu-length] block: the same card with a front 360 mm radiator (synthetic null on sapphire-pulse-radeon-rx-9070-xt-16gb)'
+      : '[gpu-length] block: the same card with a front 360 mm radiator (300 mm limit)',
+  );
+  // The Director's ruling of 2026-10-03: gpu-length may set a field to null on a real record, in
+  // its unknown-data test only, titled "(synthetic null on <catalogue part id>)".
+  const unknownTitles = {
+    'no-unknown': null,
+    'synthetic-null':
+      '[gpu-length] unknown: a 420 mm front radiator, a size the case lists no limit for (synthetic null on fractal-north-charcoal-black-tg-light)',
+    'synthetic-unknown-part':
+      '[gpu-length] unknown: a 420 mm front radiator, a size the case lists no limit for (synthetic null on not-a-catalogue-part)',
+    'synthetic-malformed':
+      '[gpu-length] unknown: the card length is not published (synthetic null, Sapphire Pulse RX 9070 XT)',
+  };
+  const unknownTitle =
+    defect in unknownTitles
+      ? unknownTitles[defect]
+      : '[gpu-length] unknown: the card length is not published';
+  if (unknownTitle) test(unknownTitle);
   test('[gpu-length] boundary at: a 355 mm card against the 355 mm limit');
   test('[gpu-length] boundary inside: a 354 mm card against the 355 mm limit');
   test('[gpu-length] boundary outside: a 356 mm card against the 355 mm limit', {
@@ -49,7 +68,11 @@ export function defineRuleSuite(defect = 'none') {
     test(
       '[bios-version] warn: Core i5-14600K on the Prime B760M-A WiFi D4, without BIOS FlashBack: names BIOS 1205',
     );
-  test('[bios-version] unknown: the CPU is not on the board support list');
+  test(
+    defect === 'synthetic-wrong-rule'
+      ? '[bios-version] unknown: the first BIOS is not published (synthetic null on asus-tuf-gaming-x870-plus-wifi)'
+      : '[bios-version] unknown: the CPU is not on the board support list',
+  );
 
   // Not rule tests: a plain name, and another bracket convention.
   test('formats a reason with its units');

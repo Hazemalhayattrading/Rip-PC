@@ -1,6 +1,6 @@
 # Rig Lab test plan
 
-Owner: qa-lead · Version 4 · 2026-10-02 · Applies to every phase, from Phase 0 to release.
+Owner: qa-lead · Version 4.6 · 2026-10-03 · Applies to every phase, from Phase 0 to release.
 
 **What v4 adds (Phase 1, the engine):** the 20 compatibility rule ids agreed with build-lead and how
 each is traced (§9); the held-out protocol of at least 20 results, 4 per coverage class (§8.2);
@@ -172,15 +172,17 @@ scene measured 5.3 fps and then 8.5 fps ten minutes apart on 2026-09-30.
     through `storageState`, so the real restore script runs. The axe spec checks that each page
     shows its project's theme (`data-theme`) before it runs, so a light run cannot silently test
     dark.
-  - The PR column below is enforced by each project's `grep`. Dark at 768 runs only `@a11y` (and,
-    from Phase 2, `@keyboard`); light runs only `@a11y`. `E2E_FULL_MATRIX=1` runs everything in
-    every cell, for the nightly job from Phase 2.
+  - The PR column below is enforced by each project's `grep`. Dark at 768 runs only `@a11y`,
+    `@nav` (in-app navigation by touch, since WP-Q4) and, from Phase 2, `@keyboard`; light runs
+    only `@a11y`. `E2E_FULL_MATRIX=1` runs everything in every cell, for the nightly job from
+    Phase 2.
   - Cost, measured on the home PC with 2 workers: the three light projects add 54 axe tests and
     about 19 s to `npm run verify`.
 
 | Suite | 390 dark | 390 light | 768 dark | 768 light | 1440 dark | 1440 light |
 |---|---|---|---|---|---|---|
 | Smoke (routes, 404, `?b=`) | PR | nightly | nightly | nightly | PR | nightly |
+| In-app navigation by tap and mouse (§12.1, `@nav`) | PR | nightly | PR | nightly | PR | nightly |
 | Builder flows (§12.2) | PR | nightly | nightly | nightly | PR | nightly |
 | Keyboard-only path (§10.2) | — | — | PR | — | PR | — |
 | axe on every route and state (§10.1) | PR | PR | PR | PR | PR | PR |
@@ -622,6 +624,31 @@ a message.
 - CPU x4 approximates a slower machine's main thread. It does not approximate the GPU, heat, or an
   iGPU's memory bandwidth, which is why P8 needs REF-LAPTOP.
 
+### 6.7 3D asset checks (from Phases 2 and 3)
+
+design-lead's `docs/design/studio-3d-brief.md` (WP-DS2 batch 2) adds four checks, each for when
+its subject exists:
+
+1. **The stage pixel** (brief §3.2): the canvas background equals the CSS stage behind it, within
+   ±1 per channel, in both themes and at every rung of the performance ladder, so tone mapping
+   never tints the stage. A pixel probe reads both.
+2. **The reference laptop's texture formats** (brief §4): REF-LAPTOP's reference run logs WebGL's
+   compressed-texture extensions (ETC, ASTC, BC7, S3TC) on the Core Ultra 7 155H. three's
+   KTX2Loader may transcode ETC1S to BC7 (5.6 MB per 2K map, against 2.8 MB as ETC), so the
+   texture budget assumes the worse case until QA reports them. `fps-probe.mjs` records the list
+   with its run.
+3. **No 3D request to another host** (brief §4): Draco, the Basis transcoder and the environment
+   map are served under `/Rip-PC/`; drei's defaults would load them from gstatic.com, jsdelivr.net
+   and raw.githack.com. The smoke already fails any request outside the site under `/Rip-PC/`
+   (§12.1); Phase 3 extends it to every garage asset.
+4. **Whether GitHub Pages compresses `.wasm`** (brief §4): the Basis transcoder is 0.58 MB raw and
+   0.26 MB gzip, and the first-build 6 MB budget counts whichever is served. QA reads the live
+   response's `content-encoding` once the transcoder is deployed.
+
+Also for the zero-warnings gate (§13.2): a bare `<Canvas shadows>` in three 0.186.1 logs
+"WebGLShadowMap: PCFSoftShadowMap has been removed", so the brief asks for `shadows="percentage"`,
+and the console fixture fails the bare form.
+
 ## 7. Data audit protocol
 
 ### 7.1 What, when, who
@@ -846,9 +873,19 @@ Captures QA makes go to `artifacts/audit/<phase>/` (git-ignored).
   - Every anchor row must have exactly one passing golden case, matched by id. Equal counts can
     hide one missing case and one duplicate. A missing, extra, duplicated, failed, skipped or
     misnamed case fails, and a title that Vitest cut short is named as the cause.
-  - With `--estimates`, it reads the engine's own estimate for each anchor (from the dump,
-    `artifacts/engine/golden-estimates.json`: `[{ anchorId, low, high, confidence }]`) and checks
-    the ±5% itself. A golden test that asserted a looser tolerance would pass Vitest and fail here.
+  - With `--estimates`, it reads the engine's own estimate for each anchor, as
+    `[{ anchorId, low, high, confidence }]`, and checks the ±5% itself. A golden test that asserted
+    a looser tolerance would pass Vitest and fail here.
+  - QA builds those queries itself, one per anchor row, from the row alone: its test system as a
+    `PerfSystem` (catalogue CPU and chip ids, the memory as a `RamConfig`), its conditions as a
+    `GameQuery` or `CreatorQuery` with `source: { publisher, benchmarkId }`, and its preset through
+    WP-D2's preset map. The dump's query mode answers them. A wrong mapping on either side, QA's
+    or the golden test's, then shows as a difference (build-lead's contract at `83aa5ab`).
+  - **Which field the estimate is read from** (the contract's C2): a row whose upscaling method is
+    "native" (36 at `c621c15`) is a query with `upscaling: null`, checked against `.native`. Every
+    other row, the upscaler's own "Native" mode included (16 rows, DLAA and FSR or XeSS Native AA)
+    and the Quality and Ultra Quality rows (64), is a query with that `UpscalingChoice`, checked
+    against `.withUpscaler`.
   - `--anchors data/benchmarks/game.json` limits it to the game rows, while WP-E3 has landed and
     WP-E4 hasn't.
   - Exit 0 pass, 1 a failed check, 2 cannot measure. Its tests run on real Vitest output of a
@@ -899,8 +936,13 @@ Captures QA makes go to `artifacts/audit/<phase>/` (git-ignored).
      in `data/**` or `src/data/**` at the frozen commit, checked by grep.
   3. It carries the full test conditions of §7.3 and a `publishedAt`, as an anchor must, and frame
      generation is off.
-  4. The model claims to cover it: the game has at least one anchor at that resolution and preset,
-     and the chip or CPU is in the catalogue at the frozen commit.
+  4. The model claims to cover it, checked from the data at the frozen commit:
+     - for a game result, the game has at least one anchor at that resolution and preset;
+     - for a creator result, the workload and its named test have at least one anchor;
+     - and the chip or CPU is in the catalogue.
+
+     A pick outside that is ineligible: for a game or workload with no anchors there, "no estimate
+     yet" is the right answer, not a failure (the Director, 2026-10-02).
   5. The value is printed in the source, or read from a chart by §7.3's rule (±1% or ±1 unit) and
      marked as read from a chart.
 - **The procedure** (blind; phase-1-plan §4, "Held-out results"):
@@ -914,16 +956,19 @@ Captures QA makes go to `artifacts/audit/<phase>/` (git-ignored).
      and its source, also without any model output. The picker replaces an ineligible pick, and the
      replacement is committed before the run.
   5. qa-lead runs the model once, at the frozen commit, in a worktree checked out at that commit,
-     through the dump's query mode. Each pick is one query: its published test system, its game or
-     workload and its setting, without a source context, since that is the estimate the lab shows.
+     through the dump's query mode. Each pick is one query: its published test system as a
+     `PerfSystem`, its game or workload and its setting, with `source: null`, since that is the
+     estimate the lab shows. Upscaling maps as for the golden rows (§8.1): plain native rendering
+     is `upscaling: null`, read from `.native`; any upscaler mode, "Native" included, is that
+     `UpscalingChoice`, read from `.withUpscaler`.
   6. QA's script computes each error and writes the results under `artifacts/qa/phase-1/holdout/`.
      A tooling crash may be fixed and the same picks run once more, and the report says so. The
      picks never change after the run.
 - **Gates:**
   - Error = |midpoint − published| / published. Each result is within `heldOutMaxErrorPct` 10%.
     Over 10% is a Blocker.
-  - "No estimate" on an eligible pick fails like an error over 10%, since eligibility already
-    requires a configuration the model claims to cover.
+  - "No estimate" on an eligible pick fails like an error over 10%, since eligibility (rule 4)
+    already requires a configuration the model claims to cover.
   - **Calibration:** of the results the model labels `high`, at least half have the published value
     inside the range (plan WP-E3, "Done means"). Otherwise the confidence labels are wrong: a Major,
     and WP-E3 isn't done.
@@ -989,9 +1034,15 @@ Captures QA makes go to `artifacts/audit/<phase>/` (git-ignored).
 
 ### 8.3 Frame generation and VRAM
 
-- In build-lead's result types, `FpsEstimate.frameGeneration` can only be a `NoEstimate` in Phase 1,
-  so no frame-generation number can exist. Unit and e2e tests check that frame-generation figures
-  never appear in native fields or native UI rows.
+- `FpsEstimate` keeps `native`, `withUpscaler` and `frameGeneration` as separate fields, so a
+  frame-generation figure can never enter a native one. The contract at `83aa5ab` types
+  `frameGeneration` as `FpsResult | NoEstimate`, ready for later sources, so the Phase 1 rule moves
+  from the type to checks: while no anchor has frame generation on, `frameGeneration` is a
+  `NoEstimate` for every query (QA's query-mode checks, and build-lead's `fpsEstimateProblems`
+  from WP-E3). Unit and e2e tests check that frame-generation figures never appear in native
+  fields or native UI rows.
+- From the query-mode output, QA also checks that every `exact` anchor behind `.native` is a
+  native row, and every one behind `.withUpscaler` has the query's upscaler and mode.
 - A setting that needs more VRAM than the card has is flagged (`VramCheck`, `exceeds`), never
   hidden. The lab's local-AI case, "doesn't fit in 8 GB" (plan WP-E4), is checked in e2e.
 
@@ -1033,12 +1084,28 @@ For each of the 20 rules in §9.2:
     `case.frontIo.usbC`) holds a real answer, not an unpublished one.
   - The lists are re-checked whenever a rule starts to read a new field, every WP-D1 field
     included. The first re-check, against WP-D1 batch 1 (`c588afb`), moved gpu-length and
-    psu-form-factor into the unknown-data group, so 10 rules have unknown-data tests and 10 have
-    validator proofs.
+    psu-form-factor into the unknown-data group. The second, against build-lead's `RuleSpec`
+    (`480a30e`), moved cooler-height there too: it now reads the memory kit, because a kit taller
+    than the cooler's memory clearance raises the front fan, and both of those heights can be
+    unpublished. So 11 rules have unknown-data tests and 9 have validator proofs. cooler-socket,
+    which now reads the board's socket while no CPU is picked, gained `motherboard.socket`'s
+    proof.
 - **Real products.** Fixtures use real, sourced catalogue products (`data/compat-fixtures.json`,
-  WP-D1). A boundary or unknown-data test may take a real product and override the one field under
-  test, and its title says so ("Sapphire Pulse RX 9070 XT with its length set to 355 mm"). No test
-  adds an invented product to the catalogue (CLAUDE.md rule 8).
+  WP-D1). A boundary test may take a real product and override the one field under test, and its
+  title says so ("Sapphire Pulse RX 9070 XT with its length set to 355 mm"). An unknown-data test
+  uses a real product whose own data has the unpublished value. No test adds an invented product
+  to the catalogue (CLAUDE.md rule 8).
+- **The one exception: a synthetic null** (the Director's ruling, 2026-10-03, from the WP-D1
+  batch 1 review).
+  - Four rules have a "can't verify" outcome that no catalogue product can produce today, because
+    no product has the null: gpu-length, cooler-height, psu-form-factor and psu-length.
+  - Their unknown-data tests may take a real record and set the field to null inside the test,
+    titled `[<rule-id>] unknown: <description> (synthetic null on <part id>)`.
+  - `compat-rules.json` marks the four with `"syntheticNull": true`.
+  - compat-trace fails a synthetic null in any other place: another rule, another kind of test,
+    another wording, or a part id that isn't in the catalogue (§9.3).
+  - When a real product with the null joins the catalogue, the rule's test moves to it, and the
+    mark comes off.
 
 ### 9.2 The 20 rules
 
@@ -1057,7 +1124,7 @@ The examples are phase-1-plan §3's real products.
 | 6 | `ram-speed` | The kit's speed against the board's and the CPU's official speeds | ok, warn | yes | yes | Trident Z5 CK DDR5-8200 with the Core Ultra 9 285K on the TUF Gaming Z890-Plus WiFi: warn, naming the official speed and explaining XMP |
 | 7 | `gpu-length` | Card length against the case, per layout | ok, block | yes | yes | Sapphire Pulse RX 9070 XT (320 mm) in the Fractal North: ok (355 mm). With the ARCTIC Liquid Freezer III Pro 360 at the front: block (300 mm) |
 | 8 | `gpu-thickness` | Card thickness against slot spacing and the case's slots | ok, warn, block | yes | yes | Fractal Terra with the Sapphire Pulse RX 9060 XT and the DeepCool AN400: names the spine positions where both fit |
-| 9 | `cooler-height` | Air-cooler height against the case, per layout | ok, block | yes | no | DeepCool AK620 (160 mm) in the Fractal Terra: block |
+| 9 | `cooler-height` | Air-cooler height against the case, per layout, with the front fan raised over a taller memory kit | ok, block | yes | yes | DeepCool AK620 (160 mm) in the Fractal Terra: block |
 | 10 | `ram-cooler-clearance` | RAM height under an air cooler | ok, warn, block | yes | yes | TeamGroup T-Force Delta RGB (46.1 mm) under the AK620 (43 mm): block, or warn if the fan can move up. DeepCool AN400 (clearance not published): warn, can't verify |
 | 11 | `radiator-fit` | Radiator size and position against the case | ok, block | yes | yes | ARCTIC Liquid Freezer III Pro 360 in the Fractal Pop Mini Air (240 mm at most): block |
 | 12 | `psu-form-factor` | The PSU form factor against the case | ok, warn, block | no | yes | DeepCool PN850M (ATX) in the Fractal Terra (SFX and SFX-L only): block |
@@ -1067,7 +1134,7 @@ The examples are phase-1-plan §3's real products.
 | 16 | `m2-lanes` | M.2 count, and lane-sharing side effects | ok, warn, block | yes | no | Three NVMe drives on the ROG Strix B650E-I (2 slots): block. A drive in a shared slot on the TUF Gaming B550-Plus WiFi II: warn, quoting the manual |
 | 17 | `board-form-factor` | The board's form factor against the case | ok, block | no | no | TUF Gaming B650-Plus WiFi (ATX) in the Pop Mini Air: block |
 | 18 | `usb-c-header` | A front USB-C port needs a header on the board | ok, warn | no | no | Fractal North with the TUF Gaming B550-Plus WiFi II (no header): warn |
-| 19 | `cooler-socket` | The cooler's mounting kit fits the CPU socket | ok, block | no | no | A cooler that doesn't list every socket (WP-D1 adds one) |
+| 19 | `cooler-socket` | The cooler's mounting kit fits the CPU socket, or the board's while no CPU is picked | ok, block | no | no | A cooler that doesn't list every socket (WP-D1 adds one) |
 | 20 | `display-output` | A build with no graphics card needs a CPU with integrated graphics | ok, block | no | no | Core i5-12400F with no graphics card: block |
 
 Rows 4 and 5, and 12 and 13, each split one item of BUILD_PROMPT §5.1, as in v3. Rows 19 and 20
@@ -1097,7 +1164,11 @@ are Hazem's additions (phase-1-plan §6.2).
       the registry has an id the list doesn't, or one id twice;
     - a `RuleSpec`'s outcomes or numeric flag differ from §9.2;
     - a test name has a known rule id but a wrong kind, a valid kind but an unknown id, or a status
-      that §9.2 doesn't give that rule (usually an unknown-data test named `warn:`).
+      that §9.2 doesn't give that rule (usually an unknown-data test named `warn:`);
+    - a test sets a synthetic null that §9.1 doesn't allow: on a rule without the mark, in a test
+      that isn't `unknown:`, in another wording, or on a part id that isn't in the catalogue
+      (`--catalogue`, by default `data/parts`). Such a test doesn't count. The matrix lists every
+      synthetic null it accepted.
   - It exits 2 when it can't measure: bad input, or a test file under `src/engine/` or `src/data/`
     that didn't load.
   - It writes the matrix, with each input's SHA-256, to `artifacts/qa/compat-trace/compat-trace.json`
@@ -1155,7 +1226,9 @@ never on its code:
   - `build` has the shape of the engine's `BuildParts`, and every part id exists in the catalogue
     at the commit tested.
   - The engine chooses the case layout, so an entry must fail under every layout. A combination
-    that fails in one layout only belongs in a rule's unit tests.
+    that fails in one layout only belongs in a rule's unit tests. An entry may fix where the
+    radiator goes (`BuildParts.radiatorPosition`, "front"), and it must then fail with the
+    radiator there.
   - `expect` lists every rule that must not be `ok`, each with `block` or `warn`.
   - **Results:** `ok` for an expected rule, or the rule not run, is a Blocker: a false negative. A
     milder status than expected (`warn` for `block`) is a Major. `worst` must be `block` whenever an
@@ -1183,7 +1256,7 @@ never on its code:
   | S12 | No `ok` result has a `not-published` evidence item, and every `cantVerify` warning has one (change C3) |
   | S13 | Every report names each rule exactly once, in `results` or `notRun`, and `worst` is the worst status in `results`, or null when none ran |
   | S14 | A report whose layout search finds no layout has `worst` = block (change C4) |
-  | S15 | Each rule's combination count equals the product of its categories' sizes, plus one for each optional category (change C5) |
+  | S15 | Each rule's combination count equals what its sweep kind implies, computed by QA from the catalogue (change C5). `product`: the product of its categories' sizes, plus one for each optional category; for a layout-dependent rule, a combination with a liquid cooler counts once unset and once more for each position the case takes for that radiator. `drive-lists`: the boards times every multiset of 1 to `maxDrives` drives. `power-extremes`: the CPUs times the cards plus one (none) times the power supplies, times two (the other categories at their lowest and highest draw) |
 
   - The sweep worker (§17) owns these checks. A failed invariant is a Blocker when it hides an
     incompatibility (S1 to S11, S14), and a Major otherwise.
@@ -1285,8 +1358,12 @@ evidence are in §17 and `docs/qa/phase-1-worker-briefs.md`.
   - The order is logical (2.4.3).
   - There is no trap (2.1.2).
   - Every action is available by keyboard (2.1.1).
-  - A step change moves focus to the new step's heading or `main`. build-lead's smoke already
-    checks this for "Next".
+  - A step change moves focus to the new step's h1 (design-lead's focus rules, 2026-10-03; §12.1
+    measures rules 1 to 3 now). build-lead's smoke already checks a focus move for "Next".
+  - The h1's ring follows `:focus-visible` (design-lead's focus rule 5): after Enter on a link,
+    the new page's h1 shows the 2 px `--focus` ring at a 3 px offset; after a mouse click or a tap,
+    no ring. In both themes; the ring clears 3:1 on the stage (`contrast.mjs`: `--focus` on
+    `--stage`, 18.43:1 dark and 16.87:1 light).
 
 ### 10.3 Visible focus and reduced motion
 
@@ -1453,8 +1530,45 @@ WP-Q1 added, all done on 2026-09-30 except the last item:
   shift, including one flagged as following input. The test gives no input, and at 390 px
   Chromium flags real shifts that way (§6.4). Mutation M4 fails it at 390 (0.3646) and at 1440
   (0.2205).
-- Still open: a post-deploy smoke against PAGES once Pages is live. It is blocked until Hazem
-  enables Pages and merges to `main`.
+- **In-app navigation** (WP-Q4, after Hazem's report of 2026-10-02): `tests/e2e/navigation.spec.ts`,
+  tagged `@smoke @nav`, so `verify` runs it at 390, 768 and 1440 px.
+  - The smoke test loads each route directly. This spec instead activates every in-site link on
+    one page of each kind: the home page, the first, a middle and the last build step, a summary
+    page and the 404 page. It taps at the touch widths and clicks with the mouse at 1440.
+  - After each link it checks the URL, the title and the h1 against the route table, that it was
+    an in-app navigation, that the new h1 is on screen (not only in the document), and that Back
+    returns.
+  - A known defect is recorded, not failed: `KNOWN_OFF_SCREEN` (QA-P1-001, build-lead, Major) at
+    1440 px on the build steps, where a link low on the page leaves the new heading scrolled out of
+    view. QA removes the entry when it verifies the fix.
+  - It also measures design-lead's focus and scroll rules (2026-10-03, `docs/design/components.md`
+    with WP-DS2 batch 2): a route change jumps to scrollY 0, never smoothly, with focus on the new
+    h1 and the header, the site nav and the h1 on screen; Back restores the scroll position, with
+    focus on the h1; an in-page change (the theme toggle) neither scrolls nor moves focus.
+    - The third rule holds and is enforced. The first two are build-lead's fix for QA-P1-001, so
+      each deviation is recorded as an annotation until QA verifies the fix and sets
+      `FOCUS_RULES.enforced`.
+    - On 2026-10-03, at `5055f3a`: focus lands on `main`, not the h1, after every route change at
+      every width; "Build" from the home page lands at scrollY 90 at 768 px and 178 at 1440, with
+      the header and the site nav off screen at 1440. Back already restores the scroll position.
+  - Proof: a planted `AppLink` that swallows its click fails the spec at the URL check.
+- **`index.html` paths** (QA-P1-002, build-lead, WP-E0): the host serves `/index.html` and
+  `/lab/index.html` with a 200, so the app renders their directory's route. The smoke loads each
+  and expects a 200 with no redirect and that route's heading; `/build/index.html` stays not found.
+  The first two run once the route table shows the fix (and the lab index route, found by the file
+  the host serves for it, `lab/index.html`, whether or not its path ends in a slash), so the smoke
+  stays green whichever lands first. A stand-in fix ran them green on 2026-10-03; QA checks that
+  they ran when it verifies the fix.
+- **The same spec on the live site** (PAGES), after each milestone deploy and on any navigation
+  report: `npx playwright test --config tests/e2e/live/playwright.config.ts`. It runs in five
+  browsers (Playwright's Chromium, the installed Chrome and Edge, Playwright's Firefox and WebKit)
+  at the three widths, one page at a time, and never inside `verify`.
+- **Hazem's report, closed 2026-10-03: not an app bug.** His automated desktop Chrome clicked about
+  270 ms after the response, before the app had rendered any links: the static HTML's `#root` is
+  empty until the app runs. The click hit nothing, so the address bar didn't change, and the text
+  read right after showed the home page. A click once the link exists navigates at once, headless
+  and headed. Rendering the shell into the static HTML (Phase 2, the Director's WP-B1 decision)
+  turns such an early click into an ordinary page load.
 
 ### 12.2 Builder flows (from Phase 2)
 
@@ -1576,10 +1690,12 @@ an owning team and an `until`: `permanent`, the last day it applies, or an https
 - An empty reason, an unknown owner, a repeated id, a malformed `until` or an expired date stops
   the whole run before any test starts. `npm run test` fails on it too.
 - Every entry is reviewed at each phase exit.
-- Four entries today, all qa-lead's and permanent:
+- Six entries today, all qa-lead's and permanent:
   - `not-found-page-status`: the 404 answer of a page that a test declared it asks for.
   - `not-found-page-console`: Chromium's console error for that same page URL. It moved here
-    from build-lead's `isOwnDocument404`.
+    from build-lead's `isOwnDocument404`. It takes the exact text in two forms: "404 (Not Found)"
+    over HTTP/1.1, as the local preview answers, and "404 ()" over HTTP/2, as GitHub Pages
+    answers, where WebKit logs the same text (the live navigation run, 2026-10-02).
   - `software-webgl-notice`: Chromium's warning that WebGL fell back to its software renderer
     without `--enable-unsafe-swiftshader`, in the wording of Chromium 141 and of its current
     source. The e2e projects pass that flag, so it should not appear; build-lead saw it from a
@@ -1595,6 +1711,18 @@ an owning team and an `until`: `permanent`, the last day it applies, or an https
   is how Chromium attributes both notices (48 of 48). CI's ubuntu runners passed with these two
   entries (run 36973853810, 2026-10-02). A new variant fails the run, and QA decides whether it
   is the environment or the app.
+
+  Two entries for Firefox, from the live five-browser run (§12.1), triaged by build-lead on
+  2026-10-03. Firefox logs both; Chromium and WebKit don't.
+  - `firefox-webgl-context-lost`: "WebGL context was lost." when the 3D preview unmounts, because
+    React Three Fiber's renderer disposal calls `gl.forceContextLoss()` on purpose (browsers cap
+    live WebGL contexts). Only that exact text, naming the lazy 3D chunk (`assets/Garage-<hash>.js`)
+    as its file, from that file.
+  - `firefox-webgl-viewport-rect`: the one-time "drawElementsInstanced: Drawing to a destination
+    rect smaller than the viewport rect" note. three.js r186 floors the canvas size but rounds the
+    viewport, so a fractional CSS width clips 1 px, harmlessly. Only that exact text, with no source
+    location. Phase 3's garage keeps its canvas at whole pixels, which ends it: the entry is
+    reviewed then.
 
 **Enforcement and self-tests** (Vitest, so `npm run verify` runs them):
 
@@ -1709,6 +1837,12 @@ QA re-tests every fix on the integration branch before closing the defect.
 | 2026-10-02 | 3.3 | WP-Q2: fixes from the independent check of v3.2, QA-P0-032 to 037. Both warning entries match the whole notice and only from the page itself, and the ReadPixels notice is attributed to ANGLE on SwiftShader, not a GPU driver (§13.2). The self-test table and how the checker catches a broken fixture (§13.2). Seven more method values pinned, and the web-vitals spec refuses an empty plan. D10's environment and blocks columns (§3.2). No gate value changed | qa-lead; no approval needed (no gate or method changed) |
 | 2026-10-02 | 3.4 | WP-Q2: from the re-test of v3.3, QA-P0-038 to 040. The software-WebGL entry takes only the two prefixes Chromium's GPU logger writes, and §13.2 states the page-URL limit exactly: inline scripts and inline event handlers, even ones a script file sets. The remaining approved method values pinned (visual thresholds, viewport sizes and flags, scale, gzip level and bytes per KB, the 95% warning, fps spread and calibration, the CI proxy, INP spread and rates, the model, D1 and audit values). Two §13.2 slips | qa-lead; no approval needed (no gate or method changed) |
 | 2026-10-02 | 4 | WP-Q3, Phase 1. The 20 rule ids agreed with build-lead, with their outcomes and their numeric and unknown-data flags (§9.1, §9.2), and their trace: compat-trace with `compat-rules.json`, the validator proofs of the unknown-data ruling, and the check of the engine's `RuleSpec` (§9.3). Golden tests in each anchor's own source context, the golden-count check and the conflicting-pairs check (§8.1). The held-out protocol: at least 20 results, 4 per class, blind picks committed before one run, the eligibility and mix rules, and the calibration check (§8.2); `models.heldOutCount` 20, with `heldOutPerClassMin` 4 and `heldOutClasses`, pinned. The corpus format and the sweep invariants (§9.4). The mutation-test check (§9.5). The Phase 1 audit seed (§7.2). The independent checks of phase-1-plan §4 (§17 and `docs/qa/phase-1-worker-briefs.md`). The Phase 1 wiring (Appendix C). `rule1.mjs` reads WP-D1's per-batch price windows (§7.5) | The held-out count and classes: Hazem, 2026-10-02 (phase-1-plan §6.3). The unknown-data ruling and the golden source context: the Director, 2026-10-02 (`9f47477`). The rest: pending the Director's review of WP-Q3 |
+| 2026-10-02 | 4.1 | The Director's acceptance of WP-Q3 (`9d56356`): QA's v4 method proposals approved as written (the held-out mix rules, a corpus result milder than expected as a Major, Stryker reasons of at least 20 characters, the sweep severities). "No estimate" fails a held-out result only on an eligible pick, so §8.2's rule 4 now says outright that a pick for a game or workload without anchors there is ineligible | Approved by: Director, 2026-10-02 (`7f3382f`) |
+| 2026-10-03 | 4.2 | WP-Q4, Hazem's navigation report: the in-app navigation spec, run by `verify` at 390, 768 and 1440 px (`@nav` joins the 768 px project's grep), and its live-site config in five browsers (§12.1, §5). Hazem's report closed as an automated click made before the app rendered its links (§12.1). Found on the way: QA-P1-001 (Major, the new heading off screen after an in-app navigation at 1440 px) and QA-P1-002 (Minor, `/index.html` shows the 404 view), both with build-lead. The declared-404 allow-list entry takes the HTTP/2 form of the notice (§13.2). No gate value changed | qa-lead; the live-site check and the closing rule are the Director's (2026-10-02, 2026-10-03) |
+| 2026-10-03 | 4.3 | QA's re-review of the engine contract (`83aa5ab`, OK for WP-E1): §8.1 says which field each golden row is read from (C2) and that QA builds the golden queries itself through the dump's query mode; §8.2 maps a held-out pick's upscaling the same way; §8.3 moves Phase 1's no-frame-generation rule from the type to checks; §9.4 lets a corpus entry fix the radiator position and counts S15 by sweep kind; Appendix C drops `golden-estimates.json`. compat-trace also compares `RuleSpec.unknownData`. No gate value changed | qa-lead |
+| 2026-10-03 | 4.4 | Two Firefox allow-list entries from the live run, as build-lead triaged them: the deliberate WebGL context loss when the 3D preview unmounts, and three.js r186's 1 px viewport rounding note (§13.2). The `index.html` smoke tests for QA-P1-002, which run once the fix and the lab index are in (§12.1). design-lead's four 3D checks for Phases 2 and 3, and the shadows warning (§6.7). No gate value changed | qa-lead |
+| 2026-10-03 | 4.5 | The unknown-data lists re-checked against build-lead's `RuleSpec` at `480a30e`, as the Director's ruling asks: cooler-height reads the memory kit, so it joins the unknown-data group (11 rules, 9 with validator proofs), and cooler-socket gains `motherboard.socket`'s validator proof (§9.1, §9.2). The lab-index smoke test finds its route by the file the host serves (§12.1). No gate value changed | Approved by: Director, 2026-10-03 (`2fe7148`) |
+| 2026-10-03 | 4.6 | The synthetic-null exception (the Director's ruling, 2026-10-03, from the WP-D1 batch 1 review): gpu-length, cooler-height, psu-form-factor and psu-length may set a field to null on a real catalogue record in their unknown-data tests, titled "(synthetic null on <part id>)". `compat-rules.json` marks the four, and compat-trace fails a synthetic null anywhere else and checks the part id against the catalogue (§9.1, §9.3). An unknown-data test of any other rule uses a real product whose data has the null; a boundary test keeps v4's one-field override. Check C's blind key list, `tests/audit/anchor-keys.mjs`, and its transcription format (§17, brief C). §17 lists the 7 anchor sources after WP-D2 batch 1. No gate value changed | The synthetic-null exception: the Director, 2026-10-03. The rest: qa-lead |
 
 ## 17. Phase 1 independent checks
 
@@ -1740,9 +1874,17 @@ them:
 | H. 10% of all numbers | 2 or 3 | Wave 4, with the Phase 1 seed (§7.2) | §7 |
 | I. The lab pages (WP-Q4) | an e2e-tester and a perf-tester | As the lab pages land | No console errors or warnings; axe clean in both themes at all three widths; the lab marked internal, not indexed and out of the nav; the engine and the catalogue loaded only on lab pages; the JS budgets hold |
 
-Today's 143 anchors, by source, for check C: ComputerBase's "Gaming-Grafikkarten 2026 im Test",
-page 4 (48 rows) and page 5 (32 rows); TechPowerUp's Ryzen 7 9850X3D review, page 18 (36 rows);
-TechPowerUp's Ryzen 7 9800X3D review, page 9 (18 rows); Blender Open Data 5.2.0 (9 rows).
+The anchors by source, for check C, at `df6cd00` (190 rows): ComputerBase's "Gaming-Grafikkarten
+2026 im Test", page 4 (48 rows) and page 5 (32 rows); TechPowerUp's Ryzen 7 9850X3D review, page 18
+(36 rows); TechPowerUp's Ryzen 7 9800X3D review, page 9 (18 rows); Blender Open Data 5.2.0 (9
+rows); and, from WP-D2 batch 1, Tom's Hardware's GPU hierarchy 2026 (39 rows) and TechSpot's Core
+Ultra 7 270K Plus review (8 rows).
+
+A check C worker reads a blind key list made by `tests/audit/anchor-keys.mjs`: every row of its
+review with its claims, and no value. A field the tool doesn't know stops it, and so does a value of
+the review printed in a title, locator or note; a note that prints one can be withheld instead, and
+the row says which field it was on. qa-lead seals each transcription by committing its SHA-256
+before stage 2 compares it with the data rows.
 
 ---
 
@@ -1959,8 +2101,10 @@ With coverage on, the report also carries the coverage map.
   build-lead in WP-E0.
 - During WP-E1, `audit:compat-trace` adds `--allow-pending <the ids not built yet>`. A rule comes
   off the list in the commit that adds it.
-- Until WP-E4 lands, `audit:golden` adds `--anchors data/benchmarks/game.json`. Once the dump
-  writes the golden estimates, it also adds `--estimates artifacts/engine/golden-estimates.json`.
+- Until WP-E4 lands, `audit:golden` adds `--anchors data/benchmarks/game.json`.
+- From WP-E3, QA's golden-query step (a WP-Q4 tool) writes one query per anchor row (§8.1), the
+  dump's query mode answers it, and `audit:golden` reads the answers with `--estimates`. The exact
+  lines follow with that tool.
 
 **C.3 `verify`.** The two checks run after the unit tests and the engine dump, and before the
 build:
