@@ -124,7 +124,9 @@ const SPECS: Readonly<Record<RuleId, Omit<RuleSpec, 'id'>>> = {
     checks: 'Air-cooler height against the case, per layout',
     outcomes: ['ok', 'block'],
     numeric: true,
-    unknownData: false,
+    // The kit's height and the cooler's memory clearance, which it reads, can be unpublished
+    // (QA's test plan v4.5).
+    unknownData: true,
     layoutDependent: true,
     // Memory too: a kit taller than the cooler's memory clearance makes its front fan sit
     // higher, and this rule checks the height the cooler then has (QA's follow-up 2, so it and
@@ -235,7 +237,7 @@ const SPECS: Readonly<Record<RuleId, Omit<RuleSpec, 'id'>>> = {
   },
   'cooler-socket': {
     title: 'Cooler mounting',
-    checks: "The cooler's mounting kit fits the CPU socket",
+    checks: "The cooler's mounting kit fits the CPU socket, or the board's while no CPU is picked",
     outcomes: ['ok', 'block'],
     numeric: false,
     unknownData: false,

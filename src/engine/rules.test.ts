@@ -20,9 +20,10 @@ const readsOf = (id: RuleId): string[] =>
   ruleSpec(id).reads.map(({ category, optional }) => `${category}${optional ? '?' : ''}`);
 
 /**
- * QA's record, tests/audit/compat-rules.json (test plan v4 §9.2), copied here as
- * [outcomes, numeric, unknownData]. compat-trace compares the dump's registry with that file, so
- * a change on either side shows up there too.
+ * QA's record, tests/audit/compat-rules.json (test plan v4.6 §9.2), copied here as
+ * [outcomes, numeric, unknownData], because src/ may not import tests/ (eslint.config.js).
+ * compat-trace compares the dump's registry with that file, so a change on either side shows up
+ * there too.
  */
 const QA_RECORD: Readonly<Record<RuleId, readonly [readonly string[], boolean, boolean]>> = {
   'cpu-socket': [['ok', 'block'], false, false],
@@ -33,7 +34,8 @@ const QA_RECORD: Readonly<Record<RuleId, readonly [readonly string[], boolean, b
   'ram-speed': [['ok', 'warn'], true, true],
   'gpu-length': [['ok', 'block'], true, true],
   'gpu-thickness': [['ok', 'warn', 'block'], true, true],
-  'cooler-height': [['ok', 'block'], true, false],
+  // v4.5: the memory kit's height and the cooler's memory clearance can be unpublished.
+  'cooler-height': [['ok', 'block'], true, true],
   'ram-cooler-clearance': [['ok', 'warn', 'block'], true, true],
   'radiator-fit': [['ok', 'block'], true, true],
   'psu-form-factor': [['ok', 'warn', 'block'], false, true],
