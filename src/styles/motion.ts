@@ -2,13 +2,14 @@
  * Motion tokens for code that animates from script: Motion (motion/react) and the 3D scene.
  *
  * These are the --dur-*, --delay-* and --ease-* values of tokens.css in the units scripts use.
- * tokens.test.ts fails if the two ever differ. Direction C, Studio: docs/design/motion.md.
+ * tokens.test.ts fails if the two ever differ, and motion.types.test.ts if Motion's own types stop
+ * taking them. Direction C, Studio, and its rules for Phase 2: docs/design/motion.md.
  * Only transform and opacity animate, and numbers swap instead of counting.
  */
 
 /** Durations in milliseconds. */
 export const durationMs = {
-  /** Hover, pressed states, a pill's highlight. */
+  /** A hover overlay's fade, the pressed scale, a chevron's turn. */
   ui: 160,
   /** Crossfades: a callout chip, a compatibility state. */
   fade: 200,
@@ -18,7 +19,7 @@ export const durationMs = {
   value: 360,
   /** The RGB colour changing, in the shader. */
   light: 400,
-  /** A part seating in 3D. */
+  /** A part seating in 3D; the fans spinning up or down. */
   seat: 500,
   /** The camera moving to the next part. */
   camera: 700,
@@ -48,13 +49,16 @@ export type DelayName = keyof typeof delayMs;
 /**
  * A duration in seconds, Motion's unit. With reduced motion every movement is instant, except
  * `cut`, the short crossfade that stands in for a camera move.
+ *
+ * Pass `useReducedMotion()` from motion/react as it is. It is `null` only where there is no
+ * window (a server render, a Node test), and `null` counts as no preference, as it does in Motion.
  */
-export function motionSeconds(name: DurationName, reducedMotion: boolean): number {
-  if (reducedMotion && name !== 'cut') return 0;
+export function motionSeconds(name: DurationName, reducedMotion: boolean | null): number {
+  if (reducedMotion === true && name !== 'cut') return 0;
   return durationMs[name] / 1000;
 }
 
-/** A delay in seconds. With reduced motion nothing waits. */
-export function delaySeconds(name: DelayName, reducedMotion: boolean): number {
-  return reducedMotion ? 0 : delayMs[name] / 1000;
+/** A delay in seconds. With reduced motion nothing waits. `null` counts as no preference. */
+export function delaySeconds(name: DelayName, reducedMotion: boolean | null): number {
+  return reducedMotion === true ? 0 : delayMs[name] / 1000;
 }

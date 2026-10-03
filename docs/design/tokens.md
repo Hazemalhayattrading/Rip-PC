@@ -15,7 +15,7 @@ document is the contract between design and build:
 | [`src/styles/base.css`](../../src/styles/base.css) | What Preflight removes and Rig Lab needs back (section 3) |
 | [`src/styles/motion.ts`](../../src/styles/motion.ts) | The motion tokens for Motion and the 3D scene, in milliseconds and seconds |
 | [`src/styles/fonts/`](../../src/styles/fonts/) | `rig-lab-sans.woff2` (72,332 bytes), `OFL.txt`, `FONTLOG.txt` |
-| [`src/styles/tokens.test.ts`](../../src/styles/tokens.test.ts) | 96 tests, run by `npm run test` (section 6) |
+| [`src/styles/tokens.test.ts`](../../src/styles/tokens.test.ts) | 106 tests, run by `npm run test` (section 6) |
 
 Every value below is the value in `tokens.css`. If the two ever disagree, `tokens.css` wins, and
 this document has a bug.
@@ -196,11 +196,20 @@ Any colour utility takes Tailwind's opacity modifier (`bg-ink/10`); it compiles 
    are in `--ink-2` and `--ink-3`, so a list full of warnings stays calm. Every state also has its
    icon silhouette and its word ([direction.md §1.3](direction.md#13-compatibility-ok-warn-block)):
    colour is never the only signal (WCAG 1.4.1).
+   - **State colours sit on `--surface` or `--surface-raised` only,** where they pass at 4.82:1 or
+     more. Never on the stage or the floor: there, in light, `--ok` falls to 4.36:1 on
+     `--stage-floor` and 3.79:1 on `--stage-floor-deep`, and `--warn` to 4.23:1 on
+     `--stage-floor-deep` (QA-P0-018, re-measured by design-lead on 2026-10-02). A state shown
+     over the stage sits in a callout, which is a `--surface` panel.
 3. **Three text tiers, no others.** `--ink`, `--ink-2`, `--ink-3`. Never fade text with opacity:
    the contrast table below measures these three tokens, not faded copies of them.
    - Light `--ink-3` is `#5a5e64`, darker than the picked mock's `#62666c` (changed 2026-10-01).
      The mock's value passed at the top of the floor (4.70:1) but fell to 4.08:1 at its near
      edge, `--stage-floor-deep`: QA finding DS0-01.
+   - **The one exception is a disabled control** (backlog item 9). It fades whole, at 0.4, with
+     `disabled:opacity-40` or `aria-disabled:opacity-40`
+     ([components.md §2](components.md#2-buttons-and-their-states)). WCAG 1.4.3 exempts inactive
+     components. A blocked part is not disabled, and it never fades.
 4. **Text sits on a surface, or on the stage only in the measured zones:** the wall, the key light
    and the floor (section 2.2). Every text tier is measured at both ends of the floor gradient and
    under the key light.
@@ -208,12 +217,28 @@ Any colour utility takes Tailwind's opacity modifier (`bg-ink/10`); it compiles 
    - The camera frames the build outside the text zones: the step heading and its hint, the 3D
      tools row and their captions. A callout over the scene is a `--surface` panel.
    - The Studio mock breaks this at 768 (DS0-01): the hint paragraph's last word runs into the
-     case top (1.56:1), and the mock label sits over the case (2.38:1). Phase 2's layout
-     reserves the zones ([backlog.md](backlog.md), item 41).
+     case top (1.56:1), and the mock label sits over the case (2.38:1).
+   - **Phase 2's frame reserves the zones** (backlog item 41). [components.md
+     §9](components.md#9-text-zones-in-the-studio-frame) gives each zone, and the build frame it
+     leaves, at 390, 768 and 1440.
 5. **Control borders use `--ink-3`** (checkbox, input, pressed chip): at least 5.87:1. `--line` is
    for panel edges and dividers only, and is never a control's only boundary.
+   - **The one exception is a control that its visible label identifies:** a filter chip at rest,
+     or a round button's outline over the stage. Its `--line` border is decoration, as a text
+     button has none. Its state never rests on `--line`: a pressed chip takes the `--ink-3` border,
+     the raised fill and the strong ink ([components.md §2](components.md#2-buttons-and-their-states);
+     WP-DS2, design-lead's ruling of 2026-10-03).
 6. **Focus is always visible:** a 2 px ring in `--focus`, offset 3 px, from `base.css`. Never remove
    it, on the stage too.
+   - **No ancestor may clip it** (backlog item 45): give clip and scroll containers inner padding,
+     or use `overflow: clip` with `overflow-clip-margin`, or an inset ring (`-2px` offset, as in
+     the Specs grid).
+   - **No chrome may cover it** (backlog item 1; WCAG 2.2 SC 2.4.11): scroll containers pad for
+     whatever floats over them (section 2.5, "Focus never hides under the chrome").
+   - **Never an inset ring on an `--action` surface.** `--focus` against `--action` is 1.10:1 in
+     dark and 1.00:1 in light, so an inset ring vanishes on the primary button. Its ring stays
+     outside, on the surface around it, at 15.89:1 or more on every measured surface (QA-P0-019,
+     re-measured on 2026-10-02).
 7. **Panels are opaque.** No glass blur, no gradients in the chrome. The key light's pool on the
    stage is the only gradient.
 8. **Selection:** a selected row is `--surface-raised` with a 3 px `--ink` bar at its leading
@@ -227,6 +252,37 @@ Any colour utility takes Tailwind's opacity modifier (`bg-ink/10`); it compiles 
       text colour, which fell to 3.06:1 (`--ink-3` on a raised row).
     - Forcing `--ink` text onto that tint fails too: `--action` surfaces are `--ink`-coloured,
       so the result is 1:1.
+12. **Forced colours** (Windows contrast themes; backlog item 3). The browser replaces every
+    colour with the theme's system colours. A state drawn only by a background or a shadow would
+    vanish. So each state also has a border, an outline, text, a `currentColor` glyph, or a system
+    colour of its own.
+    - **What survives.** Measured in Chromium 141's forced-colours emulation, in a dark and a light
+      palette (`forced-colors-probe.mjs` and `forced-colors-svg.mjs`, 2026-10-02):
+      - **dropped:** author backgrounds (they become Canvas), gradients
+        (`background-image: none`) and box-shadows;
+      - **forced to the text colour:** text, borders and outlines. A transparent border becomes
+        visible;
+      - **kept:** system colours the author sets (`Highlight`), and opacity.
+    - **Colour goes on a wrapping element; an `<svg>` takes only `currentColor`.**
+      - An icon that inherits its colour follows the forced text colour.
+      - A colour set on the `<svg>` itself is kept as authored. In the probe, an `#00ff00` icon
+        stayed `#00ff00` in both palettes, while its inheriting neighbour turned white in the dark
+        palette and black in the light one.
+    - **The states:**
+
+      | State | Drawn by | In forced colours |
+      |---|---|---|
+      | Panels and round buttons over the stage | `bg-surface` and `shadow-float` | Both drop. Keep the 1 px `border-line` on every panel and round button: it stays |
+      | A checked checkbox | an `--ink` fill and a check | The check is an SVG in `currentColor`. The box takes `forced-colors:bg-[Highlight]` and `forced-colors:text-[HighlightText]` |
+      | The selected row's bar | `bg-ink` | `forced-colors:before:bg-[Highlight]`. The word "Selected" stays |
+      | A toggled pill segment, chip or round button | `bg-action`, `bg-surface-raised`, `border-ink-3` | `forced-colors:aria-pressed:bg-[Highlight] forced-colors:aria-pressed:text-[HighlightText]` |
+      | The dock's step track | backgrounds | Done and current: `forced-colors:bg-[CanvasText]`. The rest: `forced-colors:bg-[GrayText]` |
+      | The sheet's handle | `bg-ink-3` | `forced-colors:bg-[CanvasText]` |
+      | Focus rings, status chips, the confidence mark | an outline, `currentColor`, outlined empty bars | Survive as drawn |
+      | A disabled control | opacity 0.4 | Survives |
+
+    - **Check it** with Playwright's `page.emulateMedia({ forcedColors: 'active' })`, in a dark and
+      a light palette, as the lab mock does ([lab-spec.md §11](lab-spec.md#11-evidence-the-mock)).
 
 **The stage background**, behind and around the 3D canvas, and the whole picture when WebGL is
 missing. It is the mock's recipe in tokens:
@@ -330,6 +386,8 @@ Sizes are in px; the CSS uses rem.
 3. **Widths:** 125 % only for display, figure and wordmark; 112.5 % for headings and labels; 100 %
    for everything else.
 4. **12 px is the floor.** `type-caption` is the smallest text Rig Lab sets.
+   - On touch screens, form fields are at least 16 px, whatever their role, so iOS never zooms the
+     page (`base.css`; section 3, backlog item 5).
 5. **Tabular figures everywhere, prose included.** Every role and the page body set
    `font-variant-numeric: tabular-nums`.
    - Numbers keep their width when they change (prices on a market switch, FPS, the total), so
@@ -346,9 +404,26 @@ Sizes are in px; the CSS uses rem.
    - a no-break space before the unit ("120 W");
    - an en dash in ranges, with the unit once ("96–108 fps");
    - the currency code before the amount ("SAR 9,412").
+   - **Make them with `Intl`, never with a hand-built format** (backlog item 21):
+     [copy-guide.md §3](copy-guide.md#3-numbers-and-units) for numbers and money, and
+     [§12](copy-guide.md#12-dates-and-sources-in-text) for dates.
 7. **Headings** (`h1`–`h3`) balance their lines (`text-wrap: balance`, in `base.css`).
 8. **Rule ids never break** inside: `whitespace-nowrap` on "Rule socket-match". It moves to the
    next line whole.
+9. **Names, ids and units are never translated** (backlog item 20; web-design-guidelines, "Brand
+   names, code tokens, identifiers: wrap with `translate="no"`"). Chrome offers to translate Rig
+   Lab's English pages into Arabic for Saudi visitors. A translated "Ryzen", "fps" or
+   "socket-match" would no longer match the retailer's listing, the spec sheet or the rule.
+   - `translate="no"` goes on the smallest element that holds one of these:
+     - a part's display name, or a brand;
+     - a model number;
+     - a socket, chipset or slot name ("AM5", "B650", "M.2_2");
+     - a rule id;
+     - a unit or a currency code, or a measured value with its unit.
+   - **The formatter marks its own output:** `<span translate="no">120&nbsp;W</span>`,
+     `<span translate="no">SAR&nbsp;9,412</span>`.
+   - The sentence around them stays translatable, and so do dates. The lab's list is in
+     [lab-spec.md §9](lab-spec.md#9-accessibility-checklist).
 
 ### 2.5 Layout
 
@@ -359,6 +434,10 @@ the mock.
 **The Studio frame.** The stage fills the viewport and the chrome floats over it. The 3D camera
 frames the build in what is left: below the top bar, above the dock, and left of the rail from
 `lg`.
+- The frame never scrolls the window. Its rail, sheet and table scroll inside themselves
+  ([components.md §6](components.md#6-focus-on-a-page-or-step-change)).
+- The text zones the camera keeps clear, at 390, 768 and 1440, are in [components.md
+  §9](components.md#9-text-zones-in-the-studio-frame) (backlog item 41).
 
 | Token | Utility | Phone | md (768) | lg (1100) | Use |
 |---|---|---|---|---|---|
@@ -368,6 +447,30 @@ frames the build in what is left: below the top bar, above the dock, and left of
 | `--dock` | `h-dock` | 76 px | 80 px | 92 px | Dock height |
 | `--rail-width` | `w-rail` | full width | full width | 424 px | The part rail, beside the stage from `lg` |
 | `--stage-horizon` | (CSS only) | 64 % | 64 % | 64 % | Where the wall meets the floor |
+| `--safe-top`, `--safe-right`, `--safe-bottom`, `--safe-left` | `pt-safe-top`, `pr-safe-right`, `pb-safe-bottom`, `pl-safe-left`, or any spacing utility (`mb-safe-bottom`, `h-safe-top`, …) | `env(safe-area-inset-*, 0px)` | the same | the same | The device's safe areas (notch, rounded corners, home indicator) around the full-bleed stage |
+
+**Safe areas** (added in WP-DS2, backlog item 6):
+- **The stage fills the whole screen, safe areas included:** that is what full bleed means. The
+  chrome keeps out of them:
+  - **a floating panel** sits `max(var(--gutter), var(--safe-*))` from each edge, such as
+    `bottom-[max(var(--gutter),var(--safe-bottom))]` for the dock from md, or
+    `right-[max(var(--gutter),var(--safe-right))]` for the rail;
+  - **chrome on an edge grows by the safe area:**
+    - the top bar is `h-[calc(var(--topbar)+var(--safe-top))] pt-safe-top`;
+    - the phone dock, which sits on the bottom edge, is
+      `h-[calc(var(--dock)+var(--safe-bottom))] pb-safe-bottom`;
+  - **text on the stage** sits `max(var(--inset), var(--safe-left))` from the left edge:
+    `pl-[max(var(--inset),var(--safe-left))]`.
+- **They are 0 until `viewport-fit=cover`.** That lands with the Phase 2 frame, in `index.html`'s
+  viewport meta (build-lead's file): `width=device-width, initial-scale=1.0, viewport-fit=cover`.
+  Until then they change nothing.
+- **The fallback is `0px`, not `0`.** Inside `max()` and `calc()`, a bare 0 is a number, so
+  `max(1rem, 0)` is invalid. Measured in Chromium 141 (`base-cascade-check.mjs`, 2026-10-02):
+  - with a unitless 0, the declaration is dropped;
+  - with `0px`, `max(var(--gutter), var(--safe-bottom))` comes out at 16 px.
+- **Script reads them like the other layout tokens.**
+  `getComputedStyle(document.documentElement).getPropertyValue('--safe-bottom')` returns the
+  resolved length: `"0px"` on a desktop, measured in Chromium 141.
 
 **Radii** (`static`): `rounded-control` 5 px (checkboxes), `rounded-row` 14 px (part rows,
 callouts), `rounded-panel` 20 px (the rail, sheets), `rounded-dock` 22 px (the dock),
@@ -375,30 +478,80 @@ callouts), `rounded-panel` 20 px (the rail, sheets), `rounded-dock` 22 px (the d
 
 **Named sizes on top of the 4 px step:** `h-control` 48 px (primary buttons), `size-control-sm`
 36 px (round icon buttons), `h-chip` 30 px (filter chips).
+- **Anything that holds text takes a minimum height, never a fixed one** (WCAG 1.4.12; backlog
+  item 2): `min-h-control`, `min-h-chip`, `min-h-control-sm`, `min-h-11`. A visitor's text spacing
+  (line height 1.5, letter spacing 0.12 em, word spacing 0.16 em) then grows the control, instead
+  of clipping its label.
+- `size-control-sm` and `size-10` stay fixed: a round button holds an icon, and its name is
+  visually hidden.
+- **`h-topbar` and `h-dock` stay fixed,** because the frame's offsets (the scroll padding below, the
+  text zones) are worked out from them.
+  - Their text is single lines, and it still fits with 1.4.12's spacing. Worked from the tokens,
+    the lg dock needs 76 of its 92 px: a 36 px figure at line height 1.5 is 54 px, its 12 px
+    caption 18 px, and the gap 4 px. The md dock needs 67 of 80 px, and the phone dock 58 of 76.
+  - Neither bar sets `overflow: hidden`.
 
-**Hit areas are at least 24 × 24 px** (WCAG 2.2, 2.5.8, one step above the project's 2.1 AA floor).
-The mock's compare checkbox is drawn at 18 px. In Phase 2 its button gets a 24 px hit area, with
-the 18 px box drawn inside it.
+**The reading measure** (added in WP-DS2, backlog item 15): `max-w-measure`, 32 em. Every
+sentence that can run longer than one line takes it: reasons, actions, hints, descriptions.
+- It sets about 64 characters a line on average and 75 at most, in any type role, because it is in
+  em. Measured in Rig Lab Sans on the engine's own sentences (the lab mock,
+  [lab-spec.md](lab-spec.md)): 64.3 characters a line on average, 75 at most.
+- **Not `65ch`.** A ch is the width of a zero: 9.2 px in `type-body`, against 7.17 px for an
+  average character. `max-w-[65ch]` set lines of up to 83 characters.
+- The rule: 45 to 75 characters a line. Tables and single-line labels don't need it.
+
+**Hit areas are at least 24 × 24 px** (WCAG 2.2, 2.5.8, one step above the project's 2.1 AA floor),
+**and at least 44 × 44 px under `pointer: coarse`** (backlog item 4).
+- Where the drawing is smaller, an invisible extension makes up the difference. The one technique
+  and every control's sizes are in [components.md §1](components.md#1-hit-areas).
+- The mock's compare checkbox is drawn at 18 px. In Phase 2 it sits inside a 24 px button.
+
+**Focus never hides under the chrome** (WCAG 2.2 SC 2.4.11; backlog item 1). Each scroll container
+pads for what floats over it:
+
+| Scroll container | What floats over it | Its scroll padding |
+|---|---|---|
+| The rail's list, from lg | Nothing: the rail sits between the top bar and the dock | None. `p-1` inside, so no ring is clipped (section 2.1, rule 6) |
+| The sheet, below lg | The dock, over its end | md, where the dock floats: `scroll-pb-[calc(var(--dock)+max(var(--gutter),var(--safe-bottom))+0.5rem)]`. Phones, where it sits on the edge: `scroll-pb-[calc(var(--dock)+var(--safe-bottom)+0.5rem)]`. The content takes the same value as `padding-bottom`, so the last row can scroll clear |
+| The Specs table | Its sticky header row and its pinned columns | `scroll-pt-10 scroll-ps-[13.75rem] lg:scroll-ps-[17.75rem]` ([specs-view.md §6](specs-view.md#6-keyboard-and-screen-readers)) |
+| The window, on a page outside the Studio frame that scrolls under a fixed top bar | The top bar | `scroll-pt-[calc(var(--topbar)+var(--safe-top)+0.5rem)]` on `html`: the window's scroll padding lives on `html`, not on `body` |
+
+- **The extra 0.5rem** clears the focus ring, which reaches 5 px outside its control (2 px wide, at
+  a 3 px offset).
+- **Scroll padding moves focus scrolling too.** Measured in Chromium 141
+  (`scroll-padding-focus.mjs`, 2026-10-03): in a 300 px scroller with a 100 px bar floating over its
+  end, a button half under the bar stays there when `focus()` or Tab reaches it. With
+  `scroll-padding-bottom: 108px`, both scroll it clear.
+- **Sticky parts sit outside scrollers where they can:** the sheet's header, and the Specs panel's
+  header and footer.
+- **The step's `<h1>`** takes `scroll-mt-topbar` ([components.md
+  §6](components.md#6-focus-on-a-page-or-step-change), rule 6).
 
 **Layers**, back to front (`z-*`): `stage` 0 (the canvas and its floor shadow), `stage-ui` 2
 (leader lines and callouts pinned to the build), `chrome` 4 (the step heading and the 3D tools),
 `rail` 6, `dock` 8, `topbar` 10, `sheet` 20 (the phone sheet expanded, the Specs panel), `toast` 30.
 Never use a raw `z-index` number.
+- **`under` −1 is not a page layer.** It puts a control's hover overlay under the control's own
+  content, and only inside that control's `isolate` context: `relative isolate before:z-under`
+  ([motion.md, Studio rules for Phase 2, §1](motion.md#studio-rules-for-phase-2); added in WP-DS2,
+  test first). Anywhere else, it would drop the layer behind the stage.
 
 ### 2.6 Motion
 
 From [motion.md](motion.md#direction-c-studio-cinematic-the-object-moves-first). Only `transform`
 and `opacity` animate. Numbers swap; they never count through values nobody quoted. Nothing loops.
+**How to build each one in Phase 2**, who animates what (CSS, Motion or the 3D scene), hover,
+pressed and reduced motion, is in [motion.md, "Studio: rules for Phase 2"](motion.md#studio-rules-for-phase-2).
 
 | Token | Utility | ms | Use |
 |---|---|---|---|
-| `--dur-ui` | `duration-ui` | 160 | Hover, pressed states, a pill's highlight |
+| `--dur-ui` | `duration-ui` | 160 | A hover overlay's fade, the pressed scale, a chevron's turn. Never a colour |
 | `--dur-fade` | `duration-fade` | 200 | Crossfades: a callout chip, a compatibility state |
 | `--dur-exit` | `duration-exit` | 240 | An old value leaving; the step track filling |
 | `--dur-value` | `duration-value` | 360 | A new value arriving; the rail sliding; the callout re-anchoring |
 | `--delay-value` | `delay-value` | 40 | The new value starts after the old one begins to leave |
 | `--dur-light` | (`motion.ts`) | 400 | The RGB colour changing, in the shader |
-| `--dur-seat` | (`motion.ts`) | 500 | A part seating in 3D |
+| `--dur-seat` | (`motion.ts`) | 500 | A part seating in 3D; the fans spinning up or down |
 | `--dur-camera` | (`motion.ts`) | 700 | The camera moving to the next part |
 | `--dur-cut` | (`motion.ts`) | 200 | Reduced motion only: the crossfade that replaces a camera move |
 
@@ -427,6 +580,31 @@ component's utilities can still restyle any of them.
 | Page: `line-height: 1.5`, a system font stack | `--stage` background, `--ink` text, Rig Lab Sans, 15 / 22 body, tabular figures, no faked bold, antialiased | The page is the stage before any component paints |
 | Buttons: `cursor: default` | `pointer` on buttons, `[role=button]`, `summary`, `label[for]`; `not-allowed` when disabled | The click affordance a mouse user expects |
 | Selection: the browser's highlight | Solid: `--stage` text on `--ink` | Selected text stays at least 16.75:1 on every surface (section 2.1, rule 11) |
+| No `touch-action` | `touch-action: manipulation` on links with an `href`, buttons, fields except range sliders, `summary`, `label` and the ARIA widget roles | A quick second tap never zooms the page, while panning and pinch zoom still work (backlog item 7). A slider keeps the browser's own value, or a sideways drag would pan the page |
+| Form controls: `font: inherit`, so a field takes the page's 15 px, or its type role | On touch screens (`pointer: coarse`), every `input`, `select` and `textarea` is at least 16 px: `max(1rem, 16px) !important` | iOS Safari zooms the page into a focused field set below 16 px (backlog item 5). Desktop pointers keep the roles' 14 and 15 px |
+| Selects and option groups: `background-color: transparent; color: inherit` | `--surface` background and `--ink` text on `select`, `optgroup` and `option`; disabled options and groups in `--ink-3` | Windows can draw the open list in system colours under Rig Lab's light text (backlog item 8) |
+
+**About the WP-DS2 rows** (the last three):
+- **Why `!important` is safe on the touch font size.** For important declarations, the cascade
+  reverses the layer order: one in the base layer beats important declarations in the utilities
+  layer. So no type role, and no `!` utility, can take a field below 16 px on touch.
+  - Measured in Chromium 141 with touch emulation (`base-cascade-check.mjs`, 2026-10-02): a
+    `type-control` field and a field with an important 14 px utility both compute to 16 px.
+  - With a desktop pointer, both stay at 14 px, so desktop pages look as before.
+  - It is the only `!important` in `base.css`. Rig Lab's buttons are `<button>` elements, so the
+    rule never reaches a button.
+- **The same check measured the other two rows.**
+  - Selects and options take `--surface` and `--ink` in both themes, and a disabled option takes
+    `--ink-3`.
+  - A button's `touch-action` is `manipulation`, and a range slider's stays `auto`.
+- **Overscroll is not in `base.css`,** because a base style can't know which element scrolls. The
+  sheet and the Specs panel put `overscroll-contain` on their scroll containers ([components.md
+  §8](components.md#8-the-phone-sheets-expand-button), [specs-view.md
+  §1](specs-view.md#1-where-it-lives)).
+- **Disabled is not in `base.css` either** (backlog item 9). The opacity comes from
+  `disabled:opacity-40` and `aria-disabled:opacity-40`, put on each control ([components.md
+  §2](components.md#2-buttons-and-their-states)). A blocked part's row is `aria-disabled`, but it
+  must not fade. `base.css` keeps only the not-allowed cursor.
 
 Two Preflight rules that components must allow for:
 - **Lists lose their markers** (`list-style: none`). Safari then stops announcing them as lists. A
@@ -497,10 +675,13 @@ One run per row, on 2026-10-01. The layout-shift values were the same in every r
   - QA's simulated-throttling gate does not tell them apart (1,657 against 1,654 ms).
   - Every variant is inside the 2.5 s budget.
 - **Decision (Director, 2026-10-01): Phase 0 keeps the preload.** It is within budget, and it
-  avoids a visible swap.
+  avoids a visible swap. The decision stands until the Phase 2 measurement below. WP-DS2 recorded it
+  and made no new measurement ([backlog.md](backlog.md), item 22).
   - Phase 2 renders the shell text into the static route HTML, so LCP stops waiting for JS.
-  - Then it measures preload against no preload again, under applied throttling
-    ([backlog.md](backlog.md), item 22).
+  - Then it measures preload against no preload again, under applied throttling.
+  - **QA adds an applied-throttling LCP check at Phase 2 entry** (QA-P0-006, which the Director
+    deferred to then). Today's simulated-throttling gate can't tell the two apart (1,657 against
+    1,654 ms, above).
 
 ### 4.3 The fallback face
 
@@ -598,7 +779,7 @@ node docs/design/tools/tokens-check.mjs                     # browser check, on 
 
 | What | Command | Proves |
 |---|---|---|
-| `src/styles/tokens.test.ts`, 96 tests | `npm run test` (in `verify`) | Every utility compiles with Tailwind 4.3.3, and the removed defaults stay removed. `tokens.css` fails inside a layer (the wiring rule). `motion.ts` equals the CSS, and reduced motion zeroes everything but `cut`. The fallback's overrides stay Rig Lab Sans's metrics ÷ `size-adjust`. The font is a WOFF2 within the 80 KB budget, with its licence. Selected text is `--stage` on `--ink`, the pair the contrast check measures, and the contrast check passes. |
+| `src/styles/tokens.test.ts`, 106 tests | `npm run test` (in `verify`) | Every utility compiles with Tailwind 4.3.3, and the removed defaults stay removed. `tokens.css` fails inside a layer (the wiring rule). `motion.ts` equals the CSS, and reduced motion zeroes everything but `cut`. The fallback's overrides stay Rig Lab Sans's metrics ÷ `size-adjust`. The font is a WOFF2 within the 80 KB budget, with its licence. Selected text is `--stage` on `--ink`, the pair the contrast check measures, and the contrast check passes. The safe-area tokens read `env()` with a `0px` fallback, and `base.css` sets the 16 px touch fields, `touch-action` on controls, and the select colours after Preflight (WP-DS2). |
 | `docs/design/tools/contrast.mjs` | `node docs/design/tools/contrast.mjs [--check]` | WCAG 2.1 AA for every pair in section 2.2, dark and light, from `tokens.css` itself |
 | `docs/design/tools/tokens-check.mjs` | `node docs/design/tools/tokens-check.mjs` | The real Vite and Tailwind build under `/Rip-PC/`: hashed font, preload rewritten to the same file, no default palette. Six specimen screenshots (390, 768 and 1440, dark and light), both variable axes, the fallback's width and baselines, and the slow-font LCP and CLS |
 | `docs/design/tools/calibrate-fallback.mjs` | section 4.4 | The fallback descriptors from the font files |
@@ -620,4 +801,6 @@ Screenshots and reports go to `artifacts/screenshots/phase-0/WP-DS1/tokens/` and
   and measures again (backlog item 22). The app's swap itself is now measured: CLS 0.0000.
 - **Calibration covers Arial on Windows.** macOS and iOS also ship Arial, and Liberation Sans was
   drawn to Arial's widths, so they should behave the same. None of them was measured here.
-- **The compare checkbox's hit area** (18 px in the mock) must grow to 24 px in Phase 2 (2.5).
+- **The compare checkbox's hit area** (18 px in the mock) grows to 24 px in Phase 2, and to 44 px on
+  touch screens. Specified in [components.md §1](components.md#1-hit-areas) (WP-DS2); built in
+  Phase 2.

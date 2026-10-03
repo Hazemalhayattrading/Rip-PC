@@ -2,7 +2,16 @@
 
 Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
 
-**Last update:** 2026-10-02, Director. **Phase 1 (the engine) has started:**
+**Last update:** 2026-10-03, Director. **Resumed after the second stop, in a new session.** The old
+session's teammates are gone, so the four leads were re-spawned with the Phase 1 briefs and their
+rows below.
+- The limit hit at about 21:59 UTC on 2026-10-02, before any lead finished stopping. Nothing was lost:
+  - build-lead had already pushed its WIP (`f37a7ef`);
+  - the Director committed design-lead's one file (`eb20070`);
+  - the Director aborted data-lead's half-done merge, whose two semantics files still had unresolved conflicts. Its branch is back at `9f8a332`, clean and pushed.
+- Both of build-lead's workers had sent stop reports. They are recovered into build-lead's `artifacts/reports/`.
+
+**Phase 1 (the engine) is in wave 1:**
 - **The plan is approved.** Hazem approved `docs/reports/phase-1-plan.md` on 2026-10-02, with
   three answers in its §6:
   - the BIOS warning: warn, not block. It names the version needed, and tells the buyer to ask the
@@ -93,22 +102,54 @@ Owner: Director · Updated after every accepted task (CLAUDE.md rule 12).
 | 2026-10-02 | **Phase 1 plan approved** by Hazem, with three answers. The BIOS warning: warn, naming the BIOS version and telling the buyer to ask the retailer for an updated board. Both extra rules, `cooler-socket` and `display-output`, so 20 in all. At least 20 held-out results. The other defaults stand | Hazem | `docs/reports/phase-1-plan.md` §6 |
 | 2026-10-02 | The integration branch fast-forwarded to `main` (`27dbc6e`), then merged the plan branch. `feat/director-phase-1-plan` deleted | Director | `385493f` |
 | 2026-10-02 | **Phase 1 briefs written,** and the four leads spawned for wave 1 | Director | `docs/reports/phase-1-briefs.md` |
+| 2026-10-03 | **Resume after the second stop** (new session).<br>• build-lead's WIP was already pushed, at `f37a7ef`.<br>• design-lead's `copy-guide.md` edits were committed as WIP, `eb20070`.<br>• data-lead's merge of `e968a75` into `feat/data-engine-data` was aborted: `semantics.ts` and its test had unresolved conflicts. Nothing was lost, and `9f8a332` is clean and pushed.<br>• The engine-engineer's and frontend-engineer's stop reports were recovered into build-lead's `artifacts/reports/`.<br>• The four leads were re-spawned | Director | Checked before committing: no pre-purge IDs, no secrets. All 7 worktrees are clean and equal to origin |
+| 2026-10-03 | **WP-DS2 batch 2 accepted and merged** (`bf0c95a`): the 49 backlog items, QA-P0-018 and 019, QA-P1-001's focus rule and QA-P1-003. Item 38 is closed (textures ship as KTX2). New `components.md`; updates to `tokens.md`, `specs-view.md`, `motion.md` and `studio-3d-brief.md`. Tested style changes for touch, safe areas and selects, plus a `motion` type test | design-lead (ui-designer, motion-designer, 3d-artist) | verify on the merged branch: 727 unit, 166 e2e. No visible change today: 12 screenshots byte-identical; CSS +194 B gzip; JS unchanged. The Director re-checked 4 of 5 facts in `node_modules` and by arithmetic. The 8 licence captures were copied to `C:Projectsig-lab-evidencephase-1design-lead` and verified; manifest `docs/reports/evidence/design-lead-evidence-2026-10-03-ds2-3d-licences.sha256` |
+| 2026-10-03 | **The Zod-free `nullMeansNone` accepted and merged** (`ddee87b`), WP-D1's own small batch. `src/data/semantics.ts` imports only types and the import-free `paths.ts`, and the validator calls the same function. It unblocks E0's lab: 100 of 172 null values mean "none" | data-lead | verify on the merged branch: 709 unit, 166 e2e; 14 tests, with a no-Zod negative control |
+| 2026-10-03 | **Hazem's navigation report closed: not an app bug.** QA reproduced the exact case: desktop Chrome on this PC, automated. A click 260–280 ms after the response finds no link, because the static HTML's `#root` is empty until the app renders, at about 580 ms. The URL stays `/Rip-PC/`, and the home page then shows. A click once the link exists navigates at once. Phase 2's planned static shell (a Phase 0 decision) puts the nav links in the HTML and removes the gap | qa-lead | `artifacts/screenshots/phase-1/WP-Q4/nav-check/` in the QA worktree, with `manifest.sha256`. The live run passes 81 of 90 across 5 browsers × 3 widths. The 9 failures are Firefox WebGL warnings only, with no navigation failure; the question is with build-lead |
+| 2026-10-03 | **WP-DS2 batch 1's AA claims checked by QA:** all 28 contrast pairs pass, recomputed from `tokens.css`. The mock has 0 axe violations (wcag22aa) in 7 cells, 320 px included. One Minor goes to design-lead: QA-P1-003, a "44 px buttons" spec line against the 36 px theme toggle, which still passes WCAG 2.5.8 | qa-lead | `artifacts/qa/phase-1/ds2-aa/` in the QA worktree |
+| 2026-10-03 | **Work in progress saved after the stop.** The Director committed and pushed each worktree as-is, with no agent running:<br>• build `b6cc839` (48 files);<br>• data D1 `1218ff9`;<br>• data D2 `93dbabc`;<br>• design `56096a8`;<br>• qa `f20b156`, a new branch on origin.<br>Of the 6 workers, only the hardware-researcher sent its stop report (13:38:53 UTC). It was recovered from the transcript into data-lead's `artifacts/reports/` | Director | Before the commits, every file was checked: none over 200 KB, no pre-purge IDs, no secret-like strings. The repo has no git hooks. All 5 worktrees are clean and equal to origin |
+| 2026-10-02 | **WP-Q3 accepted and merged** (`9d56356`). It holds:<br>• test plan v4, with the audit seed, the golden tests in each anchor's source context, the held-out protocol (20 results, 4 per class), the 20 rules, the corpus and sweep, and mutation tests;<br>• `phase-1-worker-briefs.md`, briefs A to I;<br>• `compat-rules.json`: 10 rules with unknown-data tests, and 10 with validator proofs, 25 distinct test titles;<br>• `compat-trace` and `golden-count`;<br>• `budget.json`: Hazem's held-out values, pinned | qa-lead | QA paths only. The 20 ids equal plan §3 and build-lead's `RULE_IDS`. verify on the merged branch: 695 unit, 166 e2e. 223 tool tests; each tool fails on planted defects; 19 of 19 planted tool bugs were caught; no pre-purge IDs |
+| 2026-10-02 | **WP-DS2 batch 1 accepted and merged** (`427d241`). It holds:<br>• `lab-spec.md`: five shared components;<br>• `copy-guide.md`: patterns for all 20 rules, and the BIOS warning to Hazem's §6;<br>• the `max-w-measure` token, test first;<br>• `tokens.md` rules for QA-P0-018 and 019, and backlog items 15 and 45 | design-lead | verify on the merged branch: 598 unit, 166 e2e. The lab mock has 0 axe violations at 390, 768 and 1440, dark and light. The Director checked the guide's 5 numbers against the catalogue, and 2 on the live maker pages (NZXT C1200 depth 160 mm; Fractal Pop Mini Air PSU max length 150 mm) |
+| 2026-10-02 | data-lead set up both Phase 1 branches, from `c621c15`: `feat/data-engine-data` (D1) and `feat/data-benchmarks` (D2, in the new `worktrees/data-lead-d2`). The parked Intel profile `d4e87e3` is on the D1 branch as `755def5`, so `feat/data-intel-profile` is deleted on origin, with a lease. The local ref is kept | data-lead; Director | identical `git patch-id`; verify 597 unit, 166 e2e in both worktrees; no pre-purge IDs in the new commits |
 | 2026-10-01 | **WP-D0 accepted and merged** (`c04e2a5`): Zod schemas, a validator with 34 rules, 73 seed spec records (all plan 5.3 minimums and mixes), live prices (US 52 + 10 gaps, SA 45 + 17 gaps), 116 game and 27 creator anchors, 15 games, the 20% audit (78 items, 8 findings fixed). The Director's review caught the North cooler limit (145 → 170 mm); data-lead's sweep caught the North PSU limit by tray count (schema: `psu.clearance` list) | data-lead | verify on the merged branch: 454 unit, 112 e2e; initial JS 77.42 KB gzip (no catalogue data in the bundle); 21 new evidence files copied and checked (`docs/reports/evidence/data-lead-evidence-2026-10-01.sha256`) |
 
 ## In progress
 
 | Task | Who | Branch / worktree | State | Exact next step |
 |---|---|---|---|---|
-| WP-D1 Engine data, and WP-D2 Benchmark coverage | data-lead | `feat/data-engine-data` in `worktrees/data-lead`; `feat/data-benchmarks` in `worktrees/data-lead-d2` (new) | Wave 1, started 2026-10-02 | Brief steps 1 and 2: set up both branches and cherry-pick `d4e87e3`. Then D1 batch 1: the fixture table for the 20 rules, and the structured conditions. D2 runs in parallel, starting with the 10 games that have no anchors |
-| WP-E0 Engine foundations and the Engine lab | build-lead | `feat/build-engine-foundations` in `worktrees/build-lead` | Wave 1, started 2026-10-02 | Brief E0 steps 1 to 3: branch, check the APIs with Context7, then write the result types first, for review by qa-lead and design-lead |
-| WP-DS2 Design backlog and engine copy | design-lead | `feat/design-ds2` in `worktrees/design-lead` | Wave 1, started 2026-10-02 | Brief step 2 first: the lab spec, and the copy guide with the BIOS warning, for build-lead |
-| WP-Q3 Test plan v4 and verification tools | qa-lead | `feat/qa-phase1-plan` in `worktrees/qa-lead` | Wave 1, started 2026-10-02 | Brief Q3 steps 1 to 3: branch, review the result types when they arrive, and write test plan v4 (20 rules, at least 20 held-out results) |
+| WP-D1 Engine data, and WP-D2 Benchmark coverage | data-lead (re-spawned 2026-10-03) | `feat/data-engine-data` @ `9f8a332`; `feat/data-benchmarks` @ `bf9777b`; `feat/data-semantics` @ `3e3bdf3` (merged as `ddee87b`). All clean and pushed | D1 batch 1 is in data-lead's own review. D2 batch 1 is handed off, and the Director's review waits on QA's golden-count pin | 1. **Redo the merge** of the integration branch into `feat/data-engine-data`, in `worktrees/data-lead`. Two files conflict, `src/data/semantics.ts` and `src/data/semantics.test.ts`: keep D1's extended field list (powerAdapter, atxBracketIncluded, singleFanRamClearanceMm) and its tests, on top of the merged module's API. Run verify, then commit and push.<br>2. Commit the price worker's staged prices and gaps, from `artifacts/prices/d1-batch1-staged.json`, into `data/prices/*.json`. That clears the price-coverage errors.<br>3. Hand off D1 batch 1, against the Director's checklist below.<br>4. D2: the preset-name map next, then batch 2.<br>**The Director's D1 batch 1 checklist:**<br>• retail stock, or the maker's current listing, for each new part. The 3400G is on Amazon.sa at SAR 536.49. The B580 LE has no price in either market. The Kingston 4x16, PK650D and AN600 are listed in neither;<br>• the B580's 600 W is Intel's *minimum* PSU (now `recommendedPsuKind`);<br>• prefer Intel's public pages to the PDF marked "not for end users";<br>• consider the listed RGB Kingston kit KF560C40BBAK4-64 instead |
+| WP-E0 Engine foundations and the Engine lab | build-lead (re-spawned 2026-10-03). The old workers ended with the old session; spawn new ones | `feat/build-engine-foundations` @ `f37a7ef`, clean and pushed, with all the workers' files committed as WIP | The types are approved (`83aa5ab`); `semantics.ts` is wired (`526ab87`); `recommendedPsuKind` is in the contract (`a249f13`). Both workers' stop reports are in `artifacts/reports/`, and give the exact state:<br>• engine-engineer: the swept dump (49,955 combinations, 201 KB gzip), the compat scaffold and the query mode are **finished**, with 1,217 tests and 100% engine coverage;<br>• frontend-engineer: QA-P1-002 and the drives in the codec are done. The lazy lab header is half done: `EngineLab.tsx` has no header, `main` or h1 yet. There are type errors in `src/app/lab/*` | 1. Read both reports in `artifacts/reports/`, and review the WIP commit.<br>2. Finish the frontend half: `EngineLab.tsx` as the full lab frame; the three type errors; `canAddDrive` moved to `src/state/drives.ts`; initial JS at or under 79.92 KB (`npm run perf:bundle`); the lab to design-lead's spec.<br>3. verify green, merge the integration branch, then hand off E0, with the sweep counts and the dump size.<br>4. E1 batch 1a on `feat/build-engine-compat`, once the compat scaffold is reviewed: cpu-socket, ram-type, board-form-factor, usb-c-header and m2-lanes.<br>5. RuleSpec: `cooler-height` gets `unknownData: true` and an unknown test (QA v4.5).<br>6. QA-P1-001 step 2 (focus on the h1) before M1. |
+| WP-DS2 Design backlog and engine copy | design-lead (re-spawned 2026-10-03) | `feat/design-ds2` @ `eb20070`: the integration tip plus the WIP copy-guide edits (the §7.14 example and §9's maker's-figure patterns, for `recommendedPsuKind`) | Batches 1 and 2 are merged | 1. Review WIP `eb20070`, finish the two copy-guide edits, run verify, and hand them off as a small batch.<br>2. The wording reviews after the E1, E3 and E5 hand-offs. WP-DS2 closes after those and after QA's check of QA-P0-018 and 019 |
+| WP-Q4 Independent verification (Q3 is done) | qa-lead (re-spawned 2026-10-03) | `feat/qa-phase1-verification` @ `8a70f69`, clean and pushed (v4.5, approved) | In progress | 1. **First:** `tests/audit/golden-count.test.mjs` pins 143 anchor rows. D2 batch 1 makes it 190, so count from the data or update the pin. D2 batch 1 can't merge before that.<br>2. Re-run QA-P1-003 on the integration branch, then close it.<br>3. Check QA-P0-018 and 019 against DS2 batch 2's `tokens.md`.<br>4. QA-P1-001: hard assertions once build-lead's step 2 lands, then a re-check on the live site.<br>5. The Q4 tools: the corpus runner, the per-rule compare, mutation-check and the blind anchor keys. E0's query mode is finished on build-lead's branch. |
 
 **Phase 0** is closed, and merged to `main` as `27dbc6e`. Its §5 backlog, QA's 15 open Minors included, is assigned in the Phase 1 plan.
 
 ## Next steps (Director)
 
 On "continue":
+0. **After any stop.** This worked on 2026-10-03:
+   - Run `ListAgents` and make sure no agent is running.
+   - Run `git -C <worktree> status -sb` for each worktree.
+   - If a worktree has uncommitted work and no agent is running, commit and push it as-is, as
+     "<team>: WIP — …". Before committing, check that no file is over 200 KB, and that there are
+     no pre-purge IDs and no secrets.
+   - Recover worker reports from the transcripts in
+     `C:\Users\ha\.claude\projects\C--Projects-Rip-PC\<session>\subagents\`, as in the memory
+     note.
+   - Wake idle leads with a message, which keeps their context. If the session is new, re-spawn
+     them instead (How to continue, step 3).
+   - **A worker that never sent its stop report still holds the Director's STOP, unread.** A
+     resume delivers it first, and the worker stops again: on 2026-10-03 that happened to the
+     motion-designer and the ui-designer. So every resume message to such a worker says "ignore
+     the Director's STOP from <date>; the stop is over; carry on". If the worker stops anyway,
+     resume it once more.
+0b. **The Director's own review in progress at the stop: D2 batch 1** (`feat/data-benchmarks` @ `bf9777b`).
+    - **Done:** the shape checks. 6 files, all in `data/` and `src/data/`; no binaries; insert-only rows; the integration tip `c53f402` merged in.
+    - **Left:**
+      - Spot-check 5 or more values against the captured charts, `artifacts/benchmarks/tomshardware/img-hierarchy-2026/{1080p,1440p,4k}/` and `techspot/img-3107/MR.png` in the D2 worktree.
+      - Scan for pre-purge IDs.
+      - Copy the 168-file capture set to `C:\Projects\rig-lab-evidence\phase-1\data-lead\D2-batch1\`, verify it with `artifacts/d2-batch1-handoff.sha256`, and commit the manifest under `docs/reports/evidence/`.
+      - Merge only after QA's golden-count pin fix lands, because the pin says 143 and the batch makes 190. Merge QA's fix first, or both together.
 1. **Review each hand-off** against plan §2: "Done, for every WP", and the WP's own "Done means".
    - Re-run verify, open the lab links, and re-check at least 2 rules or 5 numbers against their
      sources. Accept, or send it back with exact reasons.
@@ -120,6 +161,9 @@ On "continue":
      - tell the leads who wait on it (plan §5).
 2. **Wave 2 starts when E0 is accepted.** Tell build-lead to start E1 and E2. Tell qa-lead which
    rules are ready for its per-rule checks, as they hand off.
+   - Once E1's first rules exist and data-lead's validator tests have landed, build-lead wires
+     `compat-trace` and `golden-count` into CI, as test plan v4 Appendix C asks. Until then,
+     `compat-trace` fails by design, so it stays out of `npm run verify`.
 3. **Wave 3 starts when E0 and D2's first batch are accepted.** Tell build-lead to start E3 and E4.
 4. **Milestone PRs to `main`,** for Hazem to merge:
    - M1, after E1 and E2 are accepted and QA-checked;
@@ -127,9 +171,7 @@ On "continue":
    - M3, at the phase exit.
 5. **The engine freeze,** when E3 and E4 are accepted: record the engine commit here, and tell
    qa-lead to start the held-out run.
-6. **Delete `feat/data-intel-profile`** on origin once data-lead reports that `d4e87e3` is on
-   `feat/data-engine-data`.
-7. **After GitHub's reply** to the Support request: check that the old commit answers 404, on the
+6. **After GitHub's reply** to the Support request: check that the old commit answers 404, on the
    API and on raw URLs, and record the result. Its ID is in
    `C:\Projects\rig-lab-evidence\purge\github-support-request.md`.
 
@@ -194,6 +236,9 @@ Branch-tidy record:
   Hazem, optionally: a private backup of `C:\Projects\rig-lab-evidence`, which is now the only
   full copy.
 - **3D assets, paid options: Hazem decides later, before Phase 3** (his answer, 2026-10-02).
+  - New input from WP-DS2 batch 2 (`studio-3d-brief.md`, item 40; captures in `rig-lab-evidence`):
+    - Unity's Asset Store terms allow a model "as an embedded component". Whether a hero part is "a substantial portion" is Hazem's call.
+    - ArtStation's licence is unclear for a plain GLB, and a public site would need its Extended licence.
   The options are in `docs/design/studio-3d-brief.md` §7. Design-lead recommends A now (USD 0, parametric models and CC BY), deciding B before Phase 3 (a commissioned hero set, about USD 1,440, an estimate, not a quote), and skipping C. Its three questions: may we ask ARCTIC and ASUS for permission, and who sends the requests? Who downloads the CC BY files, with what account? Is a budget of about USD 1,500 for B open for Phase 3?
 - **GitHub Support request: done, waiting for GitHub's reply.** Hazem filed it on 2026-10-02
   through GitHub's Virtual Assistant. It covers the cached pre-purge commits, from the one that
@@ -212,6 +257,68 @@ Branch-tidy record:
   (Phase 2).
 
 ## Decisions
+
+- **2026-10-02, WP-E0's bundle criterion (Director, on build-lead's question).** The build codec
+  keeps `zod/mini`, about 5.1 KB gzip, which was accepted in WP-B0. Phase 2's URL parameters will
+  use it, and rewriting a share-link parser is outside E0.
+  - "No Zod" means no catalogue data, no data schemas and no classic `zod` on the product pages.
+  - The lab index is `/lab/` (`lab/index.html`), because GitHub Pages redirects `/lab` there once
+    `lab/` is a folder.
+  - The plan and the briefs now say this.
+- **2026-10-02, unknown-data tests (Director, on qa-lead's finding).**
+  - 12 of the 20 rules read only fields that the schema or the validator require, so valid data
+    can't be "not published" there. They need no unknown-data test.
+  - Instead, the validator's negative tests must prove that a null in each such field is
+    rejected, and QA's rule list names those tests.
+  - The 8 rules that can meet an unpublished value keep their unknown-data tests. Such a value is
+    one of these:
+    - a field that is null with a note;
+    - a nullable list;
+    - a fact the schema doesn't hold, such as RAM rank.
+    An empty list means "none", which is a real answer.
+  - The first 8 were `bios-version`, `ram-speed`, `gpu-thickness`, `ram-cooler-clearance`,
+    `radiator-fit`, `psu-length`, `psu-wattage` and `gpu-power-connector`.
+  - After WP-D1's batch 1, `gpu-length` and `psu-form-factor` joined them, so 10 have the test
+    and 10 have validator proofs (23 new validator tests, plus `bios-coverage`).
+  - QA's `tests/audit/compat-rules.json` is the record.
+  - The list is checked again whenever a rule starts to read a new field (plan WP-E1). QA's
+    wording fix was applied on 2026-10-02.
+- **2026-10-02, golden tests with conflicting sources (Director, on qa-lead's question).**
+  - The ±5% of BUILD_PROMPT §5.3 holds for every anchor, in its own source context: its publisher
+    and its test conditions. The model may calibrate per source, from the anchors.
+  - Where sources disagree by more than 10%, the range shown without a source context contains
+    both values, at medium confidence or lower (plan WP-E3).
+- **2026-10-03, test plan v4.5 approved (Director).** QA re-checked the unknown-data split, as the ruling requires, after `cooler-height` began to read the RAM kit's height and the cooler's RAM clearance. Both can be unpublished, so the split is now 11 rules with unknown-data tests and 9 with validator proofs. The trace requires 20 distinct validator titles. `cooler-socket` gains `motherboard.socket`'s existing proof.
+- **2026-10-03, design-lead's rulings in WP-DS2 batch 2** (recorded, within its remit):
+  - the market pill switches at once, with no slide;
+  - `--z-under` applies only inside an isolate context;
+  - chips at rest may use the `--line` border;
+  - Phase 2 runs with no post-processing composer, and with Neutral tone mapping;
+  - no list virtualisation until INP evidence calls for it;
+  - display names are reviewed from the dump;
+  - the focus rule on a page change, which QA tests and build-lead fixes QA-P1-001 to.
+- **2026-10-03, E1 may start before E0 is accepted (Director).** QA and design approved the result
+  types at `83aa5ab`, which is the E1 gate. E0's remaining parts (catalogue loading, the dump, the
+  lab shell) don't change how the rules are written.
+  - E1 batch 1 runs on its own branch, from the approved contract, if build-lead has capacity.
+  - The merge order is unchanged: E0 first, then E1.
+  - The plan's waves still hold for E2 to E5.
+- **2026-10-02, QA's method proposals in test plan v4 (Director, approved).**
+  - The held-out mix: at least 4 anchored configurations, at most 4 results per review, and at
+    least 3 publishers.
+  - A corpus result milder than expected is a Major.
+  - Disabling a Stryker mutant needs a reason of at least 20 characters.
+  - The sweep severities: S1 to S11 and S14 are Blockers, the rest are Majors.
+  - "No estimate" counts as a failed held-out result, but only for an eligible pick: one the
+    engine claims to cover. For a game with no anchors, "no estimate yet" is correct, and such a
+    pick isn't eligible.
+- **2026-10-02, a card for the Arc B580 (Director, on qa-lead's data finding).** The
+  `intel-arc-b580` chip has 6 game anchors and a Blender row, but no catalogue card, so no build
+  can reach it. One real, sourced B580 card goes into WP-D1. It's a data-integrity fix, not
+  catalogue growth (plan WP-D1 and §7).
+- **2026-10-02, the dump's query mode (qa-lead's request, accepted).** Given a file of builds and
+  queries, it writes exactly those results, so QA never reads the engine's code. E0 fixes the
+  input format, and each later WP adds its entry point (plan WP-E0).
 
 - **2026-10-01, agent teams: they work on this PC.**
   - `data-lead` spawned as an in-process teammate. `ListAgents` lists it under "Teammates", and

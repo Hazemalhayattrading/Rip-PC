@@ -1,6 +1,6 @@
 /**
- * What the data means, for code that must not load Zod (the engine). Type imports only, plus the
- * Zod-free path helpers. The validator uses the same functions, so the two can't drift apart.
+ * What the data means, for code that must not load Zod (the engine and the lab). Type imports only,
+ * plus the Zod-free path helpers. The validator uses the same functions, so the two can't drift apart.
  */
 import type { SpecRecord } from './schema/files';
 import { covers, splitPath } from './validate/paths';

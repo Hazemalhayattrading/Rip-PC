@@ -36,7 +36,7 @@ engine's result next to the sources it used.
 
 | Page | What it shows | Arrives with |
 |---|---|---|
-| `/lab` | What each page does, and how many parts, prices and anchors loaded | WP-E0 |
+| `/lab/` | What each page does, and how many parts, prices and anchors loaded | WP-E0 |
 | `/lab/parts` | Every catalogue part and spec, each with its source and date | WP-E0 |
 | `/lab/accuracy` | Every benchmark anchor with its source, and a coverage grid (games × GPUs, games × CPUs). WP-E3 adds the model's number and the error for each anchor | WP-E0, filled by WP-D2 |
 | `/lab/compat` | One row per compatibility rule: ok, warn or block, with the reason, the rule id and the sources | WP-E1 |
@@ -85,12 +85,19 @@ Owner: build-lead (engine-engineer, frontend-engineer) · Needs: nothing · Wave
   - The parts, prices and anchors reach the browser as one content-hashed JSON file, validated
     at build time by the same Zod schemas.
   - The engine takes the catalogue as an argument, so it stays pure.
-  - Neither the data nor Zod reaches the product pages.
+  - Neither the catalogue data nor the data schemas reach the product pages, and nor does
+    classic `zod`. The build codec's `zod/mini`, accepted in WP-B0, stays (Director, 2026-10-02).
 - **An engine dump script.** It writes every rule's result, for every catalogue combination, to
   JSON. QA's sweep and its per-rule workers use it.
+  - **A query mode** (QA's request, accepted on 2026-10-02): given a file of builds and queries,
+    it writes the engine's results for exactly those.
+  - QA's corpus, per-rule workers, held-out run and bottleneck checks use it, so QA never reads
+    the engine's code.
+  - E0 fixes the input format and covers compatibility. Each later WP adds its own entry point.
 - **An ESLint rule** that stops `src/**` from importing `tests/**`. QA asked for it in test plan §8.
-- **The lab shell:** `/lab`, `/lab/parts` and `/lab/accuracy` (the anchors and the coverage
-  grid), with one shared part picker.
+- **The lab shell:** `/lab/`, `/lab/parts` and `/lab/accuracy` (the anchors and the coverage
+  grid), with one shared part picker. The index is `/lab/` (`lab/index.html`), because GitHub
+  Pages redirects `/lab` there once `lab/` is a folder.
 
 **In the browser**
 - Open `/lab/parts` and pick any part. Each spec shows its value, its unit and its source:
@@ -119,6 +126,9 @@ it · Wave 1
      without a native 12V-2x6 is needed, and a real case of too few cables.
    - `cpu-chipset`: every catalogue CPU is on the support list of every board with its socket.
    - `cooler-socket` (added by Hazem, §6): all 5 coolers list all 4 sockets.
+   - **A card for every catalogue GPU chip.** The Intel Arc B580 has 6 game anchors and a
+     Blender row, but no card in the catalogue, so no build can reach it (QA's finding). One real,
+     sourced B580 card fixes this (Director's ruling, 2026-10-02).
    - If no real product exists after 2 tries (rule 11), data-lead records the gap, and the
      Director decides.
 2. **Structured conditions.** Today the conditional clearances are free text. Each becomes
@@ -142,8 +152,12 @@ it · Wave 1
    - AMD's PPT;
    - the structured Intel power profile, parked on `feat/data-intel-profile` (`d4e87e3`, a
      cherry-pick of 2fa3e32).
-7. **The CUDIMM question.** Data-lead checks whether the G.Skill Trident Z5 CK kit needs a
-   module-kind field (CUDIMM or UDIMM) for the RAM rules.
+7. **RAM details for the RAM rules.**
+   - The schema already has a module form factor (UDIMM, CUDIMM or SO-DIMM). Data-lead checks the
+     G.Skill Trident Z5 CK kit's value.
+   - For `ram-speed`: the modules' rank, and each CPU's official speed per configuration
+     (modules per channel, and rank), wherever the makers publish them. With 4 modules, the
+     official speed depends on them. Where they aren't published, the rule says "can't verify".
 8. **The case size-class redesign:**
    - a zod-free `deriveCaseSize`, with `exteriorVolumeLiters`;
    - frozen class ids;
@@ -225,8 +239,22 @@ Owner: build-lead (engine-engineer) · Needs: WP-E0; WP-D1 for the rules marked 
   The §3 examples open from links in the hand-off.
 
 **Done means**
-- Each rule has positive, negative, boundary (for numeric rules) and unknown-data tests, named as
-  in test plan §9.3.
+- Each rule has positive and negative tests, plus boundary tests for numeric rules, named as in
+  test plan §9.3.
+- **Unknown-data tests** (Director's ruling on QA's finding, 2026-10-02):
+  - Every rule that reads a value which can be unpublished has one. Such a value is one of
+    these:
+    - a field that is null with a note;
+    - a nullable list, such as a case's `psu.clearance`;
+    - a fact the schema doesn't hold, such as a RAM kit's rank.
+  - An empty list is a real answer ("none"), not an unpublished one.
+  - For a rule whose fields the schema or the validator require, the validator's negative tests
+    must prove that a null there is rejected. QA's rule list names those tests, and
+    `compat-trace` requires each one to pass.
+  - The list is checked again whenever a rule starts to read a new field. QA's rule list,
+    `tests/audit/compat-rules.json`, is the record.
+  - After WP-D1's batch 1, 10 rules need the test and 10 have validator proofs. `gpu-length` and
+    `psu-form-factor` joined the first 8, because D1 added values that can be unpublished.
 - QA's `compat-trace` check exits 0.
 - The known-incompatibility corpus gives no ok, and the catalogue-wide sweep holds.
 - Mutation tests (StrykerJS) run on the rules. Every surviving mutant is killed by a new test, or
@@ -280,8 +308,14 @@ Owner: build-lead (a second engine-engineer, in its own folder) · Needs: WP-E0.
 - `/lab/accuracy` gains the model's number and the error for every anchor.
 
 **Done means**
-- **The golden test** is generated from the anchor files, with one case per row (143 today). Every
-  case passes within ±5%.
+- **The golden test** is generated from the anchor files, with one case per row (143 today).
+  - Every case passes within ±5%, in the anchor's own source context: its publisher and its test
+    conditions.
+  - The model may calibrate per source, for example with a scene factor per publisher and game.
+    The calibration comes from the anchors, and the result's explanation names it.
+- **Where reputable sources disagree** by more than 10% on the same configuration
+  (`conflictsWith`): the estimate shown without a source context has a range that contains every
+  published value of the pair, at medium confidence or lower (Director's ruling, 2026-10-02).
 - **The held-out results:**
   - at least 20 (Hazem, §6), chosen blind by QA after the engine is frozen;
   - each within 10%;
@@ -362,6 +396,15 @@ Owner: qa-lead (data-auditors, e2e-tester, perf-tester) · Needs: each WP's hand
 **Deliverable**
 - The §4 checks, run for each WP as it lands.
 - e2e tests for the lab pages.
+- **In-app navigation on the live site** (Hazem's report, 2026-10-02: clicking "Build" or
+  "Start a build" seemed to stay on the home page, while opening `/Rip-PC/build/use-case`
+  directly worked).
+  - Every nav link and call to action is clicked by mouse and tapped by touch, on the live GitHub
+    Pages site as well as locally. Today's smoke tests only load each route directly.
+  - It runs in real browsers: Chrome with the GPU on, Edge, and Firefox and WebKit through
+    Playwright.
+  - If the bug is real, it goes to build-lead as a defect, the fix is written test first, and the
+    check runs on the live site again after the next deploy.
 - `docs/qa/report-phase-1.md`. As in Phase 0, the Director commits qa-lead's text unchanged.
 
 **In the browser**
@@ -370,6 +413,7 @@ Owner: qa-lead (data-auditors, e2e-tester, perf-tester) · Needs: each WP's hand
 
 **Done means**
 - QA's verdict is CLOSED: 0 Blockers, 0 open Majors.
+- The live-site navigation check passes after each milestone deploy.
 
 ### WP-DS2 · Design backlog and engine copy
 Owner: design-lead (ui-designer, motion-designer) · Needs: nothing · Wave 1
@@ -435,7 +479,7 @@ catalogue parts.
 | **Every compatibility rule** | 1 worker per rule | 20 | As each rule hands off, 4 at a time | Each real combination it tried matches its expected result. The reason names the right parts, numbers and units, and the source links open the right page. The boundary and unknown-data cases behave as specified |
 | Known incompatibilities, and the sweep | 1 worker | 1 | After WP-E1 | No ok for any real combination known not to work (from manuals, support lists and case pages). The catalogue-wide sweep holds |
 | **Every benchmark anchor: the data** | 1 worker per source review. A source with more than about 50 rows is split | 5 for today's 143 rows, plus 1 for each review WP-D2 adds | After each WP-D2 batch the Director accepts | Every row's value and conditions match the source: resolution, preset, ray tracing, upscaling, frame generation, test CPU and GPU, driver and date |
-| **Every benchmark anchor: the model** | The golden test, generated with 1 case per row | None: it runs in CI | Every PR | Every case is within ±5%, and QA checks that the number of cases equals the number of rows |
+| **Every benchmark anchor: the model** | The golden test, generated with 1 case per row | None: it runs in CI | Every PR | Every case is within ±5% in its own source context, and QA checks that the number of cases equals the number of rows. For each conflicting pair, the range shown contains both values |
 | Held-out results | 1–2 workers pick them; another checks the picks | 2–3 | After WP-E3 and WP-E4 are frozen | At least 20 results, 4 per coverage class, chosen blind and absent from the data, each within 10% |
 | Power constants | 1 worker | 1 | After WP-E2 | Every constant matches its source, and the PSU range is checked against every card maker's recommendation |
 | Bottleneck verdicts | 1 worker | 1 | After WP-E5 | For 20 builds that QA picks, each sentence matches the model's numbers, and each rebalanced build passes the rules and the price limit |
@@ -503,7 +547,8 @@ the four leads, reusing their worktrees. The Phase 0 working rules stay:
 
 - **The builder UI and its step pages** are Phase 2. The lab is the only UI.
 - **Growing the catalogue to the v1 size** (BUILD_PROMPT §4, rule 6) is Phase 2 work, alongside
-  the builder. Phase 1 adds only the products that the rule tests need.
+  the builder. Phase 1 adds only the products that the rule tests need, plus a card for any
+  catalogue GPU chip that has none (the Arc B580).
 - **Prices:**
   - more SA retailers, and Newegg's seller selector: Phase 4, with the Buy Sheet;
   - the re-price batch: before launch.

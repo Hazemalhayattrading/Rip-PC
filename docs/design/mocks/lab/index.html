@@ -1,0 +1,448 @@
+<!doctype html>
+<!--
+  Engine lab mock (WP-DS2): the frame, the part picker, the status chip, the result row, the evidence
+  list, the source link and the estimate readout of docs/design/lab-spec.md, on the shipped tokens.
+  It is static. Build and shoot it with: node docs/design/tools/lab-mock.mjs
+  Parts, specs, sources and dates are real catalogue values at c621c15. The rows' outcomes and the
+  estimates are illustrative, because the engine is not built yet; the page says so.
+-->
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Compatibility · Engine lab · Rig Lab</title>
+    <script>
+      try {
+        if (new URLSearchParams(location.search).get('theme') === 'light') {
+          document.documentElement.dataset.theme = 'light';
+        }
+      } catch {}
+    </script>
+    <link rel="stylesheet" href="./lab.css" />
+  </head>
+  <body>
+    <svg width="0" height="0" class="absolute" aria-hidden="true" focusable="false">
+      <defs>
+        <symbol id="i-ok" viewBox="0 0 18 18"><circle cx="9" cy="9" r="7" /><path d="M6 9.2l2 2 4.1-4.3" /></symbol>
+        <symbol id="i-warn" viewBox="0 0 18 18"><path d="M9 2.5l7 12.3H2z" /><path d="M9 7.2v3.4M9 12.9v.1" /></symbol>
+        <symbol id="i-unverified" viewBox="0 0 18 18"><path d="M9 2l7 7-7 7-7-7z" /><path d="M7.4 7.6a1.65 1.65 0 1 1 2.35 1.5c-.45.22-.75.55-.75 1.05v.25M9 12.7v.1" /></symbol>
+        <symbol id="i-block" viewBox="0 0 18 18"><circle cx="9" cy="9" r="7" /><path d="M4.1 13.9l9.8-9.8" /></symbol>
+        <symbol id="i-none" viewBox="0 0 18 18"><circle cx="9" cy="9" r="7" /></symbol>
+        <symbol id="i-na" viewBox="0 0 18 18"><circle cx="9" cy="9" r="7" /><path d="M6 9h6" /></symbol>
+        <symbol id="i-out" viewBox="0 0 18 18"><path d="M7.5 4.5h6v6" /><path d="M13.5 4.5l-9 9" /></symbol>
+        <symbol id="i-chevron-down" viewBox="0 0 18 18"><path d="M5 7l4 4 4-4" /></symbol>
+        <symbol id="i-chevron-right" viewBox="0 0 18 18"><path d="M7 5l4 4-4 4" /></symbol>
+        <symbol id="i-theme" viewBox="0 0 18 18"><path d="M15 11.4A6.3 6.3 0 0 1 6.6 3a6.3 6.3 0 1 0 8.4 8.4z" /></symbol>
+      </defs>
+    </svg>
+
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-toast focus:rounded-pill focus:bg-surface focus:px-4 focus:py-2 focus:type-control">Skip to main content</a>
+
+    <header class="px-inset pt-6">
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-3">
+        <a href="#" class="type-wordmark text-ink no-underline">Rig Lab</a>
+        <span class="rounded-pill border border-dashed border-line bg-surface px-2.5 py-0.5 type-caption text-ink-2">Engine lab: internal preview</span>
+        <button type="button" data-theme-toggle aria-pressed="false" class="relative ml-auto grid size-control-sm place-items-center rounded-pill border border-line bg-surface text-ink-2 pointer-coarse:after:absolute pointer-coarse:after:top-1/2 pointer-coarse:after:left-1/2 pointer-coarse:after:size-[max(100%,2.75rem)] pointer-coarse:after:-translate-x-1/2 pointer-coarse:after:-translate-y-1/2">
+          <svg class="size-[18px]" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-theme" /></svg>
+          <span class="sr-only">Light theme</span>
+        </button>
+      </div>
+      <nav aria-label="Engine lab" class="mt-3">
+        <ul role="list" class="flex flex-wrap gap-x-5 gap-y-1">
+          <li><a href="#" class="inline-flex min-h-6 items-center type-control text-ink-2 no-underline">Overview</a></li>
+          <li><a href="#" class="inline-flex min-h-6 items-center type-control text-ink-2 no-underline">Parts</a></li>
+          <li><a href="#" class="inline-flex min-h-6 items-center type-control text-ink-2 no-underline">Accuracy</a></li>
+          <li><a href="#" aria-current="page" class="inline-flex min-h-6 items-center type-control text-ink underline decoration-ink decoration-2 underline-offset-[6px]">Compatibility</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main id="main" tabindex="-1" class="px-inset pt-8 pb-16">
+      <h1>Compatibility</h1>
+      <p class="mt-2 max-w-measure type-body text-ink-2">One row per rule: its result, its reason and the specs it used, with their sources.</p>
+      <p class="mt-1 max-w-measure type-small text-ink-3">Mock: real parts, specs and sources from the catalogue. The results are illustrative, because the rules are not built yet, and 7 of the 20 rows are drawn.</p>
+
+      <div class="mt-8 grid items-start gap-8 lg:grid-cols-[22rem_minmax(0,1fr)]">
+        <!-- The part picker -->
+        <section aria-labelledby="build-h" class="rounded-panel border border-line bg-surface p-5 lg:sticky lg:top-6">
+          <h2 id="build-h">Build</h2>
+          <p class="mt-1 type-small text-ink-3">The link holds these parts, so you can share this exact build.</p>
+          <div class="mt-4 grid gap-4 md:max-lg:grid-cols-2">
+            <div>
+              <label for="p-cpu" class="mb-1.5 block type-small text-ink-2">CPU</label>
+              <div class="relative">
+                <select id="p-cpu" class="min-h-11 w-full appearance-none text-ellipsis rounded-row border border-ink-3 bg-surface pr-10 pl-3 type-name text-ink">
+                  <option class="bg-surface text-ink" value="">None</option>
+                  <option class="bg-surface text-ink">AMD Ryzen 7 9800X3D</option>
+                  <option class="bg-surface text-ink" selected>Intel Core i5 processor 14600K</option>
+                </select>
+                <span class="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-ink-3" aria-hidden="true"><svg class="size-[18px]" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#i-chevron-down" /></svg></span>
+              </div>
+            </div>
+            <div>
+              <label for="p-board" class="mb-1.5 block type-small text-ink-2">Motherboard</label>
+              <div class="relative">
+                <select id="p-board" class="min-h-11 w-full appearance-none text-ellipsis rounded-row border border-ink-3 bg-surface pr-10 pl-3 type-name text-ink">
+                  <option class="bg-surface text-ink" value="">None</option>
+                  <option class="bg-surface text-ink" selected>ASUS PRIME B760M-A WIFI D4</option>
+                  <option class="bg-surface text-ink">ASUS TUF GAMING Z890-PLUS WIFI</option>
+                </select>
+                <span class="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-ink-3" aria-hidden="true"><svg class="size-[18px]" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#i-chevron-down" /></svg></span>
+              </div>
+            </div>
+            <div>
+              <label for="p-ram" class="mb-1.5 block type-small text-ink-2">Memory (RAM)</label>
+              <div class="relative">
+                <select id="p-ram" class="min-h-11 w-full appearance-none text-ellipsis rounded-row border border-ink-3 bg-surface pr-10 pl-3 type-name text-ink">
+                  <option class="bg-surface text-ink" value="">None</option>
+                  <option class="bg-surface text-ink" selected>G.SKILL Trident Z Neo DDR4-3600 CL16 32GB (2x16GB)</option>
+                </select>
+                <span class="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-ink-3" aria-hidden="true"><svg class="size-[18px]" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#i-chevron-down" /></svg></span>
+              </div>
+            </div>
+            <div>
+              <label for="p-gpu" class="mb-1.5 block type-small text-ink-2">Graphics card (GPU)</label>
+              <div class="relative">
+                <select id="p-gpu" class="min-h-11 w-full appearance-none text-ellipsis rounded-row border border-ink-3 bg-surface pr-10 pl-3 type-name text-ink">
+                  <option class="bg-surface text-ink" value="">None</option>
+                  <option class="bg-surface text-ink" selected>SAPPHIRE PULSE AMD Radeon RX 9070 XT 16GB</option>
+                </select>
+                <span class="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-ink-3" aria-hidden="true"><svg class="size-[18px]" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#i-chevron-down" /></svg></span>
+              </div>
+            </div>
+            <div>
+              <label for="p-storage" class="mb-1.5 block type-small text-ink-2">Storage</label>
+              <div class="relative">
+                <select id="p-storage" class="min-h-11 w-full appearance-none text-ellipsis rounded-row border border-ink-3 bg-surface pr-10 pl-3 type-name text-ink">
+                  <option class="bg-surface text-ink" value="" selected>None</option>
+                  <option class="bg-surface text-ink">WD_BLACK SN850X NVMe SSD 2TB (without heatsink)</option>
+                </select>
+                <span class="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-ink-3" aria-hidden="true"><svg class="size-[18px]" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#i-chevron-down" /></svg></span>
+              </div>
+            </div>
+            <div>
+              <label for="p-psu" class="mb-1.5 block type-small text-ink-2">Power supply (PSU)</label>
+              <div class="relative">
+                <select id="p-psu" class="min-h-11 w-full appearance-none text-ellipsis rounded-row border border-ink-3 bg-surface pr-10 pl-3 type-name text-ink">
+                  <option class="bg-surface text-ink" value="">None</option>
+                  <option class="bg-surface text-ink" selected>NZXT C1200 Gold ATX 3.1</option>
+                </select>
+                <span class="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-ink-3" aria-hidden="true"><svg class="size-[18px]" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#i-chevron-down" /></svg></span>
+              </div>
+            </div>
+            <div>
+              <label for="p-cooler" class="mb-1.5 block type-small text-ink-2">CPU cooling</label>
+              <div class="relative">
+                <select id="p-cooler" class="min-h-11 w-full appearance-none text-ellipsis rounded-row border border-ink-3 bg-surface pr-10 pl-3 type-name text-ink">
+                  <option class="bg-surface text-ink" value="">None</option>
+                  <option class="bg-surface text-ink" selected>DeepCool AN400</option>
+                </select>
+                <span class="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-ink-3" aria-hidden="true"><svg class="size-[18px]" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#i-chevron-down" /></svg></span>
+              </div>
+            </div>
+            <div>
+              <label for="p-case" class="mb-1.5 block type-small text-ink-2">Case</label>
+              <div class="relative">
+                <select id="p-case" class="min-h-11 w-full appearance-none text-ellipsis rounded-row border border-ink-3 bg-surface pr-10 pl-3 type-name text-ink">
+                  <option class="bg-surface text-ink" value="">None</option>
+                  <option class="bg-surface text-ink" selected>Fractal Design Pop Mini Air RGB Black TG Clear Tint</option>
+                </select>
+                <span class="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-ink-3" aria-hidden="true"><svg class="size-[18px]" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#i-chevron-down" /></svg></span>
+              </div>
+            </div>
+            <div>
+              <label for="p-fans" class="mb-1.5 block type-small text-ink-2">Case fans</label>
+              <div class="relative">
+                <select id="p-fans" class="min-h-11 w-full appearance-none text-ellipsis rounded-row border border-ink-3 bg-surface pr-10 pl-3 type-name text-ink">
+                  <option class="bg-surface text-ink" value="" selected>None</option>
+                  <option class="bg-surface text-ink">ARCTIC P12 PWM PST (Black)</option>
+                </select>
+                <span class="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-ink-3" aria-hidden="true"><svg class="size-[18px]" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#i-chevron-down" /></svg></span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- The results -->
+        <section aria-labelledby="checks-h">
+          <h2 id="checks-h" class="sr-only">Checks</h2>
+          <p role="status" class="type-heading text-ink">12 of 17 pass, 1 incompatible, 2 can't verify, 2 warnings.</p>
+          <p class="mt-1 type-body text-ink-2">1 not checked yet.</p>
+
+          <ol role="list" class="@container mt-4 rounded-panel border border-line bg-surface">
+            <!-- 1. cpu-socket: Passes -->
+            <li class="grid border-line px-5 py-4 not-first:border-t @xl:grid-cols-[9.5rem_minmax(0,1fr)] @xl:gap-x-6">
+              <div class="flex flex-wrap items-baseline gap-x-2 @xl:col-start-2 @xl:row-start-1">
+                <h3>CPU socket</h3>
+                <span class="type-caption whitespace-nowrap text-ink-3" translate="no">cpu-socket</span>
+              </div>
+              <p class="mt-1 @xl:col-start-1 @xl:row-span-2 @xl:row-start-1 @xl:mt-px">
+                <span class="inline-flex items-center gap-1.5 type-small whitespace-nowrap text-ok"><svg class="size-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-ok" /></svg>Passes</span>
+              </p>
+              <div class="@container mt-2 @xl:col-start-2 @xl:row-start-2 @xl:mt-1">
+                <p class="max-w-measure type-body text-ink-2">The <span translate="no">Intel Core i5 processor 14600K</span> and the <span translate="no">ASUS PRIME B760M-A WIFI D4</span> both use <span translate="no">LGA1700</span>.</p>
+                <div class="mt-3">
+                  <p class="mb-1 type-caption text-ink-3">Sources</p>
+                  <dl class="grid gap-y-2 type-small @2xl:grid-cols-[minmax(0,13rem)_auto_minmax(0,1fr)] @2xl:gap-x-4">
+                    <div class="flex flex-wrap gap-x-2 @2xl:col-span-3 @2xl:grid @2xl:grid-cols-subgrid">
+                      <dt class="text-ink-2">CPU: socket</dt>
+                      <dd class="whitespace-nowrap text-ink" translate="no">LGA1700</dd>
+                      <dd class="w-full @2xl:w-auto"><a href="https://www.intel.com/content/www/us/en/products/sku/236799/intel-core-i5-processor-14600k-24m-cache-up-to-5-30-ghz/specifications.html" target="_blank" rel="noopener noreferrer" class="text-ink-2"><span translate="no">Intel</span>, spec page<span class="sr-only"> (opens in a new tab)</span><span class="ml-0.5 inline-block align-[-0.125em] text-ink-3" aria-hidden="true"><svg class="size-3.5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#i-out" /></svg></span></a><span class="whitespace-nowrap text-ink-3">, read <time datetime="2026-09-30">30 Sep 2026</time></span></dd>
+                    </div>
+                    <div class="flex flex-wrap gap-x-2 @2xl:col-span-3 @2xl:grid @2xl:grid-cols-subgrid">
+                      <dt class="text-ink-2">Motherboard: socket</dt>
+                      <dd class="whitespace-nowrap text-ink" translate="no">LGA1700</dd>
+                      <dd class="w-full @2xl:w-auto"><a href="https://www.asus.com/motherboards-components/motherboards/prime/prime-b760m-a-wifi-d4/techspec/" target="_blank" rel="noopener noreferrer" class="text-ink-2"><span translate="no">ASUS</span>, spec page<span class="sr-only"> (opens in a new tab)</span><span class="ml-0.5 inline-block align-[-0.125em] text-ink-3" aria-hidden="true"><svg class="size-3.5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#i-out" /></svg></span></a><span class="whitespace-nowrap text-ink-3">, read <time datetime="2026-09-30">30 Sep 2026</time></span></dd>
+                    </div>
+                  </dl>
+                </div>
+              </div>
+            </li>
+
+            <!-- 3. bios-version: Warning, no BIOS FlashBack (Hazem's decision) -->
+            <li class="grid border-line px-5 py-4 not-first:border-t @xl:grid-cols-[9.5rem_minmax(0,1fr)] @xl:gap-x-6">
+              <div class="flex flex-wrap items-baseline gap-x-2 @xl:col-start-2 @xl:row-start-1">
+                <h3>BIOS version</h3>
+                <span class="type-caption whitespace-nowrap text-ink-3" translate="no">bios-version</span>
+              </div>
+              <p class="mt-1 @xl:col-start-1 @xl:row-span-2 @xl:row-start-1 @xl:mt-px">
+                <span class="inline-flex items-center gap-1.5 type-small whitespace-nowrap text-warn"><svg class="size-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-warn" /></svg>Warning</span>
+              </p>
+              <div class="@container mt-2 @xl:col-start-2 @xl:row-start-2 @xl:mt-1">
+                <p class="max-w-measure type-body text-ink-2" data-measure="reason">The <span translate="no">Intel Core i5 processor 14600K</span> needs BIOS <span translate="no">1205</span> or later on the <span translate="no">ASUS PRIME B760M-A WIFI D4</span>, and this board can't update its BIOS without a CPU it already supports.</p>
+                <p class="mt-1 max-w-measure type-body text-ink">Ask the retailer for a board already updated to BIOS <span translate="no">1205</span> or later.</p>
+                <div class="mt-3">
+                  <p class="mb-1 type-caption text-ink-3">Sources</p>
+                  <dl class="grid gap-y-2 type-small @2xl:grid-cols-[minmax(0,13rem)_auto_minmax(0,1fr)] @2xl:gap-x-4">
+                    <div class="flex flex-wrap gap-x-2 @2xl:col-span-3 @2xl:grid @2xl:grid-cols-subgrid">
+                      <dt class="text-ink-2">Motherboard: BIOS for this CPU</dt>
+                      <dd class="whitespace-nowrap text-ink"><span translate="no">1205</span> or later</dd>
+                      <dd class="w-full @2xl:w-auto"><a href="https://www.asus.com/motherboards-components/motherboards/prime/prime-b760m-a-wifi-d4/helpdesk_qvl_cpu/?model2Name=PRIME-B760M-A-WIFI-D4" target="_blank" rel="noopener noreferrer" class="text-ink-2"><span translate="no">ASUS</span>, CPU support list<span class="sr-only"> (opens in a new tab)</span><span class="ml-0.5 inline-block align-[-0.125em] text-ink-3" aria-hidden="true"><svg class="size-3.5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#i-out" /></svg></span></a><span class="whitespace-nowrap text-ink-3">, read <time datetime="2026-09-30">30 Sep 2026</time></span></dd>
+                    </div>
+                    <div class="flex flex-wrap gap-x-2 @2xl:col-span-3 @2xl:grid @2xl:grid-cols-subgrid">
+                      <dt class="text-ink-2">Motherboard: BIOS FlashBack</dt>
+                      <dd class="whitespace-nowrap text-ink">No</dd>
+                      <dd class="w-full @2xl:w-auto"><a href="https://www.asus.com/motherboards-components/motherboards/prime/prime-b760m-a-wifi-d4/techspec/" target="_blank" rel="noopener noreferrer" class="text-ink-2"><span translate="no">ASUS</span>, spec page<span class="sr-only"> (opens in a new tab)</span><span class="ml-0.5 inline-block align-[-0.125em] text-ink-3" aria-hidden="true"><svg class="size-3.5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#i-out" /></svg></span></a><span class="whitespace-nowrap text-ink-3">, read <time datetime="2026-09-30">30 Sep 2026</time></span>
+                        <span class="block type-caption text-ink-3">The spec page lists no BIOS FlashBack button or feature for this board.</span></dd>
+                    </div>
+                  </dl>
+                </div>
+              </div>
+            </li>
+
+            <!-- 6. ram-speed: Warning, with an action -->
+            <li class="grid border-line px-5 py-4 not-first:border-t @xl:grid-cols-[9.5rem_minmax(0,1fr)] @xl:gap-x-6">
+              <div class="flex flex-wrap items-baseline gap-x-2 @xl:col-start-2 @xl:row-start-1">
+                <h3>Memory speed</h3>
+                <span class="type-caption whitespace-nowrap text-ink-3" translate="no">ram-speed</span>
+              </div>
+              <p class="mt-1 @xl:col-start-1 @xl:row-span-2 @xl:row-start-1 @xl:mt-px">
+                <span class="inline-flex items-center gap-1.5 type-small whitespace-nowrap text-warn"><svg class="size-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-warn" /></svg>Warning</span>
+              </p>
+              <div class="@container mt-2 @xl:col-start-2 @xl:row-start-2 @xl:mt-1">
+                <p class="max-w-measure type-body text-ink-2" data-measure="reason">The <span translate="no">G.SKILL Trident Z Neo DDR4-3600 CL16 32GB (2x16GB)</span> is rated at 3,600&nbsp;<span translate="no">MT/s</span>, above the 3,200&nbsp;<span translate="no">MT/s</span> that the <span translate="no">Intel Core i5 processor 14600K</span> officially supports.</p>
+                <p class="mt-1 max-w-measure type-body text-ink">Turn on the kit's <span translate="no">XMP</span> profile in the BIOS to run it at 3,600&nbsp;<span translate="no">MT/s</span>, an overclock that <span translate="no">Intel</span> doesn't guarantee.</p>
+                <div class="mt-3">
+                  <p class="mb-1 type-caption text-ink-3">Sources</p>
+                  <dl class="grid gap-y-2 type-small @2xl:grid-cols-[minmax(0,13rem)_auto_minmax(0,1fr)] @2xl:gap-x-4">
+                    <div class="flex flex-wrap gap-x-2 @2xl:col-span-3 @2xl:grid @2xl:grid-cols-subgrid">
+                      <dt class="text-ink-2">Memory: rated speed</dt>
+                      <dd class="whitespace-nowrap text-ink">3,600&nbsp;<span translate="no">MT/s</span></dd>
+                      <dd class="w-full @2xl:w-auto"><a href="https://www.gskill.com/specification/165/326/1562840211/F4-3600C16D-32GTZNC-Specification" target="_blank" rel="noopener noreferrer" class="text-ink-2"><span translate="no">G.SKILL</span>, spec page<span class="sr-only"> (opens in a new tab)</span><span class="ml-0.5 inline-block align-[-0.125em] text-ink-3" aria-hidden="true"><svg class="size-3.5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#i-out" /></svg></span></a><span class="whitespace-nowrap text-ink-3">, read <time datetime="2026-09-30">30 Sep 2026</time></span></dd>
+                    </div>
+                    <div class="flex flex-wrap gap-x-2 @2xl:col-span-3 @2xl:grid @2xl:grid-cols-subgrid">
+                      <dt class="text-ink-2">CPU: official DDR4 speed</dt>
+                      <dd class="whitespace-nowrap text-ink">3,200&nbsp;<span translate="no">MT/s</span></dd>
+                      <dd class="w-full @2xl:w-auto"><a href="https://www.intel.com/content/www/us/en/products/sku/236799/intel-core-i5-processor-14600k-24m-cache-up-to-5-30-ghz/specifications.html" target="_blank" rel="noopener noreferrer" class="text-ink-2"><span translate="no">Intel</span>, spec page<span class="sr-only"> (opens in a new tab)</span><span class="ml-0.5 inline-block align-[-0.125em] text-ink-3" aria-hidden="true"><svg class="size-3.5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#i-out" /></svg></span></a><span class="whitespace-nowrap text-ink-3">, read <time datetime="2026-09-30">30 Sep 2026</time></span></dd>
+                    </div>
+                    <div class="flex flex-wrap gap-x-2 @2xl:col-span-3 @2xl:grid @2xl:grid-cols-subgrid">
+                      <dt class="text-ink-2">Memory: overclock profile</dt>
+                      <dd class="whitespace-nowrap text-ink" translate="no">XMP 2.0</dd>
+                      <dd class="w-full @2xl:w-auto"><a href="https://www.gskill.com/specification/165/326/1562840211/F4-3600C16D-32GTZNC-Specification" target="_blank" rel="noopener noreferrer" class="text-ink-2"><span translate="no">G.SKILL</span>, spec page<span class="sr-only"> (opens in a new tab)</span><span class="ml-0.5 inline-block align-[-0.125em] text-ink-3" aria-hidden="true"><svg class="size-3.5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#i-out" /></svg></span></a><span class="whitespace-nowrap text-ink-3">, read <time datetime="2026-09-30">30 Sep 2026</time></span></dd>
+                    </div>
+                  </dl>
+                </div>
+              </div>
+            </li>
+
+            <!-- 10. ram-cooler-clearance: Can't verify -->
+            <li class="grid border-line px-5 py-4 not-first:border-t @xl:grid-cols-[9.5rem_minmax(0,1fr)] @xl:gap-x-6">
+              <div class="flex flex-wrap items-baseline gap-x-2 @xl:col-start-2 @xl:row-start-1">
+                <h3>Memory under the cooler</h3>
+                <span class="type-caption whitespace-nowrap text-ink-3" translate="no">ram-cooler-clearance</span>
+              </div>
+              <p class="mt-1 @xl:col-start-1 @xl:row-span-2 @xl:row-start-1 @xl:mt-px">
+                <span class="inline-flex items-center gap-1.5 type-small whitespace-nowrap text-warn"><svg class="size-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-unverified" /></svg>Can't verify</span>
+              </p>
+              <div class="@container mt-2 @xl:col-start-2 @xl:row-start-2 @xl:mt-1">
+                <p class="max-w-measure type-body text-ink-2"><span translate="no">DeepCool</span> doesn't publish how much room the <span translate="no">DeepCool AN400</span> leaves for memory.</p>
+                <p class="mt-1 max-w-measure type-body text-ink">Ask <span translate="no">DeepCool</span> or the retailer whether memory 44&nbsp;<span translate="no">mm</span> tall fits under the <span translate="no">DeepCool AN400</span>.</p>
+                <div class="mt-3">
+                  <p class="mb-1 type-caption text-ink-3">Sources</p>
+                  <dl class="grid gap-y-2 type-small @2xl:grid-cols-[minmax(0,13rem)_auto_minmax(0,1fr)] @2xl:gap-x-4">
+                    <div class="flex flex-wrap gap-x-2 @2xl:col-span-3 @2xl:grid @2xl:grid-cols-subgrid">
+                      <dt class="text-ink-2">Memory: height</dt>
+                      <dd class="whitespace-nowrap text-ink">44&nbsp;<span translate="no">mm</span></dd>
+                      <dd class="w-full @2xl:w-auto"><a href="https://www.gskill.com/faq/1502180912/DRAM-Memory" target="_blank" rel="noopener noreferrer" class="text-ink-2"><span translate="no">G.SKILL</span>, support article<span class="sr-only"> (opens in a new tab)</span><span class="ml-0.5 inline-block align-[-0.125em] text-ink-3" aria-hidden="true"><svg class="size-3.5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#i-out" /></svg></span></a><span class="whitespace-nowrap text-ink-3">, read <time datetime="2026-09-30">30 Sep 2026</time></span></dd>
+                    </div>
+                    <div class="flex flex-wrap gap-x-2 @2xl:col-span-3 @2xl:grid @2xl:grid-cols-subgrid">
+                      <dt class="text-ink-2">Cooler: room for memory</dt>
+                      <dd class="whitespace-nowrap text-ink-2">Not published</dd>
+                      <dd class="w-full @2xl:w-auto"><a href="https://www.deepcool.com/products/Cooling/cpuaircoolers/AN400-Top-Flow-Low-Profile-Cooler-1851-1700-AM5/2023/16838.shtml" target="_blank" rel="noopener noreferrer" class="text-ink-2"><span translate="no">DeepCool</span>, product page<span class="sr-only"> (opens in a new tab)</span><span class="ml-0.5 inline-block align-[-0.125em] text-ink-3" aria-hidden="true"><svg class="size-3.5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#i-out" /></svg></span></a><span class="whitespace-nowrap text-ink-3">, read <time datetime="2026-09-30">30 Sep 2026</time></span>
+                        <span class="block type-caption text-ink-3">DeepCool gives no number; it says the AN400 has “unobstructed clearance for RAM modules”.</span></dd>
+                    </div>
+                  </dl>
+                </div>
+              </div>
+            </li>
+
+            <!-- 11. radiator-fit: Doesn't apply (an air cooler) -->
+            <li class="grid border-line px-5 py-4 not-first:border-t @xl:grid-cols-[9.5rem_minmax(0,1fr)] @xl:gap-x-6">
+              <div class="flex flex-wrap items-baseline gap-x-2 @xl:col-start-2 @xl:row-start-1">
+                <h3>Radiator fit</h3>
+                <span class="type-caption whitespace-nowrap text-ink-3" translate="no">radiator-fit</span>
+              </div>
+              <p class="mt-1 @xl:col-start-1 @xl:row-span-2 @xl:row-start-1 @xl:mt-px">
+                <span class="inline-flex items-center gap-1.5 type-small whitespace-nowrap text-ink-3"><svg class="size-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-na" /></svg>Doesn't apply</span>
+              </p>
+              <div class="@container mt-2 @xl:col-start-2 @xl:row-start-2 @xl:mt-1">
+                <p class="max-w-measure type-body text-ink-3">The <span translate="no">DeepCool AN400</span> is an air cooler, so it has no radiator.</p>
+              </div>
+            </li>
+
+            <!-- 13. psu-length: Incompatible -->
+            <li class="grid border-line px-5 py-4 not-first:border-t @xl:grid-cols-[9.5rem_minmax(0,1fr)] @xl:gap-x-6">
+              <div class="flex flex-wrap items-baseline gap-x-2 @xl:col-start-2 @xl:row-start-1">
+                <h3>Power supply length</h3>
+                <span class="type-caption whitespace-nowrap text-ink-3" translate="no">psu-length</span>
+              </div>
+              <p class="mt-1 @xl:col-start-1 @xl:row-span-2 @xl:row-start-1 @xl:mt-px">
+                <span class="inline-flex items-center gap-1.5 type-small whitespace-nowrap text-block"><svg class="size-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-block" /></svg>Incompatible</span>
+              </p>
+              <div class="@container mt-2 @xl:col-start-2 @xl:row-start-2 @xl:mt-1">
+                <p class="max-w-measure type-body text-ink-2" data-measure="reason">The <span translate="no">NZXT C1200 Gold ATX 3.1</span> is 160&nbsp;<span translate="no">mm</span> long, but the <span translate="no">Fractal Design Pop Mini Air RGB Black TG Clear Tint</span> takes power supplies up to 150&nbsp;<span translate="no">mm</span>.</p>
+                <div class="mt-3">
+                  <p class="mb-1 type-caption text-ink-3">Sources</p>
+                  <dl class="grid gap-y-2 type-small @2xl:grid-cols-[minmax(0,13rem)_auto_minmax(0,1fr)] @2xl:gap-x-4">
+                    <div class="flex flex-wrap gap-x-2 @2xl:col-span-3 @2xl:grid @2xl:grid-cols-subgrid">
+                      <dt class="text-ink-2">Power supply: length</dt>
+                      <dd class="whitespace-nowrap text-ink">160&nbsp;<span translate="no">mm</span></dd>
+                      <dd class="w-full @2xl:w-auto"><a href="https://nzxt.com/products/c1200-gold-atx" target="_blank" rel="noopener noreferrer" class="text-ink-2"><span translate="no">NZXT</span>, product page<span class="sr-only"> (opens in a new tab)</span><span class="ml-0.5 inline-block align-[-0.125em] text-ink-3" aria-hidden="true"><svg class="size-3.5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#i-out" /></svg></span></a><span class="whitespace-nowrap text-ink-3">, read <time datetime="2026-09-30">30 Sep 2026</time></span></dd>
+                    </div>
+                    <div class="flex flex-wrap gap-x-2 @2xl:col-span-3 @2xl:grid @2xl:grid-cols-subgrid">
+                      <dt class="text-ink-2">Case: power supply limit</dt>
+                      <dd class="whitespace-nowrap text-ink">150&nbsp;<span translate="no">mm</span></dd>
+                      <dd class="w-full @2xl:w-auto"><a href="https://www.fractal-design.com/products/cases/pop-series/pop-mini-air/pop-mini-air-rgb-black-tg-clear-tint/" target="_blank" rel="noopener noreferrer" class="text-ink-2"><span translate="no">Fractal Design</span>, product page<span class="sr-only"> (opens in a new tab)</span><span class="ml-0.5 inline-block align-[-0.125em] text-ink-3" aria-hidden="true"><svg class="size-3.5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#i-out" /></svg></span></a><span class="whitespace-nowrap text-ink-3">, read <time datetime="2026-09-30">30 Sep 2026</time></span></dd>
+                    </div>
+                  </dl>
+                </div>
+              </div>
+            </li>
+
+            <!-- 16. m2-lanes: Not checked -->
+            <li class="grid border-line px-5 py-4 not-first:border-t @xl:grid-cols-[9.5rem_minmax(0,1fr)] @xl:gap-x-6">
+              <div class="flex flex-wrap items-baseline gap-x-2 @xl:col-start-2 @xl:row-start-1">
+                <h3>M.2 slots and shared lanes</h3>
+                <span class="type-caption whitespace-nowrap text-ink-3" translate="no">m2-lanes</span>
+              </div>
+              <p class="mt-1 @xl:col-start-1 @xl:row-span-2 @xl:row-start-1 @xl:mt-px">
+                <span class="inline-flex items-center gap-1.5 type-small whitespace-nowrap text-ink-3"><svg class="size-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-none" /></svg>Not checked</span>
+              </p>
+              <div class="@container mt-2 @xl:col-start-2 @xl:row-start-2 @xl:mt-1">
+                <p class="max-w-measure type-body text-ink-3">Pick a drive to check the M.2 slots.</p>
+              </div>
+            </li>
+          </ol>
+
+          <!-- A board with BIOS FlashBack: the row's steps -->
+          <h2 id="steps-h" class="mt-10">A board with BIOS FlashBack</h2>
+          <p class="mt-1 max-w-measure type-small text-ink-3">Another build, to show the steps: the <span translate="no">AMD Ryzen 7 9850X3D</span> on the <span translate="no">ASUS TUF GAMING X870-PLUS WIFI</span>. The steps are open here; they start closed.</p>
+          <ol role="list" class="@container mt-4 rounded-panel border border-line bg-surface">
+            <li class="grid border-line px-5 py-4 not-first:border-t @xl:grid-cols-[9.5rem_minmax(0,1fr)] @xl:gap-x-6">
+              <div class="flex flex-wrap items-baseline gap-x-2 @xl:col-start-2 @xl:row-start-1">
+                <h3>BIOS version</h3>
+                <span class="type-caption whitespace-nowrap text-ink-3" translate="no">bios-version</span>
+              </div>
+              <p class="mt-1 @xl:col-start-1 @xl:row-span-2 @xl:row-start-1 @xl:mt-px">
+                <span class="inline-flex items-center gap-1.5 type-small whitespace-nowrap text-warn"><svg class="size-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-warn" /></svg>Warning</span>
+              </p>
+              <div class="@container mt-2 @xl:col-start-2 @xl:row-start-2 @xl:mt-1">
+                <p class="max-w-measure type-body text-ink-2" data-measure="reason">The <span translate="no">AMD Ryzen 7 9850X3D</span> needs BIOS <span translate="no">1066</span> or later on the <span translate="no">ASUS TUF GAMING X870-PLUS WIFI</span>, which can update its BIOS without a CPU, using <span translate="no">BIOS FlashBack</span>.</p>
+                <p class="mt-1 max-w-measure type-body text-ink">Before first boot, update the board to BIOS <span translate="no">1066</span> or later with <span translate="no">BIOS FlashBack</span>.</p>
+                <details class="group mt-3" open>
+                  <summary class="inline-flex min-h-6 list-none items-center gap-1.5 type-control text-ink [&::-webkit-details-marker]:hidden">
+                    <svg class="size-[18px] shrink-0 transition-transform duration-ui ease-settle group-open:rotate-90" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-chevron-right" /></svg>
+                    <span>How to update with <span translate="no">BIOS FlashBack</span></span><span class="text-ink-3">7 steps</span>
+                  </summary>
+                  <ol class="mt-2 max-w-measure list-decimal space-y-1 pl-5 type-body text-ink-2 marker:text-ink-3">
+                    <li>Download BIOS <span translate="no">1066</span> or later for the <span translate="no">ASUS TUF GAMING X870-PLUS WIFI</span> from the <span translate="no">ASUS</span> Download Center, and unzip it.</li>
+                    <li>Run <span translate="no">BIOSRenamer</span> from the download, which gives the BIOS file the name <span translate="no">BIOS FlashBack</span> needs.</li>
+                    <li>Copy the renamed <span translate="no">.CAP</span> file to the top folder of a USB drive formatted as <span translate="no">FAT32</span>.</li>
+                    <li>Shut the PC down, but leave the power supply plugged in and switched on.</li>
+                    <li>Plug the USB drive into the board's <span translate="no">BIOS FlashBack</span> USB port; the board's manual shows where it is.</li>
+                    <li>Press the <span translate="no">BIOS FlashBack</span> button for 3 seconds, until its light blinks three times.</li>
+                    <li>Leave everything plugged in until the light goes out, which means the update is done.</li>
+                  </ol>
+                  <p class="mt-2 type-small"><a href="https://www.asus.com/support/faq/1038568/" target="_blank" rel="noopener noreferrer" class="text-ink-2"><span translate="no">ASUS</span>, support article<span class="sr-only"> (opens in a new tab)</span><span class="ml-0.5 inline-block align-[-0.125em] text-ink-3" aria-hidden="true"><svg class="size-3.5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#i-out" /></svg></span></a><span class="whitespace-nowrap text-ink-3">, updated <time datetime="2026-04-09">9 Apr 2026</time>, read <time datetime="2026-10-02">2 Oct 2026</time></span></p>
+                </details>
+                <div class="mt-3">
+                  <p class="mb-1 type-caption text-ink-3">Sources</p>
+                  <dl class="grid gap-y-2 type-small @2xl:grid-cols-[minmax(0,13rem)_auto_minmax(0,1fr)] @2xl:gap-x-4">
+                    <div class="flex flex-wrap gap-x-2 @2xl:col-span-3 @2xl:grid @2xl:grid-cols-subgrid">
+                      <dt class="text-ink-2">Motherboard: BIOS for this CPU</dt>
+                      <dd class="whitespace-nowrap text-ink"><span translate="no">1066</span> or later</dd>
+                      <dd class="w-full @2xl:w-auto"><a href="https://www.asus.com/motherboards-components/motherboards/tuf-gaming/tuf-gaming-x870-plus-wifi/helpdesk_cpu/?model2Name=tuf-gaming-x870-plus-wifi" target="_blank" rel="noopener noreferrer" class="text-ink-2"><span translate="no">ASUS</span>, CPU support list<span class="sr-only"> (opens in a new tab)</span><span class="ml-0.5 inline-block align-[-0.125em] text-ink-3" aria-hidden="true"><svg class="size-3.5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#i-out" /></svg></span></a><span class="whitespace-nowrap text-ink-3">, read <time datetime="2026-09-30">30 Sep 2026</time></span></dd>
+                    </div>
+                    <div class="flex flex-wrap gap-x-2 @2xl:col-span-3 @2xl:grid @2xl:grid-cols-subgrid">
+                      <dt class="text-ink-2">Motherboard: BIOS FlashBack</dt>
+                      <dd class="whitespace-nowrap text-ink">Yes</dd>
+                      <dd class="w-full @2xl:w-auto"><a href="https://www.asus.com/motherboards-components/motherboards/tuf-gaming/tuf-gaming-x870-plus-wifi/techspec/" target="_blank" rel="noopener noreferrer" class="text-ink-2"><span translate="no">ASUS</span>, spec page<span class="sr-only"> (opens in a new tab)</span><span class="ml-0.5 inline-block align-[-0.125em] text-ink-3" aria-hidden="true"><svg class="size-3.5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#i-out" /></svg></span></a><span class="whitespace-nowrap text-ink-3">, read <time datetime="2026-09-30">30 Sep 2026</time></span></dd>
+                    </div>
+                  </dl>
+                </div>
+              </div>
+            </li>
+          </ol>
+
+          <!-- The estimate readout -->
+          <h2 id="estimate-h" class="mt-10">The estimate readout</h2>
+          <p class="mt-1 max-w-measure type-small text-ink-3">Illustrative numbers: the performance model (WP-E3) is not built yet. Valorant has no benchmark anchors today.</p>
+          <div class="mt-4 grid gap-4 md:grid-cols-2">
+            <section aria-labelledby="est-cp" class="rounded-panel border border-line bg-surface p-5">
+              <h3 id="est-cp" translate="no">Cyberpunk 2077</h3>
+              <p class="mt-3 type-figure text-ink"><span aria-hidden="true">142–158</span><span class="sr-only">142 to 158</span>&nbsp;<span class="type-unit text-ink-2">fps</span></p>
+              <p class="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 type-small text-ink-2">
+                <span>Estimated</span>
+                <span class="inline-flex items-center gap-1.5">
+                  <svg class="h-1 w-10" viewBox="0 0 40 4" aria-hidden="true"><rect x="0" y="0" width="12" height="4" rx="2" fill="currentColor" /><rect x="14" y="0" width="12" height="4" rx="2" fill="currentColor" /><rect x="28.5" y="0.5" width="11" height="3" rx="1.5" fill="none" stroke="currentColor" stroke-width="1" /></svg>
+                  Medium confidence
+                </span>
+              </p>
+              <p class="type-small text-ink-3"><span translate="no">Cyberpunk 2077</span> at 1440p, High preset, ray tracing off, no upscaling</p>
+              <p class="mt-3 type-small text-ink">Limited by the graphics card.</p>
+              <p class="type-small text-ink-2">Graphics card limit: <span class="whitespace-nowrap"><span aria-hidden="true">142–158</span><span class="sr-only">142 to 158</span>&nbsp;fps</span>. CPU limit: <span class="whitespace-nowrap"><span aria-hidden="true">210–240</span><span class="sr-only">210 to 240</span>&nbsp;fps</span>.</p>
+            </section>
+            <section aria-labelledby="est-val" class="rounded-panel border border-line bg-surface p-5">
+              <h3 id="est-val" translate="no">Valorant</h3>
+              <p class="mt-3 type-figure text-ink-3" aria-hidden="true">—</p>
+              <p class="mt-1 type-small text-ink-2">No estimate yet</p>
+              <p class="type-small text-ink-3">There is no published test of <span translate="no">Valorant</span> on the <span translate="no">AMD Radeon RX 9070 XT</span>.</p>
+            </section>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      const toggle = document.querySelector('[data-theme-toggle]');
+      const sync = () => toggle.setAttribute('aria-pressed', String(document.documentElement.dataset.theme === 'light'));
+      sync();
+      toggle.addEventListener('click', () => {
+        const root = document.documentElement;
+        root.dataset.theme = root.dataset.theme === 'light' ? 'dark' : 'light';
+        sync();
+      });
+    </script>
+  </body>
+</html>
