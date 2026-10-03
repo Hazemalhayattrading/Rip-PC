@@ -69,6 +69,14 @@ export const CHROMIUM_404_CONSOLE_TEXT =
   'Failed to load resource: the server responded with a status of 404 (Not Found)';
 
 /**
+ * The same notice over HTTP/2, which has no reason phrase, so the brackets are empty. GitHub Pages
+ * answers over HTTP/2, and Chromium-family browsers and WebKit log this text for a 404 there
+ * (the live navigation run, 2026-10-02). The local preview answers over HTTP/1.1.
+ */
+export const HTTP2_404_CONSOLE_TEXT =
+  'Failed to load resource: the server responded with a status of 404 ()';
+
+/**
  * Chromium's notice when WebGL falls back to its software renderer, SwiftShader, without the
  * --enable-unsafe-swiftshader flag (seen by build-lead, 2026-10-01). The whole text, in the
  * wording of Chromium 141 (Playwright 1.56.1's build) and of Chromium's current source, which
@@ -125,10 +133,10 @@ export const ALLOWED: readonly AllowedProblem[] = [
     matches: (problem, run) =>
       run.expectNotFoundDocument &&
       problem.kind === 'console.error' &&
-      problem.text === CHROMIUM_404_CONSOLE_TEXT &&
+      (problem.text === CHROMIUM_404_CONSOLE_TEXT || problem.text === HTTP2_404_CONSOLE_TEXT) &&
       run.problems.some((other) => isNotFoundPage(other) && other.url === problem.url),
     reason:
-      "Chromium logs a page that answers 404 as a failed resource. It is the same 404 the test asked for, so it is allowed only for that page's own URL (moved from build-lead's isOwnDocument404 in the smoke spec).",
+      "Chromium logs a page that answers 404 as a failed resource, with the reason phrase over HTTP/1.1 and empty brackets over HTTP/2 (GitHub Pages; WebKit logs the same). It is the same 404 the test asked for, so it is allowed only for that page's own URL (moved from build-lead's isOwnDocument404 in the smoke spec).",
     owner: 'qa-lead',
     until: 'permanent',
   },
@@ -154,7 +162,47 @@ export const ALLOWED: readonly AllowedProblem[] = [
     owner: 'qa-lead',
     until: 'permanent',
   },
+  {
+    id: 'firefox-webgl-context-lost',
+    matches: (problem) => {
+      if (problem.kind !== 'console.warning') return false;
+      const m = FIREFOX_CONTEXT_LOST.exec(problem.text);
+      return m !== null && m[1] === problem.url && isGarageChunk(problem.url);
+    },
+    reason:
+      "Firefox's warning when a WebGL context is lost on purpose: React Three Fiber's renderer disposal calls gl.forceContextLoss() when the 3D preview unmounts, because browsers cap live WebGL contexts (@react-three/fiber 9.8.1; build-lead's triage, 2026-10-03). Firefox logs it; Chromium and WebKit don't. Only this exact text, naming the lazy 3D chunk, from that chunk; a context lost anywhere else still fails.",
+    owner: 'qa-lead',
+    until: 'permanent',
+  },
+  {
+    id: 'firefox-webgl-viewport-rect',
+    matches: (problem) =>
+      problem.kind === 'console.warning' &&
+      problem.url === '' &&
+      problem.text === FIREFOX_VIEWPORT_RECT_TEXT,
+    reason:
+      "Firefox's one-time WebGL note when the viewport is 1 px larger than the canvas: three.js r186 floors the canvas size (setSize) but rounds the viewport (setViewport), so a fractional CSS width leaves 1 px clipped, harmlessly (build-lead's triage, 2026-10-03). Phase 3's garage keeps its canvas at whole pixels, which ends it: review this entry then. Only this exact text, with no source location.",
+    owner: 'qa-lead',
+    until: 'permanent',
+  },
 ];
+
+/** Firefox's text for a lost WebGL context; the group is the file that lost it. */
+const FIREFOX_CONTEXT_LOST =
+  /^\[JavaScript Warning: "WebGL context was lost\." \{file: "([^"]+)" line: \d+\}\]$/;
+
+/** Firefox's text when the viewport exceeds the canvas by a rounding pixel (given once per context). */
+export const FIREFOX_VIEWPORT_RECT_TEXT =
+  '[JavaScript Warning: "WebGL warning: drawElementsInstanced: Drawing to a destination rect smaller than the viewport rect. (This warning will only be given once)"]';
+
+/** The lazy 3D chunk, as Vite names it: assets/Garage-<hash>.js. */
+function isGarageChunk(url: string): boolean {
+  try {
+    return /\/assets\/Garage-[A-Za-z0-9_-]+\.js$/.test(new URL(url).pathname);
+  } catch {
+    return false;
+  }
+}
 
 /** The verdict on one test's problems. */
 export interface Verdict {

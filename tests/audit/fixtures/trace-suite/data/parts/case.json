@@ -1,0 +1,5 @@
+{
+  "$comment": "Fixture catalogue for tests/audit/compat-trace.test.mjs: real part ids from data/parts/case.json, the ids only.",
+  "schemaVersion": 1,
+  "items": [{ "id": "fractal-north-charcoal-black-tg-light" }]
+}
