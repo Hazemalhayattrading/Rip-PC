@@ -237,8 +237,9 @@ Any colour utility takes Tailwind's opacity modifier (`bg-ink/10`); it compiles 
      whatever floats over them (section 2.5, "Focus never hides under the chrome").
    - **Never an inset ring on an `--action` surface.** `--focus` against `--action` is 1.10:1 in
      dark and 1.00:1 in light, so an inset ring vanishes on the primary button. Its ring stays
-     outside, on the surface around it, at 15.89:1 or more on every measured surface (QA-P0-019,
-     re-measured on 2026-10-02).
+     outside, on the surface around it: 15.89:1 or more on the panels, and 13.39:1 or more on
+     every measured surface, the stage's key light included (section 2.2; QA-P0-019, re-measured
+     on 2026-10-02; QA-P1-004).
 7. **Panels are opaque.** No glass blur, no gradients in the chrome. The key light's pool on the
    stage is the only gradient.
 8. **Selection:** a selected row is `--surface-raised` with a 3 px `--ink` bar at its leading
