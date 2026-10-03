@@ -1,6 +1,7 @@
 # Copy guide: reasons, verdicts and estimates (WP-DS2)
 
-Owner: design-lead · Date: 2026-10-02 · Status: ready for build-lead (WP-E0, WP-E1) · Spec:
+Owner: design-lead · Date: 2026-10-02 · Updated 2026-10-03 (the card maker's power supply
+figure: sections 2, 7.14 and 9) · Status: ready for build-lead (WP-E0, WP-E1) · Spec:
 [phase-1-plan.md](../reports/phase-1-plan.md) §2 WP-DS2 and §6
 
 This guide sets the wording of every string the engine produces: compatibility reasons, the power
@@ -10,7 +11,8 @@ strings, so the engine writes each one once.
 
 **Examples are real.** They use catalogue parts and values at the integration tip `c621c15`. Where
 a rule needs WP-D1 or WP-E2 data that is not in the catalogue yet, the example says so, and its
-numbers in square brackets are placeholders, not data.
+numbers in square brackets are placeholders, not data. Section 9's maker's-figure examples use
+WP-D1 batch 1's values (`feat/data-engine-data`, from `910ff10`), which are not merged yet.
 
 ---
 
@@ -48,8 +50,9 @@ apply" when the build has nothing for it to check (section 6).
 5. **Plain English** that a first-time buyer understands (section 5). A technical term the buyer
    must know, such as XMP, is explained once in the same sentence.
 6. **No sources in the sentence.** Never "according to ASUS". Sources are in the evidence, beside
-   the sentence, and so is a manual's own wording (`m2-lanes` quotes it there). The one exception
-   is "{maker} doesn't publish …" (rule 7).
+   the sentence, and so is a manual's own wording (`m2-lanes` quotes it there). Two exceptions
+   name the maker: "{maker} doesn't publish …" (rule 7), and the card maker's power supply figure
+   (section 9), which is the maker's own requirement, recommendation or minimum.
 7. **Never guess.** Missing data is "Can't verify", with the reason
    "{maker} doesn't publish {what} for the {part}." The engine never fills a gap with a typical
    value.
@@ -412,11 +415,19 @@ Section 8 has the full wording, Hazem's requirement included.
 | Passes | This build's estimated worst-case load is {load}, and the {psu} gives {watts}, within the recommended {range}. | — |
 | Warning | The {psu} gives {watts}, at the bottom of the recommended {range} for this build. | — |
 | Incompatible | The {psu} gives {watts}, below the {range} recommended for this build's estimated {load} worst-case load. | Pick a power supply of {rangeLow} or more. |
+| Warning: below the card maker's figure (only a `required` or `minimum` figure) | The {psu} gives {watts}, below {the maker's figure, in section 9's form inside a sentence}. | — |
 
 - Incompatible, the RTX 5090 Founders Edition with the DeepCool PN650M: "The DeepCool PN650M
   gives 650 W, below the [1,000–1,200 W] recommended for this build's estimated [780 W]
-  worst-case load." Action: "Pick a power supply of [1,000 W] or more." NVIDIA recommends 1,000 W
-  for this card; E2's range must include it, or the hand-off explains why not (plan WP-E2).
+  worst-case load." Action: "Pick a power supply of [1,000 W] or more." NVIDIA requires a power
+  supply of 1,000 W for this card: its spec page lists "Required System Power (W)" 1000 (section
+  9 has the sentence). E2's range must include it, or the hand-off explains why not (plan WP-E2).
+- Warning, below the card maker's figure: "The DeepCool PN650M gives 650 W, below the 750 W
+  minimum that Sapphire Technology sets for the SAPPHIRE PULSE AMD Radeon RX 9070 XT 16GB."
+  Whether this case warns, and which outcome wins when the power supply is also below the range,
+  is E2's call; this is the wording if it does. A `recommended` figure is not a floor, so it never
+  makes this warning: ASUS bases its figure on "a fully overclocked GPU and CPU system
+  configuration".
 - "Estimated" stays in every sentence that gives a load (CLAUDE.md rule 2).
 
 ### 15. `gpu-power-connector` — Graphics card power cables
@@ -578,6 +589,36 @@ https://www.asus.com/support/faq/1038568/, last updated 9 Apr 2026, read by desi
 The numbers in this table show the format only.
 - **A line's label is its component,** as above, and the part's display name is shown beside it
   (copy guide §4): never a shortened name such as "Ryzen 7 9800X3D, PPT".
+
+**The card maker's figure,** shown beside the recommended range (`makerRecommendation`). Makers
+use three different words for it. Every string that mentions the figure keeps the maker's word,
+by `kind` (data-lead's `recommendedPsuKind`), with one verb per kind:
+
+| `kind` | Sentence, beside the range | Inside another sentence | Example (WP-D1 batch 1 values) |
+|---|---|---|---|
+| `required` | {maker} requires a power supply of {watts} for the {card}. | the {watts} that {maker} requires for the {card} | "NVIDIA requires a power supply of 1,000 W for the NVIDIA GeForce RTX 5090 Founders Edition." NVIDIA's label: "Required System Power (W)" |
+| `recommended` | {maker} recommends a power supply of {watts} for the {card}. | the {watts} that {maker} recommends for the {card} | "ASUS recommends a power supply of 850 W for the ASUS TUF Gaming GeForce RTX 5070 Ti 16GB GDDR7 OC Edition." ASUS's label: "Recommended PSU" |
+| `minimum` | {maker} sets a minimum power supply of {watts} for the {card}. | the {watts} minimum that {maker} sets for the {card} | "Sapphire Technology sets a minimum power supply of 750 W for the SAPPHIRE PULSE AMD Radeon RX 9070 XT 16GB." Sapphire's words: "Minimum 750 Watt Power Supply". Intel's, for the Intel Arc B580 Limited Edition Graphics: "Minimum Power Supply Unit" "600 W" |
+| none: a card is picked, and `makerRecommendation` is `null` | {maker} doesn't publish a power supply figure for the {card}. | — | No catalogue card today |
+
+- **Never call every figure a recommendation.** A required or minimum figure said as
+  "recommends" softens what the maker wrote. Labels follow the same rule, never "Recommended
+  PSU": "Maker's PSU (W)" in the Specs view ([specs-view.md §2](specs-view.md#2-columns)), and
+  "Graphics card: maker's power supply figure" in the lab's evidence list.
+- **The number goes after the noun:** "a power supply of 850 W", "a minimum power supply of
+  750 W", "the 850 W that ASUS recommends"; never "an 850 W power supply". Before the number,
+  the article would have to follow how each number sounds ("an 850", "a 750").
+- **`{maker}` is the publisher name** (`data/publishers.json`) of the figure's source,
+  `makerRecommendation.evidence.sources`. Today that is always the card's own maker. With no
+  figure, it is the card brand's publisher, as in rule 7.
+- **No caveat in the sentence.** NVIDIA bases its figure on "a PC configured with a Ryzen 9
+  9950X processor", and ASUS on "a fully overclocked GPU and CPU system configuration". Those
+  words belong in the evidence, with the figure's source; the sentence keeps the figure and the
+  maker's word.
+- **How the range relates to the figure** is `PsuRange.explanation`, one sentence that E2
+  drafts. When it mentions the figure, it uses the "inside another sentence" form, so it never
+  shortens the maker's name ("Sapphire's minimum"). When the range doesn't include the figure,
+  that sentence says why (plan WP-E2). design-lead reviews it with the strings (section 13).
 
 ## 10. Estimates (WP-E3, WP-E4)
 

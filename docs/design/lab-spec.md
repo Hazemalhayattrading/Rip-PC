@@ -1,6 +1,7 @@
 # Engine lab spec (WP-DS2)
 
-Owner: design-lead · Date: 2026-10-02 · Status: ready for build-lead (WP-E0, then each lab page) ·
+Owner: design-lead · Date: 2026-10-02 · Updated 2026-10-03 (`/lab/power`: the range's explanation
+and the card maker's figure) · Status: ready for build-lead (WP-E0, then each lab page) ·
 Mock: [`mocks/lab/index.html`](mocks/lab/index.html) · Words: [copy-guide.md](copy-guide.md)
 
 The Engine lab is a few internal pages at `/lab/` where Hazem and the team pick real parts and read
@@ -279,7 +280,7 @@ Cyberpunk 2077 at 1440p, High preset, ray tracing off, no upscaling   type-small
 | `/lab/parts` | A category select and a part select (the shared picker in one-part mode). Then the spec table: Spec, Value, Source. **Values show exactly as stored, with their units** ("5,200 MHz"), so an auditor sees the data itself; converting to "5.2 GHz" is the product's job. Nested fields are indented rows under their parent. Then the prices table: Market, Price, Retailer, As of; a missing price says "No SA price found", with its gap record |
 | `/lab/accuracy` | The anchor table: Game, Setting, Hardware, Test system, Measured, Source; E3 adds Model and Error. The coverage grid: games down, chips (or CPUs) across, each cell a count. A zero shows "0" in `text-ink-3` and links to its line in the "Gaps" list under the grid, which gives every empty cell's reason (plan WP-D2) |
 | `/lab/compat` | The picker, the summary and the 20 result rows (sections 2 to 5) |
-| `/lab/power` | The picker; the breakdown table (Part, Gaming (W), Worst case (W), Source); the two estimated totals; the headroom; the recommended range as a figure ("850–1,000 W") under the label "Recommended power supply" |
+| `/lab/power` | The picker; the breakdown table (Part, Gaming (W), Worst case (W), Source); the two estimated totals; the headroom; the recommended range as a figure ("850–1,000 W") under the label "Recommended power supply", and under the figure its explanation (`PsuRange.explanation`) in `type-small text-ink-2 max-w-measure`. Then the card maker's figure: the sentence of [copy-guide.md §9](copy-guide.md#9-power-wp-e2) for its `kind`, in the same style, with its source link (section 5) on the next line. With no card picked, that line is left out |
 | `/lab/games` | The picker and its "Test" group; the readout (section 6) with its limiter, the two limits and its anchors |
 | `/lab/creator` | The picker; one block per workload: its name in `type-label`, then its readout or "No estimate yet", then its evidence |
 | `/lab/bottleneck` | The picker, a workload and a market; the verdict and "what would help" in `type-body text-ink`; then each rebalanced build as a panel: its title, its swaps, its price with "prices as of", and its checks summary |
