@@ -48,9 +48,10 @@ function sumOfCells(grid: CoverageGrid): number {
 }
 
 describe('buildAccuracyModel on the real catalogue', () => {
-  it('counts every anchor: 116 game rows and 27 creator rows', () => {
-    expect(model.gameAnchors).toBe(116);
-    expect(model.creatorAnchors).toBe(27);
+  // Counted from the data files, not pinned: every WP-D2 batch adds anchor rows.
+  it('counts every anchor of the data files: each game row and each creator row', () => {
+    expect(model.gameAnchors).toBe(rawGameIds.length);
+    expect(model.creatorAnchors).toBe(rawCreatorIds.length);
   });
 
   it('puts every GPU-bound game anchor in the games × GPU chips grid, and drops none', () => {
@@ -63,13 +64,15 @@ describe('buildAccuracyModel on the real catalogue', () => {
     const cpuBound = rawGame.filter((row) => row.limiter === 'cpu').length;
     expect(model.cpuBound.total).toBe(cpuBound);
     expect(sumOfCells(model.cpuBound)).toBe(cpuBound);
-    expect(model.gpuBound.total + model.cpuBound.total).toBe(116);
+    expect(model.gpuBound.total + model.cpuBound.total).toBe(rawGameIds.length);
   });
 
   it('accounts for every creator row in the Cinebench grid, the Blender grid or apart', () => {
     expect(sumOfCells(model.cinebench)).toBe(model.cinebench.total);
     expect(sumOfCells(model.blender)).toBe(model.blender.total);
-    expect(model.cinebench.total + model.blender.total + model.otherCreatorRows).toBe(27);
+    expect(model.cinebench.total + model.blender.total + model.otherCreatorRows).toBe(
+      rawCreatorIds.length,
+    );
   });
 
   it('lays the grids out in catalogue order: games by GPU chip, games by CPU, parts by test', () => {
@@ -245,17 +248,17 @@ describe('the gaps under each coverage grid', () => {
 describe('anchorTables', () => {
   const tables = anchorTables(catalogue);
 
-  it('holds every game anchor, in catalogue order: 116 rows', () => {
+  it('holds every game anchor of the data file, in catalogue order', () => {
     expect(tables.game.map((row) => row.id)).toEqual(rawGameIds);
-    expect(tables.game).toHaveLength(116);
+    expect(tables.game.length).toBeGreaterThan(0);
   });
 
-  it('holds every creator anchor once, in a table per unit: 27 rows', () => {
+  it('holds every creator anchor of the data file once, in a table per unit', () => {
     const ids = [...tables.cinebench, ...tables.blender, ...tables.otherCreator].map(
       (row) => row.id,
     );
     expect([...ids].sort()).toEqual([...rawCreatorIds].sort());
-    expect(ids).toHaveLength(27);
+    expect(ids).toHaveLength(rawCreatorIds.length);
     expect(tables.cinebench.every((row) => row.unit === 'points')).toBe(true);
     expect(tables.blender.every((row) => row.unit === 'samples-per-minute')).toBe(true);
   });

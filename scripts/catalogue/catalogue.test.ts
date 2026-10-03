@@ -56,9 +56,14 @@ describe('buildCatalogue, on the real data', () => {
     expect(catalogue.publishers.length).toBeGreaterThan(0);
   });
 
-  it('holds the 143 benchmark anchors of plan §4: 116 game rows and 27 creator rows', () => {
-    expect(catalogue.gameBenchmarks).toHaveLength(116);
-    expect(catalogue.creatorBenchmarks).toHaveLength(27);
+  // Counted from the data files, not pinned: every WP-D2 batch adds anchor rows.
+  it('holds every benchmark anchor of the data files: each game row and each creator row', () => {
+    const rows = (path: string) =>
+      (JSON.parse(texts[path] ?? '') as { items: unknown[] }).items.length;
+    expect(catalogue.gameBenchmarks).toHaveLength(rows(DATA_PATHS.benchmarks.game));
+    expect(catalogue.creatorBenchmarks).toHaveLength(rows(DATA_PATHS.benchmarks.creator));
+    expect(catalogue.gameBenchmarks.length).toBeGreaterThan(0);
+    expect(catalogue.creatorBenchmarks.length).toBeGreaterThan(0);
   });
 
   it('writes minified JSON that reads back as the same catalogue', () => {
