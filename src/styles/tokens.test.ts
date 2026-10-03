@@ -61,6 +61,8 @@ const EXPECTED: Record<string, string> = {
   'z-topbar': '.z-topbar { z-index: var(--z-topbar); }',
   'z-sheet': '.z-sheet { z-index: var(--z-sheet); }',
   'z-toast': '.z-toast { z-index: var(--z-toast); }',
+  // Under a control's own content, inside its `isolate` context only (WP-DS2, backlog item 10).
+  'before:z-under': 'z-index: var(--z-under);',
   'duration-ui': 'transition-duration: var(--dur-ui);',
   'duration-fade': 'transition-duration: var(--dur-fade);',
   'duration-exit': 'transition-duration: var(--dur-exit);',
@@ -79,6 +81,11 @@ const EXPECTED: Record<string, string> = {
   'h-chip': '.h-chip { height: var(--spacing-chip); }',
   // The reading measure: about 64 characters a line, 75 at most, in any type role (WP-DS2).
   'max-w-measure': '.max-w-measure { max-width: var(--container-measure); }',
+  // The device's safe areas for the full-bleed stage (WP-DS2, backlog item 6).
+  'pt-safe-top': '.pt-safe-top { padding-top: var(--safe-top); }',
+  'pr-safe-right': '.pr-safe-right { padding-right: var(--safe-right); }',
+  'pb-safe-bottom': '.pb-safe-bottom { padding-bottom: var(--safe-bottom); }',
+  'pl-safe-left': '.pl-safe-left { padding-left: var(--safe-left); }',
   'font-sans': '.font-sans { font-family: var(--font-sans); }',
   'font-light': 'font-weight: var(--font-weight-light);',
   'font-semibold': 'font-weight: var(--font-weight-semibold);',
@@ -223,6 +230,47 @@ describe('design tokens compile with the installed Tailwind (WP-DS1)', () => {
     const base = css.slice(css.indexOf('@layer base'));
     expect(base).toContain('::selection { background: var(--ink); color: var(--stage); }');
     expect(tokensCss).not.toContain('--selection');
+  });
+
+  it('reads the safe areas from env(), with fallbacks that max() and calc() accept', () => {
+    // Backlog item 6. 0px, not 0: inside max() and calc() a bare 0 is a number, so
+    // max(var(--gutter), var(--safe-bottom)) would be invalid with a unitless fallback.
+    for (const side of ['top', 'right', 'bottom', 'left']) {
+      expect(css).toContain(`--safe-${side}: env(safe-area-inset-${side}, 0px);`);
+    }
+  });
+
+  it('sets text fields and selects to at least 16 px on touch screens, over any utility', () => {
+    // Backlog item 5. iOS zooms the page into a focused field set below 16 px. For important
+    // declarations the layer order reverses, so this one in the base layer beats a utility's,
+    // important or not. Only coarse pointers: desktop keeps the 14 and 15 px roles.
+    const base = css.slice(css.indexOf('@layer base'));
+    expect(base).toContain(
+      '@media (pointer: coarse) { input, select, textarea { font-size: max(1rem, 16px) !important; } }',
+    );
+    expect(base.match(/font-size: max\(1rem, 16px\)/g)).toHaveLength(1);
+  });
+
+  it('turns off double-tap zoom on controls, but leaves range sliders alone', () => {
+    // Backlog item 7. A slider keeps the browser's own touch-action, or a sideways drag pans.
+    const base = css.slice(css.indexOf('@layer base'));
+    expect(base).toContain(
+      "a[href], button, input:not([type='range']), select, textarea, summary, label, [role='button'], [role='checkbox'], [role='link'], [role='menuitem'], [role='option'], [role='radio'], [role='switch'], [role='tab'] { touch-action: manipulation; }",
+    );
+  });
+
+  it('gives native selects and their options explicit colours after Preflight', () => {
+    // Backlog item 8. Preflight makes a select's background transparent, and Windows can then draw
+    // the open list in system colours under Rig Lab's light text.
+    const base = css.slice(css.indexOf('@layer base'));
+    const reset = base.indexOf('background-color: transparent;');
+    const restored = base.indexOf(
+      'select, optgroup, option { background-color: var(--surface); color: var(--ink); }',
+    );
+    expect(reset).toBeGreaterThan(-1);
+    expect(restored).toBeGreaterThan(reset);
+    // An author colour on <option> also reaches disabled options, so they get the quietest tier.
+    expect(base).toContain(':is(optgroup, option):disabled { color: var(--ink-3); }');
   });
 });
 
