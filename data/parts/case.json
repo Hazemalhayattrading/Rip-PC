@@ -317,7 +317,7 @@
         },
         {
           "field": "frontIo",
-          "text": "From \"2x USB Type-A 5Gbps, 1x USB Type-C 20Gbps, 1x Audio Jack\" and \"one USB 3.2 Gen 2×2 Type-C\"."
+          "text": "From the product page: \"2x USB Type-A 5Gbps, 1x USB Type-C 20Gbps, 1x Audio Jack\" and \"one USB 3.2 Gen 2×2 Type-C with speeds up to 20 Gbps\". Fractal's user guide disagrees: its specification table reads \"Front ports 1 x USB 3.1 Gen 2 Type-C, 2 x USB 3.0, Audio & Mic\". The catalogue follows the product page, Fractal's current listing."
         },
         {
           "field": "driveTrayLayouts",
