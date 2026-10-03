@@ -475,6 +475,105 @@
       ]
     },
     {
+      "id": "2026-10-02-d2-batch-1",
+      "seed": 202610021,
+      "rule": "One mulberry32(seed) generator for the whole draw. For each batch, in the order listed: sort the items ascending, partial Fisher-Yates shuffle (for i from 0 to size-1, swap item i with item i + floor(rng() * (n - i))), take the first ceil(20% of n), then sort them. Script: data/tools/audit-sample.mjs.",
+      "drawnAt": "2026-10-02",
+      "evidence": [
+        "artifacts/audit/population-2026-10-02-d2-batch-1.json",
+        "artifacts/audit/sample-2026-10-02-d2-batch-1.json",
+        "artifacts/audit/check-2026-10-02-d2-batch-1.txt"
+      ],
+      "batches": [
+        {
+          "batch": "benchmark:game",
+          "population": 47,
+          "size": 10,
+          "ids": [
+            "toms-gpuh-2026-black-myth-wukong-1440p-amd-radeon-rx-9060-xt-16gb",
+            "toms-gpuh-2026-black-myth-wukong-1440p-nvidia-geforce-rtx-5060",
+            "toms-gpuh-2026-black-myth-wukong-4k-amd-radeon-rx-9070-xt",
+            "toms-gpuh-2026-black-myth-wukong-4k-nvidia-geforce-rtx-5060-ti-16gb",
+            "toms-gpuh-2026-black-myth-wukong-4k-nvidia-geforce-rtx-5090",
+            "toms-gpuh-2026-marvel-rivals-1080p-nvidia-geforce-rtx-5060",
+            "toms-gpuh-2026-marvel-rivals-1440p-amd-radeon-rx-9060-xt-16gb",
+            "toms-gpuh-2026-marvel-rivals-1440p-amd-radeon-rx-9070-xt",
+            "toms-gpuh-2026-marvel-rivals-1440p-nvidia-geforce-rtx-5070-ti",
+            "ts-270k-plus-marvel-rivals-1080p-medium-intel-core-i5-14600k"
+          ],
+          "auditedAt": "2026-10-02",
+          "method": "Every sampled row's average and 1% low read by eye against its saved chart image (Tom's Hardware's hierarchy charts and TechSpot's MR.png), and its resolution, preset, ray tracing, upscaling and test system against the chart title and the saved review page (log: check-2026-10-02-d2-batch-1.txt).",
+          "findings": [],
+          "followUp": null
+        }
+      ],
+      "reviews": [
+        {
+          "by": "Director",
+          "at": "2026-10-02",
+          "scope": "The worker's report, before the hand-off: notes that go beyond the source, and the living Tom's Hardware page.",
+          "findings": [
+            {
+              "items": [
+                "toms-gpuh-2026-black-myth-wukong-4k-nvidia-geforce-rtx-5060"
+              ],
+              "field": "notes",
+              "found": "The avgFps note read the RTX 5060's 4K result as \"probably a VRAM limit (our reading; Tom's does not comment)\", an inference the source does not make.",
+              "fix": "The note now gives only Tom's numbers (11.7 fps against the Arc B580's 16.2 at 4K; 33.1 against 26.6 at 1440p) and says Tom's gives no reason.",
+              "fixedIn": "71402f7"
+            },
+            {
+              "items": [
+                "toms-gpuh-2026-black-myth-wukong-1440p-nvidia-geforce-rtx-5090",
+                "toms-gpuh-2026-black-myth-wukong-1440p-nvidia-geforce-rtx-5080",
+                "toms-gpuh-2026-black-myth-wukong-1440p-nvidia-geforce-rtx-5070-ti",
+                "toms-gpuh-2026-black-myth-wukong-1440p-nvidia-geforce-rtx-5070",
+                "toms-gpuh-2026-black-myth-wukong-1440p-nvidia-geforce-rtx-5060-ti-16gb",
+                "toms-gpuh-2026-black-myth-wukong-1440p-nvidia-geforce-rtx-5060",
+                "toms-gpuh-2026-black-myth-wukong-1440p-amd-radeon-rx-9070-xt",
+                "toms-gpuh-2026-black-myth-wukong-1440p-amd-radeon-rx-9070",
+                "toms-gpuh-2026-black-myth-wukong-1440p-amd-radeon-rx-9060-xt-16gb",
+                "toms-gpuh-2026-black-myth-wukong-1440p-intel-arc-b580",
+                "toms-gpuh-2026-black-myth-wukong-4k-nvidia-geforce-rtx-5090",
+                "toms-gpuh-2026-black-myth-wukong-4k-nvidia-geforce-rtx-5080",
+                "toms-gpuh-2026-black-myth-wukong-4k-nvidia-geforce-rtx-5070-ti",
+                "toms-gpuh-2026-black-myth-wukong-4k-nvidia-geforce-rtx-5070",
+                "toms-gpuh-2026-black-myth-wukong-4k-nvidia-geforce-rtx-5060-ti-16gb",
+                "toms-gpuh-2026-black-myth-wukong-4k-nvidia-geforce-rtx-5060",
+                "toms-gpuh-2026-black-myth-wukong-4k-amd-radeon-rx-9070-xt",
+                "toms-gpuh-2026-black-myth-wukong-4k-amd-radeon-rx-9070",
+                "toms-gpuh-2026-black-myth-wukong-4k-amd-radeon-rx-9060-xt-16gb",
+                "toms-gpuh-2026-black-myth-wukong-4k-intel-arc-b580",
+                "toms-gpuh-2026-marvel-rivals-1080p-nvidia-geforce-rtx-5080",
+                "toms-gpuh-2026-marvel-rivals-1080p-nvidia-geforce-rtx-5070-ti",
+                "toms-gpuh-2026-marvel-rivals-1080p-nvidia-geforce-rtx-5070",
+                "toms-gpuh-2026-marvel-rivals-1080p-nvidia-geforce-rtx-5060-ti-16gb",
+                "toms-gpuh-2026-marvel-rivals-1080p-nvidia-geforce-rtx-5060",
+                "toms-gpuh-2026-marvel-rivals-1080p-amd-radeon-rx-9070-xt",
+                "toms-gpuh-2026-marvel-rivals-1080p-amd-radeon-rx-9070",
+                "toms-gpuh-2026-marvel-rivals-1080p-amd-radeon-rx-9060-xt-16gb",
+                "toms-gpuh-2026-marvel-rivals-1080p-intel-arc-b580",
+                "toms-gpuh-2026-marvel-rivals-1440p-nvidia-geforce-rtx-5090",
+                "toms-gpuh-2026-marvel-rivals-1440p-nvidia-geforce-rtx-5080",
+                "toms-gpuh-2026-marvel-rivals-1440p-nvidia-geforce-rtx-5070-ti",
+                "toms-gpuh-2026-marvel-rivals-1440p-nvidia-geforce-rtx-5070",
+                "toms-gpuh-2026-marvel-rivals-1440p-nvidia-geforce-rtx-5060-ti-16gb",
+                "toms-gpuh-2026-marvel-rivals-1440p-nvidia-geforce-rtx-5060",
+                "toms-gpuh-2026-marvel-rivals-1440p-amd-radeon-rx-9070-xt",
+                "toms-gpuh-2026-marvel-rivals-1440p-amd-radeon-rx-9070",
+                "toms-gpuh-2026-marvel-rivals-1440p-amd-radeon-rx-9060-xt-16gb",
+                "toms-gpuh-2026-marvel-rivals-1440p-intel-arc-b580"
+              ],
+              "field": "sources",
+              "found": "Tom's GPU hierarchy is updated over time, and the rows cited only the live page, so a later re-read could see other numbers.",
+              "fix": "Each row's hierarchy sources cite the Wayback snapshot of 2026-09-29 (archiveUrl), checked to be the same version as the capture (dateModified 2026-06-24T21:35:42+00:00, the same 187 chart images), and a note names the page capture and the chart image read, with SHA-256.",
+              "fixedIn": "71402f7"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "2026-10-02-d1-fixtures",
       "seed": 20261003,
       "rule": "One mulberry32(seed) generator for the whole draw. For each batch, in the order listed: sort the items ascending, partial Fisher-Yates shuffle (for i from 0 to size-1, swap item i with item i + floor(rng() * (n - i))), take the first ceil(20% of n), then sort them. Script: data/tools/audit-sample.mjs.",
