@@ -42,6 +42,7 @@ paths such as `artifacts/prices/...`, relative to a data-lead worktree root.
 | `data-lead-evidence-2026-10-01-qa-fixes.sha256` | the 23 files from data-lead's fixes for QA-P0-008 to 012: case user-guide renders and texts, the radiator-limits log, verify logs | a data-lead worktree root, or `C:\Projects\rig-lab-evidence\data-lead-artifacts\` |
 | `data-lead-evidence-2026-10-01-qa-fixes-2.sha256` | the 23 files from data-lead's follow-up: captures of the 7 ASUS CPU-support and BIOS pages, the URL check log, verify logs | a data-lead worktree root, or `C:\Projects\rig-lab-evidence\data-lead-artifacts\` |
 | `design-lead-evidence-2026-10-03-ds2-3d-licences.sha256` | the 8 licence captures behind WP-DS2 batch 2's item 40: ArtStation's marketplace EULA (a Cloudflare 403, plus a Wayback copy of 2026-07-11) and Unity's Asset Store terms, read live | `C:Projectsig-lab-evidencephase-1design-leadWP-DS2d-licences`, or the design-lead worktree's `artifacts/captures/phase-1/WP-DS2/3d-licences/` |
+| `data-lead-evidence-2026-10-03-d2-batch1.sha256` | the 168 files behind WP-D2 batch 1: Tom's Hardware GPU-hierarchy pages and charts, its 2026-09-29 Wayback snapshot, TechSpot's 270K Plus review (Wayback) and chart, the fetch log, and the batch audit | `C:\Projects\rig-lab-evidence\phase-1\data-lead\D2-batch1\`, or the root of a data-lead worktree |
 | `EXCLUDED.txt` | what was deliberately not kept, and why | — |
 
 ## Verify

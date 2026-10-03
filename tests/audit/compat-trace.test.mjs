@@ -11,6 +11,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
+  catalogueIds,
   dataTestCases,
   formatTrace,
   parseTitle,
@@ -122,12 +123,15 @@ describe('the real rule set, tests/audit/compat-rules.json', () => {
   // The Director's ruling named 8 rules on the integration data. Re-checked against WP-D1 batch 1
   // (c588afb), as the ruling asks: gpu-length reads conditional rows that leave some radiator sizes
   // without a limit, and psu-form-factor reads atxBracketIncluded, which can be unpublished.
-  it('asks unknown-data tests of 10 rules, and validator proofs of the other 10', () => {
+  // Re-checked against build-lead's RuleSpec (480a30e): cooler-height reads the memory kit, whose
+  // height, like the cooler's memory clearance, can be unpublished.
+  it('asks unknown-data tests of 11 rules, and validator proofs of the other 9', () => {
     expect(rules.filter((r) => r.unknownData).map((r) => r.id)).toEqual([
       'bios-version',
       'ram-speed',
       'gpu-length',
       'gpu-thickness',
+      'cooler-height',
       'ram-cooler-clearance',
       'radiator-fit',
       'psu-form-factor',
@@ -140,12 +144,20 @@ describe('the real rule set, tests/audit/compat-rules.json', () => {
       'cpu-chipset',
       'ram-type',
       'ram-slots',
-      'cooler-height',
       'm2-lanes',
       'board-form-factor',
       'usb-c-header',
       'cooler-socket',
       'display-output',
+    ]);
+  });
+
+  it("allows a synthetic null for exactly the four rules of the Director's ruling (2026-10-03)", () => {
+    expect(rules.filter((r) => r.syntheticNull).map((r) => r.id)).toEqual([
+      'gpu-length',
+      'cooler-height',
+      'psu-form-factor',
+      'psu-length',
     ]);
   });
 
@@ -335,9 +347,9 @@ describe('the unknown-data ruling: validator tests for rules that read only requ
 
 describe("the engine's RuleSpec against test plan §9.2", () => {
   const specs = [
-    { id: 'cpu-socket', outcomes: ['ok', 'block'], numeric: false },
-    { id: 'gpu-length', outcomes: ['block', 'ok'], numeric: true },
-    { id: 'bios-version', outcomes: ['ok', 'warn'], numeric: false },
+    { id: 'cpu-socket', outcomes: ['ok', 'block'], numeric: false, unknownData: false },
+    { id: 'gpu-length', outcomes: ['block', 'ok'], numeric: true, unknownData: true },
+    { id: 'bios-version', outcomes: ['ok', 'warn'], numeric: false, unknownData: true },
   ];
   const run = (registrySpecs) => traceScenario('clean', { registrySpecs });
 
@@ -345,22 +357,23 @@ describe("the engine's RuleSpec against test plan §9.2", () => {
     expect(run(specs).errors).toEqual([]);
   });
 
-  it('fails on a different outcome set or numeric flag', () => {
+  it('fails on a different outcome set, numeric flag or unknownData flag', () => {
     const r = run([
       { ...specs[0], outcomes: ['ok', 'warn', 'block'] },
       { ...specs[1], numeric: false },
-      specs[2],
+      { ...specs[2], unknownData: false },
     ]);
     expect(r.errors).toEqual([
       'cpu-socket: the registry gives the outcomes ok, warn, block, test plan §9.2 gives ok, block',
       'gpu-length: the registry says numeric is false, test plan §9.2 says true',
+      'bios-version: the registry says unknownData is false, test plan §9.2 says true',
     ]);
   });
 
   it('reads RuleSpec objects from the registry file', () => {
     expect(registryEntries({ rules: specs })).toEqual(specs);
     expect(registryEntries(['cpu-socket'])).toEqual([
-      { id: 'cpu-socket', outcomes: null, numeric: null },
+      { id: 'cpu-socket', outcomes: null, numeric: null, unknownData: null },
     ]);
   });
 });
@@ -406,6 +419,44 @@ describe('planted defects, through real Vitest', () => {
         file: 'src/engine/skipped-boundary.fixture.mjs',
       },
     ]);
+  });
+});
+
+describe("synthetic nulls, through real Vitest (the Director's ruling, 2026-10-03)", () => {
+  const catalogue = catalogueIds(path.join(SUITE, 'data', 'parts')).ids;
+
+  it('counts a synthetic null on a marked rule and a real catalogue part, and lists it', () => {
+    const r = traceScenario('synthetic-null', { catalogue });
+    expect(r.errors).toEqual([]);
+    expect(resultOf(r, 'gpu-length')).toMatchObject({
+      result: 'TRACED',
+      syntheticNulls: [{ partId: 'fractal-north-charcoal-black-tg-light', status: 'passed' }],
+    });
+    expect(r.summary.syntheticNullTests).toBe(1);
+    expect(formatTrace(r)).toContain(
+      'Synthetic nulls (test plan §9.1): gpu-length on fractal-north-charcoal-black-tg-light',
+    );
+  });
+
+  it.each([
+    ['synthetic-wrong-rule', 'bios-version', /allows only for gpu-length \(the Director's ruling/],
+    ['synthetic-wrong-kind', 'gpu-length', /belongs only in an "unknown:" test/],
+    [
+      'synthetic-unknown-part',
+      'gpu-length',
+      /"not-a-catalogue-part", which is not a catalogue part/,
+    ],
+    ['synthetic-malformed', 'gpu-length', /does not end "\(synthetic null on <part id>\)"/],
+  ])('fails %s, and does not count the test', (name, ruleId, message) => {
+    const r = traceScenario(name, { catalogue });
+    expect(r.ok).toBe(false);
+    expect(r.errors.filter((e) => message.test(e))).toHaveLength(1);
+    expect(resultOf(r, ruleId).result).toBe('UNTRACED');
+    expect(resultOf(r, ruleId).syntheticNulls).toEqual([]);
+  });
+
+  it('cannot measure a synthetic null without a catalogue to check its part against', () => {
+    expect(() => traceScenario('synthetic-null')).toThrow(TraceInputError);
   });
 });
 
@@ -480,8 +531,10 @@ describe('the rule set is validated', () => {
     unknownData: false,
     requiredFields: [proof],
   };
-  it('accepts both kinds of rule', () => {
+  it('accepts both kinds of rule, and a synthetic-null mark with its reason', () => {
     expect(validateRules({ schemaVersion: 1, rules: [base, required] })).toHaveLength(2);
+    const marked = { ...base, syntheticNull: true, syntheticNullWhy: 'no product has the null' };
+    expect(validateRules({ schemaVersion: 1, rules: [marked] })).toHaveLength(1);
   });
 
   it.each([
@@ -516,6 +569,12 @@ describe('the rule set is validated', () => {
         requiredFields: [{ field: 'cpu.igpu', proof: 'none-by-definition', test: null }],
       },
     ],
+    [
+      'a synthetic-null mark on a rule without unknown data',
+      { ...required, syntheticNull: true, syntheticNullWhy: 'x' },
+    ],
+    ['a synthetic-null mark without its reason', { ...base, syntheticNull: true }],
+    ['a synthetic-null mark that is not true or false', { ...base, syntheticNull: 'yes' }],
   ])('refuses %s', (_, rule) => {
     expect(() => validateRules({ schemaVersion: 1, rules: [rule] })).toThrow(TraceInputError);
   });
@@ -633,6 +692,35 @@ describe('the command line', () => {
     const r = cli([...common(scenario('no-unknown')), '--allow-pending', 'display-output']);
     expect(r.status).toBe(1);
     expect(r.stdout).toMatch(/gpu-length: no passing "unknown" test/);
+  });
+
+  it('checks a synthetic null against the catalogue under the repo root, and records its files', () => {
+    const r = cli([...common(scenario('synthetic-null')), '--allow-pending', 'display-output']);
+    expect(r.status, r.stderr).toBe(0);
+    expect(r.matrix.inputs.catalogue.files.map((f) => f.file)).toEqual([
+      'case.json',
+      'gpu-card.json',
+      'motherboard.json',
+    ]);
+    expect(r.stdout).toMatch(/Synthetic nulls \(test plan §9\.1\): gpu-length on fractal-north/);
+    const wrong = cli([
+      ...common(scenario('synthetic-wrong-rule')),
+      '--allow-pending',
+      'display-output',
+    ]);
+    expect(wrong.status).toBe(1);
+  });
+
+  it('exits 2 for a synthetic null when there is no catalogue', () => {
+    const r = cli([
+      ...common(scenario('synthetic-null')),
+      '--allow-pending',
+      'display-output',
+      '--catalogue',
+      'no-such-dir',
+    ]);
+    expect(r.status).toBe(2);
+    expect(r.stderr).toMatch(/no catalogue was given/);
   });
 
   it('exits 2 when it cannot measure', () => {

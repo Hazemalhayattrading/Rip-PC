@@ -102,7 +102,8 @@ Owner: build-lead (engine-engineer, frontend-engineer) · Needs: nothing · Wave
 **In the browser**
 - Open `/lab/parts` and pick any part. Each spec shows its value, its unit and its source:
   publisher, date and link. An unpublished value says "not published", with the reason.
-- `/lab/accuracy` lists all 143 anchors, and it shows which games and chips have none.
+- `/lab/accuracy` lists every anchor in the data (143 when the plan was written; 190 after WP-D2
+  batch 1), and it shows which games and chips have none.
 
 **Done means**
 - Every catalogue field and every anchor is reachable in the lab, with its source.
@@ -277,9 +278,11 @@ Owner: build-lead (engine-engineer) · Needs: WP-E0, and WP-D1's power registry 
 
 **Done means**
 - Every constant traces to the registry.
-- For every catalogue GPU card, the range includes the card maker's recommended PSU, or the
-  hand-off explains the difference. For example, NVIDIA recommends 1000 W for the RTX 5090
-  Founders Edition.
+- For every catalogue GPU card, the range includes the card maker's power supply figure, or the
+  hand-off explains the difference. Each figure is taken in the maker's own word: NVIDIA
+  *requires* 1000 W for the RTX 5090 Founders Edition ("Required System Power"), ASUS
+  *recommends*, and Sapphire and Intel *set a minimum*. See copy guide §9 and
+  `recommendedPsuKind`.
 
 ### WP-E3 · Game performance model
 Owner: build-lead (a second engine-engineer, in its own folder) · Needs: WP-E0. It starts on the
@@ -308,7 +311,8 @@ Owner: build-lead (a second engine-engineer, in its own folder) · Needs: WP-E0.
 - `/lab/accuracy` gains the model's number and the error for every anchor.
 
 **Done means**
-- **The golden test** is generated from the anchor files, with one case per row (143 today).
+- **The golden test** is generated from the anchor files, with one case per row (190 after WP-D2
+  batch 1; QA's check counts the rows from the data).
   - Every case passes within ±5%, in the anchor's own source context: its publisher and its test
     conditions.
   - The model may calibrate per source, for example with a scene factor per publisher and game.
@@ -478,20 +482,25 @@ catalogue parts.
 |---|---|---|---|---|
 | **Every compatibility rule** | 1 worker per rule | 20 | As each rule hands off, 4 at a time | Each real combination it tried matches its expected result. The reason names the right parts, numbers and units, and the source links open the right page. The boundary and unknown-data cases behave as specified |
 | Known incompatibilities, and the sweep | 1 worker | 1 | After WP-E1 | No ok for any real combination known not to work (from manuals, support lists and case pages). The catalogue-wide sweep holds |
-| **Every benchmark anchor: the data** | 1 worker per source review. A source with more than about 50 rows is split | 5 for today's 143 rows, plus 1 for each review WP-D2 adds | After each WP-D2 batch the Director accepts | Every row's value and conditions match the source: resolution, preset, ray tracing, upscaling, frame generation, test CPU and GPU, driver and date |
+| **Every benchmark anchor: the data** | 1 worker per source review. A source with more than about 50 rows is split | 5 for the plan's first 143 rows, plus 1 for each review WP-D2 adds (7 after D2 batch 1) | After each WP-D2 batch the Director accepts | Every row's value and conditions match the source: resolution, preset, ray tracing, upscaling, frame generation, test CPU and GPU, driver and date |
 | **Every benchmark anchor: the model** | The golden test, generated with 1 case per row | None: it runs in CI | Every PR | Every case is within ±5% in its own source context, and QA checks that the number of cases equals the number of rows. For each conflicting pair, the range shown contains both values |
 | Held-out results | 1–2 workers pick them; another checks the picks | 2–3 | After WP-E3 and WP-E4 are frozen | At least 20 results, 4 per coverage class, chosen blind and absent from the data, each within 10% |
 | Power constants | 1 worker | 1 | After WP-E2 | Every constant matches its source, and the PSU range is checked against every card maker's recommendation |
 | Bottleneck verdicts | 1 worker | 1 | After WP-E5 | For 20 builds that QA picks, each sentence matches the model's numbers, and each rebalanced build passes the rules and the price limit |
 | 10% of all numbers (BUILD_PROMPT §2) | A seeded sample, by category | 2–3 | Wave 4 | As in test plan §7. The anchors are already checked at 100% |
 
-**Today's 143 anchors, by source** (one worker each):
+**The anchors by source** (one worker each). There were 143 rows when the plan was written, and 190
+after WP-D2 batch 1:
 1. ComputerBase, "Gaming-Grafikkarten 2026 im Test" (2026-05-06), page 4: 48 GPU-bound rows;
 2. the same article, page 5: 32 rows;
 3. TechPowerUp, the Ryzen 7 9850X3D review (2026-01-28), page 18: 36 CPU-bound rows (9 CPUs × 4
    games at 1080p);
 4. TechPowerUp, the Ryzen 7 9800X3D review (2024-11-06), page 9: 18 Cinebench 2024 rows;
-5. Blender Open Data, Blender 5.2.0, with OptiX, HIP and oneAPI: 9 rows.
+5. Blender Open Data, Blender 5.2.0, with OptiX, HIP and oneAPI: 9 rows;
+6. Tom's Hardware, "The GPU benchmarks hierarchy 2026" (updated 2026-06-24; Wayback 2026-09-29):
+   39 GPU-bound rows, Black Myth: Wukong and Marvel Rivals (WP-D2 batch 1);
+7. TechSpot, the Core Ultra 7 270K Plus review (2026-03-28): 8 CPU-bound rows, Marvel Rivals at
+   1080p Medium (WP-D2 batch 1).
 
 **Cost.**
 - About 45–55 worker runs over the phase, at most 4 at a time.

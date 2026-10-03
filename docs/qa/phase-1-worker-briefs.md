@@ -132,23 +132,82 @@ against its sources and give a verdict: a defect, or a mistake in the corpus wit
 **Item:** one source review from test plan §17's list, or one review that a WP-D2 batch adds. A
 review of more than about 50 rows is split.
 
-**Read:** the blind key list qa-lead gives you. For each row of the source it holds the id, the
-game or workload, the chip or CPU, and the conditions needed to find the value, but no values. Read
-also the source page, live or archived (test plan §7.4).
+**Read:** the blind key list qa-lead gives you, made by `tests/audit/anchor-keys.mjs`. For each row
+of the review it holds the id, the game or workload, the test system, every test condition, the
+notes and the sources (url, archive, locator), but no values. A note that printed a value is
+withheld, and the row's `withheldNotes` names the field it was on. Read also the source pages, live
+or archived (test plan §7.4), on the hosts qa-lead names, one request at a time.
 
 **Stage 1:**
 1. For each row, read the value from the source: avg fps and 1% low, or the score with its unit.
-   Note how you read it: a printed number, or read off a chart (test plan §7.3: ±1% or ±1 unit,
-   whichever is larger).
+   Note how you read it: a printed number (a table cell, a bar label, a data attribute), or read
+   off a chart without labels (test plan §7.3: ±1% or ±1 unit, whichever is larger).
 2. Re-read every test condition from the source, and treat the key list's conditions as claims:
    - resolution, the preset as published, ray tracing, and the upscaler with its mode and version;
    - frame generation;
    - the test CPU, GPU and RAM, the driver, and the game version;
    - the review's `publishedAt`.
-3. Write `transcribed.json`, one entry per row, each with its locator and capture. Report its
-   SHA-256, and stop.
+3. Write `transcribed.json` (below), one entry per row, each with its locator and capture. Report
+   its SHA-256, and stop.
 
-**Stage 2** (qa-lead): a field-by-field comparison with the data rows, by test plan §7.3's rules.
+**`transcribed.json`:**
+```json
+{
+  "schemaVersion": 1,
+  "review": "<the key list's review>",
+  "keyListSha256": "<the key list's SHA-256, from your prompt>",
+  "routes": [
+    { "url": "…", "route": "live", "result": "ok", "capture": "captures/page-4.html" }
+  ],
+  "shared": {
+    "testSystem.ram": {
+      "claim": "<the key list's value, copied>",
+      "verdict": "MATCH",
+      "source": "<the source's own words>",
+      "locator": "…",
+      "capture": "captures/…"
+    }
+  },
+  "rows": [
+    {
+      "id": "<row id>",
+      "values": {
+        "avgFps": { "value": 145.6, "printedAs": "145,6", "how": "printed", "locator": "…", "capture": "…" },
+        "onePercentLowFps": { "value": null, "printedAs": null, "how": "not published", "locator": "…", "capture": "…" }
+      },
+      "conditions": {
+        "resolution": { "verdict": "MATCH", "source": "2.560 × 1.440", "locator": "…", "capture": "…" },
+        "gameVersion": { "verdict": "NOT STATED", "source": null, "locator": "pages read: …", "capture": "…" }
+      },
+      "unverifiable": null
+    }
+  ]
+}
+```
+- **`values`:** `avgFps` and `onePercentLowFps` for a game row, `score` for a creator row. `how` is
+  `printed`, `chart` or `not published`. `printedAs` is the number exactly as the source prints it.
+- **`conditions`:** one entry per claim of the row, by its path in the key list:
+  - a game row: `gameId`, `limiter`, `resolution`, `preset`, `rayTracing`, `upscaling.method`,
+    `upscaling.mode`, `upscaling.version`, `frameGeneration`, `scene`, `gameVersion`, every
+    `testSystem` field, and `publishedAt`;
+  - a creator row: `app`, `appVersion`, `test`, `device`, `backend`, `subject`, `unit`,
+    `aggregate`, every `testSystem` field, and `publishedAt`;
+  - never the catalogue ids (`catalogueId`, `chipId`, `cardId`, `cpuId` in `subject`): qa-lead
+    checks those against the catalogue. Read `subject`'s id as the chip or CPU it names.
+- **`verdict`**, against the key list's claim:
+  - `MATCH`: the source says the same;
+  - `MISMATCH`: the source says something else, quoted in `source`;
+  - `NOT STATED`: the source doesn't say; `locator` names the pages you read;
+  - `UNVERIFIABLE`: no route reached the source, and `routes` lists every one you tried.
+  - A claim of `null` is `NOT STATED` when the source doesn't say, or `MISMATCH` with the
+    source's words when it does.
+- **`shared`:** a verdict that holds for every row with the same claim, such as the test bench,
+  written once. It applies to each row whose claim equals its `claim` and that has no entry of its
+  own for that field.
+- **`unverifiable`:** for a row you couldn't reach at all, the reason instead of verdicts.
+
+**Stage 2** (qa-lead): `tests/audit/anchor-compare.mjs` compares `transcribed.json` with the data
+rows, field by field, by test plan §7.3's rules.
 
 **Passes when:** every row's value and every condition match. A mismatch is a Blocker for
 data-lead (test plan §7.3).
@@ -264,7 +323,8 @@ is a recorded Major.
 - the part picker's choice survives a reload through the URL;
 - the plan §3 links open with each rule's row showing its status chip, which never relies on colour
   alone, its reason, its rule id and its source links;
-- `/lab/accuracy` lists all 143 anchors and the coverage grid;
+- `/lab/accuracy` lists every row of the anchor files at the commit under test, counted from the
+  data (143 at `c621c15`; each WP-D2 batch adds more), and the coverage grid;
 - every estimate shows a range, the word "estimated" and a confidence word, and no
   frame-generation figure appears in a native row;
 - no console errors or warnings.

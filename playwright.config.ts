@@ -64,8 +64,8 @@ function sizedAt(viewport: ViewportSpec) {
 
 /**
  * The test plan §5 matrix: what each width and theme runs on every push and PR.
- * - Dark at 390 and 1440 runs everything. Dark at 768 runs only axe (and, from Phase 2, the
- *   keyboard path).
+ * - Dark at 390 and 1440 runs everything. Dark at 768 runs only axe, in-app navigation by touch
+ *   (`@nav`, Hazem's report of 2026-10-02) and, from Phase 2, the keyboard path.
  * - Light runs only axe: contrast depends on the theme, layout does not.
  * The other suites run in every cell in the full matrix, which E2E_FULL_MATRIX=1 turns on (the
  * nightly job, from Phase 2).
@@ -73,7 +73,7 @@ function sizedAt(viewport: ViewportSpec) {
 const fullMatrix = process.env.E2E_FULL_MATRIX === '1';
 function pullRequestSuites(viewport: ViewportSpec, theme: Theme): RegExp | undefined {
   if (theme === 'light') return /@a11y/;
-  return viewport.name === '768' ? /@a11y|@keyboard/ : undefined;
+  return viewport.name === '768' ? /@a11y|@nav|@keyboard/ : undefined;
 }
 
 /**
