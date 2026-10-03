@@ -4,7 +4,9 @@ Branch `feat/data-benchmarks`, fast-forwarded to claude/keen-lamport-0794zj @ b1
 as e5c1d2f). Spec: plan §2 WP-D2; briefs, "data-lead", step 6. Hand-offs go to `team-lead`.
 
 1. Batch 1 (Black Myth: Wukong, Marvel Rivals): **merged** (e5c1d2f).
-2. The preset-name map: **research running**.
+2. The preset-name map: **research done (2026-10-03), data-lead review next**.
+   - Staged: 10 items, 3 gaps (agentId a49a62591771b7064): Black Ops 7 "Extrem" and "Extrem, RT: Hoch"
+     (no English source), Tom's Marvel Rivals "High" (not confirmed as a menu preset).
    - One benchmark-researcher maps each publisher's preset label (12 publisher × game × label
      combinations in `data/benchmarks/game.json`) to the game's own English preset name, with
      sources. Staged in this worktree's `artifacts/benchmarks/presets-staged.json`.
