@@ -1,7 +1,8 @@
 # Copy guide: reasons, verdicts and estimates (WP-DS2)
 
 Owner: design-lead · Date: 2026-10-02 · Updated 2026-10-03 (the card maker's power supply
-figure: sections 2, 7.14 and 9) · Status: ready for build-lead (WP-E0, WP-E1) · Spec:
+figure: sections 2, 7.14 and 9; how names are tested and reviewed: section 4) · Status: ready for
+build-lead (WP-E0, WP-E1) · Spec:
 [phase-1-plan.md](../reports/phase-1-plan.md) §2 WP-DS2 and §6
 
 This guide sets the wording of every string the engine produces: compatibility reasons, the power
@@ -136,8 +137,19 @@ punctuation stay exactly as the catalogue has them.
   name against a retailer's listing.
 - **"The" before a part name** ("the DeepCool AK620"). "A" or "an" by sound before a socket or a
   standard: "an AM5 board", "an LGA1851 board", "an ATX power supply".
-- **One display-name function, with a pinned test** that lists every catalogue part's display
-  name. design-lead reviews all names in that one place.
+- **One display-name function,** `displayName` in `src/engine/names.ts`. The engine and the UI
+  both use it, so the UI finds each name inside a sentence (section 1, "Parts").
+- **A name starts with the whole brand, or leaves the brand out:** "WD_BLACK SN8100 …" under
+  WD_BLACK, "Delta RGB …" under T-FORCE. Never with part of it: brand "Kingston FURY" with the
+  name "FURY Beast …" displays as "Kingston FURY FURY Beast …".
+- **Its test is structural.** Where the brand goes in front of the name, the brand's last word
+  must not repeat as the name's first word (ignoring case), which catches that doubled word for
+  any part. No test lists every name, because each data batch would need build-lead's test
+  edited (the Director's ruling of 2026-10-03).
+- **design-lead reviews every name in one place:** `npm run engine:dump` writes every catalogue
+  part's display name to `artifacts/engine/display-names.json`. design-lead reads that file at
+  each data or engine hand-off, and sends a fix to its owner: a record to data-lead, the function
+  to build-lead.
 
 ## 5. Words
 
