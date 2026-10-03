@@ -1,7 +1,7 @@
 # Specs view: the expert table (Studio)
 
-Owner: design-lead · Date: 2026-10-01 · Updated 2026-10-03 (WP-DS2: backlog items 1, 14, 16–19) ·
-Status: ready for review · Built in Phase 2
+Owner: design-lead · Date: 2026-10-01 · Updated 2026-10-03 (WP-DS2: backlog items 1, 14, 16–19;
+the Maker's PSU column) · Status: ready for review · Built in Phase 2
 
 Studio is the least dense of the three directions. Its rail shows 4 parts in the first view at
 1440 ([direction.md §4](direction.md#4-direction-c-studio)), but a step can hold 40 or more parts,
@@ -95,7 +95,7 @@ data-lead's WP-D0 schema (`feat/data-foundations`, not yet merged), and change w
 |---|---|
 | Motherboard | Chipset · Form factor · Memory (type, slots, max MT/s) · M.2 (count, best gen) · PCIe x16 (gen) · Wi-Fi · Front USB-C header · BIOS flashback |
 | RAM | Type · Kit (modules × GB) · Speed (MT/s) · CL · Voltage (V) · Height (mm) · Profiles (EXPO, XMP) |
-| GPU | Chip · VRAM (GB) · Length (mm) · Thickness (slots) · Board power (W) · Power connectors · Recommended PSU (W) |
+| GPU | Chip · VRAM (GB) · Length (mm) · Thickness (slots) · Board power (W) · Power connectors · Maker's PSU (W) |
 | Storage | Interface · PCIe gen · Capacity (GB) · Read (MB/s) · Write (MB/s) · Cache (DRAM, HMB) · Endurance (TBW) · Heatsink |
 | PSU | Wattage (W) · Efficiency (80 Plus, Cybenetics) · ATX version · 12V-2x6 (native) · Form factor · Length (mm) · Modular |
 | Cooling | Type · Height (mm) or radiator (mm) · Fans (count × mm) · Rated (W) · RAM clearance (mm) |
@@ -104,6 +104,11 @@ data-lead's WP-D0 schema (`feat/data-foundations`, not yet merged), and change w
 
 Column order is by what decides a pick at that step: the clearance numbers come first for GPU,
 cooling and case.
+
+**Maker's PSU (W)** is the card maker's power supply figure (`recommendedPsuW`). Makers call it a
+requirement, a recommendation or a minimum (`recommendedPsuKind`), so the header never says
+"Recommended". The cell holds the number only; the source popover gives the maker's word, in the
+sentence of [copy-guide.md §9](copy-guide.md#9-power-wp-e2).
 
 ## 3. Rows
 
