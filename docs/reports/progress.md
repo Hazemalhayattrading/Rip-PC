@@ -299,7 +299,10 @@ Branch-tidy record:
   - chips at rest may use the `--line` border;
   - Phase 2 runs with no post-processing composer, and with Neutral tone mapping;
   - no list virtualisation until INP evidence calls for it;
-  - display names are reviewed from the dump;
+  - display names are reviewed from the dump. **Confirmed by the Director on 2026-10-03,** after the Kingston doubled-brand defect:
+    - build-lead adds a structural check where the brand meets the name;
+    - there is no test that lists every name, because it would need editing for every data batch;
+    - design-lead reviews the dump's names file at each hand-off, and updates copy guide §4 to match;
   - the focus rule on a page change, which QA tests and build-lead fixes QA-P1-001 to.
 - **2026-10-03, E1 may start before E0 is accepted (Director).** QA and design approved the result
   types at `83aa5ab`, which is the E1 gate. E0's remaining parts (catalogue loading, the dump, the
