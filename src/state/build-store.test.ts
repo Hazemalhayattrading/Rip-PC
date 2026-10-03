@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { MAX_PART_ID_LENGTH, MAX_PAYLOAD_LENGTH, buildCodec } from './build-codec';
-import { buildStore, canAddDrive, createBuildStore, encodeSelections } from './build-store';
+import { buildStore, createBuildStore, encodeSelections } from './build-store';
 
 /** The longest part id the codec takes, made unique by its last characters. */
 const longId = (n: number) => `${'a'.repeat(MAX_PART_ID_LENGTH - 4)}-${String(n).padStart(3, '0')}`;
@@ -177,16 +177,6 @@ describe('a build too long for a link', () => {
       store.getState().setDrives(drives);
     }).toThrow(/too long for a link/);
     expect(store.getState().selections).toEqual({});
-  });
-});
-
-describe('canAddDrive', () => {
-  it('allows another drive while one more of the longest ids still fits a link', () => {
-    expect(canAddDrive({})).toBe(true);
-    const drives = Array.from({ length: 11 }, (_, i) => longId(i));
-    // 11 drives of 83 characters each, plus "v1": 915 characters, and a 12th makes 998.
-    expect(canAddDrive({ storage: drives })).toBe(true);
-    expect(canAddDrive({ storage: [...drives, longId(11)] })).toBe(false);
   });
 });
 

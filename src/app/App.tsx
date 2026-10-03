@@ -92,7 +92,7 @@ function LabRoute({ page }: { readonly page: LabPage }) {
       fallback={() => (
         <main id="main" tabIndex={-1}>
           <h1 tabIndex={-1}>{metaOf({ name: 'lab', page }).heading}</h1>
-          <p role="alert">The Engine lab didn’t load. Reload the page to try again.</p>
+          <p role="alert">This page didn’t load. Reload the page to try again.</p>
         </main>
       )}
     >

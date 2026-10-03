@@ -191,3 +191,59 @@ export function buildAccuracyModel(catalogue: Catalogue): AccuracyModel {
     },
   };
 }
+
+/** An empty cell of a coverage grid: a row and a column with no anchor. */
+export interface GapCell {
+  readonly row: string;
+  readonly column: string;
+}
+
+/**
+ * Every empty cell of a grid, row by row: the "Gaps" list under the grid gives each its own line,
+ * and the cell's "0" links to it (lab-spec §8).
+ */
+export function gapCells(grid: CoverageGrid): GapCell[] {
+  return grid.rows.flatMap((row, r) =>
+    grid.columns
+      .filter((_, c) => (grid.counts[r]?.[c] ?? 0) === 0)
+      .map((column) => ({ row, column })),
+  );
+}
+
+/** Words to an id fragment: "benchmark score (all scenes summed)" → "benchmark-score-all-scenes-summed". */
+function slug(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+/** The page id of a gap's line, unique across the grids: `gap-gpu-minecraft-nvidia-…`. */
+export function gapId(grid: 'gpu' | 'cpu' | 'cinebench' | 'blender', gap: GapCell): string {
+  return `gap-${grid}-${slug(gap.row)}-${slug(gap.column)}`;
+}
+
+/** The anchors as the accuracy page tables them: the game anchors, and one table per creator unit. */
+export interface AnchorTables {
+  readonly game: readonly GameBenchmark[];
+  /** Cinebench 2024 rows: points. */
+  readonly cinebench: readonly CreatorBenchmark[];
+  /** Blender rows: samples per minute. */
+  readonly blender: readonly CreatorBenchmark[];
+  /** Any creator row in another unit: none today, never dropped. */
+  readonly otherCreator: readonly CreatorBenchmark[];
+}
+
+export function anchorTables(catalogue: Catalogue): AnchorTables {
+  const creator = catalogue.creatorBenchmarks;
+  return {
+    game: catalogue.gameBenchmarks,
+    cinebench: creator.filter((row) => row.app === 'cinebench-2024' && row.unit === 'points'),
+    blender: creator.filter((row) => row.app === 'blender' && row.unit === 'samples-per-minute'),
+    otherCreator: creator.filter(
+      (row) =>
+        !(row.app === 'cinebench-2024' && row.unit === 'points') &&
+        !(row.app === 'blender' && row.unit === 'samples-per-minute'),
+    ),
+  };
+}

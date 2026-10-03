@@ -1,10 +1,5 @@
 import { useEffect, useLayoutEffect, useRef } from 'react';
-import {
-  focusNewPage,
-  settleNewPage,
-  trackArrival,
-  type ArrivalTracker,
-} from './navigation-focus';
+import { focusNewPage, settleNewPage, trackArrival, type ArrivalTracker } from './navigation-focus';
 
 let tracker: ArrivalTracker | null = null;
 

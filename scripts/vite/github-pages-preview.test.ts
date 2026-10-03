@@ -180,14 +180,18 @@ describe('folderRedirects, for the dev server', () => {
     expect(res.end).toHaveBeenCalledOnce();
   });
 
-  it.each(['/Rip-PC/lab/', '/Rip-PC/lab/parts', '/Rip-PC/build', '/Rip-PC/', '/lab', '/Rip-PC/labs'])(
-    'passes %s on to Vite',
-    (url) => {
-      const { res, next } = runDev(url);
-      expect(next).toHaveBeenCalledOnce();
-      expect(res.statusCode).toBe(200);
-    },
-  );
+  it.each([
+    '/Rip-PC/lab/',
+    '/Rip-PC/lab/parts',
+    '/Rip-PC/build',
+    '/Rip-PC/',
+    '/lab',
+    '/Rip-PC/labs',
+  ])('passes %s on to Vite', (url) => {
+    const { res, next } = runDev(url);
+    expect(next).toHaveBeenCalledOnce();
+    expect(res.statusCode).toBe(200);
+  });
 
   it('puts the base in front, whatever the base is', () => {
     expect(runDev('/lab', '/').headers.location).toBe('/lab/');
@@ -200,8 +204,16 @@ describe('folderRedirects, for the dev server', () => {
     expect(hook(server)).toBeUndefined();
     expect(use).toHaveBeenCalledOnce();
     const headers: Record<string, string> = {};
-    const res = { statusCode: 0, setHeader: (n: string, v: string) => (headers[n.toLowerCase()] = v), end: () => undefined };
-    use.mock.calls[0]?.[0]({ url: '/Rip-PC/lab' } as IncomingMessage, res as unknown as ServerResponse, vi.fn());
+    const res = {
+      statusCode: 0,
+      setHeader: (n: string, v: string) => (headers[n.toLowerCase()] = v),
+      end: () => undefined,
+    };
+    use.mock.calls[0]?.[0](
+      { url: '/Rip-PC/lab' } as IncomingMessage,
+      res as unknown as ServerResponse,
+      vi.fn(),
+    );
     expect(res.statusCode).toBe(301);
     expect(headers.location).toBe('/Rip-PC/lab/');
   });

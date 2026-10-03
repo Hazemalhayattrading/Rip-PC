@@ -6,10 +6,13 @@ import type { CreatorBenchmark, GameBenchmark } from '../../data/schema';
 import { utcToday } from '../../data/validate';
 import type { Catalogue } from '../../engine/types';
 import {
+  anchorTables,
   buildAccuracyModel,
   cellCount,
   emptyColumns,
   emptyRows,
+  gapCells,
+  gapId,
   type CoverageGrid,
 } from './accuracy-model';
 
@@ -23,6 +26,18 @@ const rawGame = (
     items: { limiter: string }[];
   }
 ).items;
+
+/** The anchor ids in the data files, read without the code under test. */
+const rawGameIds = (
+  JSON.parse(readFileSync(resolve(ROOT, 'data/benchmarks/game.json'), 'utf8')) as {
+    items: { id: string }[];
+  }
+).items.map((row) => row.id);
+const rawCreatorIds = (
+  JSON.parse(readFileSync(resolve(ROOT, 'data/benchmarks/creator.json'), 'utf8')) as {
+    items: { id: string }[];
+  }
+).items.map((row) => row.id);
 
 function sumOfCells(grid: CoverageGrid): number {
   return (
@@ -190,5 +205,63 @@ describe('buildAccuracyModel on a hand-made selection of real rows', () => {
     expect(emptyRows(small.gpuBound)).not.toContain('cyberpunk-2077');
     expect(emptyRows(small.gpuBound)).toContain('minecraft');
     expect(emptyRows(small.cpuBound)).not.toContain('counter-strike-2');
+  });
+});
+
+describe('the gaps under each coverage grid', () => {
+  it('has one line for every empty cell, in the grid’s order, and none for a counted one', () => {
+    const gaps = gapCells(model.gpuBound);
+    const cells = model.gpuBound.rows.length * model.gpuBound.columns.length;
+    const counted = model.gpuBound.counts.flat().filter((count) => count > 0).length;
+    expect(gaps).toHaveLength(cells - counted);
+    expect(gaps).toContainEqual({ row: 'minecraft', column: 'nvidia-geforce-rtx-5090' });
+    expect(gaps).not.toContainEqual({ row: 'cyberpunk-2077', column: 'amd-radeon-rx-9070-xt' });
+    expect(gaps[0]).toEqual({
+      row: model.gpuBound.rows[0],
+      column: model.gpuBound.columns.find((_, c) => (model.gpuBound.counts[0]?.[c] ?? 0) === 0),
+    });
+  });
+
+  it('gives each line an id of its own on the page, across all four grids', () => {
+    const ids = (
+      [
+        ['gpu', model.gpuBound],
+        ['cpu', model.cpuBound],
+        ['cinebench', model.cinebench],
+        ['blender', model.blender],
+      ] as const
+    ).flatMap(([key, grid]) => gapCells(grid).map((gap) => gapId(key, gap)));
+    expect(new Set(ids).size).toBe(ids.length);
+    expect(gapId('gpu', { row: 'minecraft', column: 'nvidia-geforce-rtx-5090' })).toBe(
+      'gap-gpu-minecraft-nvidia-geforce-rtx-5090',
+    );
+    // Creator tests are words, not ids: "benchmark score (all scenes summed)".
+    expect(
+      gapId('blender', { row: 'intel-arc-b580', column: 'benchmark score (all scenes summed)' }),
+    ).toBe('gap-blender-intel-arc-b580-benchmark-score-all-scenes-summed');
+  });
+});
+
+describe('anchorTables', () => {
+  const tables = anchorTables(catalogue);
+
+  it('holds every game anchor, in catalogue order: 116 rows', () => {
+    expect(tables.game.map((row) => row.id)).toEqual(rawGameIds);
+    expect(tables.game).toHaveLength(116);
+  });
+
+  it('holds every creator anchor once, in a table per unit: 27 rows', () => {
+    const ids = [...tables.cinebench, ...tables.blender, ...tables.otherCreator].map(
+      (row) => row.id,
+    );
+    expect([...ids].sort()).toEqual([...rawCreatorIds].sort());
+    expect(ids).toHaveLength(27);
+    expect(tables.cinebench.every((row) => row.unit === 'points')).toBe(true);
+    expect(tables.blender.every((row) => row.unit === 'samples-per-minute')).toBe(true);
+  });
+
+  it('keeps each anchor’s sources, so every row can show where its number comes from', () => {
+    const rows = [...tables.game, ...tables.cinebench, ...tables.blender, ...tables.otherCreator];
+    expect(rows.filter((row) => row.sources.length === 0).map((row) => row.id)).toEqual([]);
   });
 });

@@ -10,7 +10,6 @@
  */
 import { createStore, type StoreApi } from 'zustand/vanilla';
 import {
-  MAX_PART_ID_LENGTH,
   MAX_PAYLOAD_LENGTH,
   buildCodec,
   partIdSchema,
@@ -132,14 +131,4 @@ export const buildStore: StoreApi<BuildState> = createBuildStore();
 /** The share-URL encoding of a build, or `null` for the empty build (links then omit `b`). */
 export function encodeSelections(selections: RigBuild): string | null {
   return buildCodec.isEmpty(selections) ? null : buildCodec.encode(selections);
-}
-
-/**
- * Whether one more drive still fits the build's link, whatever its id: the "Add a drive" button
- * shows only while it does.
- */
-export function canAddDrive(selections: RigBuild): boolean {
-  const longest = 'a'.repeat(MAX_PART_ID_LENGTH);
-  const storage = [...(selections.storage ?? []), longest];
-  return buildCodec.encode({ ...selections, storage }).length <= MAX_PAYLOAD_LENGTH;
 }
