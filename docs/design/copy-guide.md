@@ -415,8 +415,9 @@ Section 8 has the full wording, Hazem's requirement included.
 
 - Incompatible, the RTX 5090 Founders Edition with the DeepCool PN650M: "The DeepCool PN650M
   gives 650 W, below the [1,000–1,200 W] recommended for this build's estimated [780 W]
-  worst-case load." Action: "Pick a power supply of [1,000 W] or more." NVIDIA recommends 1,000 W
-  for this card; E2's range must include it, or the hand-off explains why not (plan WP-E2).
+  worst-case load." Action: "Pick a power supply of [1,000 W] or more." NVIDIA *requires* a
+  power supply of 1,000 W for this card (its "Required System Power", section 9). E2's range must
+  include it, or the hand-off explains why not (plan WP-E2).
 - "Estimated" stays in every sentence that gives a load (CLAUDE.md rule 2).
 
 ### 15. `gpu-power-connector` — Graphics card power cables
@@ -578,6 +579,25 @@ https://www.asus.com/support/faq/1038568/, last updated 9 Apr 2026, read by desi
 The numbers in this table show the format only.
 - **A line's label is its component,** as above, and the part's display name is shown beside it
   (copy guide §4): never a shortened name such as "Ryzen 7 9800X3D, PPT".
+
+**The card maker's figure,** shown beside the recommended range (`makerRecommendation`). Makers
+use three different words, and the sentence keeps the maker's word, by `kind` (data-lead's
+`recommendedPsuKind`):
+
+| `kind` | Sentence | Example (catalogue values, `feat/data-engine-data`) |
+|---|---|---|
+| `required` | {maker} requires a power supply of {watts} for the {card}. | "NVIDIA requires a power supply of 1,000 W for the NVIDIA GeForce RTX 5090 Founders Edition." NVIDIA lists it as "Required System Power" |
+| `recommended` | {maker} recommends a power supply of {watts} for the {card}. | "ASUS recommends a power supply of 850 W for the ASUS TUF Gaming GeForce RTX 5070 Ti 16GB GDDR7 OC Edition." |
+| `minimum` | {maker} gives {watts} as the minimum power supply for the {card}. | "Sapphire Technology gives 750 W as the minimum power supply for the SAPPHIRE PULSE AMD Radeon RX 9070 XT 16GB." Sapphire lists "Minimum 750 Watt Power Supply"; Intel's Arc B580 card is a minimum too |
+
+- **Never call every figure a recommendation.** A required or minimum figure said as
+  "recommends" softens what the maker wrote.
+- **"A power supply of 850 W", never "an 850 W power supply":** the article would have to follow
+  how each number sounds ("an 850", "a 750"), so the number goes after the noun.
+- **`{maker}` is the publisher's name** (`data/publishers.json`), as everywhere in this guide.
+- **How the range relates to the figure** is `PsuRange.explanation`, one sentence that E2
+  drafts. design-lead reviews it with the strings (section 13). When the range doesn't include
+  the maker's figure, that sentence says why (plan WP-E2).
 
 ## 10. Estimates (WP-E3, WP-E4)
 
