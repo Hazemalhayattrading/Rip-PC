@@ -473,6 +473,189 @@
           ]
         }
       ]
+    },
+    {
+      "id": "2026-10-02-d1-fixtures",
+      "seed": 20261003,
+      "rule": "One mulberry32(seed) generator for the whole draw. For each batch, in the order listed: sort the items ascending, partial Fisher-Yates shuffle (for i from 0 to size-1, swap item i with item i + floor(rng() * (n - i))), take the first ceil(20% of n), then sort them. Script: data/tools/audit-sample.mjs.",
+      "drawnAt": "2026-10-03",
+      "evidence": [
+        "artifacts/audit/population-2026-10-03-d1-batch1.json",
+        "artifacts/audit/sample-2026-10-03-d1-batch1.json",
+        "artifacts/audit/d1-batch1-2026-10-03.txt",
+        "artifacts/audit/d1-batch1/fractal-terra-support-cooler-gpu-2026-10-03.txt"
+      ],
+      "batches": [
+        {
+          "batch": "spec:case",
+          "population": 2,
+          "size": 1,
+          "ids": [
+            "fractal-terra-graphite"
+          ],
+          "auditedAt": "2026-10-03",
+          "method": "New records: every sourced value; changed records: every value this batch changed. Read against the saved maker pages, manuals and archive copies under artifacts/specs/<category>/ (and d1/), each quote found in the capture (log: d1-batch1-2026-10-03.txt).",
+          "findings": [],
+          "followUp": null
+        },
+        {
+          "batch": "spec:cooler",
+          "population": 4,
+          "size": 1,
+          "ids": [
+            "deepcool-an600"
+          ],
+          "auditedAt": "2026-10-03",
+          "method": "New records: every sourced value; changed records: every value this batch changed. Read against the saved maker pages, manuals and archive copies under artifacts/specs/<category>/ (and d1/), each quote found in the capture (log: d1-batch1-2026-10-03.txt).",
+          "findings": [],
+          "followUp": null
+        },
+        {
+          "batch": "spec:cpu",
+          "population": 1,
+          "size": 1,
+          "ids": [
+            "amd-ryzen-5-3400g"
+          ],
+          "auditedAt": "2026-10-03",
+          "method": "New records: every sourced value; changed records: every value this batch changed. Read against the saved maker pages, manuals and archive copies under artifacts/specs/<category>/ (and d1/), each quote found in the capture (log: d1-batch1-2026-10-03.txt).",
+          "findings": [],
+          "followUp": null
+        },
+        {
+          "batch": "spec:gpu-card",
+          "population": 11,
+          "size": 3,
+          "ids": [
+            "asus-tuf-gaming-geforce-rtx-5070-ti-16gb-oc",
+            "nvidia-geforce-rtx-5080-founders-edition",
+            "sapphire-pulse-radeon-rx-9060-xt-oc-16gb"
+          ],
+          "auditedAt": "2026-10-03",
+          "method": "New records: every sourced value; changed records: every value this batch changed. Read against the saved maker pages, manuals and archive copies under artifacts/specs/<category>/ (and d1/), each quote found in the capture (log: d1-batch1-2026-10-03.txt).",
+          "findings": [],
+          "followUp": null
+        },
+        {
+          "batch": "spec:motherboard",
+          "population": 7,
+          "size": 2,
+          "ids": [
+            "asus-tuf-gaming-b650m-plus-wifi",
+            "asus-tuf-gaming-x870-plus-wifi"
+          ],
+          "auditedAt": "2026-10-03",
+          "method": "New records: every sourced value; changed records: every value this batch changed. Read against the saved maker pages, manuals and archive copies under artifacts/specs/<category>/ (and d1/), each quote found in the capture (log: d1-batch1-2026-10-03.txt).",
+          "findings": [],
+          "followUp": null
+        },
+        {
+          "batch": "spec:psu",
+          "population": 6,
+          "size": 2,
+          "ids": [
+            "deepcool-pn650m",
+            "deepcool-pn850m"
+          ],
+          "auditedAt": "2026-10-03",
+          "method": "New records: every sourced value; changed records: every value this batch changed. Read against the saved maker pages, manuals and archive copies under artifacts/specs/<category>/ (and d1/), each quote found in the capture (log: d1-batch1-2026-10-03.txt).",
+          "findings": [],
+          "followUp": null
+        },
+        {
+          "batch": "spec:ram",
+          "population": 1,
+          "size": 1,
+          "ids": [
+            "kingston-fury-beast-rgb-ddr5-6000-cl40-4x16gb"
+          ],
+          "auditedAt": "2026-10-03",
+          "method": "New records: every sourced value; changed records: every value this batch changed. Read against the saved maker pages, manuals and archive copies under artifacts/specs/<category>/ (and d1/), each quote found in the capture (log: d1-batch1-2026-10-03.txt).",
+          "findings": [],
+          "followUp": null
+        },
+        {
+          "batch": "price-observations:sa",
+          "population": 2,
+          "size": 1,
+          "ids": [
+            "noctua-nh-l9i-17xx-chromax-black|amazon-sa"
+          ],
+          "auditedAt": "2026-10-03",
+          "method": "Every field read against the saved product page: amount, seller and shipper, stock, delivery location and the product's name or part number; the capture's SHA-256 checked against captureSha256 (log: d1-batch1-2026-10-03.txt).",
+          "findings": [],
+          "followUp": null
+        },
+        {
+          "batch": "price-gaps:sa",
+          "population": 4,
+          "size": 1,
+          "ids": [
+            "intel-arc-b580-limited-edition"
+          ],
+          "auditedAt": "2026-10-03",
+          "method": "Every search and page the reason names, re-read in its saved capture under artifacts/prices/ (log: d1-batch1-2026-10-03.txt).",
+          "findings": [],
+          "followUp": null
+        },
+        {
+          "batch": "price-observations:us",
+          "population": 2,
+          "size": 1,
+          "ids": [
+            "noctua-nh-l9i-17xx-chromax-black|amazon-us"
+          ],
+          "auditedAt": "2026-10-03",
+          "method": "Every field read against the saved product page: amount, seller and shipper, stock, delivery location and the product's name or part number; the capture's SHA-256 checked against captureSha256 (log: d1-batch1-2026-10-03.txt).",
+          "findings": [],
+          "followUp": null
+        },
+        {
+          "batch": "price-gaps:us",
+          "population": 4,
+          "size": 1,
+          "ids": [
+            "deepcool-an600"
+          ],
+          "auditedAt": "2026-10-03",
+          "method": "Every search and page the reason names, re-read in its saved capture under artifacts/prices/ (log: d1-batch1-2026-10-03.txt).",
+          "findings": [],
+          "followUp": null
+        },
+        {
+          "batch": "compat-fixtures",
+          "population": 53,
+          "size": 11,
+          "ids": [
+            "bios-version-warn-9850x3d-x870-plus-flashback",
+            "board-form-factor-ok-b650m-pop-air",
+            "cpu-chipset-block-3400g-b550-plus",
+            "display-output-block-12400f-no-card",
+            "gpu-power-connector-cant-verify-tuf-5070-ti-pk650d",
+            "gpu-power-connector-ok-5080-fe-pn850m-native",
+            "gpu-thickness-ok-9060-xt-an400-terra",
+            "m2-lanes-ok-sn850x-b650-plus",
+            "m2-lanes-warn-two-nvme-b550-plus",
+            "psu-form-factor-ok-pn850m-north",
+            "usb-c-header-ok-north-x870-plus"
+          ],
+          "auditedAt": "2026-10-03",
+          "method": "Each fact equals its record (validator rule fixture-fact); each fact's record value read against its capture; the outcome checked against the rule in plan §3 (log: d1-batch1-2026-10-03.txt).",
+          "findings": [
+            {
+              "items": [
+                "usb-c-header-ok-north-x870-plus"
+              ],
+              "field": "frontIo.usbC",
+              "found": "The fact (fractal-north-charcoal-black-tg-light, 20 Gbps USB-C) matches the record's source, the North product page (\"1x USB Type-C 20Gbps\", \"one USB 3.2 Gen 2×2 Type-C with speeds up to 20 Gbps\"), but Fractal's North user guide, also a source of the record, reads \"Front ports 1 x USB 3.1 Gen 2 Type-C, 2 x USB 3.0, Audio & Mic\", and the record did not say so. The outcome stands: the X870-PLUS WIFI's 20 Gbps header serves either speed.",
+              "fix": "A note on the North's frontIo quotes both documents and says the catalogue follows the product page, Fractal's current listing.",
+              "fixedIn": "88de686"
+            }
+          ],
+          "followUp": "Every case's front USB-C entry read against its user guide: Pop Air and Pop Mini Air \"Front ports 2 x USB 3.0, Audio & Mic\" (records: no USB-C), Terra \"1 x USB Type-C 20Gpbs\" (record: 20 Gbps); the DeepCool CH560 guide has no port text. No other conflict."
+        }
+      ],
+      "reviews": []
     }
   ]
 }
