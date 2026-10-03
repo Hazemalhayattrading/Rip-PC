@@ -560,13 +560,14 @@ interface CoverageProps {
 }
 
 function Coverage({ grid, gridKey, title, corner, rowName, columnName, gap }: CoverageProps) {
-  const headingId = useId();
   const gapsId = useId();
   const gaps = gapCells(grid);
   const anyOutside = grid.outside.some((count) => count > 0);
+  // A plain section, not a named one: the table's scroll region below carries the grid's name, and
+  // two landmarks with one name would read twice in a screen reader's landmark list.
   return (
-    <section aria-labelledby={headingId} className="mt-8">
-      <h3 id={headingId}>{title}</h3>
+    <section className="mt-8">
+      <h3>{title}</h3>
       <div className={`mt-3 w-fit max-w-full ${PANEL}`}>
         <TableRegion label={title}>
           <thead className={THEAD}>
