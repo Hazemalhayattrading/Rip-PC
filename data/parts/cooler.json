@@ -448,7 +448,7 @@
       "nsprRating": null,
       "rgb": false,
       "heightMm": 67,
-      "ramClearanceMm": 40,
+      "ramClearanceMm": null,
       "singleFanRamClearanceMm": null,
       "sources": [
         {
@@ -486,7 +486,7 @@
         },
         {
           "field": "ramClearanceMm",
-          "text": "From \"Making full use of a 120mm high airflow fan and an overhanging design, the AN600 actively cools RAM modules up to 40mm tall\". DeepCool publishes no other RAM figure for the AN600 (one top-flow fan, no alternative fan position)."
+          "text": "Not published. DeepCool's only RAM figure describes cooling, not a clearance: \"Making full use of a 120mm high airflow fan and an overhanging design, the AN600 actively cools RAM modules up to 40mm tall\". The cooler has one top-flow fan and no other fan position."
         },
         {
           "field": "fanCount",

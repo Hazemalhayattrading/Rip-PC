@@ -966,8 +966,8 @@
         },
         {
           "outcome": "cant-verify",
-          "kind": "not-applicable",
-          "reason": "The rule reads only required fields (cooler.heightMm, case.coolerClearance, case.layoutPositions[].coolerMaxHeightMm), which can't be null; the validator tests \"[schema] … is rejected\" prove it."
+          "kind": "no-real-product",
+          "reason": "The rule also reads the RAM kit: a tall kit can push an air cooler's fan up, which adds to the cooler's height. \"Can't verify\" needs an air cooler whose fan must move for a tall kit and whose RAM clearance is unpublished, and no catalogue cooler is like that."
         }
       ]
     },
@@ -1022,13 +1022,13 @@
           ]
         },
         {
-          "id": "ram-cooler-clearance-block-delta-rgb-an600",
-          "outcome": "block",
+          "id": "ram-cooler-clearance-cant-verify-delta-rgb-an600",
+          "outcome": "cant-verify",
           "parts": {
             "ram": "teamgroup-t-force-delta-rgb-ddr5-6000-cl30-2x16gb",
             "cooler": "deepcool-an600"
           },
-          "reason": "The Delta RGB modules are 46.1 mm tall, and the AN600 takes RAM up to 40 mm.",
+          "reason": "The Delta RGB modules are 46.1 mm tall, and DeepCool publishes no RAM clearance for the AN600: it says only that the cooler \"actively cools RAM modules up to 40mm tall\".",
           "facts": [
             {
               "part": "teamgroup-t-force-delta-rgb-ddr5-6000-cl30-2x16gb",
@@ -1038,7 +1038,7 @@
             {
               "part": "deepcool-an600",
               "path": "ramClearanceMm",
-              "value": 40
+              "value": null
             },
             {
               "part": "deepcool-an600",
@@ -1069,7 +1069,13 @@
           ]
         }
       ],
-      "gaps": []
+      "gaps": [
+        {
+          "outcome": "block",
+          "kind": "pending",
+          "reason": "A later D1 batch adds an air cooler with a fixed fan and a published RAM clearance below a catalogue kit's height. The AN600's \"actively cools RAM modules up to 40mm tall\" is a cooling claim, not a stated clearance (Director, 2026-10-03)."
+        }
+      ]
     },
     {
       "rule": "radiator-fit",
@@ -1597,8 +1603,8 @@
         },
         {
           "outcome": "cant-verify",
-          "kind": "not-applicable",
-          "reason": "The estimate uses the chip's reference TBP and the CPU's power figures, which every catalogue chip and CPU publishes (referenceTbpW and the power scheme are required)."
+          "kind": "pending",
+          "reason": "WP-E2: PowerEstimate.missing allows a lower-bound estimate when a part's power isn't published, and QA counts psu-wattage as an unknown-data rule. E2 decides whether that gives \"can't verify\", and the fixture follows E2."
         }
       ]
     },
