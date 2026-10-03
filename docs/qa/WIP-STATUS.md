@@ -124,10 +124,31 @@ Owner: qa-lead. Spec: `docs/reports/phase-1-plan.md` §2 (WP-Q4) and §4; test p
       look GPU- or engine-limited, yet they're labelled limiter "cpu".
     - Stage-2 results: `artifacts/qa/phase-1/check-c/<item>/stage2.json`, manifest
       `docs/qa/evidence/phase-1/check-c-stage2.sha256`. verify: 816 unit, 192 e2e (4 skipped), exit 0.
+20. 2026-10-03: the Director merged the branch to `7e9e110` as `ae9dc3e` (v4.5, v4.6, the
+    synthetic-null exception, anchor-keys, brief C), recorded at `7017ee9`, which is merged here
+    (`64953e9`). The status file stays on the integration branch until Hazem decides; I don't retry
+    its removal. Boundary tests keep v4's one-field override (the Director).
+21. 2026-10-03: **drift, as the Director asked** (judge against what was recorded; drift is its own
+    column; a freshness flag past the 5% golden tolerance):
+    - anchor-compare gains `drift` resolutions. Each carries the value recorded at `retrievedAt`,
+      which must equal the data, or the tool calls it a recording error. The output shows recorded,
+      live and the % change, and flags freshness past `models.goldenTolerancePct` without calling it
+      a defect. 38 tests; 12 planted defects each fail them.
+    - Blender: every query matches its row (blender_version=5.2.0, compute_type of the row's backend,
+      group_by=device_name). 12 drift fields over 6 rows, from -0.08% to +0.10%, so no freshness
+      flag. The 3 other rows match live exactly.
+    - Tom's: the cited Wayback snapshot (20260929141411) has dateModified 2026-06-24T21:35:42+00:00,
+      the version the worker read live, and references all 4 keyed charts. No drift
+      (`check-c/toms-gpu-hierarchy-2026/qa-lead-archive-version/`).
+    - CB pages were last modified on 2026-07-17, before `retrievedAt`. Both TPU reviews were read
+      from their cited snapshots, and TechSpot's copy was checked against QA's own fetch. No drift
+      is possible there.
+    - Test plan v4.6 §7.3 states the rule.
 
 ## In progress
 - Waiting:
-  - the Director on the v4.5 and v4.6 hand-off (`7e9e110`) and the status-file question;
+  - the Director on check C (`f47a1bb` and the drift follow-up) and on §7.3's stage-2 rules;
+  - Hazem on the status file;
   - the dump's query mode and `rules.json` (WP-E0);
   - WP-D1 batch 1's merge (the validator tests);
   - the SHA of build-lead's QA-P1-001 and QA-P1-002 fixes, which come together.
@@ -135,11 +156,11 @@ Owner: qa-lead. Spec: `docs/reports/phase-1-plan.md` §2 (WP-Q4) and §4; test p
   data-lead).
 - Check C workers, to resume one with SendMessage: CB page 4 `a824b88e9f4bc936d`, TPU 9850X3D
   `af45ac9eecd4f6f54`, Blender `a0c4229284e5d9dfa`, Tom's `ab11f05c7be6cfbcc`, CB page 5
-  `a5b25994c6c8ab99e`, TPU 9800X3D `ab86e5c3f86c6c67a`, TechSpot `a862aafb5dff7dc0b`. Wave 2's
-  reports arrive by message when qa-lead's turn ends.
+  `a5b25994c6c8ab99e`, TPU 9800X3D `ab86e5c3f86c6c67a`, TechSpot `a862aafb5dff7dc0b`. All seven
+  reports are in.
 
 ## Next steps, in order
-1. Read wave 2's three reports. Re-test QA-P1-005 when data-lead answers.
+1. Re-test QA-P1-005 when data-lead answers.
 2. Check C runs again on each WP-D2 batch the Director accepts: `node tests/audit/anchor-keys.mjs
    --list`, a key list for each new review, a fresh worker, the seal, then `anchor-compare.mjs`.
 3. When the dump's query mode lands (WP-E0):

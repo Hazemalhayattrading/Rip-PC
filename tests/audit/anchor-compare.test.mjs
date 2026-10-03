@@ -503,6 +503,54 @@ describe('resolutions: reviewed judgements, which must still fit', () => {
   });
 });
 
+describe('drift: a living source that moved after retrievedAt', () => {
+  const live = (value) =>
+    gameTranscript({
+      values: { ...gameTranscript().values, avgFps: printed(value, String(value)) },
+    });
+  const drift = (recorded = 145.6) => ({
+    record: 'g-1',
+    field: 'avgFps',
+    from: 'MISMATCH',
+    outcome: 'MATCH',
+    kind: 'drift',
+    recorded,
+    why: 'the source moved after retrievedAt',
+    evidence: 'the capture at retrievedAt, with its SHA-256',
+  });
+
+  it('keeps the drift in its own column, recorded against live with the % change', () => {
+    const r = run({ game: [gameRow()], rows: [live(145.4)], resolutions: [drift()] });
+    expect(r.ok).toBe(true);
+    expect(outcomeOf(r, 'avgFps')).toMatchObject({
+      outcome: 'MATCH',
+      resolvedFrom: 'MISMATCH',
+      drift: { recorded: 145.6, live: 145.4, changePct: -0.14 },
+    });
+    expect(r.summary).toMatchObject({ drift: 1, freshness: [] });
+  });
+
+  it('flags drift past the golden tolerance as a freshness issue, not a defect', () => {
+    const r = run({ game: [gameRow()], rows: [live(155.2)], resolutions: [drift()] });
+    expect(r.ok).toBe(true);
+    expect(r.defects).toEqual([]);
+    expect(r.summary.freshness).toEqual([{ record: 'g-1', field: 'avgFps', changePct: 6.59 }]);
+  });
+
+  it('refuses drift whose recorded value is not the data: that is a recording error', () => {
+    expect(() =>
+      run({ game: [gameRow()], rows: [live(145.4)], resolutions: [drift(145.4)] }),
+    ).toThrow(/a recording error, not drift/);
+  });
+
+  it('refuses a kind of resolution it does not know', () => {
+    const odd = { ...drift(), kind: 'rounding' };
+    expect(() => run({ game: [gameRow()], rows: [live(145.4)], resolutions: [odd] })).toThrow(
+      /kind "rounding" is not "drift"/,
+    );
+  });
+});
+
 describe('a key list or transcription that does not fit', () => {
   it('refuses a transcription made from another key list', () => {
     const keyRows = rowsOf(files([gameRow()]));

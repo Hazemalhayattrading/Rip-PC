@@ -9,96 +9,138 @@
       "field": "score",
       "from": "MISMATCH",
       "outcome": "MATCH",
-      "why": "Blender Open Data is a live database, and it moved on after the row's retrievedAt (2026-09-30): the data equals that day's state, 16066.37 over 126 results, and on 2026-10-03 the worker read 16052.86 over 132 results (more results, as the database only grows). Not a data defect.",
-      "evidence": "data-lead's capture of the OPTIX feed on 2026-09-30: C:/Projects/rig-lab-evidence/data-lead-artifacts/artifacts/benchmarks/blender-od-OPTIX-5.2.0.json, SHA-256 4b5971da63e45befd4d75761d2be0dff139ce8e979b7e27c4fefb1e5b7c46c37 (docs/reports/evidence/files.sha256, filed at Phase 0), row \"NVIDIA GeForce RTX 5090\": 16066.367391397402, 126. Cross-checks: Phase 0's independent audit read the live RTX 5060 median equal to this capture on 2026-10-01; the three rows whose counts are unchanged today match live exactly. The worker's live capture: artifacts/qa/phase-1/check-c/blender-5.2.0/captures/optix-rtx50.html."
+      "kind": "drift",
+      "recorded": 16066.37,
+      "why": "Blender Open Data is a living database. The row recorded the OPTIX/HIP/ONEAPI query for Blender 5.2.0 on 2026-09-30; the same query (compute_type=OPTIX, blender_version=5.2.0, group_by=device_name) gave 16052.86 over 132 results on 2026-10-03.",
+      "evidence": "blender-od-OPTIX-5.2.0.json, data-lead's capture of that query on 2026-09-30 (SHA-256 4b5971da63e45befd4d75761d2be0dff139ce8e979b7e27c4fefb1e5b7c46c37, in docs/reports/evidence/files.sha256 since Phase 0), row \"NVIDIA GeForce RTX 5090\": median 16066.367391397402, 126 results. Cross-checks: Phase 0's independent audit read the RTX 5060's live median equal to this capture on 2026-10-01; the three rows whose counts haven't changed match live exactly today. Live: artifacts/qa/phase-1/check-c/blender-5.2.0/captures/optix-rtx50.html."
     },
     {
       "record": "blender-od-5-2-0-optix-nvidia-geforce-rtx-5090",
       "field": "aggregate",
       "from": "MISMATCH",
       "outcome": "MATCH",
-      "why": "Blender Open Data is a live database, and it moved on after the row's retrievedAt (2026-09-30): the data equals that day's state, 16066.37 over 126 results, and on 2026-10-03 the worker read 16052.86 over 132 results (more results, as the database only grows). Not a data defect.",
-      "evidence": "data-lead's capture of the OPTIX feed on 2026-09-30: C:/Projects/rig-lab-evidence/data-lead-artifacts/artifacts/benchmarks/blender-od-OPTIX-5.2.0.json, SHA-256 4b5971da63e45befd4d75761d2be0dff139ce8e979b7e27c4fefb1e5b7c46c37 (docs/reports/evidence/files.sha256, filed at Phase 0), row \"NVIDIA GeForce RTX 5090\": 16066.367391397402, 126. Cross-checks: Phase 0's independent audit read the live RTX 5060 median equal to this capture on 2026-10-01; the three rows whose counts are unchanged today match live exactly. The worker's live capture: artifacts/qa/phase-1/check-c/blender-5.2.0/captures/optix-rtx50.html."
+      "kind": "drift",
+      "recorded": {
+        "statistic": "median",
+        "sampleSize": 126
+      },
+      "why": "Blender Open Data is a living database. The row recorded the OPTIX/HIP/ONEAPI query for Blender 5.2.0 on 2026-09-30; the same query (compute_type=OPTIX, blender_version=5.2.0, group_by=device_name) gave 16052.86 over 132 results on 2026-10-03.",
+      "evidence": "blender-od-OPTIX-5.2.0.json, data-lead's capture of that query on 2026-09-30 (SHA-256 4b5971da63e45befd4d75761d2be0dff139ce8e979b7e27c4fefb1e5b7c46c37, in docs/reports/evidence/files.sha256 since Phase 0), row \"NVIDIA GeForce RTX 5090\": median 16066.367391397402, 126 results. Cross-checks: Phase 0's independent audit read the RTX 5060's live median equal to this capture on 2026-10-01; the three rows whose counts haven't changed match live exactly today. Live: artifacts/qa/phase-1/check-c/blender-5.2.0/captures/optix-rtx50.html."
     },
     {
       "record": "blender-od-5-2-0-optix-nvidia-geforce-rtx-5080",
       "field": "score",
       "from": "MISMATCH",
       "outcome": "MATCH",
-      "why": "Blender Open Data is a live database, and it moved on after the row's retrievedAt (2026-09-30): the data equals that day's state, 9128.28 over 303 results, and on 2026-10-03 the worker read 9127.64 over 307 results (more results, as the database only grows). Not a data defect.",
-      "evidence": "data-lead's capture of the OPTIX feed on 2026-09-30: C:/Projects/rig-lab-evidence/data-lead-artifacts/artifacts/benchmarks/blender-od-OPTIX-5.2.0.json, SHA-256 4b5971da63e45befd4d75761d2be0dff139ce8e979b7e27c4fefb1e5b7c46c37 (docs/reports/evidence/files.sha256, filed at Phase 0), row \"NVIDIA GeForce RTX 5080\": 9128.279431166382, 303. Cross-checks: Phase 0's independent audit read the live RTX 5060 median equal to this capture on 2026-10-01; the three rows whose counts are unchanged today match live exactly. The worker's live capture: artifacts/qa/phase-1/check-c/blender-5.2.0/captures/optix-rtx50.html."
+      "kind": "drift",
+      "recorded": 9128.28,
+      "why": "Blender Open Data is a living database. The row recorded the OPTIX/HIP/ONEAPI query for Blender 5.2.0 on 2026-09-30; the same query (compute_type=OPTIX, blender_version=5.2.0, group_by=device_name) gave 9127.64 over 307 results on 2026-10-03.",
+      "evidence": "blender-od-OPTIX-5.2.0.json, data-lead's capture of that query on 2026-09-30 (SHA-256 4b5971da63e45befd4d75761d2be0dff139ce8e979b7e27c4fefb1e5b7c46c37, in docs/reports/evidence/files.sha256 since Phase 0), row \"NVIDIA GeForce RTX 5080\": median 9128.279431166382, 303 results. Cross-checks: Phase 0's independent audit read the RTX 5060's live median equal to this capture on 2026-10-01; the three rows whose counts haven't changed match live exactly today. Live: artifacts/qa/phase-1/check-c/blender-5.2.0/captures/optix-rtx50.html."
     },
     {
       "record": "blender-od-5-2-0-optix-nvidia-geforce-rtx-5080",
       "field": "aggregate",
       "from": "MISMATCH",
       "outcome": "MATCH",
-      "why": "Blender Open Data is a live database, and it moved on after the row's retrievedAt (2026-09-30): the data equals that day's state, 9128.28 over 303 results, and on 2026-10-03 the worker read 9127.64 over 307 results (more results, as the database only grows). Not a data defect.",
-      "evidence": "data-lead's capture of the OPTIX feed on 2026-09-30: C:/Projects/rig-lab-evidence/data-lead-artifacts/artifacts/benchmarks/blender-od-OPTIX-5.2.0.json, SHA-256 4b5971da63e45befd4d75761d2be0dff139ce8e979b7e27c4fefb1e5b7c46c37 (docs/reports/evidence/files.sha256, filed at Phase 0), row \"NVIDIA GeForce RTX 5080\": 9128.279431166382, 303. Cross-checks: Phase 0's independent audit read the live RTX 5060 median equal to this capture on 2026-10-01; the three rows whose counts are unchanged today match live exactly. The worker's live capture: artifacts/qa/phase-1/check-c/blender-5.2.0/captures/optix-rtx50.html."
+      "kind": "drift",
+      "recorded": {
+        "statistic": "median",
+        "sampleSize": 303
+      },
+      "why": "Blender Open Data is a living database. The row recorded the OPTIX/HIP/ONEAPI query for Blender 5.2.0 on 2026-09-30; the same query (compute_type=OPTIX, blender_version=5.2.0, group_by=device_name) gave 9127.64 over 307 results on 2026-10-03.",
+      "evidence": "blender-od-OPTIX-5.2.0.json, data-lead's capture of that query on 2026-09-30 (SHA-256 4b5971da63e45befd4d75761d2be0dff139ce8e979b7e27c4fefb1e5b7c46c37, in docs/reports/evidence/files.sha256 since Phase 0), row \"NVIDIA GeForce RTX 5080\": median 9128.279431166382, 303 results. Cross-checks: Phase 0's independent audit read the RTX 5060's live median equal to this capture on 2026-10-01; the three rows whose counts haven't changed match live exactly today. Live: artifacts/qa/phase-1/check-c/blender-5.2.0/captures/optix-rtx50.html."
     },
     {
       "record": "blender-od-5-2-0-optix-nvidia-geforce-rtx-5070-ti",
       "field": "score",
       "from": "MISMATCH",
       "outcome": "MATCH",
-      "why": "Blender Open Data is a live database, and it moved on after the row's retrievedAt (2026-09-30): the data equals that day's state, 7729.45 over 175 results, and on 2026-10-03 the worker read 7730.23 over 178 results (more results, as the database only grows). Not a data defect.",
-      "evidence": "data-lead's capture of the OPTIX feed on 2026-09-30: C:/Projects/rig-lab-evidence/data-lead-artifacts/artifacts/benchmarks/blender-od-OPTIX-5.2.0.json, SHA-256 4b5971da63e45befd4d75761d2be0dff139ce8e979b7e27c4fefb1e5b7c46c37 (docs/reports/evidence/files.sha256, filed at Phase 0), row \"NVIDIA GeForce RTX 5070 Ti\": 7729.4487381388035, 175. Cross-checks: Phase 0's independent audit read the live RTX 5060 median equal to this capture on 2026-10-01; the three rows whose counts are unchanged today match live exactly. The worker's live capture: artifacts/qa/phase-1/check-c/blender-5.2.0/captures/optix-rtx50.html."
+      "kind": "drift",
+      "recorded": 7729.45,
+      "why": "Blender Open Data is a living database. The row recorded the OPTIX/HIP/ONEAPI query for Blender 5.2.0 on 2026-09-30; the same query (compute_type=OPTIX, blender_version=5.2.0, group_by=device_name) gave 7730.23 over 178 results on 2026-10-03.",
+      "evidence": "blender-od-OPTIX-5.2.0.json, data-lead's capture of that query on 2026-09-30 (SHA-256 4b5971da63e45befd4d75761d2be0dff139ce8e979b7e27c4fefb1e5b7c46c37, in docs/reports/evidence/files.sha256 since Phase 0), row \"NVIDIA GeForce RTX 5070 Ti\": median 7729.4487381388035, 175 results. Cross-checks: Phase 0's independent audit read the RTX 5060's live median equal to this capture on 2026-10-01; the three rows whose counts haven't changed match live exactly today. Live: artifacts/qa/phase-1/check-c/blender-5.2.0/captures/optix-rtx50.html."
     },
     {
       "record": "blender-od-5-2-0-optix-nvidia-geforce-rtx-5070-ti",
       "field": "aggregate",
       "from": "MISMATCH",
       "outcome": "MATCH",
-      "why": "Blender Open Data is a live database, and it moved on after the row's retrievedAt (2026-09-30): the data equals that day's state, 7729.45 over 175 results, and on 2026-10-03 the worker read 7730.23 over 178 results (more results, as the database only grows). Not a data defect.",
-      "evidence": "data-lead's capture of the OPTIX feed on 2026-09-30: C:/Projects/rig-lab-evidence/data-lead-artifacts/artifacts/benchmarks/blender-od-OPTIX-5.2.0.json, SHA-256 4b5971da63e45befd4d75761d2be0dff139ce8e979b7e27c4fefb1e5b7c46c37 (docs/reports/evidence/files.sha256, filed at Phase 0), row \"NVIDIA GeForce RTX 5070 Ti\": 7729.4487381388035, 175. Cross-checks: Phase 0's independent audit read the live RTX 5060 median equal to this capture on 2026-10-01; the three rows whose counts are unchanged today match live exactly. The worker's live capture: artifacts/qa/phase-1/check-c/blender-5.2.0/captures/optix-rtx50.html."
+      "kind": "drift",
+      "recorded": {
+        "statistic": "median",
+        "sampleSize": 175
+      },
+      "why": "Blender Open Data is a living database. The row recorded the OPTIX/HIP/ONEAPI query for Blender 5.2.0 on 2026-09-30; the same query (compute_type=OPTIX, blender_version=5.2.0, group_by=device_name) gave 7730.23 over 178 results on 2026-10-03.",
+      "evidence": "blender-od-OPTIX-5.2.0.json, data-lead's capture of that query on 2026-09-30 (SHA-256 4b5971da63e45befd4d75761d2be0dff139ce8e979b7e27c4fefb1e5b7c46c37, in docs/reports/evidence/files.sha256 since Phase 0), row \"NVIDIA GeForce RTX 5070 Ti\": median 7729.4487381388035, 175 results. Cross-checks: Phase 0's independent audit read the RTX 5060's live median equal to this capture on 2026-10-01; the three rows whose counts haven't changed match live exactly today. Live: artifacts/qa/phase-1/check-c/blender-5.2.0/captures/optix-rtx50.html."
     },
     {
       "record": "blender-od-5-2-0-optix-nvidia-geforce-rtx-5070",
       "field": "score",
       "from": "MISMATCH",
       "outcome": "MATCH",
-      "why": "Blender Open Data is a live database, and it moved on after the row's retrievedAt (2026-09-30): the data equals that day's state, 5798.32 over 131 results, and on 2026-10-03 the worker read 5800.39 over 136 results (more results, as the database only grows). Not a data defect.",
-      "evidence": "data-lead's capture of the OPTIX feed on 2026-09-30: C:/Projects/rig-lab-evidence/data-lead-artifacts/artifacts/benchmarks/blender-od-OPTIX-5.2.0.json, SHA-256 4b5971da63e45befd4d75761d2be0dff139ce8e979b7e27c4fefb1e5b7c46c37 (docs/reports/evidence/files.sha256, filed at Phase 0), row \"NVIDIA GeForce RTX 5070\": 5798.320400580914, 131. Cross-checks: Phase 0's independent audit read the live RTX 5060 median equal to this capture on 2026-10-01; the three rows whose counts are unchanged today match live exactly. The worker's live capture: artifacts/qa/phase-1/check-c/blender-5.2.0/captures/optix-rtx50.html."
+      "kind": "drift",
+      "recorded": 5798.32,
+      "why": "Blender Open Data is a living database. The row recorded the OPTIX/HIP/ONEAPI query for Blender 5.2.0 on 2026-09-30; the same query (compute_type=OPTIX, blender_version=5.2.0, group_by=device_name) gave 5800.39 over 136 results on 2026-10-03.",
+      "evidence": "blender-od-OPTIX-5.2.0.json, data-lead's capture of that query on 2026-09-30 (SHA-256 4b5971da63e45befd4d75761d2be0dff139ce8e979b7e27c4fefb1e5b7c46c37, in docs/reports/evidence/files.sha256 since Phase 0), row \"NVIDIA GeForce RTX 5070\": median 5798.320400580914, 131 results. Cross-checks: Phase 0's independent audit read the RTX 5060's live median equal to this capture on 2026-10-01; the three rows whose counts haven't changed match live exactly today. Live: artifacts/qa/phase-1/check-c/blender-5.2.0/captures/optix-rtx50.html."
     },
     {
       "record": "blender-od-5-2-0-optix-nvidia-geforce-rtx-5070",
       "field": "aggregate",
       "from": "MISMATCH",
       "outcome": "MATCH",
-      "why": "Blender Open Data is a live database, and it moved on after the row's retrievedAt (2026-09-30): the data equals that day's state, 5798.32 over 131 results, and on 2026-10-03 the worker read 5800.39 over 136 results (more results, as the database only grows). Not a data defect.",
-      "evidence": "data-lead's capture of the OPTIX feed on 2026-09-30: C:/Projects/rig-lab-evidence/data-lead-artifacts/artifacts/benchmarks/blender-od-OPTIX-5.2.0.json, SHA-256 4b5971da63e45befd4d75761d2be0dff139ce8e979b7e27c4fefb1e5b7c46c37 (docs/reports/evidence/files.sha256, filed at Phase 0), row \"NVIDIA GeForce RTX 5070\": 5798.320400580914, 131. Cross-checks: Phase 0's independent audit read the live RTX 5060 median equal to this capture on 2026-10-01; the three rows whose counts are unchanged today match live exactly. The worker's live capture: artifacts/qa/phase-1/check-c/blender-5.2.0/captures/optix-rtx50.html."
+      "kind": "drift",
+      "recorded": {
+        "statistic": "median",
+        "sampleSize": 131
+      },
+      "why": "Blender Open Data is a living database. The row recorded the OPTIX/HIP/ONEAPI query for Blender 5.2.0 on 2026-09-30; the same query (compute_type=OPTIX, blender_version=5.2.0, group_by=device_name) gave 5800.39 over 136 results on 2026-10-03.",
+      "evidence": "blender-od-OPTIX-5.2.0.json, data-lead's capture of that query on 2026-09-30 (SHA-256 4b5971da63e45befd4d75761d2be0dff139ce8e979b7e27c4fefb1e5b7c46c37, in docs/reports/evidence/files.sha256 since Phase 0), row \"NVIDIA GeForce RTX 5070\": median 5798.320400580914, 131 results. Cross-checks: Phase 0's independent audit read the RTX 5060's live median equal to this capture on 2026-10-01; the three rows whose counts haven't changed match live exactly today. Live: artifacts/qa/phase-1/check-c/blender-5.2.0/captures/optix-rtx50.html."
     },
     {
       "record": "blender-od-5-2-0-optix-nvidia-geforce-rtx-5060",
       "field": "score",
       "from": "MISMATCH",
       "outcome": "MATCH",
-      "why": "Blender Open Data is a live database, and it moved on after the row's retrievedAt (2026-09-30): the data equals that day's state, 3635.98 over 78 results, and on 2026-10-03 the worker read 3636.7 over 79 results (more results, as the database only grows). Not a data defect.",
-      "evidence": "data-lead's capture of the OPTIX feed on 2026-09-30: C:/Projects/rig-lab-evidence/data-lead-artifacts/artifacts/benchmarks/blender-od-OPTIX-5.2.0.json, SHA-256 4b5971da63e45befd4d75761d2be0dff139ce8e979b7e27c4fefb1e5b7c46c37 (docs/reports/evidence/files.sha256, filed at Phase 0), row \"NVIDIA GeForce RTX 5060\": 3635.9835184642457, 78. Cross-checks: Phase 0's independent audit read the live RTX 5060 median equal to this capture on 2026-10-01; the three rows whose counts are unchanged today match live exactly. The worker's live capture: artifacts/qa/phase-1/check-c/blender-5.2.0/captures/optix-rtx50.html."
+      "kind": "drift",
+      "recorded": 3635.98,
+      "why": "Blender Open Data is a living database. The row recorded the OPTIX/HIP/ONEAPI query for Blender 5.2.0 on 2026-09-30; the same query (compute_type=OPTIX, blender_version=5.2.0, group_by=device_name) gave 3636.7 over 79 results on 2026-10-03.",
+      "evidence": "blender-od-OPTIX-5.2.0.json, data-lead's capture of that query on 2026-09-30 (SHA-256 4b5971da63e45befd4d75761d2be0dff139ce8e979b7e27c4fefb1e5b7c46c37, in docs/reports/evidence/files.sha256 since Phase 0), row \"NVIDIA GeForce RTX 5060\": median 3635.9835184642457, 78 results. Cross-checks: Phase 0's independent audit read the RTX 5060's live median equal to this capture on 2026-10-01; the three rows whose counts haven't changed match live exactly today. Live: artifacts/qa/phase-1/check-c/blender-5.2.0/captures/optix-rtx50.html."
     },
     {
       "record": "blender-od-5-2-0-optix-nvidia-geforce-rtx-5060",
       "field": "aggregate",
       "from": "MISMATCH",
       "outcome": "MATCH",
-      "why": "Blender Open Data is a live database, and it moved on after the row's retrievedAt (2026-09-30): the data equals that day's state, 3635.98 over 78 results, and on 2026-10-03 the worker read 3636.7 over 79 results (more results, as the database only grows). Not a data defect.",
-      "evidence": "data-lead's capture of the OPTIX feed on 2026-09-30: C:/Projects/rig-lab-evidence/data-lead-artifacts/artifacts/benchmarks/blender-od-OPTIX-5.2.0.json, SHA-256 4b5971da63e45befd4d75761d2be0dff139ce8e979b7e27c4fefb1e5b7c46c37 (docs/reports/evidence/files.sha256, filed at Phase 0), row \"NVIDIA GeForce RTX 5060\": 3635.9835184642457, 78. Cross-checks: Phase 0's independent audit read the live RTX 5060 median equal to this capture on 2026-10-01; the three rows whose counts are unchanged today match live exactly. The worker's live capture: artifacts/qa/phase-1/check-c/blender-5.2.0/captures/optix-rtx50.html."
+      "kind": "drift",
+      "recorded": {
+        "statistic": "median",
+        "sampleSize": 78
+      },
+      "why": "Blender Open Data is a living database. The row recorded the OPTIX/HIP/ONEAPI query for Blender 5.2.0 on 2026-09-30; the same query (compute_type=OPTIX, blender_version=5.2.0, group_by=device_name) gave 3636.7 over 79 results on 2026-10-03.",
+      "evidence": "blender-od-OPTIX-5.2.0.json, data-lead's capture of that query on 2026-09-30 (SHA-256 4b5971da63e45befd4d75761d2be0dff139ce8e979b7e27c4fefb1e5b7c46c37, in docs/reports/evidence/files.sha256 since Phase 0), row \"NVIDIA GeForce RTX 5060\": median 3635.9835184642457, 78 results. Cross-checks: Phase 0's independent audit read the RTX 5060's live median equal to this capture on 2026-10-01; the three rows whose counts haven't changed match live exactly today. Live: artifacts/qa/phase-1/check-c/blender-5.2.0/captures/optix-rtx50.html."
     },
     {
       "record": "blender-od-5-2-0-hip-amd-radeon-rx-9070-xt",
       "field": "score",
       "from": "MISMATCH",
       "outcome": "MATCH",
-      "why": "Blender Open Data is a live database, and it moved on after the row's retrievedAt (2026-09-30): the data equals that day's state, 3385.34 over 306 results, and on 2026-10-03 the worker read 3388.86 over 318 results (more results, as the database only grows). Not a data defect.",
-      "evidence": "data-lead's capture of the HIP feed on 2026-09-30: C:/Projects/rig-lab-evidence/data-lead-artifacts/artifacts/benchmarks/blender-od-HIP-5.2.0.json, SHA-256 90221cb5d3d9e8a1fe9c2118fc83fbea0665e9836f552961e60b71862c1461ae (docs/reports/evidence/files.sha256, filed at Phase 0), row \"AMD Radeon RX 9070 XT\": 3385.340450371907, 306. Cross-checks: Phase 0's independent audit read the live RTX 5060 median equal to this capture on 2026-10-01; the three rows whose counts are unchanged today match live exactly. The worker's live capture: artifacts/qa/phase-1/check-c/blender-5.2.0/captures/hip-rx9070.html."
+      "kind": "drift",
+      "recorded": 3385.34,
+      "why": "Blender Open Data is a living database. The row recorded the OPTIX/HIP/ONEAPI query for Blender 5.2.0 on 2026-09-30; the same query (compute_type=HIP, blender_version=5.2.0, group_by=device_name) gave 3388.86 over 318 results on 2026-10-03.",
+      "evidence": "blender-od-HIP-5.2.0.json, data-lead's capture of that query on 2026-09-30 (SHA-256 90221cb5d3d9e8a1fe9c2118fc83fbea0665e9836f552961e60b71862c1461ae, in docs/reports/evidence/files.sha256 since Phase 0), row \"AMD Radeon RX 9070 XT\": median 3385.340450371907, 306 results. Cross-checks: Phase 0's independent audit read the RTX 5060's live median equal to this capture on 2026-10-01; the three rows whose counts haven't changed match live exactly today. Live: artifacts/qa/phase-1/check-c/blender-5.2.0/captures/hip-rx9070.html."
     },
     {
       "record": "blender-od-5-2-0-hip-amd-radeon-rx-9070-xt",
       "field": "aggregate",
       "from": "MISMATCH",
       "outcome": "MATCH",
-      "why": "Blender Open Data is a live database, and it moved on after the row's retrievedAt (2026-09-30): the data equals that day's state, 3385.34 over 306 results, and on 2026-10-03 the worker read 3388.86 over 318 results (more results, as the database only grows). Not a data defect.",
-      "evidence": "data-lead's capture of the HIP feed on 2026-09-30: C:/Projects/rig-lab-evidence/data-lead-artifacts/artifacts/benchmarks/blender-od-HIP-5.2.0.json, SHA-256 90221cb5d3d9e8a1fe9c2118fc83fbea0665e9836f552961e60b71862c1461ae (docs/reports/evidence/files.sha256, filed at Phase 0), row \"AMD Radeon RX 9070 XT\": 3385.340450371907, 306. Cross-checks: Phase 0's independent audit read the live RTX 5060 median equal to this capture on 2026-10-01; the three rows whose counts are unchanged today match live exactly. The worker's live capture: artifacts/qa/phase-1/check-c/blender-5.2.0/captures/hip-rx9070.html."
+      "kind": "drift",
+      "recorded": {
+        "statistic": "median",
+        "sampleSize": 306
+      },
+      "why": "Blender Open Data is a living database. The row recorded the OPTIX/HIP/ONEAPI query for Blender 5.2.0 on 2026-09-30; the same query (compute_type=HIP, blender_version=5.2.0, group_by=device_name) gave 3388.86 over 318 results on 2026-10-03.",
+      "evidence": "blender-od-HIP-5.2.0.json, data-lead's capture of that query on 2026-09-30 (SHA-256 90221cb5d3d9e8a1fe9c2118fc83fbea0665e9836f552961e60b71862c1461ae, in docs/reports/evidence/files.sha256 since Phase 0), row \"AMD Radeon RX 9070 XT\": median 3385.340450371907, 306 results. Cross-checks: Phase 0's independent audit read the RTX 5060's live median equal to this capture on 2026-10-01; the three rows whose counts haven't changed match live exactly today. Live: artifacts/qa/phase-1/check-c/blender-5.2.0/captures/hip-rx9070.html."
     }
   ]
 }

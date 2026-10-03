@@ -26,8 +26,13 @@
  * the catalogue, and a CPU, chip or card id names the part the source names.
  *
  * --resolutions holds qa-lead's reviewed judgement on single fields, each with its why and
- * evidence, such as a live database that moved on after the row's retrievedAt. A resolution names
- * the outcome it replaces, so one that no longer fits stops the comparison (exit 2).
+ * evidence. A resolution names the outcome it replaces, so one that no longer fits stops the
+ * comparison (exit 2). A "drift" resolution is for a living source that moved after the row's
+ * retrievedAt: it carries the value recorded then, which must equal the data (otherwise the
+ * difference is a recording error, never drift), and the output keeps the drift in its own column,
+ * recorded against live with the % change. Drift past the golden tolerance (budget.json,
+ * models.goldenTolerancePct) is a freshness flag for data-lead to re-anchor or re-date, not a
+ * defect.
  *
  * Usage:
  *   node tests/audit/anchor-compare.mjs --transcribed <transcribed.json> --key-list <key-list.json>
@@ -42,6 +47,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
 import { DEFAULT_ANCHORS, keyEntry, KeyInputError, readingsOf, rowsOf } from './anchor-keys.mjs';
+import { goldenTolerancePct } from './golden-count.mjs';
 
 export const DEFAULT_CATALOGUE = path.join('data', 'parts');
 const VALUES = { game: ['avgFps', 'onePercentLowFps'], creator: ['score'] };
@@ -290,7 +296,7 @@ export function compareMapping(row, kind, catalogue) {
  * row's retrievedAt. Each names the outcome it expects to replace, so a resolution that no longer
  * fits the comparison stops it instead of hiding a new finding.
  */
-function applyResolutions(records, resolutions) {
+function applyResolutions(records, resolutions, freshnessPct) {
   for (const [i, r] of resolutions.entries()) {
     if (!r || typeof r.why !== 'string' || !r.why || typeof r.evidence !== 'string' || !r.evidence)
       throw new CompareInputError(`resolution ${i} needs a "why" and its "evidence"`);
@@ -303,6 +309,22 @@ function applyResolutions(records, resolutions) {
       throw new CompareInputError(
         `resolution ${i}: ${r.record} ${r.field} is ${found.outcome} now, not ${r.from}; review it again`,
       );
+    // Drift: a live source moved after retrievedAt. The data must equal what was recorded then;
+    // if it doesn't, the difference is a recording error, never drift.
+    if (r.kind === 'drift') {
+      if (JSON.stringify(r.recorded) !== JSON.stringify(found.value))
+        throw new CompareInputError(
+          `resolution ${i}: ${r.record} ${r.field} records ${JSON.stringify(r.recorded)} at retrievedAt, but the data holds ${JSON.stringify(found.value)}: a recording error, not drift`,
+        );
+      const live = found.foundValue ?? found.found;
+      const changePct =
+        typeof live === 'number' && typeof found.value === 'number'
+          ? Math.round(((live - found.value) / found.value) * 1e4) / 100
+          : null;
+      found.drift = { recorded: found.value, live, changePct };
+      if (changePct !== null && Math.abs(changePct) > freshnessPct) found.freshness = true;
+    } else if (r.kind !== undefined)
+      throw new CompareInputError(`resolution ${i}: kind "${r.kind}" is not "drift"`);
     found.resolvedFrom = found.outcome;
     found.outcome = r.outcome;
     found.severity = SEVERITY[r.outcome];
@@ -318,6 +340,7 @@ export function compare({
   rows,
   catalogue,
   resolutions = [],
+  freshnessPct = 5,
 }) {
   if (transcribed?.keyListSha256 !== keyListSha256)
     throw new CompareInputError(
@@ -349,7 +372,7 @@ export function compare({
     const { row, kind } = data;
     const t = transcribed.rows.find((r) => r.id === row.id);
     if (!t) throw new CompareInputError(`the transcription has no row ${row.id}`);
-    const add = (field, value, result, found) => {
+    const add = (field, value, result, found, foundValue) => {
       const source = sourceFor(row, field);
       records.push({
         record: row.id,
@@ -358,6 +381,7 @@ export function compare({
         sourceUrl: source?.url ?? null,
         archiveUrl: source?.archiveUrl ?? null,
         found,
+        ...(typeof foundValue === 'number' && { foundValue }),
         outcome: result.outcome,
         severity: result.severity ?? SEVERITY[result.outcome] ?? null,
         ...(result.convention && { convention: result.convention }),
@@ -381,6 +405,7 @@ export function compare({
         row[field] ?? null,
         compareValue(row[field] ?? null, tv, row.notes ?? [], field),
         tv?.printedAs ?? null,
+        tv?.value,
       );
     }
     for (const field of claimPaths(row, kind)) {
@@ -405,7 +430,7 @@ export function compare({
     throw new CompareInputError(
       `the transcription doesn't fit: ${inputProblems.map((r) => `${r.record} ${r.field}: ${r.note}`).join('; ')}`,
     );
-  applyResolutions(records, resolutions);
+  applyResolutions(records, resolutions, freshnessPct);
   const counts = {};
   for (const r of records) counts[r.outcome] = (counts[r.outcome] ?? 0) + 1;
   const defects = records.filter((r) => r.severity);
@@ -420,6 +445,12 @@ export function compare({
       majors: defects.filter((d) => d.severity === 'Major').length,
       conventions: records.filter((r) => r.convention).length,
       resolved: records.filter((r) => r.resolvedFrom).length,
+      drift: records.filter((r) => r.drift).length,
+      // Not a defect: drift past the golden tolerance asks data-lead to re-anchor or re-date.
+      freshness: records
+        .filter((r) => r.freshness)
+        .map((r) => ({ record: r.record, field: r.field, changePct: r.drift.changePct })),
+      freshnessPct,
     },
     defects,
     records,
@@ -434,9 +465,13 @@ export function formatCompare(result) {
       .map(([k, v]) => `${k} ${v}`)
       .join(' · ')}${s.conventions ? ` · (${s.conventions} by a documented convention)` : ''}`,
   ];
-  for (const r of result.records.filter((x) => x.resolvedFrom))
+  for (const r of result.records.filter((x) => x.resolvedFrom && !x.drift))
     lines.push(
       `  ~ resolved ${r.resolvedFrom} -> ${r.outcome}: ${r.record} ${r.field}: ${r.resolution.why}`,
+    );
+  for (const r of result.records.filter((x) => x.drift))
+    lines.push(
+      `  ~ drift ${r.record} ${r.field}: recorded ${JSON.stringify(r.drift.recorded)}, live ${JSON.stringify(r.drift.live)}${r.drift.changePct === null ? '' : ` (${r.drift.changePct > 0 ? '+' : ''}${r.drift.changePct}%)`}${r.freshness ? ` FRESHNESS: over ${result.summary.freshnessPct}%, re-anchor or re-date` : ''}`,
     );
   for (const d of result.defects)
     lines.push(
@@ -485,6 +520,7 @@ export function main(argv = process.argv.slice(2)) {
       rows: rowsOf(files),
       catalogue: readCatalogue(catalogueDir),
       resolutions: resDoc?.json.resolutions ?? [],
+      freshnessPct: goldenTolerancePct(),
     });
     const inputs = {
       transcribed: { file: values.transcribed, sha256: tDoc.sha256 },
