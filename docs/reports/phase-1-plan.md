@@ -278,9 +278,11 @@ Owner: build-lead (engine-engineer) · Needs: WP-E0, and WP-D1's power registry 
 
 **Done means**
 - Every constant traces to the registry.
-- For every catalogue GPU card, the range includes the card maker's recommended PSU, or the
-  hand-off explains the difference. For example, NVIDIA recommends 1000 W for the RTX 5090
-  Founders Edition.
+- For every catalogue GPU card, the range includes the card maker's power supply figure, or the
+  hand-off explains the difference. Each figure is taken in the maker's own word: NVIDIA
+  *requires* 1000 W for the RTX 5090 Founders Edition ("Required System Power"), ASUS
+  *recommends*, and Sapphire and Intel *set a minimum*. See copy guide §9 and
+  `recommendedPsuKind`.
 
 ### WP-E3 · Game performance model
 Owner: build-lead (a second engine-engineer, in its own folder) · Needs: WP-E0. It starts on the
