@@ -61,26 +61,54 @@ Owner: qa-lead. Spec: `docs/reports/phase-1-plan.md` §2 (WP-Q4) and §4; test p
     must say `unknownData: true` in the same merge window, because `rules.test.ts` pins this
     file. The lab-index smoke test now finds its route by `htmlFileOf(route) === 'lab/index.html'`
     (build-lead's catch: the lab's path is `/lab/`).
+11. 2026-10-03 (after the second stop): **the golden-count pin is gone.** The test counted 143 rows,
+    and WP-D2 batch 1 makes 190 (163 game, 27 creator; 47 rows added, none changed or removed).
+    The test now derives the expected list from the anchor files. The fix is on its own branch,
+    `feat/qa-golden-count` @ `8fafdf5`, cut from `2fe7148`, in the second worktree
+    `.claude/worktrees/qa-lead-golden`. Handed off to the Director.
+    - verify there: 727 unit, 166 e2e, exit 0. With D2 batch 1 trial-merged on top (not
+      committed, then aborted): 735 unit, 166 e2e, exit 0. The old pin fails on that tree (190, not
+      143). Four planted `anchorRows` defects each fail the new test.
+    - Evidence: `artifacts/qa/phase-1/golden-count-pin/`, with `manifest.sha256`.
+12. 2026-10-03: **QA-P1-003 closed** on the integration tip `2fe7148`. It's the same probe as at
+    `fe6b187`, in 8 cells, and `retest.json` is byte-identical. lab-spec §9's target line agrees.
+    Evidence: `artifacts/qa/phase-1/ds2-aa/retest-p1-003-2fe7148/`.
+13. 2026-10-03: **QA-P0-018 and QA-P0-019 closed** against the merged `tokens.md` (rules 2 and 6).
+    All 7 stated ratios, recomputed from `tokens.css`, match. New Minor **QA-P1-004** to
+    design-lead: rule 6 claims "15.89:1 or more on every measured surface", but the ring in the key
+    light is 13.39:1 in dark (§2.2's own table agrees). Evidence:
+    `artifacts/qa/phase-1/ds2-p0-018-019/`.
+14. 2026-10-03: the integration tip `2fe7148` merged into this branch (`fe8e255`).
 
 ## In progress
+- Waiting: the Director's merge of `feat/qa-golden-count` and of WP-D2 batch 1. Then check C runs
+  for D2 batch 1: 2 source reviews, Tom's Hardware's GPU hierarchy (39 GPU-bound rows: Black
+  Myth: Wukong and Marvel Rivals) and TechSpot's Core Ultra 7 270K Plus review (8 CPU-bound
+  rows: Marvel Rivals).
 - Waiting: the dump's query mode and `rules.json` (WP-E0); WP-D1 batch 1's merge (the validator
   tests); the SHA of build-lead's QA-P1-001 and QA-P1-002 fixes, which come together.
+- Open defects: QA-P1-001 (Major, build-lead), QA-P1-002 (Minor, build-lead), QA-P1-004 (Minor,
+  design-lead).
 
 ## Next steps, in order
-1. When the dump's query mode lands (WP-E0): the golden-query step (`tests/audit/golden-queries.mjs`:
+1. The blind anchor key list for check C (brief C): ids, game or workload, chip or CPU and the
+   conditions to find each value, but no values. Test it, then build the two D2 batch 1 key lists,
+   ready for when the Director accepts the batch.
+2. After the Director merges `feat/qa-golden-count`: remove the second worktree
+   (`git worktree remove .claude/worktrees/qa-lead-golden`), and merge the integration branch here.
+3. When the dump's query mode lands (WP-E0): the golden-query step (`tests/audit/golden-queries.mjs`:
    one query per anchor row, the preset through WP-D2's map), the corpus runner and the sweep (S1
    to S15, S15 by sweep kind), and the per-rule compare script for check A.
-2. Re-test QA-P1-001, QA-P1-002 and QA-P1-003 when their owners report fixes.
+4. Re-test QA-P1-001, QA-P1-002 and QA-P1-004 when their owners report fixes.
    - QA-P1-001: when build-lead's fix lands, the navigation spec goes back to hard assertions (the
      Director, 2026-10-03): set `FOCUS_RULES.enforced` to true and empty `KNOWN_OFF_SCREEN`, run it
      at all three widths, then run the live config after the deploy.
-   - QA-P1-003: the fix is verified on `feat/design-ds2` @ `fe6b187` (a 44 x 44 hit area on a
-     coarse pointer, 36 px with a mouse; `artifacts/qa/phase-1/ds2-aa/retest-p1-003/`). Close it
-     after WP-DS2 batch 2 merges, with one re-run on the integration branch.
-3. QA-P1-002: when build-lead's fix lands, check that the two gated `index.html` smoke tests ran
+   - QA-P1-004: re-run `artifacts/qa/phase-1/ds2-p0-018-019/p0-018-019.mjs` and read the new
+     sentence against it.
+5. QA-P1-002: when build-lead's fix lands, check that the two gated `index.html` smoke tests ran
    (not skipped) at 390 and 1440 px, then re-run the live config after the deploy, and check by
    hand that `/lab` answers 301 to `/lab/` there (GitHub Pages' directory redirect, which
    `vite preview` need not copy).
-4. The other Q4 tools, as E0 and E1 land: `mutation-check.mjs` (the first Stryker report), the
-   blind anchor key list; `strata.mjs` for WP-D1's new data files.
-5. The §4 fan-out, as each WP hands off (the briefs file).
+6. The other Q4 tools, as E0 and E1 land: `mutation-check.mjs` (the first Stryker report);
+   `strata.mjs` for WP-D1's new data files.
+7. The §4 fan-out, as each WP hands off (the briefs file).
