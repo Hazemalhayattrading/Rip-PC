@@ -79,36 +79,59 @@ Owner: qa-lead. Spec: `docs/reports/phase-1-plan.md` §2 (WP-Q4) and §4; test p
     light is 13.39:1 in dark (§2.2's own table agrees). Evidence:
     `artifacts/qa/phase-1/ds2-p0-018-019/`.
 14. 2026-10-03: the integration tip `2fe7148` merged into this branch (`fe8e255`).
+15. 2026-10-03: the Director merged the golden-count fix and WP-D2 batch 1 (`a2f95b3`), and
+    WP-DS2 batch 3 (`47fcc0a`). The integration tip `df6cd00` merged here (`8fdfd26`).
+16. 2026-10-03: **QA-P1-004 closed** at `df6cd00`. Rule 6 now gives 15.89:1 on the panels and
+    13.39:1 on every measured surface, and both match the recomputed minima
+    (`artifacts/qa/phase-1/ds2-p0-018-019/retest-p1-004-df6cd00.log`).
+17. 2026-10-03: **the blind key list for check C**, `tests/audit/anchor-keys.mjs`, with 31 tests.
+    - It groups the rows into source reviews by their first source's page (the query dropped).
+      That gives the plan's 5 reviews for the 143 rows, plus D2 batch 1's 2: 7 reviews, 190 rows.
+    - A list carries the claims only. A field the tool doesn't know stops it (exit 2). A value of
+      the review printed in a title, locator or note stops it (exit 1). The check reads every
+      number in the text in both decimal conventions and compares numerically, so a finer print
+      that rounds up (Blender's 16066.367… for 16066.37) is caught. `--drop-leaking-notes`
+      withholds a leaking note and records its field.
+    - On the real data it withholds 11 notes for Tom's (one prints four values) and 9 for Blender
+      (each prints its unrounded median). Two independent oracles find no value in any of the 7
+      lists. Seven planted tool defects each fail the tests.
+    - Brief C now gives the `transcribed.json` format, the verdicts and the `shared` block.
+    - verify: 770 unit, 192 e2e (4 skipped), exit 0
+      (`artifacts/qa/phase-1/verify-q4-8fdfd26-anchor-keys.log`).
+    - Key lists: `artifacts/qa/phase-1/check-c/<item>/key-list.json`, with `key-lists.sha256` and
+      `manifest.sha256`. Tool evidence: `artifacts/qa/phase-1/anchor-keys/`.
 
 ## In progress
-- Waiting: the Director's merge of `feat/qa-golden-count` and of WP-D2 batch 1. Then check C runs
-  for D2 batch 1: 2 source reviews, Tom's Hardware's GPU hierarchy (39 GPU-bound rows: Black
-  Myth: Wukong and Marvel Rivals) and TechSpot's Core Ultra 7 270K Plus review (8 CPU-bound
-  rows: Marvel Rivals).
+- **Check C, the anchor data (all 190 rows, 7 reviews).** The waves keep each host to one worker
+  at a time; `web.archive.org` goes to one worker per wave:
+  - wave 1: `cb-2026-seite-4` (48 rows, computerbase.de), `tpu-9850x3d-p18` (36, techpowerup.com,
+    tpucdn.com, the archive), `blender-5.2.0` (9, opendata.blender.org), `toms-gpu-hierarchy-2026`
+    (39, tomshardware.com and its image CDN, live only);
+  - wave 2: `cb-2026-seite-5` (32), `tpu-9800x3d-p9` (18, the archive), `techspot-270k-plus` (8,
+    live only).
+  - Each worker writes `transcribed.json` to `artifacts/qa/phase-1/check-c/<item>/`. qa-lead
+    commits it to `docs/qa/evidence/phase-1/check-c/<item>/` before stage 2.
 - Waiting: the dump's query mode and `rules.json` (WP-E0); WP-D1 batch 1's merge (the validator
   tests); the SHA of build-lead's QA-P1-001 and QA-P1-002 fixes, which come together.
-- Open defects: QA-P1-001 (Major, build-lead), QA-P1-002 (Minor, build-lead), QA-P1-004 (Minor,
-  design-lead).
+- Open defects: QA-P1-001 (Major, build-lead), QA-P1-002 (Minor, build-lead).
 
 ## Next steps, in order
-1. The blind anchor key list for check C (brief C): ids, game or workload, chip or CPU and the
-   conditions to find each value, but no values. Test it, then build the two D2 batch 1 key lists,
-   ready for when the Director accepts the batch.
-2. After the Director merges `feat/qa-golden-count`: remove the second worktree
-   (`git worktree remove .claude/worktrees/qa-lead-golden`), and merge the integration branch here.
-3. When the dump's query mode lands (WP-E0): the golden-query step (`tests/audit/golden-queries.mjs`:
+1. Check C, wave 1 then wave 2, as above. Read each worker's `transcribed.json` as its `Agent`
+   call returns, commit it, then stage 2.
+2. Stage 2: `tests/audit/anchor-compare.mjs` (§7.3's outcomes per field; the shared block; chart
+   tolerance; the catalogue ids against the catalogue), with planted-defect tests.
+3. Remove the second worktree: `git worktree remove .claude/worktrees/qa-lead-golden` (its
+   branch is merged, as `a2f95b3`).
+4. When the dump's query mode lands (WP-E0): the golden-query step (`tests/audit/golden-queries.mjs`:
    one query per anchor row, the preset through WP-D2's map), the corpus runner and the sweep (S1
    to S15, S15 by sweep kind), and the per-rule compare script for check A.
-4. Re-test QA-P1-001, QA-P1-002 and QA-P1-004 when their owners report fixes.
+5. Re-test QA-P1-001 and QA-P1-002 when build-lead reports the fixes.
    - QA-P1-001: when build-lead's fix lands, the navigation spec goes back to hard assertions (the
      Director, 2026-10-03): set `FOCUS_RULES.enforced` to true and empty `KNOWN_OFF_SCREEN`, run it
      at all three widths, then run the live config after the deploy.
-   - QA-P1-004: re-run `artifacts/qa/phase-1/ds2-p0-018-019/p0-018-019.mjs` and read the new
-     sentence against it.
-5. QA-P1-002: when build-lead's fix lands, check that the two gated `index.html` smoke tests ran
-   (not skipped) at 390 and 1440 px, then re-run the live config after the deploy, and check by
-   hand that `/lab` answers 301 to `/lab/` there (GitHub Pages' directory redirect, which
-   `vite preview` need not copy).
+   - QA-P1-002: check that the two gated `index.html` smoke tests ran (not skipped) at 390 and
+     1440 px, then re-run the live config after the deploy, and check by hand that `/lab` answers
+     301 to `/lab/` there (GitHub Pages' directory redirect, which `vite preview` need not copy).
 6. The other Q4 tools, as E0 and E1 land: `mutation-check.mjs` (the first Stryker report);
    `strata.mjs` for WP-D1's new data files.
-7. The §4 fan-out, as each WP hands off (the briefs file).
+7. The rest of the §4 fan-out, as each WP hands off (the briefs file).
