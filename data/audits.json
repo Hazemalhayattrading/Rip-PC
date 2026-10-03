@@ -754,7 +754,25 @@
           "followUp": "Every case's front USB-C entry read against its user guide: Pop Air and Pop Mini Air \"Front ports 2 x USB 3.0, Audio & Mic\" (records: no USB-C), Terra \"1 x USB Type-C 20Gpbs\" (record: 20 Gbps); the DeepCool CH560 guide has no port text. No other conflict."
         }
       ],
-      "reviews": []
+      "reviews": [
+        {
+          "by": "Director",
+          "at": "2026-10-03",
+          "scope": "Six facts against the captures: the 3400G against AMD's supporting chipsets, the B580 LE's size, slots and minimum PSU, the PK650D's PCIe cables, the NH-L9i-17xx's sockets and the AN600's RAM sentence. Then the batch checklist: stock or maker listings, the RGB kit swap, the Kingston display name, recommendedPsuKind, and Intel's guide limited to the output counts. Then rulings on the 31 fixture gaps. Two gap kinds changed in the same fix (e5a129b): cooler-height cant-verify is no-real-product, because the rule reads the RAM kit; psu-wattage cant-verify is pending WP-E2.",
+          "findings": [
+            {
+              "items": [
+                "deepcool-an600",
+                "ram-cooler-clearance-cant-verify-delta-rgb-an600"
+              ],
+              "field": "ramClearanceMm",
+              "found": "Recorded as 40 mm from DeepCool's \"the AN600 actively cools RAM modules up to 40mm tall\", which is marketing wording, not a stated clearance. The block fixture built on it risked telling a buyer that a working build will not fit.",
+              "fix": "ramClearanceMm is null, with the sentence quoted in its note. The fixture is now cant-verify (renamed from ram-cooler-clearance-block-delta-rgb-an600), and the rule's block outcome is a pending gap.",
+              "fixedIn": "e5a129b"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
