@@ -264,7 +264,8 @@ is a recorded Major.
 - the part picker's choice survives a reload through the URL;
 - the plan §3 links open with each rule's row showing its status chip, which never relies on colour
   alone, its reason, its rule id and its source links;
-- `/lab/accuracy` lists all 143 anchors and the coverage grid;
+- `/lab/accuracy` lists every row of the anchor files at the commit under test, counted from the
+  data (143 at `c621c15`; each WP-D2 batch adds more), and the coverage grid;
 - every estimate shows a range, the word "estimated" and a confidence word, and no
   frame-generation figure appears in a native row;
 - no console errors or warnings.

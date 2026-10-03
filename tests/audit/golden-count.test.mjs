@@ -86,14 +86,22 @@ function checkScenario(name, estimates = null) {
 const [first, second] = anchors.map((a) => a.id);
 
 describe('the real anchor files', () => {
-  it('give 143 anchor rows today: 116 game and 27 creator (phase-1-plan §4)', () => {
+  // Counted from the data, not pinned: WP-D2 adds rows batch by batch (143 at c621c15, 190 with its
+  // batch 1). The check itself compares this list with the engine's golden cases on every PR.
+  it('give one row per item, in file order, each with its own published number', () => {
     const files = DEFAULT_ANCHORS.map((file) => ({
       file,
       json: readJson(path.join(REPO, file)),
     }));
-    const rows = anchorRows(files);
-    expect(rows).toHaveLength(143);
-    expect(rows.filter((r) => r.file.endsWith('game.json'))).toHaveLength(116);
+    for (const { file, json } of files) expect(json.items.length, file).toBeGreaterThan(0);
+    const expected = files.flatMap(({ file, json }) =>
+      json.items.map((item) => ({
+        id: item.id,
+        file,
+        published: file.endsWith('game.json') ? item.avgFps : item.score,
+      })),
+    );
+    expect(anchorRows(files)).toEqual(expected);
   });
 
   it('use the tolerance in budget.json, ±5% (BUILD_PROMPT §5.3)', () => {
