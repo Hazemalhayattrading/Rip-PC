@@ -110,7 +110,17 @@ Owner: qa-lead. Spec: `docs/reports/phase-1-plan.md` §2 (WP-Q4) and §4; test p
   - wave 2: `cb-2026-seite-5` (32), `tpu-9800x3d-p9` (18, the archive), `techspot-270k-plus` (8,
     live only).
   - Each worker writes `transcribed.json` to `artifacts/qa/phase-1/check-c/<item>/`. qa-lead
-    commits it to `docs/qa/evidence/phase-1/check-c/<item>/` before stage 2.
+    seals it by committing its SHA-256 (with the key list's and the capture manifest's) before
+    stage 2. The files stay under `artifacts/`: three of them are over 240 KB and quote the pages.
+  - **Wave 1, stage 1: done and sealed** (`e3fc909`, `docs/qa/evidence/phase-1/check-c-stage1-wave1.sha256`).
+    All 4 are complete, with no structural problem (`artifacts/qa/phase-1/check-c/structure-check.mjs`):
+    - CB page 4: 48 rows, 96 printed values, 813 MATCH, 99 NOT STATED;
+    - TPU 9850X3D: 36 rows, 72 printed values, 432 MATCH, 252 NOT STATED;
+    - Blender: 9 rows, 9 printed values, 66 MATCH, 6 MISMATCH, 18 NOT STATED;
+    - Tom's: 39 rows, 78 printed values, 585 MATCH, 156 NOT STATED.
+  - Worker ids, to resume one with SendMessage: CB page 4 `a824b88e9f4bc936d`, TPU 9850X3D
+    `af45ac9eecd4f6f54`, Blender `a0c4229284e5d9dfa`, Tom's `ab11f05c7be6cfbcc`. Their reports
+    arrive by message when qa-lead's turn ends.
 - Waiting: the dump's query mode and `rules.json` (WP-E0); WP-D1 batch 1's merge (the validator
   tests); the SHA of build-lead's QA-P1-001 and QA-P1-002 fixes, which come together.
 - Open defects: QA-P1-001 (Major, build-lead), QA-P1-002 (Minor, build-lead).
