@@ -336,13 +336,13 @@
           "id": "ram-slots-ok-4-modules-4-slots",
           "outcome": "ok",
           "parts": {
-            "ram": "kingston-fury-beast-ddr5-6000-cl40-4x16gb",
+            "ram": "kingston-fury-beast-rgb-ddr5-6000-cl40-4x16gb",
             "motherboard": "asus-tuf-gaming-b650-plus-wifi"
           },
-          "reason": "The FURY Beast kit has 4 modules, and the TUF GAMING B650-PLUS WIFI has 4 DIMM slots.",
+          "reason": "The FURY Beast RGB kit has 4 modules, and the TUF GAMING B650-PLUS WIFI has 4 DIMM slots.",
           "facts": [
             {
-              "part": "kingston-fury-beast-ddr5-6000-cl40-4x16gb",
+              "part": "kingston-fury-beast-rgb-ddr5-6000-cl40-4x16gb",
               "path": "moduleCount",
               "value": 4
             },
@@ -357,13 +357,13 @@
           "id": "ram-slots-block-4-modules-2-slots",
           "outcome": "block",
           "parts": {
-            "ram": "kingston-fury-beast-ddr5-6000-cl40-4x16gb",
+            "ram": "kingston-fury-beast-rgb-ddr5-6000-cl40-4x16gb",
             "motherboard": "asus-rog-strix-b650e-i-gaming-wifi"
           },
-          "reason": "The FURY Beast kit has 4 modules, but the ROG STRIX B650E-I GAMING WIFI has only 2 DIMM slots.",
+          "reason": "The FURY Beast RGB kit has 4 modules, but the ROG STRIX B650E-I GAMING WIFI has only 2 DIMM slots.",
           "facts": [
             {
-              "part": "kingston-fury-beast-ddr5-6000-cl40-4x16gb",
+              "part": "kingston-fury-beast-rgb-ddr5-6000-cl40-4x16gb",
               "path": "moduleCount",
               "value": 4
             },

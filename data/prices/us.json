@@ -13,7 +13,7 @@
       "id": "2026-10-02-d1-fixtures",
       "label": "Parts added for the compatibility fixtures (WP-D1 batch 1)",
       "windowStart": "2026-10-02",
-      "windowEnd": "2026-10-02"
+      "windowEnd": "2026-10-03"
     }
   ],
   "priceBasis": "Buy-box price in USD as shown on the live product page for delivery to Dallas 75201 (in the seed batch, Amazon's default for the cloud fetcher; from the 2026-10-02 batch on, set with Amazon's own \"Deliver to\" control, data/tools/pw-price.cjs --us-zip=75201) or on Newegg, before sales tax and delivery fees. Third-party marketplace offers are kept and marked.",
@@ -905,6 +905,41 @@
           "text": "Read for delivery to Dallas 75201, set with Amazon's own \"Deliver to\" control before the page loaded; the page header shows \"Deliver to Dallas 75201\"."
         }
       ]
+    },
+    {
+      "partId": "kingston-fury-beast-rgb-ddr5-6000-cl40-4x16gb",
+      "batch": "2026-10-02-d1-fixtures",
+      "market": "US",
+      "currency": "USD",
+      "amount": 1044.99,
+      "retailer": "amazon-us",
+      "url": "https://www.amazon.com/dp/B0C34B4L71",
+      "inStock": true,
+      "isMarketplace": true,
+      "seller": "QyTech",
+      "retrievedAt": "2026-10-03",
+      "capture": "artifacts/prices/US/kingston-fury-beast-rgb-ddr5-6000-cl40-4x16gb--amazon-us--2026-10-03.html",
+      "captureSha256": "37f8fba36307b3fdacd0dadfe5f44db24db8493a651d0f39bbdd357f5891f18f",
+      "notes": [
+        {
+          "field": "seller",
+          "text": "Third-party seller QyTech both sells and ships it (\"Shipper / Seller\" QyTech; \"Ships from and sold by QyTech.\"), so it is neither Amazon.com nor shipped by Amazon. The buy-box offer is new (the page's buy-box data reads \"buyingOptionType\":\"NEW\"), and \"Other sellers on Amazon\" shows \"New & Used (3) from $1,044.99\"."
+        },
+        {
+          "field": "inStock",
+          "text": "The page says \"Only 1 left in stock - order soon.\""
+        },
+        {
+          "field": "amount",
+          "text": "Not counted: \"Get $50 off instantly: Pay $994.99 upon approval for Amazon Visa.\", a card sign-up offer."
+        },
+        {
+          "text": "The page names the part: title \"Kingston FURY Beast RGB 64GB (4x16GB) 6000MT/s CL40 DDR5 XMP DIMM | Overclocking | Intel XMP 3.0 | Kit of 4 | KF560C40BBAK4-64\", Model Number and Mfr Part Number \"KF560C40BBAK4-64\", selected options \"Size: 64GB (4x16GB)\", \"Style: Black\" and \"Pattern Name: 6000MT/s CL40\"."
+        },
+        {
+          "text": "Read for delivery to Dallas 75201, set with Amazon's own \"Deliver to\" control before the page loaded; the page header shows \"Deliver to Dallas 75201\"."
+        }
+      ]
     }
   ],
   "gaps": [
@@ -1062,23 +1097,6 @@
       "notes": [
         {
           "text": "Rejected listing: B0FQPCWY2C, the YD3400C5FHSBX box (Model Number \"YD3400C5FHSBX\", bullet \"AMD Wraith Stealth Heatsink Included\"), sold by The Superior Mart at $139.98 (buy box read for delivery to Dallas 75201 at 13:09Z; its search card showed $135.00 at 21:25Z). It is a different box from this record's YD3400C5FHBOX with the AMD Wraith Spire."
-        }
-      ]
-    },
-    {
-      "partId": "kingston-fury-beast-ddr5-6000-cl40-4x16gb",
-      "batch": "2026-10-02-d1-fixtures",
-      "market": "US",
-      "reasonCode": "not-listed",
-      "reason": "Amazon.com, searched for delivery to Dallas 75201: no listing for KF560C40BBK4-64 (the part number returned no results and a descriptive search returned 16 other memory products), and Newegg answered with a bot block (HTTP 403, \"unusual traffic from this device\").",
-      "retailersTried": [
-        "amazon-us",
-        "newegg"
-      ],
-      "checkedAt": "2026-10-02",
-      "notes": [
-        {
-          "text": "The nearest listing is B0C34B4L71, the RGB kit KF560C40BBAK4-64, a different part."
         }
       ]
     },

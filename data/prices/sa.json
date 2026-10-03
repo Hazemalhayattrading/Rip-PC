@@ -13,7 +13,7 @@
       "id": "2026-10-02-d1-fixtures",
       "label": "Parts added for the compatibility fixtures (WP-D1 batch 1)",
       "windowStart": "2026-10-02",
-      "windowEnd": "2026-10-02"
+      "windowEnd": "2026-10-03"
     }
   ],
   "priceBasis": "Buy-box price in SAR as shown on the live Amazon.sa product page for delivery to Riyadh; the pages state \"All prices include VAT.\" Delivery fees are excluded. Offers imported through Amazon.sa's global store show a total that includes estimated import charges; each such observation has a note with the split. Third-party marketplace offers are kept and marked.",
@@ -1092,18 +1092,21 @@
       "checkedAt": "2026-10-02"
     },
     {
-      "partId": "kingston-fury-beast-ddr5-6000-cl40-4x16gb",
+      "partId": "kingston-fury-beast-rgb-ddr5-6000-cl40-4x16gb",
       "batch": "2026-10-02-d1-fixtures",
       "market": "SA",
-      "reasonCode": "not-listed",
-      "reason": "Amazon.sa: no listing for KF560C40BBK4-64; a search for the part number returned no results and a search for \"Kingston FURY Beast DDR5 6000 64GB 4x16GB CL40\" returned 44 other memory products.",
+      "reasonCode": "no-price-shown",
+      "reason": "Amazon.sa lists the exact kit, B0C34B4L71 (\"Item model number : KF560C40BBAK4-64\"), the one result of a search for the part number, but its product page shows no buy-box price, only \"See All Buying Options\", and the first page of a descriptive search (48 of 89 results) shows no other listing of the kit.",
       "retailersTried": [
         "amazon-sa"
       ],
-      "checkedAt": "2026-10-02",
+      "checkedAt": "2026-10-03",
       "notes": [
         {
-          "text": "The nearest listing is B0C34B4L71, the RGB kit KF560C40BBAK4-64 (no price shown), a different part."
+          "text": "The part-number search card reads \"No featured offers available\" and \"SAR 6,216.13\" \"(1 new offer)\". That offer is reached only through \"See All Buying Options\" and was not opened, since it is not a buy-box price; its seller is not shown on the captured pages."
+        },
+        {
+          "text": "The product page, read for delivery to Riyadh, shows \"Consider these alternative items\" above the breadcrumb. The descriptive search was \"Kingston FURY Beast RGB DDR5 6000 64GB 4x16GB CL40\"; its 64GB DDR5-6000 Kingston FURY Beast kits are all 2x32GB."
         }
       ]
     },
